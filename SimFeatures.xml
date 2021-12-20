@@ -7,7 +7,10 @@
 		<mdl_name>SimFeatures</mdl_name>
 		<mdl_version>1</mdl_version>
 		<mdl_prefix>ft</mdl_prefix>
-		<mdl_url/>
+		<mdl_url><![CDATA[{
+	"type": "git",
+	"origin": { "uri": "https://github.com/simplicitesoftware/module-SimFeatures.git" }
+}]]></mdl_url>
 		<mdl_comment><![CDATA[This modules is:
 - a reference of all Simplicité Features
 - a testing bench for those same features]]></mdl_comment>

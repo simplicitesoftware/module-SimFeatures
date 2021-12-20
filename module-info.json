@@ -3,7 +3,7 @@
     "name": "SimFeatures",
     "format": "xml",
     "files": ["SimFeatures.xml"],
-    "repository": {},
+    "repository": {"origin": {"uri": "https://github.com/simplicitesoftware/module-SimFeatures.git"}},
     "version": "1",
     "platform": "5.1.18"
 }
