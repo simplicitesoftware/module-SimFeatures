@@ -49,6 +49,321 @@ paths:
           description: Unauthorized
       tags:
       - session
+  /rest/FtAttributes:
+    get:
+      summary: Search FtAttributes business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftattributes-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtAttributes'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: ftAttrShortText
+        description: Search filter for Short Text
+        type: string
+        required: false
+      - in: query
+        name: ftAttrLongText
+        description: Search filter for Long Text
+        type: string
+        required: false
+      - in: query
+        name: ftAttrInteger
+        description: Search filter for Integer
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrDecimal
+        description: Search filter for Decimal
+        type: number
+        required: false
+      - in: query
+        name: ftAttrDate
+        description: Search filter for Date
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateTime
+        description: Search filter for Date Time
+        type: string
+        required: false
+      - in: query
+        name: ftAttrTime
+        description: Search filter for Time
+        type: string
+        required: false
+      - in: query
+        name: ftAttrEnum
+        description: Search filter for Enum
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumMulti
+        description: Search filter for Enum Multi
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrBoolean
+        description: Search filter for Boolean
+        type: boolean
+        required: false
+      - in: query
+        name: ftAttrUrl
+        description: Search filter for Url
+        type: string
+        required: false
+      - in: query
+        name: ftAttrHtml
+        description: Search filter for Html
+        type: string
+        required: false
+      - in: query
+        name: ftAttrEmail
+        description: Search filter for Email
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDocument
+        description: Search filter for Document
+        type: string
+        required: false
+      - in: query
+        name: ftAttrPassword
+        description: Search filter for Password
+        type: string
+        required: false
+      - in: query
+        name: ftAttrExternalFile
+        description: Search filter for External File
+        type: string
+        required: false
+      - in: query
+        name: ftAttrImage
+        description: Search filter for Image
+        type: string
+        required: false
+      - in: query
+        name: ftAttrNotepad
+        description: Search filter for Notepad
+        type: string
+        required: false
+      - in: query
+        name: ftAttrPhoneNumber
+        description: Search filter for Phone Number
+        type: string
+        required: false
+      - in: query
+        name: ftAttrColor
+        description: Search filter for Color
+        type: string
+        required: false
+      - in: query
+        name: ftAttrGeographicalCoordinates
+        description: Search filter for Geographical Coordinates
+        type: string
+        required: false
+      tags:
+      - FtAttributes
+  /rest/FtAttributes/{row_id}:
+    post:
+      summary: Create a new FtAttributesbusiness object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftattributes-create
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtAttributes'
+          description: Success in creating a new business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtAttributes'
+        in: body
+        name: body
+      tags:
+      - FtAttributes
+      consumes:
+      - application/json
+    get:
+      summary: Get a FtAttributes business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftattributes-get
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtAttributes'
+          description: Success in getting a single business object record
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - in: query
+        name: _inline_documents
+        description: Inline documents?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_objects
+        description: Inline objects?
+        type: boolean
+        required: false
+      tags:
+      - FtAttributes
+    delete:
+      summary: Delete a FtAttributes business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftattributes-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      tags:
+      - FtAttributes
+    put:
+      summary: Update a FtAttributesbusiness object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftattributes-update
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtAttributes'
+          description: Success in updating a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtAttributes'
+        in: body
+        name: body
+      tags:
+      - FtAttributes
+      consumes:
+      - application/json
   /:
     get:
       summary: Get user session information
@@ -103,6 +418,94 @@ definitions:
       item:
         description: Object item with lists of linked objects' items
         type: object
+  FtAttributes:
+    type: object
+    properties:
+      ftAttrBoolean:
+        description: Boolean
+        type: boolean
+      ftAttrPassword:
+        description: Password
+        type: string
+      ftAttrLongText:
+        description: Long Text
+        type: string
+      ftAttrDecimal:
+        description: Decimal
+        type: number
+      ftAttrTime:
+        description: Time
+        type: string
+        example: HH:mm:ss
+      ftAttrExternalFile:
+        description: External File
+        type: string
+      ftAttrColor:
+        description: Color
+        type: string
+        example: '#RRGGBB'
+      ftAttrDocument:
+        description: Document
+        type: object
+      ftAttrGeographicalCoordinates:
+        description: Geographical Coordinates
+        type: string
+        example: latitude;longitude
+      ftAttrDate:
+        description: Date
+        type: string
+        example: yyyy-MM-dd
+      ftAttrEmail:
+        description: Email
+        type: string
+      ftAttrNotepad:
+        description: Notepad
+        type: string
+      ftAttrDateTime:
+        description: Date Time
+        type: string
+        example: yyyy-MM-dd HH:mm:ss
+      ftAttrHtml:
+        description: Html
+        type: string
+      ftAttrUrl:
+        description: Url
+        type: string
+      row_id:
+        description: Unique technical row ID
+        type: string
+      ftAttrEnumMulti:
+        description: Enum Multi
+        type: array
+        items:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+      ftAttrInteger:
+        description: Integer
+        type: integer
+      ftAttrPhoneNumber:
+        description: Phone Number
+        type: string
+      ftAttrEnum:
+        description: Enum
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrImage:
+        description: Image
+        type: object
+      ftAttrShortText:
+        description: Short Text
+        type: string
+  ArrayOfFtAttributes:
+    type: array
+    items:
+      $ref: '#/definitions/FtAttributes'
   PublicationResult:
     type: object
     properties:
@@ -168,3 +571,6 @@ info:
   description: API for module SimFeatures
   title: SimFeatures
   version: '1'
+tags:
+- name: FtAttributes
+  description: Attributes
