@@ -1,0 +1,9 @@
+{
+    "date": "2021-12-20 12:06:47",
+    "name": "SimFeatures",
+    "format": "xml",
+    "files": ["SimFeatures.xml"],
+    "repository": {},
+    "version": "1",
+    "platform": "5.1.18"
+}
