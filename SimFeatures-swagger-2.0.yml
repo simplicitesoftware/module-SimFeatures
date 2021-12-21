@@ -215,6 +215,11 @@ paths:
         description: Search filter for Long Text Grid
         type: string
         required: false
+      - in: query
+        name: ftAttrLongTextGridSource
+        description: Search filter for Long Text Grid Source
+        type: string
+        required: false
       tags:
       - FtAttributes
   /rest/FtAttributes/{row_id}:
@@ -457,6 +462,9 @@ definitions:
         type: string
       ftAttrUrl:
         description: Url
+        type: string
+      ftAttrLongTextGridSource:
+        description: Long Text Grid Source
         type: string
       ftAttrInteger:
         description: Integer

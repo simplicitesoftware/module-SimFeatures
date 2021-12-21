@@ -48,6 +48,7 @@ Object showcasing all the possible attributes
 | `ftAttrLongTextEditor`                                       | text(1500)                               |          | yes       |          | -                                                                                |
 | `ftAttrLongTextMarkdown`                                     | text(1500)                               |          | yes       |          | -                                                                                |
 | `ftAttrLongTextGrid`                                         | text(1500)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongTextGridSource`                                   | text(1500)                               |          |           |          | -                                                                                |
 
 ### Lists
 

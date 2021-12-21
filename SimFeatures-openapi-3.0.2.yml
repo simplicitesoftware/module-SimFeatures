@@ -53,6 +53,9 @@ components:
         ftAttrUrl:
           description: Url
           type: string
+        ftAttrLongTextGridSource:
+          description: Long Text Grid Source
+          type: string
         ftAttrInteger:
           description: Integer
           type: integer
@@ -434,6 +437,12 @@ paths:
         in: query
         name: ftAttrLongTextGrid
         description: Search filter for Long Text Grid
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftAttrLongTextGridSource
+        description: Search filter for Long Text Grid Source
         required: false
       tags:
       - FtAttributes
