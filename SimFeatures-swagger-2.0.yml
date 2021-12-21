@@ -98,8 +98,63 @@ paths:
         type: string
         required: false
       - in: query
+        name: ftAttrLongTextEditor
+        description: Search filter for Long Text Editor
+        type: string
+        required: false
+      - in: query
+        name: ftAttrLongTextMarkdown
+        description: Search filter for Long Text Markdown
+        type: string
+        required: false
+      - in: query
+        name: ftAttrLongTextGrid
+        description: Search filter for Long Text Grid
+        type: string
+        required: false
+      - in: query
+        name: ftAttrLongTextGridSource
+        description: Search filter for Long Text Grid Source
+        type: string
+        required: false
+      - in: query
+        name: ftAttrHtml
+        description: Search filter for Html
+        type: string
+        required: false
+      - in: query
         name: ftAttrInteger
         description: Search filter for Integer
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrIntegerMonetary
+        description: Search filter for Integer Monetary
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrIntegerProgressBar
+        description: Search filter for Integer Progress Bar
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrIntegerPercentage
+        description: Search filter for Integer Percentage
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrIntegerStars
+        description: Search filter for Integer Stars
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrIntegerSlider
+        description: Search filter for Integer Slider
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrIntegerEuro
+        description: Search filter for Integer Euro
         type: integer
         required: false
       - in: query
@@ -146,28 +201,8 @@ paths:
         type: boolean
         required: false
       - in: query
-        name: ftAttrUrl
-        description: Search filter for Url
-        type: string
-        required: false
-      - in: query
-        name: ftAttrHtml
-        description: Search filter for Html
-        type: string
-        required: false
-      - in: query
-        name: ftAttrEmail
-        description: Search filter for Email
-        type: string
-        required: false
-      - in: query
         name: ftAttrDocument
         description: Search filter for Document
-        type: string
-        required: false
-      - in: query
-        name: ftAttrPassword
-        description: Search filter for Password
         type: string
         required: false
       - in: query
@@ -178,6 +213,21 @@ paths:
       - in: query
         name: ftAttrImage
         description: Search filter for Image
+        type: string
+        required: false
+      - in: query
+        name: ftAttrUrl
+        description: Search filter for Url
+        type: string
+        required: false
+      - in: query
+        name: ftAttrEmail
+        description: Search filter for Email
+        type: string
+        required: false
+      - in: query
+        name: ftAttrPassword
+        description: Search filter for Password
         type: string
         required: false
       - in: query
@@ -198,26 +248,6 @@ paths:
       - in: query
         name: ftAttrGeographicalCoordinates
         description: Search filter for Geographical Coordinates
-        type: string
-        required: false
-      - in: query
-        name: ftAttrLongTextEditor
-        description: Search filter for Long Text Editor
-        type: string
-        required: false
-      - in: query
-        name: ftAttrLongTextMarkdown
-        description: Search filter for Long Text Markdown
-        type: string
-        required: false
-      - in: query
-        name: ftAttrLongTextGrid
-        description: Search filter for Long Text Grid
-        type: string
-        required: false
-      - in: query
-        name: ftAttrLongTextGridSource
-        description: Search filter for Long Text Grid Source
         type: string
         required: false
       tags:
@@ -444,12 +474,12 @@ definitions:
       ftAttrPassword:
         description: Password
         type: string
-      ftAttrDecimal:
-        description: Decimal
-        type: number
       ftAttrLongTextGrid:
         description: Long Text Grid
         type: string
+      ftAttrDecimal:
+        description: Decimal
+        type: number
       ftAttrLongTextMarkdown:
         description: Long Text Markdown
         type: string
@@ -457,14 +487,23 @@ definitions:
         description: Color
         type: string
         example: '#RRGGBB'
+      ftAttrIntegerEuro:
+        description: Integer Euro
+        type: integer
       ftAttrEmail:
         description: Email
         type: string
-      ftAttrUrl:
-        description: Url
-        type: string
+      ftAttrIntegerPercentage:
+        description: Integer Percentage
+        type: integer
       ftAttrLongTextGridSource:
         description: Long Text Grid Source
+        type: string
+      ftAttrIntegerStars:
+        description: Integer Stars
+        type: integer
+      ftAttrUrl:
+        description: Url
         type: string
       ftAttrInteger:
         description: Integer
@@ -485,6 +524,9 @@ definitions:
       ftAttrLongText:
         description: Long Text
         type: string
+      ftAttrIntegerMonetary:
+        description: Integer Monetary
+        type: integer
       ftAttrTime:
         description: Time
         type: string
@@ -503,16 +545,19 @@ definitions:
         description: Date
         type: string
         example: yyyy-MM-dd
+      ftAttrIntegerProgressBar:
+        description: Integer Progress Bar
+        type: integer
       ftAttrNotepad:
         description: Notepad
+        type: string
+      ftAttrHtml:
+        description: Html
         type: string
       ftAttrDateTime:
         description: Date Time
         type: string
         example: yyyy-MM-dd HH:mm:ss
-      ftAttrHtml:
-        description: Html
-        type: string
       row_id:
         description: Unique technical row ID
         type: string
@@ -531,6 +576,9 @@ definitions:
       ftAttrLongTextEditor:
         description: Long Text Editor
         type: string
+      ftAttrIntegerSlider:
+        description: Integer Slider
+        type: integer
       ftAttrShortText:
         description: Short Text
         type: string
