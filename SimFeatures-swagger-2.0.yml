@@ -200,6 +200,21 @@ paths:
         description: Search filter for Geographical Coordinates
         type: string
         required: false
+      - in: query
+        name: ftAttrLongTextEditor
+        description: Search filter for Long Text Editor
+        type: string
+        required: false
+      - in: query
+        name: ftAttrLongTextMarkdown
+        description: Search filter for Long Text Markdown
+        type: string
+        required: false
+      - in: query
+        name: ftAttrLongTextGrid
+        description: Search filter for Long Text Grid
+        type: string
+        required: false
       tags:
       - FtAttributes
   /rest/FtAttributes/{row_id}:
@@ -421,18 +436,47 @@ definitions:
   FtAttributes:
     type: object
     properties:
-      ftAttrBoolean:
-        description: Boolean
-        type: boolean
       ftAttrPassword:
         description: Password
-        type: string
-      ftAttrLongText:
-        description: Long Text
         type: string
       ftAttrDecimal:
         description: Decimal
         type: number
+      ftAttrLongTextGrid:
+        description: Long Text Grid
+        type: string
+      ftAttrLongTextMarkdown:
+        description: Long Text Markdown
+        type: string
+      ftAttrColor:
+        description: Color
+        type: string
+        example: '#RRGGBB'
+      ftAttrEmail:
+        description: Email
+        type: string
+      ftAttrUrl:
+        description: Url
+        type: string
+      ftAttrInteger:
+        description: Integer
+        type: integer
+      ftAttrEnum:
+        description: Enum
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrImage:
+        description: Image
+        type: object
+      ftAttrBoolean:
+        description: Boolean
+        type: boolean
+      ftAttrLongText:
+        description: Long Text
+        type: string
       ftAttrTime:
         description: Time
         type: string
@@ -440,10 +484,6 @@ definitions:
       ftAttrExternalFile:
         description: External File
         type: string
-      ftAttrColor:
-        description: Color
-        type: string
-        example: '#RRGGBB'
       ftAttrDocument:
         description: Document
         type: object
@@ -455,9 +495,6 @@ definitions:
         description: Date
         type: string
         example: yyyy-MM-dd
-      ftAttrEmail:
-        description: Email
-        type: string
       ftAttrNotepad:
         description: Notepad
         type: string
@@ -467,9 +504,6 @@ definitions:
         example: yyyy-MM-dd HH:mm:ss
       ftAttrHtml:
         description: Html
-        type: string
-      ftAttrUrl:
-        description: Url
         type: string
       row_id:
         description: Unique technical row ID
@@ -483,22 +517,12 @@ definitions:
           - A
           - B
           - C
-      ftAttrInteger:
-        description: Integer
-        type: integer
       ftAttrPhoneNumber:
         description: Phone Number
         type: string
-      ftAttrEnum:
-        description: Enum
+      ftAttrLongTextEditor:
+        description: Long Text Editor
         type: string
-        enum:
-        - A
-        - B
-        - C
-      ftAttrImage:
-        description: Image
-        type: object
       ftAttrShortText:
         description: Short Text
         type: string

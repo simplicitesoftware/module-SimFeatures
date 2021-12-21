@@ -45,6 +45,9 @@ Object showcasing all the possible attributes
 | `ftAttrPhoneNumber`                                          | phone(100)                               |          | yes       |          | -                                                                                |
 | `ftAttrColor`                                                | color                                    |          | yes       |          | -                                                                                |
 | `ftAttrGeographicalCoordinates`                              | geocoords                                |          | yes       |          | -                                                                                |
+| `ftAttrLongTextEditor`                                       | text(1500)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongTextMarkdown`                                     | text(1500)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongTextGrid`                                         | text(1500)                               |          | yes       |          | -                                                                                |
 
 ### Lists
 
