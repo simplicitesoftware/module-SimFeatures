@@ -73,65 +73,10 @@
 		<usr_menu_defcollapsed>0</usr_menu_defcollapsed>
 		<usr_menu_defdomain_id.obd_name/>
 		<usr_logout>2021-12-20 14:32:54</usr_logout>
-		<usr_last_logon>2021-12-20 15:45:27</usr_last_logon>
+		<usr_last_logon>2021-12-21 13:25:12</usr_last_logon>
 		<usr_dateformat/>
 		<usr_lang_pref>ENU</usr_lang_pref>
 		<usr_uuid/>
-	</data>
-</object>
-<object>
-	<name>UserSysParam</name>
-	<action>upsert</action>
-	<data>
-		<usp_user_id.usr_login>user</usp_user_id.usr_login>
-		<usp_param_id.sys_code>CLIENT_ID</usp_param_id.sys_code>
-		<usp_value><![CDATA[[{
- "dt": "2021-12-20 15:45:27",
- "ag": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:95.0) Gecko/20100101 Firefox/95.0",
- "id": "ylMZQUUISoyVjNlwOAGeDNONYBjqPDcVdqgaZFMHlQMpEqPPoJdjkjMFnPPVmSZZ1640007144441"
-}]]]></usp_value>
-		<usp_param_id.sys_type/>
-		<usp_param_id.sys_value><![CDATA[empty]]></usp_param_id.sys_value>
-		<usp_param_id.sys_desc/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<usp_user_id.usr_login>user</usp_user_id.usr_login>
-		<usp_param_id.sys_code>COMPACT</usp_param_id.sys_code>
-		<usp_value><![CDATA[true]]></usp_value>
-		<usp_param_id.sys_type/>
-		<usp_param_id.sys_value><![CDATA[empty]]></usp_param_id.sys_value>
-		<usp_param_id.sys_desc/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<usp_user_id.usr_login>user</usp_user_id.usr_login>
-		<usp_param_id.sys_code>HISTORY SimFeaturesScope</usp_param_id.sys_code>
-		<usp_value><![CDATA[[{"object":"FtAttributes","rowId":"4","label":"Attributes : d4b72efddae7510ec7f97c1894e94e3700689b22f81988165d9180d10705eb8cfe5782b560785083a90c6bbb5faa06c8bbc7cc473e9746031bb6b78d2056dadbf9034420e2516c8df71e7a5c8d71aa7a2799d140ca5c0337d661ffd0306aeba73ec86f328a70fb68f541719e1821bc9735a80319222bc058b272d87fa4..."},
-{"object":"FtAttributes","rowId":"3","label":"Attributes : randomness"},
-{"object":"FtAttributes","rowId":"2","label":"Attributes : random"}]]]></usp_value>
-		<usp_param_id.sys_type/>
-		<usp_param_id.sys_value><![CDATA[empty]]></usp_param_id.sys_value>
-		<usp_param_id.sys_desc/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<usp_user_id.usr_login>user</usp_user_id.usr_login>
-		<usp_param_id.sys_code>SCOPE_PREFS</usp_param_id.sys_code>
-		<usp_value><![CDATA[SimFeaturesScope]]></usp_value>
-		<usp_param_id.sys_type>LFL</usp_param_id.sys_type>
-		<usp_param_id.sys_value><![CDATA[empty]]></usp_param_id.sys_value>
-		<usp_param_id.sys_desc><![CDATA[Technical, do not change/remove, needed in user's parameters]]></usp_param_id.sys_desc>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<usp_user_id.usr_login>user</usp_user_id.usr_login>
-		<usp_param_id.sys_code>ZOOM</usp_param_id.sys_code>
-		<usp_value><![CDATA[90]]></usp_value>
-		<usp_param_id.sys_type/>
-		<usp_param_id.sys_value><![CDATA[empty]]></usp_param_id.sys_value>
-		<usp_param_id.sys_desc/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 </object>
 <object>
@@ -1140,7 +1085,7 @@
 	<data>
 		<tpl_name>FtAttributes</tpl_name>
 		<tpl_ui><![CDATA[<div>
-  <div class="area" data-area="2"></div>
+  <div class="area" data-area="2:+"></div>
   <div class="area" data-area="3"></div>
   <div class="area" data-area="4"></div>
   <div class="area" data-area="5"></div>
@@ -1321,7 +1266,7 @@
 		<obo_minrows/>
 		<obo_maxrows/>
 		<obo_sortable>1</obo_sortable>
-		<obo_list_areas/>
+		<obo_list_areas>1</obo_list_areas>
 	</data>
 </object>
 <object>
