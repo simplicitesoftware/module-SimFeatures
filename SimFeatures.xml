@@ -80,28 +80,6 @@
 	</data>
 </object>
 <object>
-	<name>UserSysParam</name>
-	<action>upsert</action>
-	<data>
-		<usp_user_id.usr_login>user</usp_user_id.usr_login>
-		<usp_param_id.sys_code>COMPACT</usp_param_id.sys_code>
-		<usp_value><![CDATA[true]]></usp_value>
-		<usp_param_id.sys_type/>
-		<usp_param_id.sys_value><![CDATA[empty]]></usp_param_id.sys_value>
-		<usp_param_id.sys_desc/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<usp_user_id.usr_login>user</usp_user_id.usr_login>
-		<usp_param_id.sys_code>ZOOM</usp_param_id.sys_code>
-		<usp_value><![CDATA[75]]></usp_value>
-		<usp_param_id.sys_type/>
-		<usp_param_id.sys_value><![CDATA[empty]]></usp_param_id.sys_value>
-		<usp_param_id.sys_desc/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-</object>
-<object>
 	<name>Group</name>
 	<action>upsert</action>
 	<data>
