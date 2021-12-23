@@ -122,7 +122,67 @@
 		<lov_model_id.mod_image/>
 	</data>
 	<data>
+		<lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
 		<lov_name>FTATTRENUMMULTI</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMMULTIPILLBOX</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMPILLBOX</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMRADIOHORIZONTAL</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FTATTRENUMRADIOVERTICAL</lov_name>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<lov_model_id.mod_name/>
 		<lov_model_id.mod_image/>
@@ -165,6 +225,72 @@
 		<lov_display>L</lov_display>
 	</data>
 	<data>
+		<lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
 		<lov_list_id.lov_name>FTATTRENUMMULTI</lov_list_id.lov_name>
 		<lov_code>A</lov_code>
 		<lov_order_by>10</lov_order_by>
@@ -188,6 +314,270 @@
 	</data>
 	<data>
 		<lov_list_id.lov_name>FTATTRENUMMULTI</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_list_id.lov_name>
+		<lov_code>C</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>code C</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>code A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>code B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg/>
+		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_list_id.lov_name>
 		<lov_code>C</lov_code>
 		<lov_order_by>30</lov_order_by>
 		<lov_label>code C</lov_label>
@@ -250,6 +640,102 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTI</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
@@ -295,6 +781,400 @@
 		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>10</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>20</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_order_by>30</lov_code_id.lov_order_by>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+</object>
+<object>
+	<name>FieldType</name>
+	<action>upsert</action>
+	<data>
+		<flt_code>FTATTRVALIDATEDTEXT</flt_code>
+		<flt_method/>
+		<flt_regexp><![CDATA[^\\w$]]></flt_regexp>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 </object>
@@ -331,6 +1211,117 @@
 		<fld_case/>
 		<fld_righttoleft>0</fld_righttoleft>
 		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrBooleanCheckbox</fld_name>
+		<fld_dbname>ft_attr_boolean_checkbox</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>8</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>1</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>CHECK</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrBooleanCombobox</fld_name>
+		<fld_dbname>ft_attr_boolean_combobox</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>8</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>1</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>COMBO</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrBooleanSlide</fld_name>
+		<fld_dbname>ft_attr_boolean_slide</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>8</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>1</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>SLIDE</fld_rendering>
 		<fld_speech/>
 		<fld_calc/>
 		<fld_objlist/>
@@ -450,6 +1441,265 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<fld_name>ftAttrDateTimeToDay</fld_name>
+		<fld_dbname>ft_attr_date_time_to_day</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>5</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>19</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>D</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDateTimeToHour</fld_name>
+		<fld_dbname>ft_attr_date_time_to_hour</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>5</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>19</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>H</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDateTimeToMinute</fld_name>
+		<fld_dbname>ft_attr_date_time_to_minute</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>5</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>19</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>I</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDateTimeToMonth</fld_name>
+		<fld_dbname>ft_attr_date_time_to_month</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>5</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>19</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>M</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDateTimeToYear</fld_name>
+		<fld_dbname>ft_attr_date_time_to_year</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>5</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>19</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>Y</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDateToMonth</fld_name>
+		<fld_dbname>ft_attr_date_to_month</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>4</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>M</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDateToYear</fld_name>
+		<fld_dbname>ft_attr_date_to_year</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>4</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>Y</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<fld_name>ftAttrDecimal</fld_name>
 		<fld_dbname>ft_attr_decimal</fld_dbname>
 		<fld_visible>3</fld_visible>
@@ -478,7 +1728,192 @@
 		<fld_updall>1</fld_updall>
 		<fld_case/>
 		<fld_righttoleft>0</fld_righttoleft>
-		<fld_rendering/>
+		<fld_rendering>NUM</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDecimalCalculator</fld_name>
+		<fld_dbname>ft_attr_decimal_calculator</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>2</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision>2</fld_precision>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>CALC</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDecimalEuro</fld_name>
+		<fld_dbname>ft_attr_decimal_euro</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>2</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision>2</fld_precision>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>EURO</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDecimalMonetary</fld_name>
+		<fld_dbname>ft_attr_decimal_monetary</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>2</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision>2</fld_precision>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>MONEY</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDecimalPercentage</fld_name>
+		<fld_dbname>ft_attr_decimal_percentage</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>2</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>5</fld_size>
+		<fld_minsize/>
+		<fld_precision>2</fld_precision>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>PRCT</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDecimalProgressBar</fld_name>
+		<fld_dbname>ft_attr_decimal_progress_bar</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>2</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>100</fld_size>
+		<fld_minsize/>
+		<fld_precision>2</fld_precision>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>BAR</fld_rendering>
 		<fld_speech/>
 		<fld_calc/>
 		<fld_objlist/>
@@ -515,7 +1950,118 @@
 		<fld_updall>1</fld_updall>
 		<fld_case/>
 		<fld_righttoleft>0</fld_righttoleft>
-		<fld_rendering/>
+		<fld_rendering>ICON</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDocumentMultiBox</fld_name>
+		<fld_dbname>ft_attr_document_multi_box</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>17</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>MBOX</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDocumentMultiList</fld_name>
+		<fld_dbname>ft_attr_document_multi_list</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>17</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>MLST</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrDocumentName</fld_name>
+		<fld_dbname>ft_attr_document_name</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>17</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>NAME</fld_rendering>
 		<fld_speech/>
 		<fld_calc/>
 		<fld_objlist/>
@@ -589,7 +2135,81 @@
 		<fld_updall>1</fld_updall>
 		<fld_case/>
 		<fld_righttoleft>0</fld_righttoleft>
-		<fld_rendering/>
+		<fld_rendering>SB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumCheckboxHorizontal</fld_name>
+		<fld_dbname>ft_attr_enum_checkbox_horizontal</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>HCB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumCheckboxVertical</fld_name>
+		<fld_dbname>ft_attr_enum_checkbox_vertical</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>VCB</fld_rendering>
 		<fld_speech/>
 		<fld_calc/>
 		<fld_objlist/>
@@ -626,7 +2246,303 @@
 		<fld_updall>1</fld_updall>
 		<fld_case/>
 		<fld_righttoleft>0</fld_righttoleft>
-		<fld_rendering/>
+		<fld_rendering>SB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumMultiCheckboxHorizontal</fld_name>
+		<fld_dbname>ft_attr_enum_multi_checkbox_horizontal</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>14</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>HCB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumMultiCheckboxVertical</fld_name>
+		<fld_dbname>ft_attr_enum_multi_checkbox_vertical</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>100</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>VCB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumMultiPillbox</fld_name>
+		<fld_dbname>ft_attr_enum_multi_pillbox</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>14</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMMULTIPILLBOX</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>PB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumMultiRadioHorizontal</fld_name>
+		<fld_dbname>ft_attr_enum_multi_radio_horizontal</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>14</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>HRB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumMultiRadioVertical</fld_name>
+		<fld_dbname>ft_attr_enum_multi_radio_vertical</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>VRB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumPillbox</fld_name>
+		<fld_dbname>ft_attr_enum_pillbox</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMPILLBOX</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>100</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>PB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumRadioHorizontal</fld_name>
+		<fld_dbname>ft_attr_enum_radio_horizontal</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>HRB</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrEnumRadioVertical</fld_name>
+		<fld_dbname>ft_attr_enum_radio_vertical</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FTATTRENUMRADIOVERTICAL</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>3</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>VRB</fld_rendering>
 		<fld_speech/>
 		<fld_calc/>
 		<fld_objlist/>
@@ -1264,6 +3180,43 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<fld_name>ftAttrNotepadUserActivities</fld_name>
+		<fld_dbname>ft_attr_notepad_user_activities</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>21</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10000</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>ACT</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<fld_name>ftAttrPassword</fld_name>
 		<fld_dbname>ft_attr_password</fld_dbname>
 		<fld_visible>3</fld_visible>
@@ -1412,6 +3365,80 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<fld_name>ftAttrTimeToHour</fld_name>
+		<fld_dbname>ft_attr_time_to_hour</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>6</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>8</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>H</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fld_name>ftAttrTimeToMinute</fld_name>
+		<fld_dbname>ft_attr_time_to_minute</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>6</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>8</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering>I</fld_rendering>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<fld_name>ftAttrUrl</fld_name>
 		<fld_dbname>ft_attr_url</fld_dbname>
 		<fld_visible>3</fld_visible>
@@ -1448,6 +3475,43 @@
 		<fld_classification/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
+	<data>
+		<fld_name>ftAttrValidatedText</fld_name>
+		<fld_dbname>ft_attr_validated_text</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_tray/>
+		<fld_type>15</fld_type>
+		<fld_type_id.flt_code>FTATTRVALIDATEDTEXT</fld_type_id.flt_code>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>250</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
 </object>
 <object>
 	<name>Template</name>
@@ -1456,11 +3520,11 @@
 		<tpl_name>FtAttributes</tpl_name>
 		<tpl_ui><![CDATA[<div>
   <div class="area" data-area="2:+"></div>
-  <div class="area" data-area="3"></div>
-  <div class="area" data-area="4"></div>
-  <div class="area" data-area="5"></div>
-  <div class="area" data-area="6"></div>
-  <div class="area" data-area="7"></div>
+  <div class="area" data-area="3:+"></div>
+  <div class="area" data-area="4:+"></div>
+  <div class="area" data-area="5:+"></div>
+  <div class="area" data-area="6:+"></div>
+  <div class="area" data-area="7:+"></div>
 </div>]]></tpl_ui>
 		<tpl_min/>
 		<tpl_image/>
@@ -1484,6 +3548,7 @@
 		<ofa_title>1</ofa_title>
 		<ofa_ui><![CDATA[<div>
   <div class="field" data-field="ftAttrShortText"></div>
+  <div class="field" data-field="ftAttrValidatedText"></div>
   <div class="field" data-field="ftAttrLongText"></div>
   <div class="field" data-field="ftAttrLongTextEditor"></div>
   <div class="field" data-field="ftAttrLongTextMarkdown"></div>
@@ -1498,15 +3563,24 @@
 		<ofa_name>FtAttributes-3</ofa_name>
 		<ofa_position>3</ofa_position>
 		<ofa_title>1</ofa_title>
-		<ofa_ui><![CDATA[<div>
-  <div class="field" data-field="ftAttrInteger"></div>
-  <div class="field" data-field="ftAttrIntegerMonetary"></div>
-  <div class="field" data-field="ftAttrIntegerProgressBar"></div>
-  <div class="field" data-field="ftAttrIntegerPercentage"></div>
-  <div class="field" data-field="ftAttrIntegerStars"></div>
-  <div class="field" data-field="ftAttrIntegerSlider"></div>
-  <div class="field" data-field="ftAttrIntegerEuro"></div>
-  <div class="field" data-field="ftAttrDecimal"></div>
+		<ofa_ui><![CDATA[<div class="row">
+  <div class="col-sm-6">
+    <div class="field" data-field="ftAttrInteger"></div>
+    <div class="field" data-field="ftAttrIntegerMonetary"></div>
+    <div class="field" data-field="ftAttrIntegerPercentage"></div>
+    <div class="field" data-field="ftAttrIntegerEuro"></div>
+    <div class="field" data-field="ftAttrIntegerProgressBar"></div>
+    <div class="field" data-field="ftAttrIntegerStars"></div>
+    <div class="field" data-field="ftAttrIntegerSlider"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="field" data-field="ftAttrDecimal"></div>
+    <div class="field" data-field="ftAttrDecimalMonetary"></div>
+    <div class="field" data-field="ftAttrDecimalPercentage"></div>
+    <div class="field" data-field="ftAttrDecimalEuro"></div>
+    <div class="field" data-field="ftAttrDecimalProgressBar"></div>
+    <div class="field" data-field="ftAttrDecimalCalculator"></div>
+  </div>
 </div>]]></ofa_ui>
 		<ofa_icon>img/color/graph</ofa_icon>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
@@ -1515,10 +3589,23 @@
 		<ofa_name>FtAttributes-4</ofa_name>
 		<ofa_position>4</ofa_position>
 		<ofa_title>1</ofa_title>
-		<ofa_ui><![CDATA[<div>
-  <div class="field" data-field="ftAttrDate"></div>
-  <div class="field" data-field="ftAttrDateTime"></div>
-  <div class="field" data-field="ftAttrTime"></div>
+		<ofa_ui><![CDATA[<div class="row">
+  <div class="col-sm-6">
+    <div class="field" data-field="ftAttrDate"></div>
+    <div class="field" data-field="ftAttrDateToMonth"></div>
+    <div class="field" data-field="ftAttrDateToYear"></div>
+    <div class="field" data-field="ftAttrTime"></div>
+    <div class="field" data-field="ftAttrTimeToMinute"></div>
+    <div class="field" data-field="ftAttrTimeToHour"></div>
+  </div>
+  <div class="col-sm-6">
+    <div class="field" data-field="ftAttrDateTime"></div>
+    <div class="field" data-field="ftAttrDateTimeToMinute"></div>
+    <div class="field" data-field="ftAttrDateTimeToHour"></div>
+    <div class="field" data-field="ftAttrDateTimeToDay"></div>
+    <div class="field" data-field="ftAttrDateTimeToMonth"></div>
+    <div class="field" data-field="ftAttrDateTimeToYear"></div>
+  </div>
 </div>]]></ofa_ui>
 		<ofa_icon>img/color/calendar</ofa_icon>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
@@ -1527,10 +3614,29 @@
 		<ofa_name>FtAttributes-5</ofa_name>
 		<ofa_position>5</ofa_position>
 		<ofa_title>1</ofa_title>
-		<ofa_ui><![CDATA[<div>
-  <div class="field" data-field="ftAttrEnum"></div>
-  <div class="field" data-field="ftAttrEnumMulti"></div>
-  <div class="field" data-field="ftAttrBoolean"></div>
+		<ofa_ui><![CDATA[<div class="row">
+  <div class="col-sm-4">
+    <div class="field" data-field="ftAttrEnum"></div>
+    <div class="field" data-field="ftAttrEnumCheckboxHorizontal"></div>
+    <div class="field" data-field="ftAttrEnumCheckboxVertical"></div>
+    <div class="field" data-field="ftAttrEnumRadioHorizontal"></div>
+    <div class="field" data-field="ftAttrEnumRadioVertical"></div>
+    <div class="field" data-field="ftAttrEnumPillbox"></div>
+  </div>
+  <div class="col-sm-4">
+    <div class="field" data-field="ftAttrEnumMulti"></div>
+    <div class="field" data-field="ftAttrEnumMultiCheckboxHorizontal"></div>
+    <div class="field" data-field="ftAttrEnumMultiCheckboxVertical"></div>
+    <div class="field" data-field="ftAttrEnumMultiRadioHorizontal"></div>
+    <div class="field" data-field="ftAttrEnumMultiRadioVertical"></div>
+    <div class="field" data-field="ftAttrEnumMultiPillbox"></div>
+  </div>
+  <div class="col-sm-4">
+    <div class="field" data-field="ftAttrBoolean"></div>
+    <div class="field" data-field="ftAttrBooleanCheckbox"></div>
+    <div class="field" data-field="ftAttrBooleanCombobox"></div>
+    <div class="field" data-field="ftAttrBooleanSlide"></div>
+  </div>
 </div>]]></ofa_ui>
 		<ofa_icon>img/system/list_of_values</ofa_icon>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
@@ -1540,7 +3646,16 @@
 		<ofa_position>6</ofa_position>
 		<ofa_title>1</ofa_title>
 		<ofa_ui><![CDATA[<div>
-  <div class="field" data-field="ftAttrDocument"></div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="field" data-field="ftAttrDocument"></div>
+      <div class="field" data-field="ftAttrDocumentName"></div>
+    </div>
+    <div class="col-sm-6">
+      <div class="field" data-field="ftAttrDocumentMultiBox"></div>
+      <div class="field" data-field="ftAttrDocumentMultiList"></div>
+    </div>
+  </div>
   <div class="field" data-field="ftAttrExternalFile"></div>
   <div class="field" data-field="ftAttrImage"></div>
 </div>]]></ofa_ui>
@@ -1552,13 +3667,20 @@
 		<ofa_position>7</ofa_position>
 		<ofa_title>1</ofa_title>
 		<ofa_ui><![CDATA[<div>
-  <div class="field" data-field="ftAttrUrl"></div>
-  <div class="field" data-field="ftAttrEmail"></div>
-  <div class="field" data-field="ftAttrPassword"></div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="field" data-field="ftAttrUrl"></div>
+      <div class="field" data-field="ftAttrEmail"></div>
+      <div class="field" data-field="ftAttrPassword"></div>
+    </div>
+    <div class="col-sm-6">
+      <div class="field" data-field="ftAttrPhoneNumber"></div>
+      <div class="field" data-field="ftAttrColor"></div>
+      <div class="field" data-field="ftAttrGeographicalCoordinates"></div>
+    </div>
+  </div>
   <div class="field" data-field="ftAttrNotepad"></div>
-  <div class="field" data-field="ftAttrPhoneNumber"></div>
-  <div class="field" data-field="ftAttrColor"></div>
-  <div class="field" data-field="ftAttrGeographicalCoordinates"></div>
+  <div class="field" data-field="ftAttrNotepadUserActivities"></div>
 </div>]]></ofa_ui>
 		<ofa_icon>star</ofa_icon>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
@@ -1683,8 +3805,8 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrLongText</obf_field_id.fld_name>
-		<obf_field_id.fld_type>13</obf_field_id.fld_type>
+		<obf_field_id.fld_name>ftAttrValidatedText</obf_field_id.fld_name>
+		<obf_field_id.fld_type>15</obf_field_id.fld_type>
 		<obf_order>20</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
@@ -1712,7 +3834,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrLongTextEditor</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrLongText</obf_field_id.fld_name>
 		<obf_field_id.fld_type>13</obf_field_id.fld_type>
 		<obf_order>30</obf_order>
 		<obf_group_by/>
@@ -1741,7 +3863,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrLongTextMarkdown</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrLongTextEditor</obf_field_id.fld_name>
 		<obf_field_id.fld_type>13</obf_field_id.fld_type>
 		<obf_order>40</obf_order>
 		<obf_group_by/>
@@ -1770,7 +3892,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrLongTextGrid</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrLongTextMarkdown</obf_field_id.fld_name>
 		<obf_field_id.fld_type>13</obf_field_id.fld_type>
 		<obf_order>50</obf_order>
 		<obf_group_by/>
@@ -1799,7 +3921,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrLongTextGridSource</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrLongTextGrid</obf_field_id.fld_name>
 		<obf_field_id.fld_type>13</obf_field_id.fld_type>
 		<obf_order>60</obf_order>
 		<obf_group_by/>
@@ -1828,9 +3950,38 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrLongTextGridSource</obf_field_id.fld_name>
+		<obf_field_id.fld_type>13</obf_field_id.fld_type>
+		<obf_order>70</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-2</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>2</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrHtml</obf_field_id.fld_name>
 		<obf_field_id.fld_type>11</obf_field_id.fld_type>
-		<obf_order>70</obf_order>
+		<obf_order>80</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -1859,35 +4010,6 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrInteger</obf_field_id.fld_name>
 		<obf_field_id.fld_type>1</obf_field_id.fld_type>
-		<obf_order>80</obf_order>
-		<obf_group_by/>
-		<obf_dfault_order/>
-		<obf_input/>
-		<obf_ref_field_id.fld_name/>
-		<obf_ref_object_id.obo_name/>
-		<obf_cascad/>
-		<obf_card/>
-		<obf_visible/>
-		<obf_ref_export>1</obf_ref_export>
-		<obf_copy/>
-		<obf_ref_order/>
-		<obf_fld_visible/>
-		<obf_fld_required/>
-		<obf_fld_updatable/>
-		<obf_fld_research/>
-		<obf_fld_more/>
-		<obf_fld_listmore/>
-		<obf_fld_researchreq/>
-		<obf_fld_dfault/>
-		<obf_field_id.fld_dfault/>
-		<obf_area_id.ofa_name>FtAttributes-3</obf_area_id.ofa_name>
-		<obf_area_id.ofa_position>3</obf_area_id.ofa_position>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrIntegerMonetary</obf_field_id.fld_name>
-		<obf_field_id.fld_type>1</obf_field_id.fld_type>
 		<obf_order>90</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
@@ -1915,7 +4037,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrIntegerProgressBar</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrIntegerMonetary</obf_field_id.fld_name>
 		<obf_field_id.fld_type>1</obf_field_id.fld_type>
 		<obf_order>100</obf_order>
 		<obf_group_by/>
@@ -1973,7 +4095,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrIntegerStars</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrIntegerEuro</obf_field_id.fld_name>
 		<obf_field_id.fld_type>1</obf_field_id.fld_type>
 		<obf_order>120</obf_order>
 		<obf_group_by/>
@@ -2002,7 +4124,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrIntegerSlider</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrIntegerProgressBar</obf_field_id.fld_name>
 		<obf_field_id.fld_type>1</obf_field_id.fld_type>
 		<obf_order>130</obf_order>
 		<obf_group_by/>
@@ -2031,7 +4153,7 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrIntegerEuro</obf_field_id.fld_name>
+		<obf_field_id.fld_name>ftAttrIntegerStars</obf_field_id.fld_name>
 		<obf_field_id.fld_type>1</obf_field_id.fld_type>
 		<obf_order>140</obf_order>
 		<obf_group_by/>
@@ -2060,9 +4182,183 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrIntegerSlider</obf_field_id.fld_name>
+		<obf_field_id.fld_type>1</obf_field_id.fld_type>
+		<obf_order>150</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-3</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>3</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrDecimal</obf_field_id.fld_name>
 		<obf_field_id.fld_type>2</obf_field_id.fld_type>
-		<obf_order>150</obf_order>
+		<obf_order>160</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-3</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>3</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDecimalMonetary</obf_field_id.fld_name>
+		<obf_field_id.fld_type>2</obf_field_id.fld_type>
+		<obf_order>170</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-3</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>3</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDecimalPercentage</obf_field_id.fld_name>
+		<obf_field_id.fld_type>2</obf_field_id.fld_type>
+		<obf_order>180</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-3</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>3</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDecimalEuro</obf_field_id.fld_name>
+		<obf_field_id.fld_type>2</obf_field_id.fld_type>
+		<obf_order>190</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-3</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>3</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDecimalProgressBar</obf_field_id.fld_name>
+		<obf_field_id.fld_type>2</obf_field_id.fld_type>
+		<obf_order>200</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-3</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>3</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDecimalCalculator</obf_field_id.fld_name>
+		<obf_field_id.fld_type>2</obf_field_id.fld_type>
+		<obf_order>210</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2091,7 +4387,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrDate</obf_field_id.fld_name>
 		<obf_field_id.fld_type>4</obf_field_id.fld_type>
-		<obf_order>160</obf_order>
+		<obf_order>220</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2118,9 +4414,38 @@
 	</data>
 	<data>
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrDateTime</obf_field_id.fld_name>
-		<obf_field_id.fld_type>5</obf_field_id.fld_type>
-		<obf_order>170</obf_order>
+		<obf_field_id.fld_name>ftAttrDateToMonth</obf_field_id.fld_name>
+		<obf_field_id.fld_type>4</obf_field_id.fld_type>
+		<obf_order>230</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDateToYear</obf_field_id.fld_name>
+		<obf_field_id.fld_type>4</obf_field_id.fld_type>
+		<obf_order>240</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2149,7 +4474,239 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrTime</obf_field_id.fld_name>
 		<obf_field_id.fld_type>6</obf_field_id.fld_type>
-		<obf_order>180</obf_order>
+		<obf_order>250</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrTimeToMinute</obf_field_id.fld_name>
+		<obf_field_id.fld_type>6</obf_field_id.fld_type>
+		<obf_order>260</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrTimeToHour</obf_field_id.fld_name>
+		<obf_field_id.fld_type>6</obf_field_id.fld_type>
+		<obf_order>270</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDateTime</obf_field_id.fld_name>
+		<obf_field_id.fld_type>5</obf_field_id.fld_type>
+		<obf_order>280</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDateTimeToMinute</obf_field_id.fld_name>
+		<obf_field_id.fld_type>5</obf_field_id.fld_type>
+		<obf_order>290</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDateTimeToHour</obf_field_id.fld_name>
+		<obf_field_id.fld_type>5</obf_field_id.fld_type>
+		<obf_order>300</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDateTimeToDay</obf_field_id.fld_name>
+		<obf_field_id.fld_type>5</obf_field_id.fld_type>
+		<obf_order>310</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDateTimeToMonth</obf_field_id.fld_name>
+		<obf_field_id.fld_type>5</obf_field_id.fld_type>
+		<obf_order>320</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-4</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>4</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDateTimeToYear</obf_field_id.fld_name>
+		<obf_field_id.fld_type>5</obf_field_id.fld_type>
+		<obf_order>330</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2178,7 +4735,152 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrEnum</obf_field_id.fld_name>
 		<obf_field_id.fld_type>7</obf_field_id.fld_type>
-		<obf_order>190</obf_order>
+		<obf_order>340</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumRadioHorizontal</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>350</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumCheckboxHorizontal</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>360</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumCheckboxVertical</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>370</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumRadioVertical</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>380</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumPillbox</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>390</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2207,7 +4909,152 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrEnumMulti</obf_field_id.fld_name>
 		<obf_field_id.fld_type>14</obf_field_id.fld_type>
-		<obf_order>200</obf_order>
+		<obf_order>400</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumMultiCheckboxHorizontal</obf_field_id.fld_name>
+		<obf_field_id.fld_type>14</obf_field_id.fld_type>
+		<obf_order>410</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumMultiCheckboxVertical</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>420</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumMultiRadioHorizontal</obf_field_id.fld_name>
+		<obf_field_id.fld_type>14</obf_field_id.fld_type>
+		<obf_order>430</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumMultiRadioVertical</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>440</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrEnumMultiPillbox</obf_field_id.fld_name>
+		<obf_field_id.fld_type>14</obf_field_id.fld_type>
+		<obf_order>450</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2236,7 +5083,94 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrBoolean</obf_field_id.fld_name>
 		<obf_field_id.fld_type>8</obf_field_id.fld_type>
-		<obf_order>210</obf_order>
+		<obf_order>460</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrBooleanCheckbox</obf_field_id.fld_name>
+		<obf_field_id.fld_type>8</obf_field_id.fld_type>
+		<obf_order>470</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrBooleanCombobox</obf_field_id.fld_name>
+		<obf_field_id.fld_type>8</obf_field_id.fld_type>
+		<obf_order>480</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-5</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>5</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrBooleanSlide</obf_field_id.fld_name>
+		<obf_field_id.fld_type>8</obf_field_id.fld_type>
+		<obf_order>490</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2265,7 +5199,94 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrDocument</obf_field_id.fld_name>
 		<obf_field_id.fld_type>17</obf_field_id.fld_type>
-		<obf_order>220</obf_order>
+		<obf_order>500</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-6</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>6</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDocumentName</obf_field_id.fld_name>
+		<obf_field_id.fld_type>17</obf_field_id.fld_type>
+		<obf_order>510</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-6</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>6</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDocumentMultiBox</obf_field_id.fld_name>
+		<obf_field_id.fld_type>17</obf_field_id.fld_type>
+		<obf_order>520</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-6</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>6</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrDocumentMultiList</obf_field_id.fld_name>
+		<obf_field_id.fld_type>17</obf_field_id.fld_type>
+		<obf_order>530</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2294,7 +5315,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrExternalFile</obf_field_id.fld_name>
 		<obf_field_id.fld_type>19</obf_field_id.fld_type>
-		<obf_order>230</obf_order>
+		<obf_order>540</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2323,7 +5344,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrImage</obf_field_id.fld_name>
 		<obf_field_id.fld_type>20</obf_field_id.fld_type>
-		<obf_order>240</obf_order>
+		<obf_order>550</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2352,7 +5373,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrUrl</obf_field_id.fld_name>
 		<obf_field_id.fld_type>10</obf_field_id.fld_type>
-		<obf_order>250</obf_order>
+		<obf_order>560</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2381,7 +5402,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrEmail</obf_field_id.fld_name>
 		<obf_field_id.fld_type>12</obf_field_id.fld_type>
-		<obf_order>260</obf_order>
+		<obf_order>570</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2410,36 +5431,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrPassword</obf_field_id.fld_name>
 		<obf_field_id.fld_type>9</obf_field_id.fld_type>
-		<obf_order>270</obf_order>
-		<obf_group_by/>
-		<obf_dfault_order/>
-		<obf_input/>
-		<obf_ref_field_id.fld_name/>
-		<obf_ref_object_id.obo_name/>
-		<obf_cascad/>
-		<obf_card/>
-		<obf_visible/>
-		<obf_ref_export>1</obf_ref_export>
-		<obf_copy/>
-		<obf_ref_order/>
-		<obf_fld_visible/>
-		<obf_fld_required/>
-		<obf_fld_updatable/>
-		<obf_fld_research/>
-		<obf_fld_more/>
-		<obf_fld_listmore/>
-		<obf_fld_researchreq/>
-		<obf_fld_dfault/>
-		<obf_field_id.fld_dfault/>
-		<obf_area_id.ofa_name>FtAttributes-7</obf_area_id.ofa_name>
-		<obf_area_id.ofa_position>7</obf_area_id.ofa_position>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
-		<obf_field_id.fld_name>ftAttrNotepad</obf_field_id.fld_name>
-		<obf_field_id.fld_type>21</obf_field_id.fld_type>
-		<obf_order>280</obf_order>
+		<obf_order>580</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2468,7 +5460,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrPhoneNumber</obf_field_id.fld_name>
 		<obf_field_id.fld_type>22</obf_field_id.fld_type>
-		<obf_order>290</obf_order>
+		<obf_order>590</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2497,7 +5489,7 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrColor</obf_field_id.fld_name>
 		<obf_field_id.fld_type>23</obf_field_id.fld_type>
-		<obf_order>300</obf_order>
+		<obf_order>600</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2526,7 +5518,65 @@
 		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftAttrGeographicalCoordinates</obf_field_id.fld_name>
 		<obf_field_id.fld_type>25</obf_field_id.fld_type>
-		<obf_order>310</obf_order>
+		<obf_order>610</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-7</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>7</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrNotepad</obf_field_id.fld_name>
+		<obf_field_id.fld_type>21</obf_field_id.fld_type>
+		<obf_order>620</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_area_id.ofa_name>FtAttributes-7</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>7</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtAttributes</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftAttrNotepadUserActivities</obf_field_id.fld_name>
+		<obf_field_id.fld_type>21</obf_field_id.fld_type>
+		<obf_order>630</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order/>
 		<obf_input/>
@@ -2599,6 +5649,28 @@
 	</data>
 </object>
 <object>
+	<name>DocIndex</name>
+	<action>upsert</action>
+	<data>
+		<din_name>B-ftAttrDocumentMultiBox</din_name>
+		<din_field_id.fld_name>ftAttrDocumentMultiBox</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<din_name>B-ftAttrDocumentMultiList</din_name>
+		<din_field_id.fld_name>ftAttrDocumentMultiList</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+</object>
+<object>
 	<name>Map</name>
 	<action>upsert</action>
 	<data>
@@ -2647,6 +5719,42 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrBooleanCheckbox</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Boolean Checkbox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrBooleanCombobox</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Boolean Combobox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrBooleanSlide</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Boolean Slide</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrColor</tsl_id.fld_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Color</tsl_value>
@@ -2683,6 +5791,90 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToDay</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date Time (To Day)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToHour</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date Time (To Hour)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToMinute</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date Time (To Minute)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToMonth</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date Time (To Month)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToYear</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date Time (To Year)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateToMonth</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date (To Month)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateToYear</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date (To Year)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrDecimal</tsl_id.fld_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Decimal</tsl_value>
@@ -2695,9 +5887,105 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalCalculator</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Decimal Calculator</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalEuro</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Decimal Euro</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalMonetary</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Decimal Monetary</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalPercentage</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Decimal Percentage</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalProgressBar</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Decimal Progress Bar</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrDocument</tsl_id.fld_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Document</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDocumentMultiBox</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Document (Multi, Box)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDocumentMultiList</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Document (Multi, List)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDocumentName</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Document (Name)</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -2731,9 +6019,129 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumCheckboxHorizontal</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Checkbox Horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumCheckboxVertical</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Checkbox Vertical</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrEnumMulti</tsl_id.fld_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Enum Multi</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiCheckboxHorizontal</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Multi Checkbox Horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiCheckboxVertical</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Multi Checkbox Vertical</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiPillbox</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Multi Pillbox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiRadioHorizontal</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Multi Radio Horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiRadioVertical</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Multi Radio Vertical</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumPillbox</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Pillbox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumRadioHorizontal</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Radio Horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumRadioVertical</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Enum Radio Vertical</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -2947,6 +6355,18 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrNotepadUserActivities</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Notepad (User Activities)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrPassword</tsl_id.fld_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Password</tsl_value>
@@ -2995,6 +6415,30 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrTimeToHour</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Time (To Hour)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrTimeToMinute</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Time (To Minute)</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrUrl</tsl_id.fld_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Url</tsl_value>
@@ -3007,9 +6451,57 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrValidatedText</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Validated Text</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrBoolean</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Ft attr boolean</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrBooleanCheckbox</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr boolean checkbox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrBooleanCombobox</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr boolean combobox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrBooleanSlide</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr boolean slide</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -3055,6 +6547,90 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToDay</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr date time to day</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToHour</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr date time to hour</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToMinute</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr date time to minute</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToMonth</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr date time to month</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateTimeToYear</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr date time to year</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateToMonth</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr date to month</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDateToYear</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr date to year</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrDecimal</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Ft attr decimal</tsl_value>
@@ -3067,9 +6643,105 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalCalculator</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr decimal calculator</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalEuro</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr decimal euro</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalMonetary</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr decimal monetary</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalPercentage</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr decimal percentage</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDecimalProgressBar</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr decimal progressbar</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrDocument</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Ft attr document</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDocumentMultiBox</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr document multi box</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDocumentMultiList</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr document multi list</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrDocumentName</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr document name</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -3103,9 +6775,129 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumCheckboxHorizontal</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum checkbox horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumCheckboxVertical</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum checkbox vertical</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrEnumMulti</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Ft attr enum multi</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiCheckboxHorizontal</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum multi checkbox horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiCheckboxVertical</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum multi checkbox vertical</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiPillbox</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum multi pillbox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiRadioHorizontal</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum multi radio horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumMultiRadioVertical</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum multi radio vertical</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumPillbox</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum pillbox</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumRadioHorizontal</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum radio horizontal</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrEnumRadioVertical</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr enum radio vertical</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -3319,6 +7111,18 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrNotepadUserActivities</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr notepad user activities</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrPassword</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Ft attr password</tsl_value>
@@ -3367,9 +7171,45 @@
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrTimeToHour</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr time to hour</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrTimeToMinute</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr time to minute</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftAttrUrl</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Ft attr url</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftAttrValidatedText</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft attr validated text</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -3481,6 +7321,24 @@
 	</data>
 </object>
 <object>
+	<name>TranslateFieldType</name>
+	<action>upsert</action>
+	<data>
+		<tsl_typeFieldType>R</tsl_typeFieldType>
+		<tsl_id.flt_code>FTATTRVALIDATEDTEXT</tsl_id.flt_code>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>FTATTRVALIDATEDTEXT</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeFieldType>R</tsl_typeFieldType>
+		<tsl_id.flt_code>FTATTRVALIDATEDTEXT</tsl_id.flt_code>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>FTATTRVALIDATEDTEXT</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+</object>
+<object>
 	<name>TranslateDomain</name>
 	<action>upsert</action>
 	<data>
@@ -3537,6 +7395,38 @@
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>SimFeaturesScope</tsl_value>
 		<tsl_help/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+</object>
+<object>
+	<name>TranslateDocIndex</name>
+	<action>upsert</action>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocumentMultiBox</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ftAttrDocumentMultiBox</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocumentMultiList</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ftAttrDocumentMultiList</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocumentMultiBox</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ftAttrDocumentMultiBox</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocumentMultiList</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ftAttrDocumentMultiList</tsl_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 </object>

@@ -93,6 +93,11 @@ paths:
         type: string
         required: false
       - in: query
+        name: ftAttrValidatedText
+        description: Search filter for Validated Text
+        type: string
+        required: false
+      - in: query
         name: ftAttrLongText
         description: Search filter for Long Text
         type: string
@@ -133,13 +138,18 @@ paths:
         type: integer
         required: false
       - in: query
-        name: ftAttrIntegerProgressBar
-        description: Search filter for Integer Progress Bar
+        name: ftAttrIntegerPercentage
+        description: Search filter for Integer Percentage
         type: integer
         required: false
       - in: query
-        name: ftAttrIntegerPercentage
-        description: Search filter for Integer Percentage
+        name: ftAttrIntegerEuro
+        description: Search filter for Integer Euro
+        type: integer
+        required: false
+      - in: query
+        name: ftAttrIntegerProgressBar
+        description: Search filter for Integer Progress Bar
         type: integer
         required: false
       - in: query
@@ -153,13 +163,33 @@ paths:
         type: integer
         required: false
       - in: query
-        name: ftAttrIntegerEuro
-        description: Search filter for Integer Euro
-        type: integer
-        required: false
-      - in: query
         name: ftAttrDecimal
         description: Search filter for Decimal
+        type: number
+        required: false
+      - in: query
+        name: ftAttrDecimalMonetary
+        description: Search filter for Decimal Monetary
+        type: number
+        required: false
+      - in: query
+        name: ftAttrDecimalPercentage
+        description: Search filter for Decimal Percentage
+        type: number
+        required: false
+      - in: query
+        name: ftAttrDecimalEuro
+        description: Search filter for Decimal Euro
+        type: number
+        required: false
+      - in: query
+        name: ftAttrDecimalProgressBar
+        description: Search filter for Decimal Progress Bar
+        type: number
+        required: false
+      - in: query
+        name: ftAttrDecimalCalculator
+        description: Search filter for Decimal Calculator
         type: number
         required: false
       - in: query
@@ -168,8 +198,13 @@ paths:
         type: string
         required: false
       - in: query
-        name: ftAttrDateTime
-        description: Search filter for Date Time
+        name: ftAttrDateToMonth
+        description: Search filter for Date (To Month)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateToYear
+        description: Search filter for Date (To Year)
         type: string
         required: false
       - in: query
@@ -178,8 +213,93 @@ paths:
         type: string
         required: false
       - in: query
+        name: ftAttrTimeToMinute
+        description: Search filter for Time (To Minute)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrTimeToHour
+        description: Search filter for Time (To Hour)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateTime
+        description: Search filter for Date Time
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateTimeToMinute
+        description: Search filter for Date Time (To Minute)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateTimeToHour
+        description: Search filter for Date Time (To Hour)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateTimeToDay
+        description: Search filter for Date Time (To Day)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateTimeToMonth
+        description: Search filter for Date Time (To Month)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDateTimeToYear
+        description: Search filter for Date Time (To Year)
+        type: string
+        required: false
+      - in: query
         name: ftAttrEnum
         description: Search filter for Enum
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumRadioHorizontal
+        description: Search filter for Enum Radio Horizontal
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumCheckboxHorizontal
+        description: Search filter for Enum Checkbox Horizontal
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumCheckboxVertical
+        description: Search filter for Enum Checkbox Vertical
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumRadioVertical
+        description: Search filter for Enum Radio Vertical
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumPillbox
+        description: Search filter for Enum Pillbox
         type: string
         required: false
         enum:
@@ -196,13 +316,88 @@ paths:
         - B
         - C
       - in: query
+        name: ftAttrEnumMultiCheckboxHorizontal
+        description: Search filter for Enum Multi Checkbox Horizontal
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumMultiCheckboxVertical
+        description: Search filter for Enum Multi Checkbox Vertical
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumMultiRadioHorizontal
+        description: Search filter for Enum Multi Radio Horizontal
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumMultiRadioVertical
+        description: Search filter for Enum Multi Radio Vertical
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftAttrEnumMultiPillbox
+        description: Search filter for Enum Multi Pillbox
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
         name: ftAttrBoolean
         description: Search filter for Boolean
         type: boolean
         required: false
       - in: query
+        name: ftAttrBooleanCheckbox
+        description: Search filter for Boolean Checkbox
+        type: boolean
+        required: false
+      - in: query
+        name: ftAttrBooleanCombobox
+        description: Search filter for Boolean Combobox
+        type: boolean
+        required: false
+      - in: query
+        name: ftAttrBooleanSlide
+        description: Search filter for Boolean Slide
+        type: boolean
+        required: false
+      - in: query
         name: ftAttrDocument
         description: Search filter for Document
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDocumentName
+        description: Search filter for Document (Name)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDocumentMultiBox
+        description: Search filter for Document (Multi, Box)
+        type: string
+        required: false
+      - in: query
+        name: ftAttrDocumentMultiList
+        description: Search filter for Document (Multi, List)
         type: string
         required: false
       - in: query
@@ -231,11 +426,6 @@ paths:
         type: string
         required: false
       - in: query
-        name: ftAttrNotepad
-        description: Search filter for Notepad
-        type: string
-        required: false
-      - in: query
         name: ftAttrPhoneNumber
         description: Search filter for Phone Number
         type: string
@@ -248,6 +438,16 @@ paths:
       - in: query
         name: ftAttrGeographicalCoordinates
         description: Search filter for Geographical Coordinates
+        type: string
+        required: false
+      - in: query
+        name: ftAttrNotepad
+        description: Search filter for Notepad
+        type: string
+        required: false
+      - in: query
+        name: ftAttrNotepadUserActivities
+        description: Search filter for Notepad (User Activities)
         type: string
         required: false
       tags:
@@ -471,43 +671,72 @@ definitions:
   FtAttributes:
     type: object
     properties:
+      ftAttrDateTimeToMinute:
+        description: Date Time (To Minute)
+        type: string
+        example: yyyy-MM-dd HH:mm:ss
+      ftAttrTimeToMinute:
+        description: Time (To Minute)
+        type: string
+        example: HH:mm:ss
+      ftAttrValidatedText:
+        description: Validated Text
+        type: string
       ftAttrPassword:
         description: Password
         type: string
-      ftAttrLongTextGrid:
-        description: Long Text Grid
+      ftAttrDateTimeToDay:
+        description: Date Time (To Day)
         type: string
+        example: yyyy-MM-dd HH:mm:ss
+      ftAttrBooleanCombobox:
+        description: Boolean Combobox
+        type: boolean
+      ftAttrDateTimeToHour:
+        description: Date Time (To Hour)
+        type: string
+        example: yyyy-MM-dd HH:mm:ss
       ftAttrDecimal:
         description: Decimal
         type: number
-      ftAttrLongTextMarkdown:
-        description: Long Text Markdown
+      ftAttrDecimalPercentage:
+        description: Decimal Percentage
+        type: number
+      ftAttrEnumMultiRadioHorizontal:
+        description: Enum Multi Radio Horizontal
+        type: array
+        items:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+      ftAttrDateToMonth:
+        description: Date (To Month)
         type: string
-      ftAttrColor:
-        description: Color
-        type: string
-        example: '#RRGGBB'
+        example: yyyy-MM-dd
       ftAttrIntegerEuro:
         description: Integer Euro
         type: integer
-      ftAttrEmail:
-        description: Email
-        type: string
       ftAttrIntegerPercentage:
         description: Integer Percentage
         type: integer
+      ftAttrDocumentName:
+        description: Document (Name)
+        type: object
       ftAttrLongTextGridSource:
         description: Long Text Grid Source
         type: string
       ftAttrIntegerStars:
         description: Integer Stars
         type: integer
-      ftAttrUrl:
-        description: Url
-        type: string
       ftAttrInteger:
         description: Integer
         type: integer
+      ftAttrDateToYear:
+        description: Date (To Year)
+        type: string
+        example: yyyy-MM-dd
       ftAttrEnum:
         description: Enum
         type: string
@@ -515,9 +744,9 @@ definitions:
         - A
         - B
         - C
-      ftAttrImage:
-        description: Image
-        type: object
+      ftAttrDecimalMonetary:
+        description: Decimal Monetary
+        type: number
       ftAttrBoolean:
         description: Boolean
         type: boolean
@@ -527,6 +756,128 @@ definitions:
       ftAttrIntegerMonetary:
         description: Integer Monetary
         type: integer
+      ftAttrDateTimeToMonth:
+        description: Date Time (To Month)
+        type: string
+        example: yyyy-MM-dd HH:mm:ss
+      ftAttrEnumMultiCheckboxHorizontal:
+        description: Enum Multi Checkbox Horizontal
+        type: array
+        items:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+      ftAttrEnumMultiCheckboxVertical:
+        description: Enum Multi Checkbox Vertical
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrDecimalCalculator:
+        description: Decimal Calculator
+        type: number
+      ftAttrEnumRadioVertical:
+        description: Enum Radio Vertical
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrDate:
+        description: Date
+        type: string
+        example: yyyy-MM-dd
+      ftAttrEnumRadioHorizontal:
+        description: Enum Radio Horizontal
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrHtml:
+        description: Html
+        type: string
+      ftAttrEnumCheckboxHorizontal:
+        description: Enum Checkbox Horizontal
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrPhoneNumber:
+        description: Phone Number
+        type: string
+      ftAttrLongTextEditor:
+        description: Long Text Editor
+        type: string
+      ftAttrShortText:
+        description: Short Text
+        type: string
+      ftAttrEnumPillbox:
+        description: Enum Pillbox
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrLongTextGrid:
+        description: Long Text Grid
+        type: string
+      ftAttrLongTextMarkdown:
+        description: Long Text Markdown
+        type: string
+      ftAttrDecimalProgressBar:
+        description: Decimal Progress Bar
+        type: number
+      ftAttrColor:
+        description: Color
+        type: string
+        example: '#RRGGBB'
+      ftAttrDocumentMultiList:
+        description: Document (Multi, List)
+        type: object
+      ftAttrNotepadUserActivities:
+        description: Notepad (User Activities)
+        type: string
+      ftAttrDateTimeToYear:
+        description: Date Time (To Year)
+        type: string
+        example: yyyy-MM-dd HH:mm:ss
+      ftAttrEmail:
+        description: Email
+        type: string
+      ftAttrBooleanCheckbox:
+        description: Boolean Checkbox
+        type: boolean
+      ftAttrEnumCheckboxVertical:
+        description: Enum Checkbox Vertical
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrUrl:
+        description: Url
+        type: string
+      ftAttrDecimalEuro:
+        description: Decimal Euro
+        type: number
+      ftAttrImage:
+        description: Image
+        type: object
+      ftAttrEnumMultiRadioVertical:
+        description: Enum Multi Radio Vertical
+        type: string
+        enum:
+        - A
+        - B
+        - C
+      ftAttrDocumentMultiBox:
+        description: Document (Multi, Box)
+        type: object
       ftAttrTime:
         description: Time
         type: string
@@ -534,30 +885,39 @@ definitions:
       ftAttrExternalFile:
         description: External File
         type: string
+      ftAttrEnumMultiPillbox:
+        description: Enum Multi Pillbox
+        type: array
+        items:
+          type: string
+          enum:
+          - A
+          - B
+          - C
       ftAttrDocument:
         description: Document
         type: object
+      ftAttrTimeToHour:
+        description: Time (To Hour)
+        type: string
+        example: HH:mm:ss
       ftAttrGeographicalCoordinates:
         description: Geographical Coordinates
         type: string
         example: latitude;longitude
-      ftAttrDate:
-        description: Date
-        type: string
-        example: yyyy-MM-dd
       ftAttrIntegerProgressBar:
         description: Integer Progress Bar
         type: integer
       ftAttrNotepad:
         description: Notepad
         type: string
-      ftAttrHtml:
-        description: Html
-        type: string
       ftAttrDateTime:
         description: Date Time
         type: string
         example: yyyy-MM-dd HH:mm:ss
+      ftAttrBooleanSlide:
+        description: Boolean Slide
+        type: boolean
       row_id:
         description: Unique technical row ID
         type: string
@@ -570,18 +930,9 @@ definitions:
           - A
           - B
           - C
-      ftAttrPhoneNumber:
-        description: Phone Number
-        type: string
-      ftAttrLongTextEditor:
-        description: Long Text Editor
-        type: string
       ftAttrIntegerSlider:
         description: Integer Slider
         type: integer
-      ftAttrShortText:
-        description: Short Text
-        type: string
   ArrayOfFtAttributes:
     type: array
     items:
