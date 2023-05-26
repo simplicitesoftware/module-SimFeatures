@@ -24,7 +24,8 @@ Object showcasing all the possible attributes
 
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| `ftAttrShortText`                                            | char(255)                                | yes*     | yes       |          | -                                                                                |
+| `ftAttrCode`                                                 | char(10)                                 | yes*     | yes       |          | -                                                                                |
+| `ftAttrShortText`                                            | char(255)                                |          | yes       |          | -                                                                                |
 | `ftAttrValidatedText`                                        | regexp(250)                              |          | yes       |          | -                                                                                |
 | `ftAttrLongText`                                             | text(1000)                               |          | yes       |          | -                                                                                |
 | `ftAttrLongTextEditor`                                       | text(1500)                               |          | yes       |          | -                                                                                |

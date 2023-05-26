@@ -265,6 +265,9 @@ components:
           description: Geographical Coordinates
           type: string
           example: latitude;longitude
+        ftAttrCode:
+          description: Code
+          type: string
         ftAttrIntegerProgressBar:
           description: Integer Progress Bar
           type: integer
@@ -306,6 +309,27 @@ components:
         content:
           description: Content (plain text or base64 encoded)
           type: string
+    PlaceData:
+      type: object
+      properties:
+        coord:
+          description: Geographical coordinates
+          type: string
+        address:
+          description: Address
+          type: string
+        row_id:
+          description: Row ID
+          type: string
+        label1:
+          description: 'Label #1'
+          type: string
+        label2:
+          description: 'Label #2'
+          type: string
+        label3:
+          description: 'Label #3'
+          type: string
     Error400:
       type: object
       properties:
@@ -339,6 +363,17 @@ components:
           type: integer
           enum:
           - 500
+    PlaceMapData:
+      type: object
+      properties:
+        places:
+          description: Places
+          type: array
+          items:
+            $ref: '#/components/schemas/PlaceData'
+        name:
+          description: Name
+          type: string
     Error403:
       type: object
       properties:
@@ -358,6 +393,8 @@ components:
       bearerFormat: Simplicite token
       scheme: bearer
       type: http
+servers:
+- url: /api
 openapi: 3.0.2
 paths:
   /login:
@@ -454,6 +491,12 @@ paths:
         in: query
         name: _doc
         description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftAttrCode
+        description: Search filter for Code
         required: false
       - schema:
           type: string
@@ -885,7 +928,7 @@ paths:
       - FtAttributes
   /rest/FtAttributes/{row_id}:
     post:
-      summary: Create a new FtAttributesbusiness object record
+      summary: Create a new FtAttributes business object record
       security:
       - bearerAuth: []
       requestBody:
@@ -1029,7 +1072,7 @@ paths:
       tags:
       - FtAttributes
     put:
-      summary: Update a FtAttributesbusiness object record
+      summary: Update a FtAttributes business object record
       security:
       - bearerAuth: []
       requestBody:
