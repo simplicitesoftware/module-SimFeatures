@@ -140,3 +140,38 @@ Object showcasing all the possible attributes
     - `B` code B
     - `C` code C
 
+`FtCustomUser` business object definition
+-----------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+
+`FtReflexiveMany` business object definition
+--------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftRxmCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+
+`FtRxmLink` business object definition
+--------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftRxlRxm1` link to **`FtReflexiveMany`**                    | id                                       | yes*     | yes       |          | -                                                                                |
+| _Ref. `ftRxlRxm1.ftRxmCode`_                                 | _char(100)_                              |          |           |          | -                                                                                |
+| `ftRxlRxm2` link to **`FtReflexiveMany`**                    | id                                       | yes*     | yes       |          | -                                                                                |
+| _Ref. `ftRxlRxm2.ftRxmCode`_                                 | _char(100)_                              |          |           |          | -                                                                                |
+
