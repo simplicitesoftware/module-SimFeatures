@@ -74,6 +74,9 @@ components:
         row_id:
           description: Unique technical row ID
           type: string
+        ftRxmId:
+          description: Reflexive item (many)
+          type: string
     ArrayOfFtReflexiveMany:
       type: array
       items:
@@ -1722,6 +1725,12 @@ paths:
         in: query
         name: ftRxmCode
         description: Search filter for Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftRxmId
+        description: Search filter for Reflexive item (many)
         required: false
       tags:
       - FtReflexiveMany

@@ -160,6 +160,7 @@ Object showcasing all the possible attributes
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftRxmCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+| `ftRxmId` link to **`FtReflexiveMany`**                      | id                                       |          | yes       |          | -                                                                                |
 
 `FtRxmLink` business object definition
 --------------------------------------

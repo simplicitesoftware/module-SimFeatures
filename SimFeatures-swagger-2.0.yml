@@ -1048,6 +1048,11 @@ paths:
         description: Search filter for Code
         type: string
         required: false
+      - in: query
+        name: ftRxmId
+        description: Search filter for Reflexive item (many)
+        type: string
+        required: false
       tags:
       - FtReflexiveMany
   /rest/FtAttributes/{row_id}:
@@ -1419,6 +1424,9 @@ definitions:
         type: string
       row_id:
         description: Unique technical row ID
+        type: string
+      ftRxmId:
+        description: Reflexive item (many)
         type: string
   ArrayOfFtReflexiveMany:
     type: array
