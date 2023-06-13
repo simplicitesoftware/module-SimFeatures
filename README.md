@@ -150,6 +150,40 @@ Object showcasing all the possible attributes
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 
+`FtListItem` business object definition
+---------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftLstCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+| `ftLstType`                                                  | enum(10) using `FT_LST_TYPE` list        |          | yes       |          | -                                                                                |
+| `ftLstDescription`                                           | html(5000)                               |          | yes       |          | -                                                                                |
+| `ftLstImage`                                                 | image                                    |          | yes       |          | -                                                                                |
+
+### Lists
+
+* `FT_LST_TYPE`
+    - `A` code A
+    - `B` code B
+    - `C` code C
+
+`FtO2mChild` business object definition
+---------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftO2mcCode`                                                 | char(20)                                 | yes*     | yes       |          | -                                                                                |
+| `ftO2mcO2mId` link to **`FtRelationshipO2m`**                | id                                       | yes      | yes       |          | -                                                                                |
+| _Ref. `ftO2mcO2mId.ftO2mCode`_                               | _char(30)_                               |          |           |          | -                                                                                |
+
 `FtReflexiveMany` business object definition
 --------------------------------------------
 
@@ -161,6 +195,17 @@ Object showcasing all the possible attributes
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftRxmCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
 | `ftRxmId` link to **`FtReflexiveMany`**                      | id                                       |          | yes       |          | -                                                                                |
+
+`FtRelationshipO2m` business object definition
+----------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftO2mCode`                                                  | char(30)                                 | yes*     | yes       |          | -                                                                                |
 
 `FtRxmLink` business object definition
 --------------------------------------
