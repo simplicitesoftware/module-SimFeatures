@@ -7515,25 +7515,6 @@
 	</data>
 </object>
 <object>
-	<name>LinkMap</name>
-	<action>upsert</action>
-	<data>
-		<lmp_link_id.obf_ref_object_id.obo_name>DemoProduct</lmp_link_id.obf_ref_object_id.obo_name>
-		<lmp_link_id.obf_object_id.obj_name>DemoMapping</lmp_link_id.obf_object_id.obj_name>
-		<lmp_link_id.obf_field_id.fld_name>demoMapPrdId</lmp_link_id.obf_field_id.fld_name>
-		<lmp_link_id.obf_order>200</lmp_link_id.obf_order>
-		<lmp_obf_id.obf_object_id.obo_name>DemoMapping</lmp_obf_id.obf_object_id.obo_name>
-		<lmp_obf_id.obf_field_id.fld_name>demoMapSupId</lmp_obf_id.obf_field_id.fld_name>
-		<lmp_obf_id.obf_order>100</lmp_obf_id.obf_order>
-		<lmp_value/>
-		<lmp_type>1</lmp_type>
-		<lmp_obfmap_id.obf_object_id.obo_name>DemoProduct</lmp_obfmap_id.obf_object_id.obo_name>
-		<lmp_obfmap_id.obf_field_id.fld_name>demoPrdSupId</lmp_obfmap_id.obf_field_id.fld_name>
-		<lmp_obfmap_id.obf_order>100</lmp_obfmap_id.obf_order>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-</object>
-<object>
 	<name>Action</name>
 	<action>upsert</action>
 	<data>
