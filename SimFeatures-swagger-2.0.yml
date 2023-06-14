@@ -2557,7 +2557,7 @@ tags:
 - name: FtListItem
   description: Lists
 - name: FtO2mChild
-  description: Child (one to many)
+  description: FtO2mChild
 - name: FtReflexiveMany
   description: Reflexive item (many)
 - name: FtRelationshipO2m
