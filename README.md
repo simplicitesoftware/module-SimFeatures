@@ -221,3 +221,39 @@ Object showcasing all the possible attributes
 | `ftRxlRxm2` link to **`FtReflexiveMany`**                    | id                                       | yes*     | yes       |          | -                                                                                |
 | _Ref. `ftRxlRxm2.ftRxmCode`_                                 | _char(100)_                              |          |           |          | -                                                                                |
 
+`FtTag` business object definition
+----------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftTagName`                                                  | char(50)                                 | yes*     | yes       |          | -                                                                                |
+
+`FtTaggedObject` business object definition
+-------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftTgoCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+
+`FtTgoTag` business object definition
+-------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftTgotagTgoId` link to **`FtTaggedObject`**                 | id                                       | yes*     | yes       |          | -                                                                                |
+| _Ref. `ftTgotagTgoId.ftTgoCode`_                             | _char(100)_                              |          |           |          | -                                                                                |
+| `ftTgotagTagId` link to **`FtTag`**                          | id                                       | yes*     | yes       |          | -                                                                                |
+| _Ref. `ftTgotagTagId.ftTagName`_                             | _char(50)_                               |          |           |          | -                                                                                |
+

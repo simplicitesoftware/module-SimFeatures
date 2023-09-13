@@ -16,14 +16,6 @@ components:
           type: integer
           enum:
           - 404
-    ArrayOfFtCustomUser:
-      type: array
-      items:
-        $ref: '#/components/schemas/FtCustomUser'
-    ArrayOfFtAttributes:
-      type: array
-      items:
-        $ref: '#/components/schemas/FtAttributes'
     PublicationResult:
       type: object
       properties:
@@ -80,32 +72,10 @@ components:
         name:
           description: Name
           type: string
-    FtReflexiveMany:
-      type: object
-      properties:
-        ftRxmCode:
-          description: Code
-          type: string
-        row_id:
-          description: Unique technical row ID
-          type: string
-        ftRxmId:
-          description: Reflexive item (many)
-          type: string
     ArrayOfFtReflexiveMany:
       type: array
       items:
         $ref: '#/components/schemas/FtReflexiveMany'
-    ArrayOfFtO2mChild:
-      type: array
-      items:
-        $ref: '#/components/schemas/FtO2mChild'
-    ActionResult:
-      type: object
-      properties:
-        result:
-          description: Action result
-          type: string
     FtRxmLink:
       type: object
       properties:
@@ -174,12 +144,6 @@ components:
         usr_first_name:
           description: First name
           type: string
-    TreeviewData:
-      type: object
-      properties:
-        item:
-          description: Object item with lists of linked objects' items
-          type: object
     FtAttributes:
       type: object
       properties:
@@ -448,6 +412,10 @@ components:
         ftAttrIntegerSlider:
           description: Integer Slider
           type: integer
+    ArrayOfFtTgoTag:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTgoTag'
     ArrayOfFtListItem:
       type: array
       items:
@@ -463,19 +431,15 @@ components:
           type: integer
           enum:
           - 400
-    FtRelationshipO2m:
+    FtTag:
       type: object
       properties:
-        ftO2mCode:
-          description: Code
+        ftTagName:
+          description: Name
           type: string
         row_id:
           description: Unique technical row ID
           type: string
-    ArrayOfFtRelationshipO2m:
-      type: array
-      items:
-        $ref: '#/components/schemas/FtRelationshipO2m'
     Error401:
       type: object
       properties:
@@ -498,6 +462,105 @@ components:
           type: integer
           enum:
           - 500
+    Error403:
+      type: object
+      properties:
+        error:
+          description: Error message
+          type: string
+        status:
+          description: Error status
+          type: integer
+          enum:
+          - 403
+    ArrayOfFtRxmLink:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtRxmLink'
+    ArrayOfFtCustomUser:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtCustomUser'
+    ArrayOfFtAttributes:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtAttributes'
+    FtReflexiveMany:
+      type: object
+      properties:
+        ftRxmCode:
+          description: Code
+          type: string
+        row_id:
+          description: Unique technical row ID
+          type: string
+        ftRxmId:
+          description: Reflexive item (many)
+          type: string
+    FtTaggedObject:
+      type: object
+      properties:
+        row_id:
+          description: Unique technical row ID
+          type: string
+        ftTgoCode:
+          description: Code
+          type: string
+    ArrayOfFtO2mChild:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtO2mChild'
+    ArrayOfFtTag:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTag'
+    ActionResult:
+      type: object
+      properties:
+        result:
+          description: Action result
+          type: string
+    TreeviewData:
+      type: object
+      properties:
+        item:
+          description: Object item with lists of linked objects' items
+          type: object
+    ArrayOfFtTaggedObject:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTaggedObject'
+    FtTgoTag:
+      type: object
+      properties:
+        ftTgotagTagId__ftTagName:
+          description: Ft tgotag tag id Name
+          type: string
+        ftTgotagTgoId:
+          description: Ft tgotag tgo id
+          type: string
+        ftTgotagTagId:
+          description: Ft tgotag tag id
+          type: string
+        ftTgotagTgoId__ftTgoCode:
+          description: Ft tgotag tgo id Code
+          type: string
+        row_id:
+          description: Unique technical row ID
+          type: string
+    FtRelationshipO2m:
+      type: object
+      properties:
+        ftO2mCode:
+          description: Code
+          type: string
+        row_id:
+          description: Unique technical row ID
+          type: string
+    ArrayOfFtRelationshipO2m:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtRelationshipO2m'
     FtListItem:
       type: object
       properties:
@@ -520,21 +583,6 @@ components:
         row_id:
           description: Unique technical row ID
           type: string
-    Error403:
-      type: object
-      properties:
-        error:
-          description: Error message
-          type: string
-        status:
-          description: Error status
-          type: integer
-          enum:
-          - 403
-    ArrayOfFtRxmLink:
-      type: array
-      items:
-        $ref: '#/components/schemas/FtRxmLink'
   securitySchemes:
     basicAuth:
       scheme: basic
@@ -1182,6 +1230,201 @@ paths:
         required: true
       tags:
       - FtListItem
+  /rest/FtTaggedObject/{row_id}:
+    post:
+      summary: Create a new FtTaggedObject business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTaggedObject'
+      operationId: obj-fttaggedobject-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaggedObject'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaggedObject
+    get:
+      summary: Get a FtTaggedObject business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaggedobject-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaggedObject'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtTaggedObject
+    delete:
+      summary: Delete a FtTaggedObject business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaggedobject-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaggedObject
+    put:
+      summary: Update a FtTaggedObject business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTaggedObject'
+      operationId: obj-fttaggedobject-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaggedObject'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaggedObject
   /rest/FtRxmLink:
     get:
       summary: Search FtRxmLink business object records or get contextualized metadata
@@ -1253,6 +1496,201 @@ paths:
         required: false
       tags:
       - FtRxmLink
+  /rest/FtTgoTag/{row_id}:
+    post:
+      summary: Create a new FtTgoTag business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTgoTag'
+      operationId: obj-fttgotag-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTgoTag'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTgoTag
+    get:
+      summary: Get a FtTgoTag business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttgotag-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTgoTag'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtTgoTag
+    delete:
+      summary: Delete a FtTgoTag business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttgotag-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTgoTag
+    put:
+      summary: Update a FtTgoTag business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTgoTag'
+      operationId: obj-fttgotag-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTgoTag'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTgoTag
   /rest/FtReflexiveMany:
     get:
       summary: Search FtReflexiveMany business object records or get contextualized
@@ -1700,6 +2138,77 @@ paths:
         required: false
       tags:
       - FtO2mChild
+  /rest/FtTgoTag:
+    get:
+      summary: Search FtTgoTag business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-fttgotag-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtTgoTag'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTgotagTgoId
+        description: Search filter for Ft tgotag tgo id
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTgotagTgoId__ftTgoCode
+        description: Search filter for Ft tgotag tgo id Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTgotagTagId
+        description: Search filter for Ft tgotag tag id
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTgotagTagId__ftTagName
+        description: Search filter for Ft tgotag tag id Name
+        required: false
+      tags:
+      - FtTgoTag
   /:
     get:
       summary: Get user session information
@@ -1726,6 +2235,308 @@ paths:
         required: false
       tags:
       - session
+  /rest/FtTag:
+    get:
+      summary: Search FtTag business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-fttag-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtTag'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTagName
+        description: Search filter for Name
+        required: false
+      tags:
+      - FtTag
+  /rest/FtTaggedObject:
+    get:
+      summary: Search FtTaggedObject business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaggedobject-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtTaggedObject'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTgoCode
+        description: Search filter for Code
+        required: false
+      tags:
+      - FtTaggedObject
+  /rest/FtTag/{row_id}:
+    post:
+      summary: Create a new FtTag business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTag'
+      operationId: obj-fttag-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTag'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTag
+    get:
+      summary: Get a FtTag business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttag-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTag'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtTag
+    delete:
+      summary: Delete a FtTag business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttag-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTag
+    put:
+      summary: Update a FtTag business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTag'
+      operationId: obj-fttag-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTag'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTag
   /rest/FtRelationshipO2m:
     get:
       summary: Search FtRelationshipO2m business object records or get contextualized
@@ -2945,3 +3756,9 @@ tags:
   description: Relationship (one to many)
 - name: FtRxmLink
   description: Associated items
+- name: FtTag
+  description: Tag
+- name: FtTaggedObject
+  description: Tagged object
+- name: FtTgoTag
+  description: FtTgoTag
