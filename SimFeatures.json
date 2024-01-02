@@ -923,6 +923,17 @@
    "list": [
     {
      "object": "FieldListValue",
+     "userkey": "FT_LST_TYPE~B~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_LST_TYPE",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "ENU",
+      "lov_value": "B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
      "userkey": "FT_LST_TYPE~A~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FT_LST_TYPE",
@@ -940,17 +951,6 @@
       "lov_code_id__lov_code": "C",
       "lov_lang": "ENU",
       "lov_value": "C",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
-     "userkey": "FT_LST_TYPE~B~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FT_LST_TYPE",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "ENU",
-      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -989,23 +989,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUM~A~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
-      "lov_code_id__lov_code": "A",
-      "lov_lang": "ENU",
-      "lov_value": "A",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUM~C~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
       "lov_code_id__lov_code": "C",
       "lov_lang": "ENU",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUM~A~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "ENU",
+      "lov_value": "A",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1022,12 +1022,12 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUM~B~FRA",
+     "userkey": "FTATTRENUM~A~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
-      "lov_code_id__lov_code": "B",
+      "lov_code_id__lov_code": "A",
       "lov_lang": "FRA",
-      "lov_value": "B",
+      "lov_value": "A",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1044,12 +1044,12 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUM~A~FRA",
+     "userkey": "FTATTRENUM~B~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
-      "lov_code_id__lov_code": "A",
+      "lov_code_id__lov_code": "B",
       "lov_lang": "FRA",
-      "lov_value": "A",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1198,23 +1198,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTI~C~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTI",
-      "lov_code_id__lov_code": "C",
-      "lov_lang": "ENU",
-      "lov_value": "C",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTI~B~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTI",
       "lov_code_id__lov_code": "B",
       "lov_lang": "ENU",
       "lov_value": "B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTI~C~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTI",
+      "lov_code_id__lov_code": "C",
+      "lov_lang": "ENU",
+      "lov_value": "C",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1330,23 +1330,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTICHECKBOXVERTICAL~B~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXVERTICAL",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "ENU",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTICHECKBOXVERTICAL~C~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXVERTICAL",
       "lov_code_id__lov_code": "C",
       "lov_lang": "ENU",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTICHECKBOXVERTICAL~B~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXVERTICAL",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "ENU",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1418,6 +1418,17 @@
     },
     {
      "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTIPILLBOX~A~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIPILLBOX",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "FRA",
+      "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTIPILLBOX~B~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIPILLBOX",
@@ -1440,28 +1451,6 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTIPILLBOX~A~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIPILLBOX",
-      "lov_code_id__lov_code": "A",
-      "lov_lang": "FRA",
-      "lov_value": "A",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~B~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "ENU",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~A~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
@@ -1479,6 +1468,17 @@
       "lov_code_id__lov_code": "C",
       "lov_lang": "ENU",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~B~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "ENU",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1627,23 +1627,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMPILLBOX~B~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMPILLBOX",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "FRA",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMPILLBOX~C~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMPILLBOX",
       "lov_code_id__lov_code": "C",
       "lov_lang": "FRA",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMPILLBOX~B~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMPILLBOX",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "FRA",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1682,17 +1682,6 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMRADIOHORIZONTAL~C~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
-      "lov_code_id__lov_code": "C",
-      "lov_lang": "FRA",
-      "lov_value": "C",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMRADIOHORIZONTAL~B~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
@@ -1715,23 +1704,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMRADIOVERTICAL~C~ENU",
+     "userkey": "FTATTRENUMRADIOHORIZONTAL~C~FRA",
      "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOVERTICAL",
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
       "lov_code_id__lov_code": "C",
-      "lov_lang": "ENU",
+      "lov_lang": "FRA",
       "lov_value": "C",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMRADIOVERTICAL~B~ENU",
+     "userkey": "FTATTRENUMRADIOVERTICAL~C~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOVERTICAL",
-      "lov_code_id__lov_code": "B",
+      "lov_code_id__lov_code": "C",
       "lov_lang": "ENU",
-      "lov_value": "B",
+      "lov_value": "C",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1748,12 +1737,12 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMRADIOVERTICAL~A~FRA",
+     "userkey": "FTATTRENUMRADIOVERTICAL~B~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOVERTICAL",
-      "lov_code_id__lov_code": "A",
-      "lov_lang": "FRA",
-      "lov_value": "A",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "ENU",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1776,6 +1765,17 @@
       "lov_code_id__lov_code": "C",
       "lov_lang": "FRA",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMRADIOVERTICAL~A~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOVERTICAL",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "FRA",
+      "lov_value": "A",
       "row_module_id__mdl_name": "SimFeatures"
      }
     }
@@ -5030,6 +5030,92 @@
     },
     {
      "object": "Field",
+     "userkey": "ftSlcField1",
+     "item": {
+      "fld_name": "ftSlcField1",
+      "fld_dbname": "ft_slc_field1",
+      "fld_visible": "3",
+      "fld_updatable": "1",
+      "fld_required": true,
+      "fld_fonctid": false,
+      "fld_research": "1",
+      "fld_researchreq": "0",
+      "fld_sort": "C",
+      "fld_more": false,
+      "fld_listmore": false,
+      "fld_listsum": null,
+      "fld_exportable": true,
+      "fld_tray": null,
+      "fld_type": "3",
+      "fld_type_id__flt_code": null,
+      "fld_list_id__lov_name": null,
+      "fld_copy": true,
+      "fld_size": 255,
+      "fld_minsize": null,
+      "fld_precision": null,
+      "fld_fromdate_id__fld_name": null,
+      "fld_dfault": null,
+      "fld_indexable": false,
+      "fld_autocomp": "0",
+      "fld_groupby": false,
+      "fld_updall": true,
+      "fld_case": null,
+      "fld_righttoleft": false,
+      "fld_rendering": null,
+      "fld_speech": null,
+      "fld_calc": null,
+      "fld_objlist": null,
+      "fld_comment": null,
+      "fld_classification": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "fld_incrementsyntax": null
+     }
+    },
+    {
+     "object": "Field",
+     "userkey": "ftSlcField2",
+     "item": {
+      "fld_name": "ftSlcField2",
+      "fld_dbname": "ft_slc_field2",
+      "fld_visible": "3",
+      "fld_updatable": "1",
+      "fld_required": false,
+      "fld_fonctid": false,
+      "fld_research": "1",
+      "fld_researchreq": "0",
+      "fld_sort": "C",
+      "fld_more": false,
+      "fld_listmore": false,
+      "fld_listsum": null,
+      "fld_exportable": true,
+      "fld_tray": null,
+      "fld_type": "3",
+      "fld_type_id__flt_code": null,
+      "fld_list_id__lov_name": null,
+      "fld_copy": true,
+      "fld_size": 255,
+      "fld_minsize": null,
+      "fld_precision": null,
+      "fld_fromdate_id__fld_name": null,
+      "fld_dfault": null,
+      "fld_indexable": false,
+      "fld_autocomp": "0",
+      "fld_groupby": false,
+      "fld_updall": true,
+      "fld_case": null,
+      "fld_righttoleft": false,
+      "fld_rendering": null,
+      "fld_speech": null,
+      "fld_calc": null,
+      "fld_objlist": null,
+      "fld_comment": null,
+      "fld_classification": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "fld_incrementsyntax": null
+     }
+    },
+    {
+     "object": "Field",
      "userkey": "ftTagName",
      "item": {
       "fld_name": "ftTagName",
@@ -5287,6 +5373,17 @@
     },
     {
      "object": "Template",
+     "userkey": "FtSelectObject",
+     "item": {
+      "tpl_name": "FtSelectObject",
+      "tpl_ui": "<div class=\"area\" data-area=\"1\"><\/div>",
+      "tpl_min": null,
+      "tpl_image": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Template",
      "userkey": "FtTag",
      "item": {
       "tpl_name": "FtTag",
@@ -5467,6 +5564,18 @@
       "ofa_position": 1,
       "ofa_title": true,
       "ofa_ui": "<div>\n  <div class=\"field\" data-field=\"ftRxlRxm1\"><\/div>\n  <div class=\"field\" data-field=\"ftRxlRxm1__ftRxmCode\"><\/div>\n  <div class=\"field\" data-field=\"ftRxlRxm2\"><\/div>\n  <div class=\"field\" data-field=\"ftRxlRxm2__ftRxmCode\"><\/div>\n  <div class=\"field\" data-field=\"ftRxlKey\"><\/div>\n<\/div>",
+      "ofa_icon": "star",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectFieldArea",
+     "userkey": "FtSelectObject-1",
+     "item": {
+      "ofa_name": "FtSelectObject-1",
+      "ofa_position": 1,
+      "ofa_title": false,
+      "ofa_ui": "<div>\n  <div class=\"field\" data-field=\"ftSlcField1\"><\/div>\n  <div class=\"field\" data-field=\"ftSlcField2\"><\/div>\n<\/div>",
       "ofa_icon": "star",
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -6046,6 +6155,81 @@
       "obo_tray": true,
       "obo_dashboard": true,
       "obo_prefix": "rxl",
+      "obo_search_ts": null,
+      "obo_minrows": null,
+      "obo_maxrows": null,
+      "obo_sortable": true,
+      "obo_list_areas": null
+     }
+    },
+    {
+     "object": "ObjectInternal",
+     "userkey": "FtSelectObject",
+     "item": {
+      "obo_name": "FtSelectObject",
+      "obo_dbtable": "select",
+      "obo_role": "OBJ",
+      "obo_class": null,
+      "obo_script_id": null,
+      "obo_usets": "0",
+      "obo_nosearch": "1",
+      "obo_comment": null,
+      "obo_type": "O",
+      "obo_searchspec": "SELECT fld_name, fld_dbname FROM m_field f\nLEFT JOIN m_objfield of\nON of.obf_field_id=f.row_id\nWHERE of.row_id IS NULL",
+      "obo_delspec": null,
+      "obo_exportorder": null,
+      "obo_distinct": false,
+      "obo_indexable": false,
+      "obo_groupby": false,
+      "obo_dfltref": null,
+      "obo_template_id__tpl_name": "FtSelectObject",
+      "obo_copy": true,
+      "obo_export": true,
+      "obo_pagine": true,
+      "obo_srh_predef": ["1"],
+      "obo_selrow": true,
+      "obo_updall": true,
+      "obo_delall": true,
+      "obo_listsearch": true,
+      "obo_list_edit": [
+       "N",
+       "L",
+       "E"
+      ],
+      "obo_useform": true,
+      "obo_title": null,
+      "obo_icon": "icon/color/sql",
+      "obo_refcount": false,
+      "obo_tree": false,
+      "obo_viewmode": "T",
+      "obo_historic": null,
+      "obo_printable": true,
+      "obo_followlink": true,
+      "obo_mergeable": false,
+      "obo_social": ["1"],
+      "obo_rowid_id__fld_name": null,
+      "obo_extend_id__obj_name": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obo_btn_reload": "P",
+      "obo_btn_prefs": "P",
+      "obo_btn_bookmark": "1",
+      "obo_btn_del": "P",
+      "obo_btn_copy": "P",
+      "obo_btn_export": "P",
+      "obo_btn_listadd": "1",
+      "obo_btn_listedit": "1",
+      "obo_btn_listupsert": "1",
+      "obo_btn_updall": "P",
+      "obo_btn_delall": "P",
+      "obo_btn_merge": "P",
+      "obo_btn_save": true,
+      "obo_btn_saveclose": true,
+      "obo_btn_savenew": true,
+      "obo_btn_savecopy": true,
+      "obo_btn_close": true,
+      "obo_tray": true,
+      "obo_dashboard": true,
+      "obo_prefix": "slc",
       "obo_search_ts": null,
       "obo_minrows": null,
       "obo_maxrows": null,
@@ -9096,6 +9280,78 @@
     },
     {
      "object": "ObjectFieldSystem",
+     "userkey": "FtSelectObject~ftSlcField1~10",
+     "item": {
+      "obf_object_id__obo_name": "FtSelectObject",
+      "obf_field_id__fld_name": "ftSlcField1",
+      "obf_field_id__fld_type": "3",
+      "obf_order": 10,
+      "obf_group_by": null,
+      "obf_dfault_order": null,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": "FtSelectObject-1",
+      "obf_area_id__ofa_position": 1,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtSelectObject~ftSlcField2~20",
+     "item": {
+      "obf_object_id__obo_name": "FtSelectObject",
+      "obf_field_id__fld_name": "ftSlcField2",
+      "obf_field_id__fld_type": "3",
+      "obf_order": 20,
+      "obf_group_by": null,
+      "obf_dfault_order": null,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": "FtSelectObject-1",
+      "obf_area_id__ofa_position": 1,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
      "userkey": "FtTag~ftTagName~10",
      "item": {
       "obf_object_id__obo_name": "FtTag",
@@ -9349,14 +9605,14 @@
     },
     {
      "object": "Link",
-     "userkey": "200~FtRxmLink~ftRxlRxm2",
+     "userkey": "100~FtRxmLink~ftRxlRxm1",
      "item": {
       "obf_ref_object_id__obo_name": "FtReflexiveMany",
-      "obf_order": 200,
+      "obf_order": 100,
       "obf_ref_order": null,
       "obf_object_id__obj_name": "FtRxmLink",
-      "obf_field_id__fld_name": "ftRxlRxm2",
-      "obf_field_id__fld_dbname": "ft_rxl_rxm_2",
+      "obf_field_id__fld_name": "ftRxlRxm1",
+      "obf_field_id__fld_dbname": "ft_rxl_rxm_1",
       "obf_field_id__fld_updatable": "1",
       "obf_field_id__fld_required": true,
       "obf_field_id__fld_fonctid": true,
@@ -9378,14 +9634,14 @@
     },
     {
      "object": "Link",
-     "userkey": "100~FtRxmLink~ftRxlRxm1",
+     "userkey": "200~FtRxmLink~ftRxlRxm2",
      "item": {
       "obf_ref_object_id__obo_name": "FtReflexiveMany",
-      "obf_order": 100,
+      "obf_order": 200,
       "obf_ref_order": null,
       "obf_object_id__obj_name": "FtRxmLink",
-      "obf_field_id__fld_name": "ftRxlRxm1",
-      "obf_field_id__fld_dbname": "ft_rxl_rxm_1",
+      "obf_field_id__fld_name": "ftRxlRxm2",
+      "obf_field_id__fld_dbname": "ft_rxl_rxm_2",
       "obf_field_id__fld_updatable": "1",
       "obf_field_id__fld_required": true,
       "obf_field_id__fld_fonctid": true,
@@ -9455,7 +9711,7 @@
       "obf_ref_export": true,
       "obf_copy": false,
       "obf_associate": null,
-      "obf_inline": null,
+      "obf_inline": false,
       "obf_rendering": null,
       "obf_treedepth": null,
       "obf_area_id__ofa_name": null,
@@ -9629,6 +9885,32 @@
       "fct_name": "FT_RXM_R",
       "fct_object_id__obj_type": "O",
       "fct_object_id__obj_name": "FtReflexiveMany",
+      "fct_function": "L",
+      "fct_action_id__act_name": null,
+      "fct_view_id__viw_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Function",
+     "userkey": "FT_SLC_CRUD",
+     "item": {
+      "fct_name": "FT_SLC_CRUD",
+      "fct_object_id__obj_type": "O",
+      "fct_object_id__obj_name": "FtSelectObject",
+      "fct_function": "CMS",
+      "fct_action_id__act_name": null,
+      "fct_view_id__viw_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Function",
+     "userkey": "FT_SLC_R",
+     "item": {
+      "fct_name": "FT_SLC_R",
+      "fct_object_id__obj_type": "O",
+      "fct_object_id__obj_name": "FtSelectObject",
       "fct_function": "L",
       "fct_action_id__act_name": null,
       "fct_view_id__viw_name": null,
@@ -9953,6 +10235,20 @@
     },
     {
      "object": "Grant",
+     "userkey": "FT_ADMIN~FT_SLC_R~FtSelectObject~",
+     "item": {
+      "grt_group_id__grp_name": "FT_ADMIN",
+      "grt_function_id__fct_name": "FT_SLC_R",
+      "grt_function_id__fct_object_id__obj_type": "O",
+      "grt_function_id__fct_object_id__obj_name": "FtSelectObject",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "L",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
      "userkey": "FT_ADMIN~FT_TAG_CRUD~FtTag~",
      "item": {
       "grt_group_id__grp_name": "FT_ADMIN",
@@ -10071,6 +10367,20 @@
       "grt_function_id__fct_name": "FT_RXL_R",
       "grt_function_id__fct_object_id__obj_type": "O",
       "grt_function_id__fct_object_id__obj_name": "FtRxmLink",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "L",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
+     "userkey": "FT_READ~FT_SLC_R~FtSelectObject~",
+     "item": {
+      "grt_group_id__grp_name": "FT_READ",
+      "grt_function_id__fct_name": "FT_SLC_R",
+      "grt_function_id__fct_object_id__obj_type": "O",
+      "grt_function_id__fct_object_id__obj_name": "FtSelectObject",
       "grt_function_id__fct_action_id__act_name": null,
       "grt_function_id__fct_function": "L",
       "grt_activ": true,
@@ -10257,6 +10567,18 @@
       "map_ext": false,
       "row_module_id__mdl_name": "SimFeatures"
      }
+    },
+    {
+     "object": "Map",
+     "userkey": "FtDomain~70",
+     "item": {
+      "map_domain_id__obd_name": "FtDomain",
+      "map_object_id__obj_name": "FtSelectObject",
+      "map_process_id__pcs_name": null,
+      "map_order": 70,
+      "map_ext": false,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
    ]
   },
@@ -10281,17 +10603,41 @@
    "label": "Contextual help",
    "icon": "img/system/help",
    "field": "row_module_id",
-   "list": [{
-    "object": "ObjectCtxHelp",
-    "userkey": "FtAttributes~L~ENU",
-    "item": {
-     "och_object_id__obo_name": "FtAttributes",
-     "och_context": ["L"],
-     "och_lang": "ENU",
-     "och_help": "<p>This object should contain all the possible combinations of field types and field type renderings to test their functionnality.<\/p>",
-     "row_module_id__mdl_name": "SimFeatures"
+   "list": [
+    {
+     "object": "ObjectCtxHelp",
+     "userkey": "FtAttributes~L~ENU",
+     "item": {
+      "och_object_id__obo_name": "FtAttributes",
+      "och_context": ["L"],
+      "och_lang": "ENU",
+      "och_help": "<p>This object should contain all the possible combinations of field types and field type renderings to test their functionnality.<\/p>",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectCtxHelp",
+     "userkey": "FtSelectObject~L~ENU",
+     "item": {
+      "och_object_id__obo_name": "FtSelectObject",
+      "och_context": ["L"],
+      "och_lang": "ENU",
+      "och_help": "<p>Example select object showing fields that do not have any object field associated to them<\/p>",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectCtxHelp",
+     "userkey": "FtSelectObject~L~FRA",
+     "item": {
+      "och_object_id__obo_name": "FtSelectObject",
+      "och_context": ["L"],
+      "och_lang": "FRA",
+      "och_help": "<p>Example select object showing fields that do not have any object field associated to them<\/p>",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
-   }]
+   ]
   },
   {
    "object": "Resource",
@@ -11583,6 +11929,38 @@
     },
     {
      "object": "TranslateField",
+     "userkey": "F~ftSlcField1~ENU",
+     "item": {
+      "tsl_typeField": "F",
+      "tsl_id__fld_name": "ftSlcField1",
+      "tsl_lang": "ENU",
+      "tsl_value": "Field 1",
+      "tsl_simplehelp": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "tsl_tooltip": null
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "F~ftSlcField2~ENU",
+     "item": {
+      "tsl_typeField": "F",
+      "tsl_id__fld_name": "ftSlcField2",
+      "tsl_lang": "ENU",
+      "tsl_value": "Field 2",
+      "tsl_simplehelp": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "tsl_tooltip": null
+     }
+    },
+    {
+     "object": "TranslateField",
      "userkey": "F~ftTagName~ENU",
      "item": {
       "tsl_typeField": "F",
@@ -12847,6 +13225,38 @@
     },
     {
      "object": "TranslateField",
+     "userkey": "F~ftSlcField1~FRA",
+     "item": {
+      "tsl_typeField": "F",
+      "tsl_id__fld_name": "ftSlcField1",
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft slc field 1",
+      "tsl_simplehelp": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "tsl_tooltip": null
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "F~ftSlcField2~FRA",
+     "item": {
+      "tsl_typeField": "F",
+      "tsl_id__fld_name": "ftSlcField2",
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft slc field 2",
+      "tsl_simplehelp": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "tsl_tooltip": null
+     }
+    },
+    {
+     "object": "TranslateField",
      "userkey": "F~ftTagName~FRA",
      "item": {
       "tsl_typeField": "F",
@@ -13062,6 +13472,17 @@
     },
     {
      "object": "TranslateFieldArea",
+     "userkey": "Z~FtSelectObject-1~ENU",
+     "item": {
+      "tsl_typeFieldArea": "Z",
+      "tsl_id__ofa_name": "FtSelectObject-1",
+      "tsl_lang": "ENU",
+      "tsl_value": "FtSelectObject-1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
      "userkey": "Z~FtTag-1~ENU",
      "item": {
       "tsl_typeFieldArea": "Z",
@@ -13222,6 +13643,17 @@
       "tsl_id__ofa_name": "FtRxmLink-1",
       "tsl_lang": "FRA",
       "tsl_value": "Rxm link -1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "Z~FtSelectObject-1~FRA",
+     "item": {
+      "tsl_typeFieldArea": "Z",
+      "tsl_id__ofa_name": "FtSelectObject-1",
+      "tsl_lang": "FRA",
+      "tsl_value": "Select object -1",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -13403,6 +13835,18 @@
     },
     {
      "object": "TranslateObject",
+     "userkey": "O~FtSelectObject~ENU",
+     "item": {
+      "tsl_typeObject": "O",
+      "tsl_id__obo_name": "FtSelectObject",
+      "tsl_lang": "ENU",
+      "tsl_value": "Select object",
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
      "userkey": "O~FtTaggedObject~ENU",
      "item": {
       "tsl_typeObject": "O",
@@ -13481,6 +13925,18 @@
       "tsl_id__obo_name": "FtRxmLink",
       "tsl_lang": "FRA",
       "tsl_value": "Associated items",
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "O~FtSelectObject~FRA",
+     "item": {
+      "tsl_typeObject": "O",
+      "tsl_id__obo_name": "FtSelectObject",
+      "tsl_lang": "FRA",
+      "tsl_value": "Select object",
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
      }

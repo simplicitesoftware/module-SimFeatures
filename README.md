@@ -221,6 +221,18 @@ Object showcasing all the possible attributes
 | `ftRxlRxm2` link to **`FtReflexiveMany`**                    | id                                       | yes*     | yes       |          | -                                                                                |
 | _Ref. `ftRxlRxm2.ftRxmCode`_                                 | _char(100)_                              |          |           |          | -                                                                                |
 
+`FtSelectObject` business object definition
+-------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftSlcField1`                                                | char(255)                                | yes      | yes       |          | -                                                                                |
+| `ftSlcField2`                                                | char(255)                                |          | yes       |          | -                                                                                |
+
 `FtTag` business object definition
 ----------------------------------
 
