@@ -16,6 +16,19 @@ components:
           type: integer
           enum:
           - 404
+    ArrayOfFtM2m:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtM2m'
+    FtM2mChild:
+      type: object
+      properties:
+        row_id:
+          description: Unique technical row ID
+          type: string
+        ftM2mcCode:
+          description: Code
+          type: string
     PublicationResult:
       type: object
       properties:
@@ -24,6 +37,24 @@ components:
           type: string
         content:
           description: Content (plain text or base64 encoded)
+          type: string
+    FtM2m:
+      type: object
+      properties:
+        ftM2mId__ftM2mCode:
+          description: Ft M2mm 2mc M2m id Code
+          type: string
+        ftM2mId:
+          description: Ft M2mm 2mc M2m id
+          type: string
+        ftM2mcId:
+          description: Ft M2mm 2mc M2mc id
+          type: string
+        row_id:
+          description: Unique technical row ID
+          type: string
+        ftM2mcId__ftM2mcCode:
+          description: Ft M2mm 2mc M2mc id Code
           type: string
     PlaceData:
       type: object
@@ -46,6 +77,10 @@ components:
         label3:
           description: 'Label #3'
           type: string
+    ArrayOfFtM2mChild:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtM2mChild'
     FtO2mChild:
       type: object
       properties:
@@ -560,6 +595,19 @@ components:
         row_id:
           description: Unique technical row ID
           type: string
+    FtRelationshipM2m:
+      type: object
+      properties:
+        ftM2mCode:
+          description: Code
+          type: string
+        row_id:
+          description: Unique technical row ID
+          type: string
+    ArrayOfFtRelationshipM2m:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtRelationshipM2m'
     FtRelationshipO2m:
       type: object
       properties:
@@ -806,6 +854,201 @@ paths:
         required: true
       tags:
       - FtRelationshipO2m
+  /rest/FtM2m/{row_id}:
+    post:
+      summary: Create a new FtM2m business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtM2m'
+      operationId: obj-ftm2m-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtM2m'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtM2m
+    get:
+      summary: Get a FtM2m business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftm2m-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtM2m'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtM2m
+    delete:
+      summary: Delete a FtM2m business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftm2m-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtM2m
+    put:
+      summary: Update a FtM2m business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtM2m'
+      operationId: obj-ftm2m-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtM2m'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtM2m
   /login:
     get:
       summary: Login (obtain bearer token)
@@ -1347,6 +1590,59 @@ paths:
         required: false
       tags:
       - FtReflexiveMany
+  /rest/FtM2mChild:
+    get:
+      summary: Search FtM2mChild business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftm2mchild-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtM2mChild'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftM2mcCode
+        description: Search filter for Code
+        required: false
+      tags:
+      - FtM2mChild
   /rest/FtRelationshipO2m:
     get:
       summary: Search FtRelationshipO2m business object records or get contextualized
@@ -1671,6 +1967,131 @@ paths:
         required: false
       tags:
       - FtListItem
+  /rest/FtRelationshipM2m:
+    get:
+      summary: Search FtRelationshipM2m business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftrelationshipm2m-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtRelationshipM2m'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftM2mCode
+        description: Search filter for Code
+        required: false
+      tags:
+      - FtRelationshipM2m
+  /rest/FtM2m:
+    get:
+      summary: Search FtM2m business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftm2m-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtM2m'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftM2mId
+        description: Search filter for Ft M2mm 2mc M2m id
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftM2mId__ftM2mCode
+        description: Search filter for Ft M2mm 2mc M2m id Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftM2mcId
+        description: Search filter for Ft M2mm 2mc M2mc id
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftM2mcId__ftM2mcCode
+        description: Search filter for Ft M2mm 2mc M2mc id Code
+        required: false
+      tags:
+      - FtM2m
   /logout:
     get:
       summary: Logout (revoke bearer token)
@@ -2080,6 +2501,201 @@ paths:
         required: true
       tags:
       - FtTaggedObject
+  /rest/FtM2mChild/{row_id}:
+    post:
+      summary: Create a new FtM2mChild business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtM2mChild'
+      operationId: obj-ftm2mchild-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtM2mChild'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtM2mChild
+    get:
+      summary: Get a FtM2mChild business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftm2mchild-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtM2mChild'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtM2mChild
+    delete:
+      summary: Delete a FtM2mChild business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftm2mchild-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtM2mChild
+    put:
+      summary: Update a FtM2mChild business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtM2mChild'
+      operationId: obj-ftm2mchild-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtM2mChild'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtM2mChild
   /rest/FtRxmLink:
     get:
       summary: Search FtRxmLink business object records or get contextualized metadata
@@ -2151,6 +2767,201 @@ paths:
         required: false
       tags:
       - FtRxmLink
+  /rest/FtRelationshipM2m/{row_id}:
+    post:
+      summary: Create a new FtRelationshipM2m business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtRelationshipM2m'
+      operationId: obj-ftrelationshipm2m-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtRelationshipM2m'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtRelationshipM2m
+    get:
+      summary: Get a FtRelationshipM2m business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftrelationshipm2m-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtRelationshipM2m'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtRelationshipM2m
+    delete:
+      summary: Delete a FtRelationshipM2m business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftrelationshipm2m-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtRelationshipM2m
+    put:
+      summary: Update a FtRelationshipM2m business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtRelationshipM2m'
+      operationId: obj-ftrelationshipm2m-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtRelationshipM2m'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtRelationshipM2m
   /rest/FtAttributes/{row_id}:
     post:
       summary: Create a new FtAttributes business object record
@@ -4019,10 +4830,16 @@ tags:
   description: Custom User
 - name: FtListItem
   description: Lists
+- name: FtM2m
+  description: N/N
+- name: FtM2mChild
+  description: Child
 - name: FtO2mChild
   description: FtO2mChild
 - name: FtReflexiveMany
   description: Reflexive item (many)
+- name: FtRelationshipM2m
+  description: Relationship (many to many)
 - name: FtRelationshipO2m
   description: Relationship (one to many)
 - name: FtRxmLink

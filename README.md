@@ -171,6 +171,31 @@ Object showcasing all the possible attributes
     - `B` code B
     - `C` code C
 
+`FtM2m` business object definition
+----------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftM2mId` link to **`FtRelationshipM2m`**                    | id                                       | yes*     | yes       |          | -                                                                                |
+| _Ref. `ftM2mId.ftM2mCode`_                                   | _char(100)_                              |          |           |          | -                                                                                |
+| `ftM2mcId` link to **`FtM2mChild`**                          | id                                       | yes*     | yes       |          | -                                                                                |
+| _Ref. `ftM2mcId.ftM2mcCode`_                                 | _char(100)_                              |          |           |          | -                                                                                |
+
+`FtM2mChild` business object definition
+---------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftM2mcCode`                                                 | char(100)                                | yes*     | yes       |          | -                                                                                |
+
 `FtO2mChild` business object definition
 ---------------------------------------
 
@@ -195,6 +220,17 @@ Object showcasing all the possible attributes
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftRxmCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
 | `ftRxmId` link to **`FtReflexiveMany`**                      | id                                       |          | yes       |          | -                                                                                |
+
+`FtRelationshipM2m` business object definition
+----------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftM2mCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
 
 `FtRelationshipO2m` business object definition
 ----------------------------------------------
