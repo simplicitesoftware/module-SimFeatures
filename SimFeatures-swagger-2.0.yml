@@ -732,6 +732,168 @@ paths:
       - FtTgoTag
       consumes:
       - application/json
+  /rest/FtNotification/{row_id}:
+    post:
+      summary: Create a new FtNotification business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftnotification-create
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtNotification'
+          description: Success in creating a new business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtNotification'
+        in: body
+        name: body
+      tags:
+      - FtNotification
+      consumes:
+      - application/json
+    get:
+      summary: Get a FtNotification business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftnotification-get
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtNotification'
+          description: Success in getting a single business object record
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - in: query
+        name: _inline_documents
+        description: Inline documents?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_objects
+        description: Inline objects?
+        type: boolean
+        required: false
+      tags:
+      - FtNotification
+    delete:
+      summary: Delete a FtNotification business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftnotification-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      tags:
+      - FtNotification
+    put:
+      summary: Update a FtNotification business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftnotification-update
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtNotification'
+          description: Success in updating a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtNotification'
+        in: body
+        name: body
+      tags:
+      - FtNotification
+      consumes:
+      - application/json
   /rest/FtReflexiveMany:
     get:
       summary: Search FtReflexiveMany business object records or get contextualized
@@ -1036,6 +1198,52 @@ paths:
       - FtRxmLink
       consumes:
       - application/json
+  /rest/FtNotification:
+    get:
+      summary: Search FtNotification business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftnotification-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtNotification'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: ftNtfCode
+        description: Search filter for Code
+        type: string
+        required: false
+      tags:
+      - FtNotification
   /rest/FtListItem:
     get:
       summary: Search FtListItem business object records or get contextualized metadata
@@ -4030,6 +4238,15 @@ definitions:
       ftTgoCode:
         description: Code
         type: string
+  FtNotification:
+    type: object
+    properties:
+      row_id:
+        description: Unique technical row ID
+        type: string
+      ftNtfCode:
+        description: Code
+        type: string
   ArrayOfFtO2mChild:
     type: array
     items:
@@ -4084,6 +4301,10 @@ definitions:
       row_id:
         description: Unique technical row ID
         type: string
+  ArrayOfFtNotification:
+    type: array
+    items:
+      $ref: '#/definitions/FtNotification'
   FtRelationshipM2m:
     type: object
     properties:
@@ -4159,6 +4380,8 @@ tags:
   description: N/N
 - name: FtM2mChild
   description: Child
+- name: FtNotification
+  description: Notifications
 - name: FtO2mChild
   description: FtO2mChild
 - name: FtReflexiveMany

@@ -22,7 +22,7 @@
      "viw_name": "SimFeaturesScope",
      "viw_ui": null,
      "viw_order": 1,
-     "viw_icon": "img/color/logo",
+     "viw_icon": "img/color/test_tube",
      "viw_disp_id__dis_code": null,
      "viw_scope": "SimFeaturesScope",
      "row_module_id__mdl_name": "SimFeatures",
@@ -156,33 +156,67 @@
    "label": "Profiles",
    "icon": "img/system/profile",
    "field": "row_module_id",
-   "list": [{
-    "object": "Profile",
-    "userkey": "ADMIN~FT_ADMIN",
-    "item": {
-     "prf_profile_id__grp_name": "ADMIN",
-     "prf_group_id__grp_name": "FT_ADMIN",
-     "row_module_id__mdl_name": "SimFeatures"
+   "list": [
+    {
+     "object": "Profile",
+     "userkey": "ADMIN~FT_ADMIN",
+     "item": {
+      "prf_profile_id__grp_name": "ADMIN",
+      "prf_group_id__grp_name": "FT_ADMIN",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Profile",
+     "userkey": "FT_ADMIN~NOTI_READER",
+     "item": {
+      "prf_profile_id__grp_name": "FT_ADMIN",
+      "prf_group_id__grp_name": "NOTI_READER",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Profile",
+     "userkey": "FT_READ~NOTI_READER",
+     "item": {
+      "prf_profile_id__grp_name": "FT_READ",
+      "prf_group_id__grp_name": "NOTI_READER",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
-   }]
+   ]
   },
   {
    "object": "Responsability",
    "label": "Responsibilities",
    "icon": "img/system/responsability",
    "field": "row_module_id",
-   "list": [{
-    "object": "Responsability",
-    "userkey": "user~FT_ADMIN~2021-12-20",
-    "item": {
-     "rsp_login_id__usr_login": "user",
-     "rsp_group_id__grp_name": "FT_ADMIN",
-     "rsp_start_dt": "2021-12-20",
-     "rsp_end_dt": null,
-     "rsp_activ": true,
-     "row_module_id__mdl_name": "SimFeatures"
+   "list": [
+    {
+     "object": "Responsability",
+     "userkey": "designer~FT_ADMIN~2024-01-10",
+     "item": {
+      "rsp_login_id__usr_login": "designer",
+      "rsp_group_id__grp_name": "FT_ADMIN",
+      "rsp_start_dt": "2024-01-10",
+      "rsp_end_dt": null,
+      "rsp_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Responsability",
+     "userkey": "user~FT_ADMIN~2021-12-20",
+     "item": {
+      "rsp_login_id__usr_login": "user",
+      "rsp_group_id__grp_name": "FT_ADMIN",
+      "rsp_start_dt": "2021-12-20",
+      "rsp_end_dt": null,
+      "rsp_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
-   }]
+   ]
   },
   {
    "object": "FieldList",
@@ -967,6 +1001,17 @@
     },
     {
      "object": "FieldListValue",
+     "userkey": "FT_LST_TYPE~A~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_LST_TYPE",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "FRA",
+      "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
      "userkey": "FT_LST_TYPE~B~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FT_LST_TYPE",
@@ -978,11 +1023,11 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FT_LST_TYPE~A~FRA",
+     "userkey": "FTATTRENUM~A~ENU",
      "item": {
-      "lov_code_id__lov_list_id__lov_name": "FT_LST_TYPE",
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
       "lov_code_id__lov_code": "A",
-      "lov_lang": "FRA",
+      "lov_lang": "ENU",
       "lov_value": "A",
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -1000,33 +1045,11 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUM~A~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
-      "lov_code_id__lov_code": "A",
-      "lov_lang": "ENU",
-      "lov_value": "A",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUM~B~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
       "lov_code_id__lov_code": "B",
       "lov_lang": "ENU",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
-     "userkey": "FTATTRENUM~B~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "FRA",
       "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -1050,6 +1073,17 @@
       "lov_code_id__lov_code": "A",
       "lov_lang": "FRA",
       "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUM~B~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUM",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "FRA",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1121,17 +1155,6 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMCHECKBOXVERTICAL~B~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMCHECKBOXVERTICAL",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "ENU",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMCHECKBOXVERTICAL~C~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMCHECKBOXVERTICAL",
@@ -1143,12 +1166,34 @@
     },
     {
      "object": "FieldListValue",
+     "userkey": "FTATTRENUMCHECKBOXVERTICAL~B~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMCHECKBOXVERTICAL",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "ENU",
+      "lov_value": "B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
      "userkey": "FTATTRENUMCHECKBOXVERTICAL~A~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMCHECKBOXVERTICAL",
       "lov_code_id__lov_code": "A",
       "lov_lang": "ENU",
       "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMCHECKBOXVERTICAL~B~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMCHECKBOXVERTICAL",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "FRA",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1171,17 +1216,6 @@
       "lov_code_id__lov_code": "A",
       "lov_lang": "FRA",
       "lov_value": "A",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
-     "userkey": "FTATTRENUMCHECKBOXVERTICAL~B~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMCHECKBOXVERTICAL",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "FRA",
-      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1220,23 +1254,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTI~B~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTI",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "FRA",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTI~A~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTI",
       "lov_code_id__lov_code": "A",
       "lov_lang": "FRA",
       "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTI~B~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTI",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "FRA",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1286,17 +1320,6 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTICHECKBOXHORIZONTAL~C~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXHORIZONTAL",
-      "lov_code_id__lov_code": "C",
-      "lov_lang": "FRA",
-      "lov_value": "C",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTICHECKBOXHORIZONTAL~B~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXHORIZONTAL",
@@ -1308,22 +1331,22 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTICHECKBOXHORIZONTAL~A~FRA",
+     "userkey": "FTATTRENUMMULTICHECKBOXHORIZONTAL~C~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXHORIZONTAL",
-      "lov_code_id__lov_code": "A",
+      "lov_code_id__lov_code": "C",
       "lov_lang": "FRA",
-      "lov_value": "A",
+      "lov_value": "C",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTICHECKBOXVERTICAL~A~ENU",
+     "userkey": "FTATTRENUMMULTICHECKBOXHORIZONTAL~A~FRA",
      "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXVERTICAL",
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXHORIZONTAL",
       "lov_code_id__lov_code": "A",
-      "lov_lang": "ENU",
+      "lov_lang": "FRA",
       "lov_value": "A",
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -1347,6 +1370,17 @@
       "lov_code_id__lov_code": "B",
       "lov_lang": "ENU",
       "lov_value": "B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTICHECKBOXVERTICAL~A~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTICHECKBOXVERTICAL",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "ENU",
+      "lov_value": "A",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1396,23 +1430,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTIPILLBOX~C~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIPILLBOX",
-      "lov_code_id__lov_code": "C",
-      "lov_lang": "ENU",
-      "lov_value": "C",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTIPILLBOX~B~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIPILLBOX",
       "lov_code_id__lov_code": "B",
       "lov_lang": "ENU",
       "lov_value": "B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTIPILLBOX~C~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIPILLBOX",
+      "lov_code_id__lov_code": "C",
+      "lov_lang": "ENU",
+      "lov_value": "C",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1451,23 +1485,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~C~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
-      "lov_code_id__lov_code": "C",
-      "lov_lang": "ENU",
-      "lov_value": "C",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~A~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
       "lov_code_id__lov_code": "A",
       "lov_lang": "ENU",
       "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~C~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
+      "lov_code_id__lov_code": "C",
+      "lov_lang": "ENU",
+      "lov_value": "C",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1495,23 +1529,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~B~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "FRA",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~C~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
       "lov_code_id__lov_code": "C",
       "lov_lang": "FRA",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTIRADIOHORIZONTAL~B~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "FRA",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1561,23 +1595,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMMULTIRADIOVERTICAL~B~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOVERTICAL",
-      "lov_code_id__lov_code": "B",
-      "lov_lang": "FRA",
-      "lov_value": "B",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMMULTIRADIOVERTICAL~C~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOVERTICAL",
       "lov_code_id__lov_code": "C",
       "lov_lang": "FRA",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMMULTIRADIOVERTICAL~B~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMMULTIRADIOVERTICAL",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "FRA",
+      "lov_value": "B",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1649,23 +1683,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMRADIOHORIZONTAL~A~ENU",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
-      "lov_code_id__lov_code": "A",
-      "lov_lang": "ENU",
-      "lov_value": "A",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMRADIOHORIZONTAL~C~ENU",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
       "lov_code_id__lov_code": "C",
       "lov_lang": "ENU",
       "lov_value": "C",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMRADIOHORIZONTAL~A~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "ENU",
+      "lov_value": "A",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -1693,23 +1727,23 @@
     },
     {
      "object": "FieldListValue",
-     "userkey": "FTATTRENUMRADIOHORIZONTAL~C~FRA",
-     "item": {
-      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
-      "lov_code_id__lov_code": "C",
-      "lov_lang": "FRA",
-      "lov_value": "C",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "FieldListValue",
      "userkey": "FTATTRENUMRADIOHORIZONTAL~A~FRA",
      "item": {
       "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
       "lov_code_id__lov_code": "A",
       "lov_lang": "FRA",
       "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FTATTRENUMRADIOHORIZONTAL~C~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FTATTRENUMRADIOHORIZONTAL",
+      "lov_code_id__lov_code": "C",
+      "lov_lang": "FRA",
+      "lov_value": "C",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -4774,10 +4808,7 @@
      "object": "Field",
      "userkey": "ftM2mcId",
      "item": {
-      "fld_name": {
-       "value": "ftM2mcId",
-       "oldvalue": "ftM2mm2mcM2mcId"
-      },
+      "fld_name": "ftM2mcId",
       "fld_dbname": "ft_m2mc_id",
       "fld_visible": "3",
       "fld_updatable": "1",
@@ -4863,10 +4894,7 @@
      "object": "Field",
      "userkey": "ftM2mId",
      "item": {
-      "fld_name": {
-       "value": "ftM2mId",
-       "oldvalue": "ftM2mm2mcM2mId"
-      },
+      "fld_name": "ftM2mId",
       "fld_dbname": "ft_m2m_id",
       "fld_visible": "3",
       "fld_updatable": "1",
@@ -4885,6 +4913,49 @@
       "fld_list_id__lov_name": null,
       "fld_copy": true,
       "fld_size": 11,
+      "fld_minsize": null,
+      "fld_precision": null,
+      "fld_fromdate_id__fld_name": null,
+      "fld_dfault": null,
+      "fld_indexable": false,
+      "fld_autocomp": "0",
+      "fld_groupby": false,
+      "fld_updall": true,
+      "fld_case": null,
+      "fld_righttoleft": false,
+      "fld_rendering": null,
+      "fld_speech": null,
+      "fld_calc": null,
+      "fld_objlist": null,
+      "fld_comment": null,
+      "fld_classification": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "fld_incrementsyntax": null
+     }
+    },
+    {
+     "object": "Field",
+     "userkey": "ftNtfCode",
+     "item": {
+      "fld_name": "ftNtfCode",
+      "fld_dbname": "ft_ntf_code",
+      "fld_visible": "3",
+      "fld_updatable": "1",
+      "fld_required": true,
+      "fld_fonctid": true,
+      "fld_research": "1",
+      "fld_researchreq": "0",
+      "fld_sort": "C",
+      "fld_more": false,
+      "fld_listmore": false,
+      "fld_listsum": null,
+      "fld_exportable": true,
+      "fld_tray": null,
+      "fld_type": "3",
+      "fld_type_id__flt_code": null,
+      "fld_list_id__lov_name": null,
+      "fld_copy": true,
+      "fld_size": 100,
       "fld_minsize": null,
       "fld_precision": null,
       "fld_fromdate_id__fld_name": null,
@@ -5518,6 +5589,17 @@
     },
     {
      "object": "Template",
+     "userkey": "FtNotification",
+     "item": {
+      "tpl_name": "FtNotification",
+      "tpl_ui": "<div class=\"area\" data-area=\"1\"><\/div>",
+      "tpl_min": null,
+      "tpl_image": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Template",
      "userkey": "FtO2mChild",
      "item": {
       "tpl_name": "FtO2mChild",
@@ -5728,6 +5810,18 @@
       "ofa_position": 1,
       "ofa_title": true,
       "ofa_ui": "<div class=\"field\" data-field=\"ftM2mcCode\"><\/div>",
+      "ofa_icon": "star",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectFieldArea",
+     "userkey": "FtNotification-1",
+     "item": {
+      "ofa_name": "FtNotification-1",
+      "ofa_position": 1,
+      "ofa_title": false,
+      "ofa_ui": "<div class=\"field\" data-field=\"ftNtfCode\"><\/div>",
       "ofa_icon": "star",
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -6090,10 +6184,7 @@
      "object": "ObjectInternal",
      "userkey": "FtM2m",
      "item": {
-      "obo_name": {
-       "value": "FtM2m",
-       "oldvalue": "FtM2mM2mc"
-      },
+      "obo_name": "FtM2m",
       "obo_dbtable": "ft_m2m",
       "obo_role": "OBJ",
       "obo_class": null,
@@ -6232,6 +6323,81 @@
       "obo_tray": true,
       "obo_dashboard": true,
       "obo_prefix": "m2mc",
+      "obo_search_ts": null,
+      "obo_minrows": null,
+      "obo_maxrows": null,
+      "obo_sortable": true,
+      "obo_list_areas": null
+     }
+    },
+    {
+     "object": "ObjectInternal",
+     "userkey": "FtNotification",
+     "item": {
+      "obo_name": "FtNotification",
+      "obo_dbtable": "ft_notification",
+      "obo_role": "OBJ",
+      "obo_class": null,
+      "obo_script_id": null,
+      "obo_usets": "1",
+      "obo_nosearch": "1",
+      "obo_comment": null,
+      "obo_type": "O",
+      "obo_searchspec": null,
+      "obo_delspec": null,
+      "obo_exportorder": null,
+      "obo_distinct": false,
+      "obo_indexable": false,
+      "obo_groupby": false,
+      "obo_dfltref": null,
+      "obo_template_id__tpl_name": "FtNotification",
+      "obo_copy": true,
+      "obo_export": true,
+      "obo_pagine": true,
+      "obo_srh_predef": ["1"],
+      "obo_selrow": true,
+      "obo_updall": true,
+      "obo_delall": true,
+      "obo_listsearch": true,
+      "obo_list_edit": [
+       "N",
+       "L",
+       "E"
+      ],
+      "obo_useform": true,
+      "obo_title": null,
+      "obo_icon": "img/color/notification",
+      "obo_refcount": false,
+      "obo_tree": false,
+      "obo_viewmode": "T",
+      "obo_historic": null,
+      "obo_printable": true,
+      "obo_followlink": true,
+      "obo_mergeable": false,
+      "obo_social": ["1"],
+      "obo_rowid_id__fld_name": null,
+      "obo_extend_id__obj_name": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obo_btn_reload": "P",
+      "obo_btn_prefs": "P",
+      "obo_btn_bookmark": "1",
+      "obo_btn_del": "P",
+      "obo_btn_copy": "P",
+      "obo_btn_export": "P",
+      "obo_btn_listadd": "1",
+      "obo_btn_listedit": "1",
+      "obo_btn_listupsert": "1",
+      "obo_btn_updall": "P",
+      "obo_btn_delall": "P",
+      "obo_btn_merge": "P",
+      "obo_btn_save": true,
+      "obo_btn_saveclose": true,
+      "obo_btn_savenew": true,
+      "obo_btn_savecopy": true,
+      "obo_btn_close": true,
+      "obo_tray": true,
+      "obo_dashboard": true,
+      "obo_prefix": "ntf",
       "obo_search_ts": null,
       "obo_minrows": null,
       "obo_maxrows": null,
@@ -9552,6 +9718,42 @@
     },
     {
      "object": "ObjectFieldSystem",
+     "userkey": "FtNotification~ftNtfCode~10",
+     "item": {
+      "obf_object_id__obo_name": "FtNotification",
+      "obf_field_id__fld_name": "ftNtfCode",
+      "obf_field_id__fld_type": "3",
+      "obf_order": 10,
+      "obf_group_by": null,
+      "obf_dfault_order": 1,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": "FtNotification-1",
+      "obf_area_id__ofa_position": 1,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
      "userkey": "FtO2mChild~ftO2mcCode~10",
      "item": {
       "obf_object_id__obo_name": "FtO2mChild",
@@ -10263,11 +10465,40 @@
       "obf_ref_export": true,
       "obf_copy": false,
       "obf_associate": null,
-      "obf_inline": null,
+      "obf_inline": false,
       "obf_rendering": null,
       "obf_treedepth": null,
       "obf_area_id__ofa_name": null,
       "obf_area_id__ofa_position": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Link",
+     "userkey": "100~FtRxmLink~ftRxlRxm1",
+     "item": {
+      "obf_ref_object_id__obo_name": "FtReflexiveMany",
+      "obf_order": 100,
+      "obf_ref_order": null,
+      "obf_object_id__obj_name": "FtRxmLink",
+      "obf_field_id__fld_name": "ftRxlRxm1",
+      "obf_field_id__fld_dbname": "ft_rxl_rxm_1",
+      "obf_field_id__fld_updatable": "1",
+      "obf_field_id__fld_required": true,
+      "obf_field_id__fld_fonctid": true,
+      "obf_cascad": "C",
+      "obf_card": "0,n",
+      "obf_query": null,
+      "obf_filters": null,
+      "obf_visible": true,
+      "obf_ref_export": true,
+      "obf_copy": false,
+      "obf_associate": "1",
+      "obf_inline": false,
+      "obf_rendering": null,
+      "obf_treedepth": null,
+      "obf_area_id__ofa_name": "FtRxmLink-1",
+      "obf_area_id__ofa_position": 1,
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -10331,35 +10562,6 @@
     },
     {
      "object": "Link",
-     "userkey": "100~FtRxmLink~ftRxlRxm1",
-     "item": {
-      "obf_ref_object_id__obo_name": "FtReflexiveMany",
-      "obf_order": 100,
-      "obf_ref_order": null,
-      "obf_object_id__obj_name": "FtRxmLink",
-      "obf_field_id__fld_name": "ftRxlRxm1",
-      "obf_field_id__fld_dbname": "ft_rxl_rxm_1",
-      "obf_field_id__fld_updatable": "1",
-      "obf_field_id__fld_required": true,
-      "obf_field_id__fld_fonctid": true,
-      "obf_cascad": "C",
-      "obf_card": "0,n",
-      "obf_query": null,
-      "obf_filters": null,
-      "obf_visible": true,
-      "obf_ref_export": true,
-      "obf_copy": false,
-      "obf_associate": "1",
-      "obf_inline": false,
-      "obf_rendering": null,
-      "obf_treedepth": null,
-      "obf_area_id__ofa_name": "FtRxmLink-1",
-      "obf_area_id__ofa_position": 1,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "Link",
      "userkey": "100~FtM2m~ftM2mId",
      "item": {
       "obf_ref_object_id__obo_name": "FtRelationshipM2m",
@@ -10379,7 +10581,7 @@
       "obf_ref_export": true,
       "obf_copy": false,
       "obf_associate": null,
-      "obf_inline": null,
+      "obf_inline": false,
       "obf_rendering": null,
       "obf_treedepth": null,
       "obf_area_id__ofa_name": null,
@@ -10637,6 +10839,32 @@
       "fct_name": "FT_M2MM2MC_R",
       "fct_object_id__obj_type": "O",
       "fct_object_id__obj_name": "FtM2m",
+      "fct_function": "L",
+      "fct_action_id__act_name": null,
+      "fct_view_id__viw_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Function",
+     "userkey": "FT_NTF_CRUD",
+     "item": {
+      "fct_name": "FT_NTF_CRUD",
+      "fct_object_id__obj_type": "O",
+      "fct_object_id__obj_name": "FtNotification",
+      "fct_function": "CMS",
+      "fct_action_id__act_name": null,
+      "fct_view_id__viw_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Function",
+     "userkey": "FT_NTF_R",
+     "item": {
+      "fct_name": "FT_NTF_R",
+      "fct_object_id__obj_type": "O",
+      "fct_object_id__obj_name": "FtNotification",
       "fct_function": "L",
       "fct_action_id__act_name": null,
       "fct_view_id__viw_name": null,
@@ -10997,6 +11225,20 @@
     },
     {
      "object": "Grant",
+     "userkey": "FT_ADMIN~FT_NTF_CRUD~FtNotification~",
+     "item": {
+      "grt_group_id__grp_name": "FT_ADMIN",
+      "grt_function_id__fct_name": "FT_NTF_CRUD",
+      "grt_function_id__fct_object_id__obj_type": "O",
+      "grt_function_id__fct_object_id__obj_name": "FtNotification",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "CMS",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
      "userkey": "FT_ADMIN~O2MC_CRUD~FtO2mChild~",
      "item": {
       "grt_group_id__grp_name": "FT_ADMIN",
@@ -11185,6 +11427,20 @@
       "grt_function_id__fct_name": "FT_M2MC_R",
       "grt_function_id__fct_object_id__obj_type": "O",
       "grt_function_id__fct_object_id__obj_name": "FtM2mChild",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "L",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
+     "userkey": "FT_READ~FT_NTF_R~FtNotification~",
+     "item": {
+      "grt_group_id__grp_name": "FT_READ",
+      "grt_function_id__fct_name": "FT_NTF_R",
+      "grt_function_id__fct_object_id__obj_type": "O",
+      "grt_function_id__fct_object_id__obj_name": "FtNotification",
       "grt_function_id__fct_action_id__act_name": null,
       "grt_function_id__fct_function": "L",
       "grt_activ": true,
@@ -11482,12 +11738,12 @@
     },
     {
      "object": "Map",
-     "userkey": "FtDomain~80",
+     "userkey": "FtDomain~90",
      "item": {
       "map_domain_id__obd_name": "FtDomain",
-      "map_object_id__obj_name": "FtRelationshipM2m",
+      "map_object_id__obj_name": "FtNotification",
       "map_process_id__pcs_name": null,
-      "map_order": 80,
+      "map_order": 90,
       "map_ext": false,
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -11524,6 +11780,20 @@
       "och_context": ["L"],
       "och_lang": "ENU",
       "och_help": "<p>This object should contain all the possible combinations of field types and field type renderings to test their functionnality.<\/p>",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectCtxHelp",
+     "userkey": "FtNotification~L;C~ENU",
+     "item": {
+      "och_object_id__obo_name": "FtNotification",
+      "och_context": [
+       "L",
+       "C"
+      ],
+      "och_lang": "ENU",
+      "och_help": "<p>On creation, the app will send a notification to the <strong>FT_ADMIN<\/strong> group&nbsp; 🛎<\/p>",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -12783,6 +13053,22 @@
       "tsl_id__fld_name": "ftM2mId",
       "tsl_lang": "ENU",
       "tsl_value": "Ft M2mm 2mc M2m id",
+      "tsl_simplehelp": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "tsl_tooltip": null
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "F~ftNtfCode~ENU",
+     "item": {
+      "tsl_typeField": "F",
+      "tsl_id__fld_name": "ftNtfCode",
+      "tsl_lang": "ENU",
+      "tsl_value": "Code",
       "tsl_simplehelp": null,
       "tsl_short_value": null,
       "tsl_placeholder": null,
@@ -14153,6 +14439,22 @@
     },
     {
      "object": "TranslateField",
+     "userkey": "F~ftNtfCode~FRA",
+     "item": {
+      "tsl_typeField": "F",
+      "tsl_id__fld_name": "ftNtfCode",
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft ntf code",
+      "tsl_simplehelp": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "tsl_tooltip": null
+     }
+    },
+    {
+     "object": "TranslateField",
      "userkey": "F~ftO2mcCode~FRA",
      "item": {
       "tsl_typeField": "F",
@@ -14479,6 +14781,17 @@
     },
     {
      "object": "TranslateFieldArea",
+     "userkey": "Z~FtNotification-1~ENU",
+     "item": {
+      "tsl_typeFieldArea": "Z",
+      "tsl_id__ofa_name": "FtNotification-1",
+      "tsl_lang": "ENU",
+      "tsl_value": "FtNotification-1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
      "userkey": "Z~FtO2mChild-1~ENU",
      "item": {
       "tsl_typeFieldArea": "Z",
@@ -14672,6 +14985,17 @@
       "tsl_id__ofa_name": "FtM2mChild-1",
       "tsl_lang": "FRA",
       "tsl_value": "M2m child -1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "Z~FtNotification-1~FRA",
+     "item": {
+      "tsl_typeFieldArea": "Z",
+      "tsl_id__ofa_name": "FtNotification-1",
+      "tsl_lang": "FRA",
+      "tsl_value": "Notification -1",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -14907,6 +15231,18 @@
     },
     {
      "object": "TranslateObject",
+     "userkey": "O~FtNotification~ENU",
+     "item": {
+      "tsl_typeObject": "O",
+      "tsl_id__obo_name": "FtNotification",
+      "tsl_lang": "ENU",
+      "tsl_value": "Notifications",
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
      "userkey": "O~FtReflexiveMany~ENU",
      "item": {
       "tsl_typeObject": "O",
@@ -15021,6 +15357,18 @@
       "tsl_id__obo_name": "FtM2mChild",
       "tsl_lang": "FRA",
       "tsl_value": "Enfant",
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "O~FtNotification~FRA",
+     "item": {
+      "tsl_typeObject": "O",
+      "tsl_id__obo_name": "FtNotification",
+      "tsl_lang": "FRA",
+      "tsl_value": "Notifications",
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -15163,32 +15511,18 @@
    "label": "View translation",
    "icon": "img/system/translation",
    "field": "row_module_id",
-   "list": [
-    {
-     "object": "TranslateView",
-     "userkey": "V~SimFeaturesScope~ENU",
-     "item": {
-      "tsl_typeView": "V",
-      "tsl_id__viw_name": "SimFeaturesScope",
-      "tsl_lang": "ENU",
-      "tsl_value": "SimFeaturesScope",
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateView",
-     "userkey": "V~SimFeaturesScope~FRA",
-     "item": {
-      "tsl_typeView": "V",
-      "tsl_id__viw_name": "SimFeaturesScope",
-      "tsl_lang": "FRA",
-      "tsl_value": "SimFeaturesScope",
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
+   "list": [{
+    "object": "TranslateView",
+    "userkey": "V~SimFeaturesScope~ANY",
+    "item": {
+     "tsl_typeView": "V",
+     "tsl_id__viw_name": "SimFeaturesScope",
+     "tsl_lang": "ANY",
+     "tsl_value": "Features",
+     "tsl_help": null,
+     "row_module_id__mdl_name": "SimFeatures"
     }
-   ]
+   }]
   },
   {
    "object": "TranslateDocIndex",
@@ -15281,6 +15615,101 @@
       "name": "UserPassword.xml"
      },
      "dt_desc": "Sets `user`'s password to `userpassword`.\n\n`user` is a used which has the `FT_ADMIN` responsibility. The user & resp are in the `SimFeature` module, and this dataset allows to make its password deterministic."
+    }
+   }]
+  },
+  {
+   "object": "NotiConfChan",
+   "label": "Broadcast channel",
+   "icon": "img/color/pipelines",
+   "field": "row_module_id",
+   "list": [{
+    "object": "NotiConfChan",
+    "userkey": "FtNotification~INT",
+    "item": {
+     "notiConfchanConfId__notiConfName": "FtNotification",
+     "notiConfchanChanId__notiChanType": "INT",
+     "notiConfchanMandatory": true,
+     "notiConfchanMethod": null,
+     "row_module_id__mdl_name": "SimFeatures"
+    }
+   }]
+  },
+  {
+   "object": "NotiConfig",
+   "label": "Configuration",
+   "icon": "img/color/cog_wheel",
+   "field": "row_module_id",
+   "list": [{
+    "object": "NotiConfig",
+    "userkey": "FtNotification",
+    "item": {
+     "notiConfName": "FtNotification",
+     "notiConfAction": "3",
+     "notiConfObjectinternalId__obo_name": "FtNotification",
+     "row_module_id__mdl_name": "SimFeatures",
+     "notiConfExpression": "true"
+    }
+   }]
+  },
+  {
+   "object": "NotiConfigContent",
+   "label": "Content",
+   "icon": "edit",
+   "field": "row_module_id",
+   "list": [{
+    "object": "NotiConfigContent",
+    "userkey": "ENU~FtNotification~~",
+    "item": {
+     "tsl_lang": "ENU",
+     "notiContContent": "Notif content",
+     "notiContConfId__notiConfName": "FtNotification",
+     "notiContConfchanId__notiConfchanConfId__notiConfName": null,
+     "notiContConfchanId__notiConfchanChanId__notiChanType": null,
+     "row_module_id__mdl_name": "SimFeatures",
+     "notiContSubject": "Notif title"
+    }
+   }]
+  },
+  {
+   "object": "NotiConfigDest",
+   "label": "Recipients",
+   "icon": "img/color/group",
+   "field": "row_module_id",
+   "list": [{
+    "object": "NotiConfigDest",
+    "userkey": "1~FtNotification",
+    "item": {
+     "notiCdOrder": 1,
+     "notiCdConfigId__notiConfName": "FtNotification",
+     "notiCdGroupId__grp_name": "FT_ADMIN",
+     "notiCdQuery": null,
+     "notiCdUserId__usr_login": "designer",
+     "row_module_id__mdl_name": "SimFeatures",
+     "notiCdType": "GRP"
+    }
+   }]
+  },
+  {
+   "object": "NotiGroupChannels",
+   "label": "Recipient channels",
+   "icon": "img/color/pipelines",
+   "field": "row_module_id",
+   "list": [{
+    "object": "NotiGroupChannels",
+    "userkey": "1~FtNotification~FT_ADMIN~designer~FtNotification~INT",
+    "item": {
+     "notiGcCdId__notiCdOrder": 1,
+     "notiGcCdId__notiCdConfigId__notiConfName": "FtNotification",
+     "notiGcCdId__notiCdGroupId__grp_name": "FT_ADMIN",
+     "notiGcCdId__notiCdType": "GRP",
+     "notiGcCdId__notiCdUserId__usr_login": "designer",
+     "notiGcConfchanId__notiConfchanConfId__notiConfName": "FtNotification",
+     "notiGcConfchanId__notiConfchanChanId__notiChanType": "INT",
+     "notiGcConfchanId__notiConfchanMethod": null,
+     "notiGcSubscribed": true,
+     "notiGcConfchanId__notiConfchanMandatory": true,
+     "row_module_id__mdl_name": "SimFeatures"
     }
    }]
   }
