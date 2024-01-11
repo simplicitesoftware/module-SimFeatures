@@ -4379,7 +4379,7 @@ tags:
 - name: FtM2m
   description: N/N
 - name: FtM2mChild
-  description: Child
+  description: Child (many to many)
 - name: FtNotification
   description: Notification Tester
 - name: FtO2mChild

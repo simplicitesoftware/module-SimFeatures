@@ -5225,9 +5225,9 @@
 		<obo_btn_del>P</obo_btn_del>
 		<obo_btn_copy>P</obo_btn_copy>
 		<obo_btn_export>P</obo_btn_export>
-		<obo_btn_listadd>1</obo_btn_listadd>
-		<obo_btn_listedit>1</obo_btn_listedit>
-		<obo_btn_listupsert>1</obo_btn_listupsert>
+		<obo_btn_listadd>P</obo_btn_listadd>
+		<obo_btn_listedit>P</obo_btn_listedit>
+		<obo_btn_listupsert>P</obo_btn_listupsert>
 		<obo_btn_updall>P</obo_btn_updall>
 		<obo_btn_delall>P</obo_btn_delall>
 		<obo_btn_merge>P</obo_btn_merge>
@@ -9092,7 +9092,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<obf_visible>1</obf_visible>
 		<obf_ref_export>1</obf_ref_export>
 		<obf_copy>0</obf_copy>
-		<obf_associate/>
+		<obf_associate>1</obf_associate>
 		<obf_inline>0</obf_inline>
 		<obf_rendering/>
 		<obf_treedepth/>
@@ -9878,6 +9878,14 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<map_object_id.obj_name>FtRelationshipM2m</map_object_id.obj_name>
 		<map_process_id.pcs_name/>
 		<map_order>35</map_order>
+		<map_ext>0</map_ext>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<map_domain_id.obd_name>FtDomain</map_domain_id.obd_name>
+		<map_object_id.obj_name>FtM2mChild</map_object_id.obj_name>
+		<map_process_id.pcs_name/>
+		<map_order>36</map_order>
 		<map_ext>0</map_ext>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -12446,7 +12454,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_typeObject>O</tsl_typeObject>
 		<tsl_id.obo_name>FtM2mChild</tsl_id.obo_name>
 		<tsl_lang>ENU</tsl_lang>
-		<tsl_value>Child</tsl_value>
+		<tsl_value>Child (many to many)</tsl_value>
 		<tsl_help/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
