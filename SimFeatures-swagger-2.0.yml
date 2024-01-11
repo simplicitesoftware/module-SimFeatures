@@ -4381,7 +4381,7 @@ tags:
 - name: FtM2mChild
   description: Child
 - name: FtNotification
-  description: Notifications
+  description: Notification Tester
 - name: FtO2mChild
   description: FtO2mChild
 - name: FtReflexiveMany

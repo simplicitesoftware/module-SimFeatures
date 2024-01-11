@@ -1,8 +1,8 @@
 {
-    "date": "2024-01-10 18:24:16",
+    "date": "2024-01-11 10:32:24",
     "name": "SimFeatures",
-    "format": "json",
-    "files": ["SimFeatures.json"],
+    "format": "xml",
+    "files": ["SimFeatures.xml"],
     "repository": {"origin": {"uri": "https://github.com/simplicitesoftware/module-SimFeatures.git"}},
     "version": "1",
     "platform": "5.3.25"
