@@ -5183,7 +5183,7 @@
 		<obo_dbtable>ft_m2m</obo_dbtable>
 		<obo_role>OBJ</obo_role>
 		<obo_class/>
-		<obo_script_id/>
+		<obo_script_id>src/com/simplicite/objects/SimFeatures/FtM2m.java</obo_script_id>
 		<obo_usets>1</obo_usets>
 		<obo_nosearch>1</obo_nosearch>
 		<obo_comment/>
@@ -5250,7 +5250,7 @@
 		<obo_dbtable>ft_m2m_child</obo_dbtable>
 		<obo_role>OBJ</obo_role>
 		<obo_class/>
-		<obo_script_id/>
+		<obo_script_id>src/com/simplicite/objects/SimFeatures/FtM2mChild.java</obo_script_id>
 		<obo_usets>1</obo_usets>
 		<obo_nosearch>1</obo_nosearch>
 		<obo_comment/>
@@ -5338,8 +5338,8 @@
 		<obo_updall>1</obo_updall>
 		<obo_delall>1</obo_delall>
 		<obo_listsearch>1</obo_listsearch>
-		<obo_list_edit>N;L;E</obo_list_edit>
-		<obo_useform>1</obo_useform>
+		<obo_list_edit>I</obo_list_edit>
+		<obo_useform>0</obo_useform>
 		<obo_title/>
 		<obo_icon>img/color/notification</obo_icon>
 		<obo_refcount>0</obo_refcount>
@@ -5360,10 +5360,10 @@
 		<obo_btn_copy>P</obo_btn_copy>
 		<obo_btn_export>P</obo_btn_export>
 		<obo_btn_listadd>1</obo_btn_listadd>
-		<obo_btn_listedit>1</obo_btn_listedit>
+		<obo_btn_listedit>P</obo_btn_listedit>
 		<obo_btn_listupsert>1</obo_btn_listupsert>
 		<obo_btn_updall>P</obo_btn_updall>
-		<obo_btn_delall>P</obo_btn_delall>
+		<obo_btn_delall>1</obo_btn_delall>
 		<obo_btn_merge>P</obo_btn_merge>
 		<obo_btn_save>1</obo_btn_save>
 		<obo_btn_saveclose>1</obo_btn_saveclose>
@@ -5482,7 +5482,7 @@
 		<obo_historic/>
 		<obo_printable>1</obo_printable>
 		<obo_followlink>1</obo_followlink>
-		<obo_mergeable>0</obo_mergeable>
+		<obo_mergeable>1</obo_mergeable>
 		<obo_social>1</obo_social>
 		<obo_rowid_id.fld_name/>
 		<obo_extend_id.obj_name/>
