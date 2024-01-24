@@ -15,6 +15,17 @@ This modules is:
 - a reference of all Simplicité Features
 - a testing bench for those same features
 
+`FtActions` business object definition
+--------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftActCode`                                                  | char(100)                                | yes*     |           |          | -                                                                                |
+
 `FtAttributes` business object definition
 -----------------------------------------
 
@@ -205,7 +216,7 @@ Object showcasing all the possible attributes
 
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| `ftNtfCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+| `ftNtfCode`                                                  | char(100)                                | yes*     |           |          | -                                                                                |
 
 `FtO2mChild` business object definition
 ---------------------------------------
