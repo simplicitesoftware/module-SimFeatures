@@ -11,9 +11,7 @@
 `SimFeatures` module definition
 ===============================
 
-This modules is:
-- a reference of all Simplicité Features
-- a testing bench for those same features
+
 
 `FtActions` business object definition
 --------------------------------------
@@ -25,6 +23,10 @@ This modules is:
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftActCode`                                                  | char(100)                                | yes*     |           |          | -                                                                                |
+
+### Custom actions
+
+* `AsyncAction`: 
 
 `FtAttributes` business object definition
 -----------------------------------------

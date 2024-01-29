@@ -5,16 +5,11 @@
 	<action>upsert</action>
 	<data>
 		<mdl_name>SimFeatures</mdl_name>
-		<mdl_version>1</mdl_version>
+		<mdl_version>0.1</mdl_version>
 		<mdl_prefix>ft</mdl_prefix>
-		<mdl_url><![CDATA[{
-	"type": "git",
-	"origin": { "uri": "https://github.com/simplicitesoftware/module-SimFeatures.git" }
-}]]></mdl_url>
-		<mdl_type/>
-		<mdl_comment><![CDATA[This modules is:
-- a reference of all Simplicité Features
-- a testing bench for those same features]]></mdl_comment>
+		<mdl_url/>
+		<mdl_type>X</mdl_type>
+		<mdl_comment/>
 	</data>
 </object>
 <object>
@@ -5036,7 +5031,7 @@
 		<obo_dbtable>ft_actions</obo_dbtable>
 		<obo_role>OBJ</obo_role>
 		<obo_class/>
-		<obo_script_id/>
+		<obo_script_id>src/com/simplicite/objects/SimFeatures/FtActions.java</obo_script_id>
 		<obo_usets>1</obo_usets>
 		<obo_nosearch>1</obo_nosearch>
 		<obo_comment/>
@@ -9340,7 +9335,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method/>
 		<act_script/>
 		<act_url><![CDATA[javascript:alert("This is a simple action");]]></act_url>
-		<act_image/>
+		<act_image>info</act_image>
 		<act_confirm>1</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui/>
@@ -9348,6 +9343,27 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_comment/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<act_exec>FRT</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+	</data>
+	<data>
+		<act_name>AsyncAction</act_name>
+		<act_type>L</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method>asyncAction</act_method>
+		<act_script/>
+		<act_url/>
+		<act_image>img/color/property_time</act_image>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>BCK</act_exec>
 		<act_count/>
 		<act_order/>
 		<act_color/>
@@ -9384,6 +9400,15 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
 		<fct_function>A</fct_function>
 		<fct_action_id.act_name>ActSimple</fct_action_id.act_name>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fct_name>AsyncAction</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
+		<fct_function>A</fct_function>
+		<fct_action_id.act_name>AsyncAction</fct_action_id.act_name>
 		<fct_view_id.viw_name/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -9703,6 +9728,16 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
 		<grt_function_id.fct_object_id.obj_name>FtActions</grt_function_id.fct_object_id.obj_name>
 		<grt_function_id.fct_action_id.act_name>ActSimple</grt_function_id.fct_action_id.act_name>
+		<grt_function_id.fct_function>A</grt_function_id.fct_function>
+		<grt_activ>1</grt_activ>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
+		<grt_function_id.fct_name>AsyncAction</grt_function_id.fct_name>
+		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
+		<grt_function_id.fct_object_id.obj_name>FtActions</grt_function_id.fct_object_id.obj_name>
+		<grt_function_id.fct_action_id.act_name>AsyncAction</grt_function_id.fct_action_id.act_name>
 		<grt_function_id.fct_function>A</grt_function_id.fct_function>
 		<grt_activ>1</grt_activ>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
