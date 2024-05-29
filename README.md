@@ -23,10 +23,15 @@
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftActCode`                                                  | char(100)                                | yes*     |           |          | -                                                                                |
+| `ftActDate`                                                  | date                                     |          | yes       |          | -                                                                                |
+| `ftActDocument`                                              | document                                 |          | yes       |          | -                                                                                |
+| `ftActImage`                                                 | image                                    |          | yes       |          | -                                                                                |
 
 ### Custom actions
 
-* `AsyncAction`: 
+* `ActAskFields`: 
+* `ActAsync`: 
+* `ActConfirmFields`: 
 
 `FtAttributes` business object definition
 -----------------------------------------

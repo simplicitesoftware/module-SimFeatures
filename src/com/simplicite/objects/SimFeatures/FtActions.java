@@ -14,7 +14,66 @@ import java.io.File;
  */
 public class FtActions extends ObjectDB {
 	private static final long serialVersionUID = 1L;
+
+	@Override
+	public void initAction(Action action) {
+		if ("ActAskFields".equals(action.getName())) {
+			// form/row value
+			String date = getFieldValue("ftActDate");
+			// Example to set default value of date2 to date + 7
+			if (!Tool.isEmpty(date)) {
+				ObjectField date2 = action.getConfirmField("ftActDate2");
+				date2.setDefaultValue(Tool.shiftDays(date, 7));
+				date2.setRequired(false);
+			}
+		}
+	}
+
+	public String confirmAction(Action a) {
+		return Message.formatSimpleInfo("confirmAction is done");
+	}
 	
+	public String askAction(Action a) {
+		File file = null;
+		try {
+			// read incoming action fields
+			ObjectField date = a.getConfirmField("ftActDate2");
+			ObjectField userId = a.getConfirmField("ftActUserId");
+			ObjectField userLName = a.getConfirmField("ftActUserId.usr_last_name");
+	
+			String msg = "askAction is done with confirmed values:\n"
+				+ "\n - date = " + date.getValue()
+				+ "\n - user id = " + userId.getValue()
+				+ "\n - last name = " + userLName.getValue();
+	
+			DocumentDB doc = a.getConfirmField("ftActDocument2").getDocument();
+			file = doc==null ? null : doc.getUploadFile();
+			if (file!=null)
+				msg += "\n\n - doc name = " + doc.getPath() 
+					+  "\n --- tmp file = " + file.getAbsolutePath() 
+					+  "\n --- file size = " + file.length();
+	
+			DocumentDB img = a.getConfirmField("ftActImage2").getDocument();
+			byte[] data = img==null ? null : img.getBytes();
+			if (data!=null)
+				msg += "\n\n - img name = " + img.getPath() 
+					+  "\n --- data size = " + data.length;
+
+			// do someting with data...
+
+			// debug message
+			return Message.formatSimpleWarning(msg);
+		}
+		catch (Exception e) {
+			return Message.formatSimpleError(e.getMessage());
+		}
+		finally {
+			// clean temp file when used
+			if (file!=null)
+				file.delete();
+		}
+	}
+
 	public String asyncAction(){
 		return "to implement in v6.0";
 	}
@@ -27,7 +86,7 @@ public class FtActions extends ObjectDB {
 		<name>Action</name>
 		<action>update</action>
 		<data>
-			<act_name>AsyncAction</act_name>
+			<act_name>ActAsync</act_name>
 			<act_async>1</act_async>
 			<act_queue_id.acq_name>AppQueue</act_queue_id.acq_name>
 		</data>

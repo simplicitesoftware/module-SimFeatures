@@ -140,6 +140,7 @@
 		<rsp_end_dt/>
 		<rsp_activ>1</rsp_activ>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<testdoc/>
 	</data>
 	<data>
 		<rsp_login_id.usr_login>user</rsp_login_id.usr_login>
@@ -148,6 +149,7 @@
 		<rsp_end_dt/>
 		<rsp_activ>1</rsp_activ>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<testdoc/>
 	</data>
 </object>
 <object>
@@ -670,6 +672,13 @@
 	<action>upsert</action>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FT_LST_TYPE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_LST_TYPE</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[A]]></lov_value>
@@ -677,23 +686,9 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FT_LST_TYPE</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>C</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[C]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FT_LST_TYPE</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>B</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[B]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FT_LST_TYPE</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>C</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[C]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -711,10 +706,10 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUM</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
+		<lov_code_id.lov_list_id.lov_name>FT_LST_TYPE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -733,9 +728,23 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUM</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUM</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>B</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUM</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -746,9 +755,16 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUM</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
+		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -762,15 +778,8 @@
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
+		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[A]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>B</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[B]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -785,13 +794,6 @@
 		<lov_code_id.lov_code>B</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[B]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -817,6 +819,13 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
@@ -827,13 +836,6 @@
 		<lov_code_id.lov_code>B</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[B]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMCHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -901,9 +903,9 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[B]]></lov_value>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -915,9 +917,9 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
+		<lov_value><![CDATA[B]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -925,6 +927,13 @@
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -937,22 +946,8 @@
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[A]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>C</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[C]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -963,16 +958,9 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTICHECKBOXVERTICAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
+		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -985,8 +973,15 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
+		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -1005,17 +1000,17 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>C</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[C]]></lov_value>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
+		<lov_value><![CDATA[C]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -1027,16 +1022,16 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>C</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[C]]></lov_value>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
+		<lov_value><![CDATA[C]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -1047,10 +1042,24 @@
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -1062,20 +1071,6 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
@@ -1085,6 +1080,20 @@
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>B</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMMULTIRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[B]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -1097,22 +1106,8 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>B</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[B]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -1125,6 +1120,13 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMPILLBOX</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
@@ -1132,9 +1134,9 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
+		<lov_value><![CDATA[C]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -1146,9 +1148,9 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>C</lov_code_id.lov_code>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[C]]></lov_value>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -1160,16 +1162,16 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[B]]></lov_value>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOHORIZONTAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
+		<lov_value><![CDATA[B]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -1181,6 +1183,13 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
 		<lov_code_id.lov_code>A</lov_code_id.lov_code>
 		<lov_lang>ENU</lov_lang>
 		<lov_value><![CDATA[A]]></lov_value>
@@ -1188,9 +1197,9 @@
 	</data>
 	<data>
 		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>B</lov_code_id.lov_code>
-		<lov_lang>ENU</lov_lang>
-		<lov_value><![CDATA[B]]></lov_value>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -1205,13 +1214,6 @@
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-	<data>
-		<lov_code_id.lov_list_id.lov_name>FTATTRENUMRADIOVERTICAL</lov_code_id.lov_list_id.lov_name>
-		<lov_code_id.lov_code>A</lov_code_id.lov_code>
-		<lov_lang>FRA</lov_lang>
-		<lov_value><![CDATA[A]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 </object>
@@ -1266,6 +1268,279 @@
 		<fld_classification/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<fld_incrementsyntax>Action #&lt;00&gt;</fld_incrementsyntax>
+	</data>
+	<data>
+		<fld_name>ftActDate</fld_name>
+		<fld_dbname>ft_act_date</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>4</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
+	</data>
+	<data>
+		<fld_name>ftActDate2</fld_name>
+		<fld_dbname/>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>1</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>4</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
+	</data>
+	<data>
+		<fld_name>ftActDocument</fld_name>
+		<fld_dbname>ft_act_document</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>17</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
+	</data>
+	<data>
+		<fld_name>ftActDocument2</fld_name>
+		<fld_dbname/>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>17</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
+	</data>
+	<data>
+		<fld_name>ftActImage</fld_name>
+		<fld_dbname>ft_act_image</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research/>
+		<fld_researchreq/>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>20</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision>200</fld_precision>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
+	</data>
+	<data>
+		<fld_name>ftActImage2</fld_name>
+		<fld_dbname/>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>0</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research/>
+		<fld_researchreq/>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>20</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision>200</fld_precision>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
+	</data>
+	<data>
+		<fld_name>ftActUserId</fld_name>
+		<fld_dbname/>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>1</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research/>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>0</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>11</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
 	</data>
 	<data>
 		<fld_name>ftAttrBoolean</fld_name>
@@ -4738,7 +5013,32 @@
 		<ofa_name>FtActions-1</ofa_name>
 		<ofa_position>1</ofa_position>
 		<ofa_title>0</ofa_title>
-		<ofa_ui><![CDATA[<div class="field" data-field="ftActCode"></div>]]></ofa_ui>
+		<ofa_ui><![CDATA[<div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="field" data-field="ftActCode"></div>
+    </div>
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="action" data-action="ActConfirmFields"></div>
+        </div>
+        <div class="col-sm-6">
+          <div class="action" data-action="ActAskFields"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="field" data-field="ftActDate"></div>
+      <div class="field" data-field="ftActDocument"></div>
+    </div>
+    <div class="col-sm-6">
+      <div class="field" data-field="ftActImage"></div>
+    </div>
+  </div>
+</div>]]></ofa_ui>
 		<ofa_icon>star</ofa_icon>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -6112,6 +6412,102 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<obf_order>10</obf_order>
 		<obf_group_by/>
 		<obf_dfault_order>1</obf_dfault_order>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name>FtActions-1</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>1</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtActions</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftActDate</obf_field_id.fld_name>
+		<obf_field_id.fld_type>4</obf_field_id.fld_type>
+		<obf_order>20</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name>FtActions-1</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>1</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtActions</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftActDocument</obf_field_id.fld_name>
+		<obf_field_id.fld_type>17</obf_field_id.fld_type>
+		<obf_order>30</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name>FtActions-1</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>1</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtActions</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftActImage</obf_field_id.fld_name>
+		<obf_field_id.fld_type>20</obf_field_id.fld_type>
+		<obf_order>40</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
 		<obf_input/>
 		<obf_ref_field_id.fld_name/>
 		<obf_ref_object_id.obo_name/>
@@ -9328,6 +9724,88 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	<name>Action</name>
 	<action>upsert</action>
 	<data>
+		<act_name>ActAskFields</act_name>
+		<act_type>A</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method>askAction</act_method>
+		<act_script/>
+		<act_url/>
+		<act_image>bi/ui-checks</act_image>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui><![CDATA[<div class="row" style="width: 60rem">
+	<div class="col-md-6">
+		<div class="field" data-field="ftActUserId"></div>
+		<div class="field" data-field="ftActUserId__usr_login"></div>
+		<div class="field" data-field="ftActUserId__usr_last_name"></div>
+	</div>
+	<div class="col-md-6">
+		<div class="field" data-field="ftActDate2"></div>
+		<div class="field" data-field="ftActImage2"></div>
+		<div class="field" data-field="ftActDocument2"></div>
+	</div>
+</div>]]></act_confirm_ui>
+		<act_plus>0</act_plus>
+		<act_comment/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>BCK</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color>#FEFEFE</act_color>
+		<act_color_bg>#A59C30</act_color_bg>
+	</data>
+	<data>
+		<act_name>ActAsync</act_name>
+		<act_type>L</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method>asyncAction</act_method>
+		<act_script/>
+		<act_url/>
+		<act_image>img/color/property_time</act_image>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>BCK</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+	</data>
+	<data>
+		<act_name>ActConfirmFields</act_name>
+		<act_type>F</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method>confirmAction</act_method>
+		<act_script/>
+		<act_url/>
+		<act_image>fas/check-square</act_image>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui><![CDATA[<div class="row" style="width: 60rem">
+	<div class="col-md-6">
+		<div class="field" data-field="ftActDate"></div>
+		<div class="field" data-field="ftActImage"></div>
+	</div>
+	<div class="col-md-6">
+		<div class="field" data-field="ftActDocument"></div>
+	</div>
+</div>]]></act_confirm_ui>
+		<act_plus>0</act_plus>
+		<act_comment/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>BCK</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color>#FFFFFF</act_color>
+		<act_color_bg>#A57630</act_color_bg>
+	</data>
+	<data>
 		<act_name>ActSimple</act_name>
 		<act_type>L</act_type>
 		<act_async>0</act_async>
@@ -9343,27 +9821,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_comment/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<act_exec>FRT</act_exec>
-		<act_count/>
-		<act_order/>
-		<act_color/>
-		<act_color_bg/>
-	</data>
-	<data>
-		<act_name>AsyncAction</act_name>
-		<act_type>L</act_type>
-		<act_async>0</act_async>
-		<act_job_depth/>
-		<act_method>asyncAction</act_method>
-		<act_script/>
-		<act_url/>
-		<act_image>img/color/property_time</act_image>
-		<act_confirm>1</act_confirm>
-		<act_confirm_expr/>
-		<act_confirm_ui/>
-		<act_plus>0</act_plus>
-		<act_comment/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-		<act_exec>BCK</act_exec>
 		<act_count/>
 		<act_order/>
 		<act_color/>
@@ -9392,32 +9849,126 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 </object>
 <object>
-	<name>Function</name>
+	<name>ActionField</name>
 	<action>upsert</action>
 	<data>
-		<fct_name>ActSimple</fct_name>
-		<fct_object_id.obj_type>O</fct_object_id.obj_type>
-		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
-		<fct_function>A</fct_function>
-		<fct_action_id.act_name>ActSimple</fct_action_id.act_name>
-		<fct_view_id.viw_name/>
+		<afd_action_id.act_name>ActAskFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>ftActDate2</afd_field_id.fld_name>
+		<afd_order>10</afd_order>
+		<afd_ref_field_id.fld_name/>
+		<afd_ref_object_id.obo_name/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
-		<fct_name>AsyncAction</fct_name>
-		<fct_object_id.obj_type>O</fct_object_id.obj_type>
-		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
-		<fct_function>A</fct_function>
-		<fct_action_id.act_name>AsyncAction</fct_action_id.act_name>
-		<fct_view_id.viw_name/>
+		<afd_action_id.act_name>ActAskFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>ftActImage2</afd_field_id.fld_name>
+		<afd_order>20</afd_order>
+		<afd_ref_field_id.fld_name/>
+		<afd_ref_object_id.obo_name/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
+	<data>
+		<afd_action_id.act_name>ActAskFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>ftActDocument2</afd_field_id.fld_name>
+		<afd_order>30</afd_order>
+		<afd_ref_field_id.fld_name/>
+		<afd_ref_object_id.obo_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<afd_action_id.act_name>ActAskFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>ftActUserId</afd_field_id.fld_name>
+		<afd_order>100</afd_order>
+		<afd_ref_field_id.fld_name/>
+		<afd_ref_object_id.obo_name>FtCustomUser</afd_ref_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<afd_action_id.act_name>ActAskFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>usr_login</afd_field_id.fld_name>
+		<afd_order>110</afd_order>
+		<afd_ref_field_id.fld_name>ftActUserId</afd_ref_field_id.fld_name>
+		<afd_ref_object_id.obo_name>FtCustomUser</afd_ref_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<afd_action_id.act_name>ActAskFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>usr_last_name</afd_field_id.fld_name>
+		<afd_order>120</afd_order>
+		<afd_ref_field_id.fld_name>ftActUserId</afd_ref_field_id.fld_name>
+		<afd_ref_object_id.obo_name>FtCustomUser</afd_ref_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<afd_action_id.act_name>ActConfirmFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>ftActDate</afd_field_id.fld_name>
+		<afd_order>10</afd_order>
+		<afd_ref_field_id.fld_name/>
+		<afd_ref_object_id.obo_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<afd_action_id.act_name>ActConfirmFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>ftActImage</afd_field_id.fld_name>
+		<afd_order>20</afd_order>
+		<afd_ref_field_id.fld_name/>
+		<afd_ref_object_id.obo_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<afd_action_id.act_name>ActConfirmFields</afd_action_id.act_name>
+		<afd_field_id.fld_name>ftActDocument</afd_field_id.fld_name>
+		<afd_order>30</afd_order>
+		<afd_ref_field_id.fld_name/>
+		<afd_ref_object_id.obo_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+</object>
+<object>
+	<name>Function</name>
+	<action>upsert</action>
 	<data>
 		<fct_name>D-FtDomain</fct_name>
 		<fct_object_id.obj_type>D</fct_object_id.obj_type>
 		<fct_object_id.obj_name>FtDomain</fct_object_id.obj_name>
 		<fct_function>L</fct_function>
 		<fct_action_id.act_name/>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fct_name>FT_ACT_ACT_ASK_FIELDS_A</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
+		<fct_function>A</fct_function>
+		<fct_action_id.act_name>ActAskFields</fct_action_id.act_name>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fct_name>FT_ACT_ACT_ASYNC_A</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
+		<fct_function>A</fct_function>
+		<fct_action_id.act_name>ActAsync</fct_action_id.act_name>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fct_name>FT_ACT_ACT_CONFIRM_FIELDS_A</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
+		<fct_function>A</fct_function>
+		<fct_action_id.act_name>ActConfirmFields</fct_action_id.act_name>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fct_name>FT_ACT_ACT_SIMPLE_A</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtActions</fct_object_id.obj_name>
+		<fct_function>A</fct_function>
+		<fct_action_id.act_name>ActSimple</fct_action_id.act_name>
 		<fct_view_id.viw_name/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -9724,20 +10275,40 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	<action>upsert</action>
 	<data>
 		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
-		<grt_function_id.fct_name>ActSimple</grt_function_id.fct_name>
+		<grt_function_id.fct_name>FT_ACT_ACT_ASK_FIELDS_A</grt_function_id.fct_name>
 		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
 		<grt_function_id.fct_object_id.obj_name>FtActions</grt_function_id.fct_object_id.obj_name>
-		<grt_function_id.fct_action_id.act_name>ActSimple</grt_function_id.fct_action_id.act_name>
+		<grt_function_id.fct_action_id.act_name>ActAskFields</grt_function_id.fct_action_id.act_name>
 		<grt_function_id.fct_function>A</grt_function_id.fct_function>
 		<grt_activ>1</grt_activ>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
 		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
-		<grt_function_id.fct_name>AsyncAction</grt_function_id.fct_name>
+		<grt_function_id.fct_name>FT_ACT_ACT_ASYNC_A</grt_function_id.fct_name>
 		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
 		<grt_function_id.fct_object_id.obj_name>FtActions</grt_function_id.fct_object_id.obj_name>
-		<grt_function_id.fct_action_id.act_name>AsyncAction</grt_function_id.fct_action_id.act_name>
+		<grt_function_id.fct_action_id.act_name>ActAsync</grt_function_id.fct_action_id.act_name>
+		<grt_function_id.fct_function>A</grt_function_id.fct_function>
+		<grt_activ>1</grt_activ>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
+		<grt_function_id.fct_name>FT_ACT_ACT_CONFIRM_FIELDS_A</grt_function_id.fct_name>
+		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
+		<grt_function_id.fct_object_id.obj_name>FtActions</grt_function_id.fct_object_id.obj_name>
+		<grt_function_id.fct_action_id.act_name>ActConfirmFields</grt_function_id.fct_action_id.act_name>
+		<grt_function_id.fct_function>A</grt_function_id.fct_function>
+		<grt_activ>1</grt_activ>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
+		<grt_function_id.fct_name>FT_ACT_ACT_SIMPLE_A</grt_function_id.fct_name>
+		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
+		<grt_function_id.fct_object_id.obj_name>FtActions</grt_function_id.fct_object_id.obj_name>
+		<grt_function_id.fct_action_id.act_name>ActSimple</grt_function_id.fct_action_id.act_name>
 		<grt_function_id.fct_function>A</grt_function_id.fct_function>
 		<grt_activ>1</grt_activ>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
@@ -10077,6 +10648,51 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	<name>DocIndex</name>
 	<action>upsert</action>
 	<data>
+		<din_name>B-ftActDocument</din_name>
+		<din_field_id.fld_name>ftActDocument</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<din_name>B-ftActDocument2</din_name>
+		<din_field_id.fld_name>ftActDocument2</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<din_name>B-ftActImage</din_name>
+		<din_field_id.fld_name>ftActImage</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<din_name>B-ftActImage2</din_name>
+		<din_field_id.fld_name>ftActImage2</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<din_name>B-ftAttrDocument</din_name>
+		<din_field_id.fld_name>ftAttrDocument</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<din_name>B-ftAttrDocumentMultiBox</din_name>
 		<din_field_id.fld_name>ftAttrDocumentMultiBox</din_field_id.fld_name>
 		<din_path/>
@@ -10095,12 +10711,40 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<din_name>B-ftAttrDocumentName</din_name>
+		<din_field_id.fld_name>ftAttrDocumentName</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<din_name>B-ftAttrImage</din_name>
+		<din_field_id.fld_name>ftAttrImage</din_field_id.fld_name>
+		<din_path/>
+		<din_min/>
+		<din_max/>
+		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<din_name>B-ftLstImage</din_name>
 		<din_field_id.fld_name>ftLstImage</din_field_id.fld_name>
 		<din_path/>
 		<din_min/>
 		<din_max/>
 		<din_grant>0</din_grant>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+</object>
+<object>
+	<name>DocIndexMIME</name>
+	<action>upsert</action>
+	<data>
+		<dim_docindex_id.din_name>B-ftActDocument</dim_docindex_id.din_name>
+		<dim_mime_id.dmi_name>application/pdf</dim_mime_id.dmi_name>
+		<dim_mime_id.dmi_ext>pdf</dim_mime_id.dmi_ext>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 </object>
@@ -10282,6 +10926,22 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	<action>upsert</action>
 	<data>
 		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>ActAskFields</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Ask fields</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>ActConfirmFields</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Confirm with fields</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
 		<tsl_id.act_name>ActSimple</tsl_id.act_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Simple action</tsl_value>
@@ -10293,6 +10953,22 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_id.act_name>FtCustomAssociate</tsl_id.act_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Custom associate</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>ActAskFields</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Demander des champs</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>ActConfirmFields</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Confirmation avec champs</tsl_value>
 		<tsl_simplehelp/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -10324,6 +11000,90 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder>auto-fill</tsl_placeholder>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDate</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Ft act date</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDate2</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Date ?</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDocument</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Ft act document</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDocument2</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Document ?</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActImage</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Ft act image</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActImage2</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Image ?</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActUserId</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>User</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
 		<tsl_listhelp/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<tsl_tooltip/>
@@ -11364,7 +12124,91 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftActCode</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
-		<tsl_value>Ft act code</tsl_value>
+		<tsl_value>Code action</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDate</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Date</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDate2</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Date ?</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDocument</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Document PDF</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActDocument2</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Document ?</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActImage</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Image</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActImage2</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Image ?</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftActUserId</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Utilisateur</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -12989,6 +13833,41 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	<action>upsert</action>
 	<data>
 		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActDocument</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ft act document</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActDocument2</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ft act document 2</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActImage</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ft act image</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActImage2</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ft act image 2</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocument</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ft attr document</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
 		<tsl_id.din_name>B-ftAttrDocumentMultiBox</tsl_id.din_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>B-ftAttrDocumentMultiBox</tsl_value>
@@ -12999,6 +13878,20 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_id.din_name>B-ftAttrDocumentMultiList</tsl_id.din_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>B-ftAttrDocumentMultiList</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocumentName</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ft attr document name</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrImage</tsl_id.din_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B-ft attr image</tsl_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -13010,6 +13903,41 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 	<data>
 		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActDocument</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ft act document</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActDocument2</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ft act document 2</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActImage</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ft act image</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftActImage2</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ft act image 2</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocument</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ft attr document</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
 		<tsl_id.din_name>B-ftAttrDocumentMultiBox</tsl_id.din_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>B-ftAttrDocumentMultiBox</tsl_value>
@@ -13020,6 +13948,20 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_id.din_name>B-ftAttrDocumentMultiList</tsl_id.din_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>B-ftAttrDocumentMultiList</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrDocumentName</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ft attr document name</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeDocIndex>B</tsl_typeDocIndex>
+		<tsl_id.din_name>B-ftAttrImage</tsl_id.din_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B-ft attr image</tsl_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
