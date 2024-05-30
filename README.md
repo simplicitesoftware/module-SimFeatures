@@ -26,6 +26,13 @@
 | `ftActDate`                                                  | date                                     |          | yes       |          | -                                                                                |
 | `ftActDocument`                                              | document                                 |          | yes       |          | -                                                                                |
 | `ftActImage`                                                 | image                                    |          | yes       |          | -                                                                                |
+| `ftActState`                                                 | enum(1) using `FT_ACT_STATE` list        | yes      | yes       |          | -                                                                                |
+
+### Lists
+
+* `FT_ACT_STATE`
+    - `A` Step A
+    - `B` Step B
 
 ### Custom actions
 

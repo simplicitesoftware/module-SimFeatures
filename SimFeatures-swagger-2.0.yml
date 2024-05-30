@@ -3238,44 +3238,6 @@ paths:
       - FtTag
       consumes:
       - application/json
-  /rest/FtActions/{row_id}/action:AsyncAction:
-    get:
-      summary: Call a custom action for a FtActions business object record or for
-        all records
-      security:
-      - bearerAuth: []
-      produces:
-      - application/json
-      operationId: obj-ftactions-action-asyncaction
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/ActionResult'
-          description: Success in calling the custom action
-        '400':
-          schema:
-            $ref: '#/definitions/Error400'
-          description: Bad request
-        '401':
-          schema:
-            $ref: '#/definitions/Error401'
-          description: Unauthorized
-        '500':
-          schema:
-            $ref: '#/definitions/Error500'
-          description: Internal server error
-        '404':
-          schema:
-            $ref: '#/definitions/Error404'
-          description: Not found
-      parameters:
-      - in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        type: string
-        required: true
-      tags:
-      - FtActions
   /rest/FtReflexiveMany/{row_id}:
     post:
       summary: Create a new FtReflexiveMany business object record
@@ -3904,6 +3866,14 @@ paths:
         description: Search filter for Ft act image
         type: string
         required: false
+      - in: query
+        name: ftActState
+        description: Search filter for Ft act state
+        type: string
+        required: false
+        enum:
+        - A
+        - B
       tags:
       - FtActions
   /rest/FtO2mChild/{row_id}:
@@ -4535,6 +4505,12 @@ definitions:
         description: Ft act date
         type: string
         example: yyyy-MM-dd
+      ftActState:
+        description: Ft act state
+        type: string
+        enum:
+        - A
+        - B
       ftActDocument:
         description: Ft act document
         type: object

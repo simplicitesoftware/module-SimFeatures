@@ -1,9 +1,13 @@
 {
-    "date": "2024-05-29 18:53:18",
+    "date": "2024-05-30 18:04:06",
     "name": "SimFeatures",
     "format": "xml",
     "files": ["SimFeatures.xml"],
-    "repository": {},
+    "repository": {"origin": {
+        "password": "x28d3PPYRk42upY",
+        "uri": "https://github.com/simplicitesoftware/module-SimFeatures.git",
+        "username": "francois-simplicite"
+    }},
     "version": "0.1",
     "platform": "5.3.39-preview"
 }
