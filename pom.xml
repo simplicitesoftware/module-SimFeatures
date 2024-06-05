@@ -13,15 +13,15 @@ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
   <description>Simplicite module: SimFeatures</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <simplicite.url>http://localhost:8853/simplicite</simplicite.url>
-    <simplicite.version>5.3-SNAPSHOT</simplicite.version>
+    <simplicite.url>https://simtest.sca.simplicite.io</simplicite.url>
+    <simplicite.version>6.3-SNAPSHOT</simplicite.version>
     <maven.compiler.source>11</maven.compiler.source>
     <maven.compiler.target>11</maven.compiler.target>
     <sonar.projectKey>simplicite-modules-SimFeatures</sonar.projectKey>
     <sonar.projectName>SimFeatures</sonar.projectName>
     <sonar.projectVersion>0.1</sonar.projectVersion>
     <sonar.sources>src,resources</sonar.sources>
-    <sonar.exclusions>**.min.js,**.min.css</sonar.exclusions>
+    <sonar.exclusions>SimFeatures.xml,SimFeatures.json,SimFeatures-*.yml,configuration/**,**.min.js,**.min.css</sonar.exclusions>
     <sonar.coverage.exclusions>resources/**.js,src/**.java</sonar.coverage.exclusions>
   </properties>
   <packaging>jar</packaging>

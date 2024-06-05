@@ -1317,53 +1317,6 @@ paths:
         required: true
       tags:
       - FtCustomUser
-  /rest/FtActions/{row_id}/action:ActAskFields:
-    get:
-      summary: Call a custom action for a FtActions business object record or for
-        all records
-      security:
-      - bearerAuth: []
-      operationId: obj-ftactions-action-actaskfields
-      responses:
-        '200':
-          description: Success in calling the custom action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResult'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtActions
   /rest/FtSelectObject:
     get:
       summary: Search FtSelectObject business object records or get contextualized
@@ -2069,53 +2022,6 @@ paths:
         required: false
       tags:
       - FtReflexiveMany
-  /rest/FtActions/{row_id}/action:ActConfirmFields:
-    get:
-      summary: Call a custom action for a FtActions business object record or for
-        all records
-      security:
-      - bearerAuth: []
-      operationId: obj-ftactions-action-actconfirmfields
-      responses:
-        '200':
-          description: Success in calling the custom action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResult'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtActions
   /rest/FtM2mChild:
     get:
       summary: Search FtM2mChild business object records or get contextualized metadata
@@ -2672,53 +2578,6 @@ paths:
         required: false
       tags:
       - FtM2m
-  /rest/FtActions/{row_id}/action:ActAsync:
-    get:
-      summary: Call a custom action for a FtActions business object record or for
-        all records
-      security:
-      - bearerAuth: []
-      operationId: obj-ftactions-action-actasync
-      responses:
-        '200':
-          description: Success in calling the custom action
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ActionResult'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtActions
   /logout:
     get:
       summary: Logout (revoke bearer token)
