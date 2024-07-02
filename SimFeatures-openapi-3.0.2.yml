@@ -119,6 +119,9 @@ components:
         ftO2mcO2mId__ftO2mCode:
           description: Father Code
           type: string
+        ftO2mcO2mId__ftO2mDescription:
+          description: Father Description
+          type: string
     PlaceMapData:
       type: object
       properties:
@@ -714,6 +717,9 @@ components:
       properties:
         ftO2mCode:
           description: Code
+          type: string
+        ftO2mDescription:
+          description: Description
           type: string
         row_id:
           description: Unique technical row ID
@@ -2345,6 +2351,12 @@ paths:
         in: query
         name: ftO2mCode
         description: Search filter for Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftO2mDescription
+        description: Search filter for Description
         required: false
       tags:
       - FtRelationshipO2m
@@ -4098,6 +4110,12 @@ paths:
         in: query
         name: ftO2mcO2mId__ftO2mCode
         description: Search filter for Father Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftO2mcO2mId__ftO2mDescription
+        description: Search filter for Father Description
         required: false
       tags:
       - FtO2mChild

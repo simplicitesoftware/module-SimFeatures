@@ -184,7 +184,7 @@ Object showcasing all the possible attributes
 
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| `ftLstCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+| `ftLstCode`                                                  | char(100)                                | yes*     |           |          | -                                                                                |
 | `ftLstType`                                                  | enum(10) using `FT_LST_TYPE` list        |          | yes       |          | -                                                                                |
 | `ftLstDescription`                                           | html(5000)                               |          | yes       |          | -                                                                                |
 | `ftLstImage`                                                 | image                                    |          | yes       |          | -                                                                                |
@@ -244,6 +244,7 @@ Object showcasing all the possible attributes
 | `ftO2mcCode`                                                 | char(20)                                 | yes*     | yes       |          | -                                                                                |
 | `ftO2mcO2mId` link to **`FtRelationshipO2m`**                | id                                       | yes      | yes       |          | -                                                                                |
 | _Ref. `ftO2mcO2mId.ftO2mCode`_                               | _char(30)_                               |          |           |          | -                                                                                |
+| _Ref. `ftO2mcO2mId.ftO2mDescription`_                        | _char(100)_                              |          |           |          | -                                                                                |
 
 `FtReflexiveMany` business object definition
 --------------------------------------------
@@ -277,7 +278,8 @@ Object showcasing all the possible attributes
 
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| `ftO2mCode`                                                  | char(30)                                 | yes*     | yes       |          | -                                                                                |
+| `ftO2mCode`                                                  | char(30)                                 | yes*     |           |          | -                                                                                |
+| `ftO2mDescription`                                           | char(100)                                |          | yes       |          | -                                                                                |
 
 `FtRxmLink` business object definition
 --------------------------------------

@@ -1329,6 +1329,11 @@ paths:
         description: Search filter for Code
         type: string
         required: false
+      - in: query
+        name: ftO2mDescription
+        description: Search filter for Description
+        type: string
+        required: false
       tags:
       - FtRelationshipO2m
   /rest/FtRxmLink/{row_id}:
@@ -2793,6 +2798,11 @@ paths:
       - in: query
         name: ftO2mcO2mId__ftO2mCode
         description: Search filter for Father Code
+        type: string
+        required: false
+      - in: query
+        name: ftO2mcO2mId__ftO2mDescription
+        description: Search filter for Father Description
         type: string
         required: false
       tags:
@@ -4619,6 +4629,9 @@ definitions:
       ftO2mcO2mId__ftO2mCode:
         description: Father Code
         type: string
+      ftO2mcO2mId__ftO2mDescription:
+        description: Father Description
+        type: string
   PlaceMapData:
     type: object
     properties:
@@ -5214,6 +5227,9 @@ definitions:
     properties:
       ftO2mCode:
         description: Code
+        type: string
+      ftO2mDescription:
+        description: Description
         type: string
       row_id:
         description: Unique technical row ID
