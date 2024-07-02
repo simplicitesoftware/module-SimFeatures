@@ -8,12 +8,9 @@
 		<mdl_version>0.1</mdl_version>
 		<mdl_prefix>ft</mdl_prefix>
 		<mdl_url><![CDATA[{
-    "origin": {
-        "password": "x28d3PPYRk42upY",
-        "uri": "https://github.com/simplicitesoftware/module-SimFeatures.git",
-        "username": "francois-simplicite"
-    },
-    "type": "git"
+    "origin": {"uri": "https://github.com/simplicitesoftware/module-SimFeatures.git"},
+    "type": "git",
+    "branch": "5.3"
 }]]></mdl_url>
 		<mdl_type>X</mdl_type>
 		<mdl_comment/>
@@ -147,7 +144,6 @@
 		<rsp_end_dt/>
 		<rsp_activ>1</rsp_activ>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-		<testdoc/>
 	</data>
 	<data>
 		<rsp_login_id.usr_login>user</rsp_login_id.usr_login>
@@ -156,7 +152,6 @@
 		<rsp_end_dt/>
 		<rsp_activ>1</rsp_activ>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-		<testdoc/>
 	</data>
 </object>
 <object>
@@ -170,6 +165,12 @@
 	</data>
 	<data>
 		<lov_name>FT_LST_TYPE</lov_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_model_id.mod_name/>
+		<lov_model_id.mod_image/>
+	</data>
+	<data>
+		<lov_name>FT_ST_STATE</lov_name>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<lov_model_id.mod_name/>
 		<lov_model_id.mod_image/>
@@ -303,6 +304,72 @@
 		<lov_color/>
 		<lov_color_bg/>
 		<lov_icon/>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FT_ST_STATE</lov_list_id.lov_name>
+		<lov_code>INITIAL</lov_code>
+		<lov_order_by>10</lov_order_by>
+		<lov_label>Initial State</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg>#D9D2E9</lov_color_bg>
+		<lov_icon>icon/color/btn_purple</lov_icon>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FT_ST_STATE</lov_list_id.lov_name>
+		<lov_code>A</lov_code>
+		<lov_order_by>20</lov_order_by>
+		<lov_label>State A</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg>#C9DAF8</lov_color_bg>
+		<lov_icon>icon/color/btn_blue</lov_icon>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FT_ST_STATE</lov_list_id.lov_name>
+		<lov_code>OPTIONAL</lov_code>
+		<lov_order_by>30</lov_order_by>
+		<lov_label>Optional State</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg>#C9DAF8</lov_color_bg>
+		<lov_icon>icon/color/btn_blue</lov_icon>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FT_ST_STATE</lov_list_id.lov_name>
+		<lov_code>B</lov_code>
+		<lov_order_by>40</lov_order_by>
+		<lov_label>State B</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg>#D9EAD3</lov_color_bg>
+		<lov_icon>icon/color/btn_green</lov_icon>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FT_ST_STATE</lov_list_id.lov_name>
+		<lov_code>EXCEPTION</lov_code>
+		<lov_order_by>50</lov_order_by>
+		<lov_label>Exceptional State</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg>#F4CCCC</lov_color_bg>
+		<lov_icon>icon/color/btn_red</lov_icon>
+		<lov_display>L</lov_display>
+	</data>
+	<data>
+		<lov_list_id.lov_name>FT_ST_STATE</lov_list_id.lov_name>
+		<lov_code>FINAL</lov_code>
+		<lov_order_by>60</lov_order_by>
+		<lov_label>Final State</lov_label>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<lov_color/>
+		<lov_color_bg>#ABABAB</lov_color_bg>
+		<lov_icon>icon/color/btn_grey</lov_icon>
 		<lov_display>L</lov_display>
 	</data>
 	<data>
@@ -773,6 +840,90 @@
 		<lov_code_id.lov_code>C</lov_code_id.lov_code>
 		<lov_lang>FRA</lov_lang>
 		<lov_value><![CDATA[C]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[State A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[State B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>INITIAL</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[Initial State]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>OPTIONAL</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[Optional State]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>EXCEPTION</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[Exceptional State]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>FINAL</lov_code_id.lov_code>
+		<lov_lang>ENU</lov_lang>
+		<lov_value><![CDATA[Final State]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>A</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[A]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>B</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[B]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>INITIAL</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[Initial]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>OPTIONAL</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[Optional]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>EXCEPTION</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[Exception]]></lov_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<lov_code_id.lov_list_id.lov_name>FT_ST_STATE</lov_code_id.lov_list_id.lov_name>
+		<lov_code_id.lov_code>FINAL</lov_code_id.lov_code>
+		<lov_lang>FRA</lov_lang>
+		<lov_value><![CDATA[Final]]></lov_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -4843,6 +4994,84 @@
 		<fld_incrementsyntax/>
 	</data>
 	<data>
+		<fld_name>ftStCode</fld_name>
+		<fld_dbname>ft_st_code</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>0</fld_updatable>
+		<fld_required>1</fld_required>
+		<fld_fonctid>1</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>3</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name/>
+		<fld_copy>1</fld_copy>
+		<fld_size>100</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax>S-&lt;000&gt;</fld_incrementsyntax>
+	</data>
+	<data>
+		<fld_name>ftStState</fld_name>
+		<fld_dbname>ft_st_state</fld_dbname>
+		<fld_visible>3</fld_visible>
+		<fld_updatable>1</fld_updatable>
+		<fld_required>1</fld_required>
+		<fld_fonctid>0</fld_fonctid>
+		<fld_research>1</fld_research>
+		<fld_researchreq>0</fld_researchreq>
+		<fld_sort>C</fld_sort>
+		<fld_more>0</fld_more>
+		<fld_listmore>0</fld_listmore>
+		<fld_listsum/>
+		<fld_exportable>1</fld_exportable>
+		<fld_tray/>
+		<fld_type>7</fld_type>
+		<fld_type_id.flt_code/>
+		<fld_list_id.lov_name>FT_ST_STATE</fld_list_id.lov_name>
+		<fld_copy>1</fld_copy>
+		<fld_size>10</fld_size>
+		<fld_minsize/>
+		<fld_precision/>
+		<fld_fromdate_id.fld_name/>
+		<fld_dfault/>
+		<fld_indexable>0</fld_indexable>
+		<fld_autocomp>0</fld_autocomp>
+		<fld_groupby>0</fld_groupby>
+		<fld_updall>1</fld_updall>
+		<fld_case/>
+		<fld_righttoleft>0</fld_righttoleft>
+		<fld_rendering/>
+		<fld_speech/>
+		<fld_calc/>
+		<fld_objlist/>
+		<fld_comment/>
+		<fld_classification/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<fld_incrementsyntax/>
+	</data>
+	<data>
 		<fld_name>ftTagName</fld_name>
 		<fld_dbname>ft_tag_name</fld_dbname>
 		<fld_visible>3</fld_visible>
@@ -5088,6 +5317,13 @@
 	</data>
 	<data>
 		<tpl_name>FtSelectObject</tpl_name>
+		<tpl_ui><![CDATA[<div class="area" data-area="1"></div>]]></tpl_ui>
+		<tpl_min/>
+		<tpl_image/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tpl_name>FtStates</tpl_name>
 		<tpl_ui><![CDATA[<div class="area" data-area="1"></div>]]></tpl_ui>
 		<tpl_min/>
 		<tpl_image/>
@@ -5393,6 +5629,17 @@
 		<ofa_ui><![CDATA[<div>
   <div class="field" data-field="ftSlcField1"></div>
   <div class="field" data-field="ftSlcField2"></div>
+</div>]]></ofa_ui>
+		<ofa_icon>star</ofa_icon>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<ofa_name>FtStates-1</ofa_name>
+		<ofa_position>1</ofa_position>
+		<ofa_title>0</ofa_title>
+		<ofa_ui><![CDATA[<div>
+  <div class="field" data-field="ftStCode"></div>
+  <div class="field" data-field="ftStState"></div>
 </div>]]></ofa_ui>
 		<ofa_icon>star</ofa_icon>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
@@ -6303,6 +6550,140 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<obo_tray>1</obo_tray>
 		<obo_dashboard>1</obo_dashboard>
 		<obo_prefix>slc</obo_prefix>
+		<obo_search_ts/>
+		<obo_minrows/>
+		<obo_maxrows/>
+		<obo_sortable>1</obo_sortable>
+		<obo_list_areas/>
+	</data>
+	<data>
+		<obo_name>FtStates</obo_name>
+		<obo_dbtable>ft_states</obo_dbtable>
+		<obo_role>OBJ</obo_role>
+		<obo_class/>
+		<obo_script_id/>
+		<obo_usets>1</obo_usets>
+		<obo_nosearch>1</obo_nosearch>
+		<obo_comment/>
+		<obo_type>O</obo_type>
+		<obo_searchspec/>
+		<obo_delspec/>
+		<obo_exportorder/>
+		<obo_distinct>0</obo_distinct>
+		<obo_indexable>0</obo_indexable>
+		<obo_groupby>0</obo_groupby>
+		<obo_dfltref/>
+		<obo_template_id.tpl_name>FtStates</obo_template_id.tpl_name>
+		<obo_copy>1</obo_copy>
+		<obo_export>1</obo_export>
+		<obo_pagine>1</obo_pagine>
+		<obo_srh_predef>1</obo_srh_predef>
+		<obo_selrow>1</obo_selrow>
+		<obo_updall>1</obo_updall>
+		<obo_delall>1</obo_delall>
+		<obo_listsearch>1</obo_listsearch>
+		<obo_list_edit>N;L;E</obo_list_edit>
+		<obo_useform>1</obo_useform>
+		<obo_title/>
+		<obo_icon>workflow</obo_icon>
+		<obo_refcount>0</obo_refcount>
+		<obo_tree>0</obo_tree>
+		<obo_viewmode>T</obo_viewmode>
+		<obo_historic>1</obo_historic>
+		<obo_printable>1</obo_printable>
+		<obo_followlink>1</obo_followlink>
+		<obo_mergeable>0</obo_mergeable>
+		<obo_social>1</obo_social>
+		<obo_rowid_id.fld_name/>
+		<obo_extend_id.obj_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<obo_btn_reload>P</obo_btn_reload>
+		<obo_btn_prefs>P</obo_btn_prefs>
+		<obo_btn_bookmark>1</obo_btn_bookmark>
+		<obo_btn_del>P</obo_btn_del>
+		<obo_btn_copy>P</obo_btn_copy>
+		<obo_btn_export>P</obo_btn_export>
+		<obo_btn_listadd>1</obo_btn_listadd>
+		<obo_btn_listedit>1</obo_btn_listedit>
+		<obo_btn_listupsert>1</obo_btn_listupsert>
+		<obo_btn_updall>P</obo_btn_updall>
+		<obo_btn_delall>P</obo_btn_delall>
+		<obo_btn_merge>P</obo_btn_merge>
+		<obo_btn_save>1</obo_btn_save>
+		<obo_btn_saveclose>1</obo_btn_saveclose>
+		<obo_btn_savenew>1</obo_btn_savenew>
+		<obo_btn_savecopy>1</obo_btn_savecopy>
+		<obo_btn_close>1</obo_btn_close>
+		<obo_tray>1</obo_tray>
+		<obo_dashboard>1</obo_dashboard>
+		<obo_prefix>st</obo_prefix>
+		<obo_search_ts/>
+		<obo_minrows/>
+		<obo_maxrows/>
+		<obo_sortable>1</obo_sortable>
+		<obo_list_areas/>
+	</data>
+	<data>
+		<obo_name>FtStatesHistoric</obo_name>
+		<obo_dbtable>ft_states_hist</obo_dbtable>
+		<obo_role>OBJ</obo_role>
+		<obo_class/>
+		<obo_script_id/>
+		<obo_usets>1</obo_usets>
+		<obo_nosearch>0</obo_nosearch>
+		<obo_comment/>
+		<obo_type>O</obo_type>
+		<obo_searchspec/>
+		<obo_delspec/>
+		<obo_exportorder/>
+		<obo_distinct>0</obo_distinct>
+		<obo_indexable>0</obo_indexable>
+		<obo_groupby>0</obo_groupby>
+		<obo_dfltref/>
+		<obo_template_id.tpl_name>FtStates</obo_template_id.tpl_name>
+		<obo_copy>0</obo_copy>
+		<obo_export>1</obo_export>
+		<obo_pagine>1</obo_pagine>
+		<obo_srh_predef>1</obo_srh_predef>
+		<obo_selrow>1</obo_selrow>
+		<obo_updall>0</obo_updall>
+		<obo_delall>1</obo_delall>
+		<obo_listsearch>1</obo_listsearch>
+		<obo_list_edit>N;L;E</obo_list_edit>
+		<obo_useform>1</obo_useform>
+		<obo_title/>
+		<obo_icon/>
+		<obo_refcount>0</obo_refcount>
+		<obo_tree>0</obo_tree>
+		<obo_viewmode>T</obo_viewmode>
+		<obo_historic/>
+		<obo_printable>1</obo_printable>
+		<obo_followlink>1</obo_followlink>
+		<obo_mergeable>0</obo_mergeable>
+		<obo_social>1</obo_social>
+		<obo_rowid_id.fld_name/>
+		<obo_extend_id.obj_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<obo_btn_reload>P</obo_btn_reload>
+		<obo_btn_prefs>P</obo_btn_prefs>
+		<obo_btn_bookmark>1</obo_btn_bookmark>
+		<obo_btn_del>P</obo_btn_del>
+		<obo_btn_copy>P</obo_btn_copy>
+		<obo_btn_export>P</obo_btn_export>
+		<obo_btn_listadd>1</obo_btn_listadd>
+		<obo_btn_listedit>1</obo_btn_listedit>
+		<obo_btn_listupsert>1</obo_btn_listupsert>
+		<obo_btn_updall>P</obo_btn_updall>
+		<obo_btn_delall>P</obo_btn_delall>
+		<obo_btn_merge>P</obo_btn_merge>
+		<obo_btn_save>1</obo_btn_save>
+		<obo_btn_saveclose>1</obo_btn_saveclose>
+		<obo_btn_savenew>1</obo_btn_savenew>
+		<obo_btn_savecopy>1</obo_btn_savecopy>
+		<obo_btn_close>1</obo_btn_close>
+		<obo_tray>1</obo_tray>
+		<obo_dashboard>1</obo_dashboard>
+		<obo_prefix>sth</obo_prefix>
 		<obo_search_ts/>
 		<obo_minrows/>
 		<obo_maxrows/>
@@ -9459,6 +9840,262 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<obf_object_id.obo_name>FtStates</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftStCode</obf_field_id.fld_name>
+		<obf_field_id.fld_type>3</obf_field_id.fld_type>
+		<obf_order>10</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order>1</obf_dfault_order>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name>FtStates-1</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>1</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtStates</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftStState</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>20</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name>FtStates-1</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>1</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtStatesHistoric</obf_object_id.obo_name>
+		<obf_field_id.fld_name>row_ref_id</obf_field_id.fld_name>
+		<obf_field_id.fld_type>0</obf_field_id.fld_type>
+		<obf_order>1</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order>1</obf_dfault_order>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name>FtStates</obf_ref_object_id.obo_name>
+		<obf_cascad>C</obf_cascad>
+		<obf_card>0,n</obf_card>
+		<obf_visible>1</obf_visible>
+		<obf_ref_export>0</obf_ref_export>
+		<obf_copy>0</obf_copy>
+		<obf_ref_order>99990</obf_ref_order>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name/>
+		<obf_area_id.ofa_position/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtStatesHistoric</obf_object_id.obo_name>
+		<obf_field_id.fld_name>row_idx</obf_field_id.fld_name>
+		<obf_field_id.fld_type>1</obf_field_id.fld_type>
+		<obf_order>2</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order>2</obf_dfault_order>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name/>
+		<obf_area_id.ofa_position/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtStatesHistoric</obf_object_id.obo_name>
+		<obf_field_id.fld_name>created_by_hist</obf_field_id.fld_name>
+		<obf_field_id.fld_type>3</obf_field_id.fld_type>
+		<obf_order>3</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order>3</obf_dfault_order>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name/>
+		<obf_area_id.ofa_position/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtStatesHistoric</obf_object_id.obo_name>
+		<obf_field_id.fld_name>created_dt_hist</obf_field_id.fld_name>
+		<obf_field_id.fld_type>5</obf_field_id.fld_type>
+		<obf_order>4</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order>4</obf_dfault_order>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name/>
+		<obf_area_id.ofa_position/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtStatesHistoric</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftStCode</obf_field_id.fld_name>
+		<obf_field_id.fld_type>3</obf_field_id.fld_type>
+		<obf_order>10</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name>FtStates-1</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>1</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<obf_object_id.obo_name>FtStatesHistoric</obf_object_id.obo_name>
+		<obf_field_id.fld_name>ftStState</obf_field_id.fld_name>
+		<obf_field_id.fld_type>7</obf_field_id.fld_type>
+		<obf_order>20</obf_order>
+		<obf_group_by/>
+		<obf_dfault_order/>
+		<obf_input/>
+		<obf_ref_field_id.fld_name/>
+		<obf_ref_object_id.obo_name/>
+		<obf_cascad/>
+		<obf_card/>
+		<obf_visible/>
+		<obf_ref_export>1</obf_ref_export>
+		<obf_copy/>
+		<obf_ref_order/>
+		<obf_fld_visible/>
+		<obf_fld_required/>
+		<obf_fld_updatable/>
+		<obf_fld_research/>
+		<obf_fld_more/>
+		<obf_fld_listmore/>
+		<obf_fld_researchreq/>
+		<obf_fld_dfault/>
+		<obf_field_id.fld_dfault/>
+		<obf_fld_exportable/>
+		<obf_field_id.fld_exportable>1</obf_field_id.fld_exportable>
+		<obf_fld_uk/>
+		<obf_area_id.ofa_name>FtStates-1</obf_area_id.ofa_name>
+		<obf_area_id.ofa_position>1</obf_area_id.ofa_position>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<obf_object_id.obo_name>FtTag</obf_object_id.obo_name>
 		<obf_field_id.fld_name>ftTagName</obf_field_id.fld_name>
 		<obf_field_id.fld_type>3</obf_field_id.fld_type>
@@ -9811,6 +10448,31 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<obf_ref_object_id.obo_name>FtStates</obf_ref_object_id.obo_name>
+		<obf_order>1</obf_order>
+		<obf_ref_order>99990</obf_ref_order>
+		<obf_object_id.obj_name>FtStatesHistoric</obf_object_id.obj_name>
+		<obf_field_id.fld_name>row_ref_id</obf_field_id.fld_name>
+		<obf_field_id.fld_dbname>row_ref_id</obf_field_id.fld_dbname>
+		<obf_field_id.fld_updatable>0</obf_field_id.fld_updatable>
+		<obf_field_id.fld_required>1</obf_field_id.fld_required>
+		<obf_field_id.fld_fonctid>1</obf_field_id.fld_fonctid>
+		<obf_cascad>C</obf_cascad>
+		<obf_card>0,n</obf_card>
+		<obf_query/>
+		<obf_filters/>
+		<obf_visible>1</obf_visible>
+		<obf_ref_export>0</obf_ref_export>
+		<obf_copy>0</obf_copy>
+		<obf_associate/>
+		<obf_inline>0</obf_inline>
+		<obf_rendering/>
+		<obf_treedepth/>
+		<obf_area_id.ofa_name/>
+		<obf_area_id.ofa_position/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<obf_ref_object_id.obo_name>FtTag</obf_ref_object_id.obo_name>
 		<obf_order>200</obf_order>
 		<obf_ref_order/>
@@ -9872,7 +10534,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method>askAction</act_method>
 		<act_script/>
 		<act_url/>
-		<act_image>bi/ui-checks</act_image>
 		<act_confirm>1</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui><![CDATA[<div class="row" style="width: 60rem">
@@ -9895,6 +10556,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_order/>
 		<act_color>#FEFEFE</act_color>
 		<act_color_bg>#A59C30</act_color_bg>
+		<act_image>bi/ui-checks</act_image>
 	</data>
 	<data>
 		<act_name>ActAsync</act_name>
@@ -9904,7 +10566,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method>asyncAction</act_method>
 		<act_script/>
 		<act_url/>
-		<act_image>img/color/property_time</act_image>
 		<act_confirm>1</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui/>
@@ -9916,6 +10577,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_order/>
 		<act_color/>
 		<act_color_bg/>
+		<act_image>img/color/property_time</act_image>
 	</data>
 	<data>
 		<act_name>ActConfirmFields</act_name>
@@ -9925,7 +10587,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method>confirmAction</act_method>
 		<act_script/>
 		<act_url/>
-		<act_image>fas/check-square</act_image>
 		<act_confirm>1</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui><![CDATA[<div class="row" style="width: 60rem">
@@ -9945,6 +10606,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_order/>
 		<act_color>#FFFFFF</act_color>
 		<act_color_bg>#A57630</act_color_bg>
+		<act_image>fas/check-square</act_image>
 	</data>
 	<data>
 		<act_name>ActSimple</act_name>
@@ -9954,7 +10616,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method/>
 		<act_script/>
 		<act_url><![CDATA[javascript:alert("This is a simple action");]]></act_url>
-		<act_image>info</act_image>
 		<act_confirm>1</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui/>
@@ -9966,6 +10627,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_order/>
 		<act_color/>
 		<act_color_bg/>
+		<act_image>info</act_image>
 	</data>
 	<data>
 		<act_name>FT_ACT_STATE-A-B</act_name>
@@ -9975,7 +10637,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method/>
 		<act_script/>
 		<act_url/>
-		<act_image>bi/toggle2-off</act_image>
 		<act_confirm>1</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui><![CDATA[<div class="row" style="width:80%">
@@ -10033,7 +10694,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		</div>
 	</div>
 </div>]]></act_confirm_ui>
-		<act_plus/>
+		<act_plus>0</act_plus>
 		<act_comment><![CDATA[Transition]]></act_comment>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<act_exec>NUL</act_exec>
@@ -10041,6 +10702,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_order/>
 		<act_color/>
 		<act_color_bg/>
+		<act_image>bi/toggle2-off</act_image>
 	</data>
 	<data>
 		<act_name>FT_ACT_STATE-B-A</act_name>
@@ -10050,11 +10712,10 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method/>
 		<act_script/>
 		<act_url/>
-		<act_image>bi/toggle2-on</act_image>
 		<act_confirm>1</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui/>
-		<act_plus/>
+		<act_plus>0</act_plus>
 		<act_comment><![CDATA[Transition]]></act_comment>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<act_exec>NUL</act_exec>
@@ -10062,6 +10723,175 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_order/>
 		<act_color/>
 		<act_color_bg/>
+		<act_image>bi/toggle2-on</act_image>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-A-B</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-A-OPTIONAL</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-B-EXCEPTION</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-B-FINAL</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-EXCEPTION-B</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-INITIAL-A</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-OPTIONAL-A</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
+	</data>
+	<data>
+		<act_name>FT_ST_STATE-OPTIONAL-B</act_name>
+		<act_type>O</act_type>
+		<act_async>0</act_async>
+		<act_job_depth/>
+		<act_method/>
+		<act_script/>
+		<act_url/>
+		<act_confirm>1</act_confirm>
+		<act_confirm_expr/>
+		<act_confirm_ui/>
+		<act_plus>0</act_plus>
+		<act_comment><![CDATA[Transition]]></act_comment>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<act_exec>NUL</act_exec>
+		<act_count/>
+		<act_order/>
+		<act_color/>
+		<act_color_bg/>
+		<act_image/>
 	</data>
 	<data>
 		<act_name>FtCustomAssociate</act_name>
@@ -10071,7 +10901,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_method/>
 		<act_script/>
 		<act_url><![CDATA[javascript:customAssociate();]]></act_url>
-		<act_image>icon/color/associate</act_image>
 		<act_confirm>0</act_confirm>
 		<act_confirm_expr/>
 		<act_confirm_ui/>
@@ -10083,6 +10912,7 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<act_order/>
 		<act_color/>
 		<act_color_bg>#4A86E8</act_color_bg>
+		<act_image>icon/color/associate</act_image>
 	</data>
 </object>
 <object>
@@ -10461,6 +11291,33 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
+		<fct_name>FT_ST_CRUD</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtStates</fct_object_id.obj_name>
+		<fct_function>CMS</fct_function>
+		<fct_action_id.act_name/>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fct_name>FT_ST_R</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtStates</fct_object_id.obj_name>
+		<fct_function>L</fct_function>
+		<fct_action_id.act_name/>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<fct_name>FT_STH_R</fct_name>
+		<fct_object_id.obj_type>O</fct_object_id.obj_type>
+		<fct_object_id.obj_name>FtStatesHistoric</fct_object_id.obj_name>
+		<fct_function>L</fct_function>
+		<fct_action_id.act_name/>
+		<fct_view_id.viw_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
 		<fct_name>FT_TAG_CRUD</fct_name>
 		<fct_object_id.obj_type>O</fct_object_id.obj_type>
 		<fct_object_id.obj_name>FtTag</fct_object_id.obj_name>
@@ -10782,6 +11639,26 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 	<data>
 		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
+		<grt_function_id.fct_name>FT_ST_CRUD</grt_function_id.fct_name>
+		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
+		<grt_function_id.fct_object_id.obj_name>FtStates</grt_function_id.fct_object_id.obj_name>
+		<grt_function_id.fct_action_id.act_name/>
+		<grt_function_id.fct_function>CMS</grt_function_id.fct_function>
+		<grt_activ>1</grt_activ>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
+		<grt_function_id.fct_name>FT_STH_R</grt_function_id.fct_name>
+		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
+		<grt_function_id.fct_object_id.obj_name>FtStatesHistoric</grt_function_id.fct_object_id.obj_name>
+		<grt_function_id.fct_action_id.act_name/>
+		<grt_function_id.fct_function>L</grt_function_id.fct_function>
+		<grt_activ>1</grt_activ>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<grt_group_id.grp_name>FT_ADMIN</grt_group_id.grp_name>
 		<grt_function_id.fct_name>FT_TAG_CRUD</grt_function_id.fct_name>
 		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
 		<grt_function_id.fct_object_id.obj_name>FtTag</grt_function_id.fct_object_id.obj_name>
@@ -10925,6 +11802,26 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<grt_function_id.fct_name>FT_SLC_R</grt_function_id.fct_name>
 		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
 		<grt_function_id.fct_object_id.obj_name>FtSelectObject</grt_function_id.fct_object_id.obj_name>
+		<grt_function_id.fct_action_id.act_name/>
+		<grt_function_id.fct_function>L</grt_function_id.fct_function>
+		<grt_activ>1</grt_activ>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<grt_group_id.grp_name>FT_READ</grt_group_id.grp_name>
+		<grt_function_id.fct_name>FT_ST_R</grt_function_id.fct_name>
+		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
+		<grt_function_id.fct_object_id.obj_name>FtStates</grt_function_id.fct_object_id.obj_name>
+		<grt_function_id.fct_action_id.act_name/>
+		<grt_function_id.fct_function>L</grt_function_id.fct_function>
+		<grt_activ>1</grt_activ>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<grt_group_id.grp_name>FT_READ</grt_group_id.grp_name>
+		<grt_function_id.fct_name>FT_STH_R</grt_function_id.fct_name>
+		<grt_function_id.fct_object_id.obj_type>O</grt_function_id.fct_object_id.obj_type>
+		<grt_function_id.fct_object_id.obj_name>FtStatesHistoric</grt_function_id.fct_object_id.obj_name>
 		<grt_function_id.fct_action_id.act_name/>
 		<grt_function_id.fct_function>L</grt_function_id.fct_function>
 		<grt_activ>1</grt_activ>
@@ -11096,6 +11993,90 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<sta_alert_id.alt_name/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
+	<data>
+		<sta_lovname>FT_ST_STATE</sta_lovname>
+		<sta_state_id.lov_list_id.lov_name>FT_ST_STATE</sta_state_id.lov_list_id.lov_name>
+		<sta_state_id.lov_code>A</sta_state_id.lov_code>
+		<sta_state>A</sta_state>
+		<sta_label>State A</sta_label>
+		<sta_activ>1</sta_activ>
+		<sta_terminal>0</sta_terminal>
+		<sta_read>0</sta_read>
+		<sta_access>1</sta_access>
+		<sta_timeout/>
+		<sta_alert_id.alt_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<sta_lovname>FT_ST_STATE</sta_lovname>
+		<sta_state_id.lov_list_id.lov_name>FT_ST_STATE</sta_state_id.lov_list_id.lov_name>
+		<sta_state_id.lov_code>B</sta_state_id.lov_code>
+		<sta_state>B</sta_state>
+		<sta_label>State B</sta_label>
+		<sta_activ>1</sta_activ>
+		<sta_terminal>0</sta_terminal>
+		<sta_read>0</sta_read>
+		<sta_access>1</sta_access>
+		<sta_timeout/>
+		<sta_alert_id.alt_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<sta_lovname>FT_ST_STATE</sta_lovname>
+		<sta_state_id.lov_list_id.lov_name>FT_ST_STATE</sta_state_id.lov_list_id.lov_name>
+		<sta_state_id.lov_code>EXCEPTION</sta_state_id.lov_code>
+		<sta_state>EXCEPTION</sta_state>
+		<sta_label>Exceptional State</sta_label>
+		<sta_activ>1</sta_activ>
+		<sta_terminal>0</sta_terminal>
+		<sta_read>0</sta_read>
+		<sta_access>1</sta_access>
+		<sta_timeout/>
+		<sta_alert_id.alt_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<sta_lovname>FT_ST_STATE</sta_lovname>
+		<sta_state_id.lov_list_id.lov_name>FT_ST_STATE</sta_state_id.lov_list_id.lov_name>
+		<sta_state_id.lov_code>FINAL</sta_state_id.lov_code>
+		<sta_state>FINAL</sta_state>
+		<sta_label>Final State</sta_label>
+		<sta_activ>1</sta_activ>
+		<sta_terminal>1</sta_terminal>
+		<sta_read>0</sta_read>
+		<sta_access>1</sta_access>
+		<sta_timeout/>
+		<sta_alert_id.alt_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<sta_lovname>FT_ST_STATE</sta_lovname>
+		<sta_state_id.lov_list_id.lov_name>FT_ST_STATE</sta_state_id.lov_list_id.lov_name>
+		<sta_state_id.lov_code>INITIAL</sta_state_id.lov_code>
+		<sta_state>INITIAL</sta_state>
+		<sta_label>Initial State</sta_label>
+		<sta_activ>1</sta_activ>
+		<sta_terminal>0</sta_terminal>
+		<sta_read>0</sta_read>
+		<sta_access>1</sta_access>
+		<sta_timeout/>
+		<sta_alert_id.alt_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<sta_lovname>FT_ST_STATE</sta_lovname>
+		<sta_state_id.lov_list_id.lov_name>FT_ST_STATE</sta_state_id.lov_list_id.lov_name>
+		<sta_state_id.lov_code>OPTIONAL</sta_state_id.lov_code>
+		<sta_state>OPTIONAL</sta_state>
+		<sta_label>Optional State</sta_label>
+		<sta_activ>1</sta_activ>
+		<sta_terminal>0</sta_terminal>
+		<sta_read>0</sta_read>
+		<sta_access>1</sta_access>
+		<sta_timeout/>
+		<sta_alert_id.alt_name/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
 </object>
 <object>
 	<name>BPMStateTransition</name>
@@ -11128,6 +12109,118 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<stm_action_id.act_name>FT_ACT_STATE-B-A</stm_action_id.act_name>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
+	<data>
+		<stm_name>FT_ST_STATE-A-B</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>A</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>B</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-A-B</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stm_name>FT_ST_STATE-A-OPTIONAL</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>A</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>OPTIONAL</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-A-OPTIONAL</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stm_name>FT_ST_STATE-B-EXCEPTION</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>B</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>EXCEPTION</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-B-EXCEPTION</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stm_name>FT_ST_STATE-B-FINAL</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>B</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>FINAL</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-B-FINAL</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stm_name>FT_ST_STATE-EXCEPTION-B</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>EXCEPTION</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>B</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-EXCEPTION-B</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stm_name>FT_ST_STATE-INITIAL-A</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>INITIAL</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>A</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-INITIAL-A</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stm_name>FT_ST_STATE-OPTIONAL-A</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>OPTIONAL</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>A</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-OPTIONAL-A</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stm_name>FT_ST_STATE-OPTIONAL-B</stm_name>
+		<stm_from_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_from_id.sta_state_id.lov_list_id.lov_name>
+		<stm_from_id.sta_state_id.lov_code>OPTIONAL</stm_from_id.sta_state_id.lov_code>
+		<stm_to_id.sta_state_id.lov_list_id.lov_name>FT_ST_STATE</stm_to_id.sta_state_id.lov_list_id.lov_name>
+		<stm_to_id.sta_state_id.lov_code>B</stm_to_id.sta_state_id.lov_code>
+		<stm_callbackscript/>
+		<stm_callback/>
+		<stm_condition/>
+		<stm_activ>1</stm_activ>
+		<stm_notif_id.alt_name/>
+		<stm_action_id.act_name>FT_ST_STATE-OPTIONAL-B</stm_action_id.act_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
 </object>
 <object>
 	<name>BPMStateTranGroup</name>
@@ -11144,6 +12237,62 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
 		<stg_activ>1</stg_activ>
 		<stg_object_id.obo_name>FtActions</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-A-B</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-A-OPTIONAL</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-B-EXCEPTION</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-B-FINAL</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-EXCEPTION-B</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-INITIAL-A</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-OPTIONAL-A</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<stg_transition_id.stm_name>FT_ST_STATE-OPTIONAL-B</stg_transition_id.stm_name>
+		<stg_group_id.grp_name>FT_ADMIN</stg_group_id.grp_name>
+		<stg_activ>1</stg_activ>
+		<stg_object_id.obo_name>FtStates</stg_object_id.obo_name>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 </object>
@@ -11171,6 +12320,14 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<map_object_id.obj_name>FtCustomUser</map_object_id.obj_name>
 		<map_process_id.pcs_name/>
 		<map_order>20</map_order>
+		<map_ext>0</map_ext>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<map_domain_id.obd_name>FtDomain</map_domain_id.obd_name>
+		<map_object_id.obj_name>FtStates</map_object_id.obj_name>
+		<map_process_id.pcs_name/>
+		<map_order>25</map_order>
 		<map_ext>0</map_ext>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -11365,6 +12522,70 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 	<data>
 		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-A-B</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>A -&gt; B</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-A-OPTIONAL</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>A -&gt; Optional</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-B-EXCEPTION</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B -&gt; Exception</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-B-FINAL</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>B -&gt; Final</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-EXCEPTION-B</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Exception -&gt; B</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-INITIAL-A</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Initial -&gt; A</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-OPTIONAL-A</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Optional -&gt; A</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-OPTIONAL-B</tsl_id.act_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Optional -&gt; B</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
 		<tsl_id.act_name>FtCustomAssociate</tsl_id.act_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Custom associate</tsl_value>
@@ -11408,6 +12629,70 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_id.act_name>FT_ACT_STATE-B-A</tsl_id.act_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Retour vers A</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-A-B</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>A -&gt; B</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-A-OPTIONAL</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>A -&gt; Optional</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-B-EXCEPTION</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B -&gt; Exception</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-B-FINAL</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>B -&gt; Final</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-EXCEPTION-B</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Exception -&gt; B</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-INITIAL-A</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Initial -&gt; A</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-OPTIONAL-A</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Optional -&gt; A</tsl_value>
+		<tsl_simplehelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeAction>A</tsl_typeAction>
+		<tsl_id.act_name>FT_ST_STATE-OPTIONAL-B</tsl_id.act_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Optional -&gt; B</tsl_value>
 		<tsl_simplehelp/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -12508,6 +13793,30 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_id.fld_name>ftSlcField2</tsl_id.fld_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Field 2</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftStCode</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Code</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftStState</tsl_id.fld_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>State</tsl_value>
 		<tsl_simplehelp/>
 		<tsl_short_value/>
 		<tsl_placeholder/>
@@ -13657,6 +14966,30 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 	<data>
 		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftStCode</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft st code</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
+		<tsl_id.fld_name>ftStState</tsl_id.fld_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft st state</tsl_value>
+		<tsl_simplehelp/>
+		<tsl_short_value/>
+		<tsl_placeholder/>
+		<tsl_listhelp/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+		<tsl_tooltip/>
+	</data>
+	<data>
+		<tsl_typeField>F</tsl_typeField>
 		<tsl_id.fld_name>ftTagName</tsl_id.fld_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Ft tag name</tsl_value>
@@ -13835,6 +15168,13 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 	<data>
 		<tsl_typeFieldArea>Z</tsl_typeFieldArea>
+		<tsl_id.ofa_name>FtStates-1</tsl_id.ofa_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>FtStates-1</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeFieldArea>Z</tsl_typeFieldArea>
 		<tsl_id.ofa_name>FtTag-1</tsl_id.ofa_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>FtTag-1</tsl_value>
@@ -13971,6 +15311,13 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_id.ofa_name>FtSelectObject-1</tsl_id.ofa_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Select object -1</tsl_value>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeFieldArea>Z</tsl_typeFieldArea>
+		<tsl_id.ofa_name>FtStates-1</tsl_id.ofa_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>States -1</tsl_value>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 	<data>
@@ -14135,6 +15482,22 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 	<data>
 		<tsl_typeObject>O</tsl_typeObject>
+		<tsl_id.obo_name>FtStates</tsl_id.obo_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>States</tsl_value>
+		<tsl_help/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeObject>O</tsl_typeObject>
+		<tsl_id.obo_name>FtStatesHistoric</tsl_id.obo_name>
+		<tsl_lang>ENU</tsl_lang>
+		<tsl_value>Ft states historic</tsl_value>
+		<tsl_help/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeObject>O</tsl_typeObject>
 		<tsl_id.obo_name>FtTaggedObject</tsl_id.obo_name>
 		<tsl_lang>ENU</tsl_lang>
 		<tsl_value>Tagged object</tsl_value>
@@ -14218,6 +15581,22 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<tsl_id.obo_name>FtSelectObject</tsl_id.obo_name>
 		<tsl_lang>FRA</tsl_lang>
 		<tsl_value>Select object</tsl_value>
+		<tsl_help/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeObject>O</tsl_typeObject>
+		<tsl_id.obo_name>FtStates</tsl_id.obo_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>États</tsl_value>
+		<tsl_help/>
+		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
+	</data>
+	<data>
+		<tsl_typeObject>O</tsl_typeObject>
+		<tsl_id.obo_name>FtStatesHistoric</tsl_id.obo_name>
+		<tsl_lang>FRA</tsl_lang>
+		<tsl_value>Ft states historic</tsl_value>
 		<tsl_help/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
@@ -14451,17 +15830,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 	</data>
 </object>
 <object>
-	<name>NotiConfChan</name>
-	<action>upsert</action>
-	<data>
-		<notiConfchanConfId.notiConfName>FtNotification</notiConfchanConfId.notiConfName>
-		<notiConfchanChanId.notiChanType>INT</notiConfchanChanId.notiChanType>
-		<notiConfchanMandatory>1</notiConfchanMandatory>
-		<notiConfchanMethod/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-	</data>
-</object>
-<object>
 	<name>NotiConfigContent</name>
 	<action>upsert</action>
 	<data>
@@ -14472,36 +15840,6 @@ WHERE of.row_id IS NULL]]></obo_searchspec>
 		<notiContConfchanId.notiConfchanChanId.notiChanType/>
 		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 		<notiContSubject>Notif title</notiContSubject>
-	</data>
-</object>
-<object>
-	<name>NotiConfigDest</name>
-	<action>upsert</action>
-	<data>
-		<notiCdOrder>1</notiCdOrder>
-		<notiCdConfigId.notiConfName>FtNotification</notiCdConfigId.notiConfName>
-		<notiCdGroupId.grp_name>FT_ADMIN</notiCdGroupId.grp_name>
-		<notiCdQuery/>
-		<notiCdUserId.usr_login/>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
-		<notiCdType>GRP</notiCdType>
-	</data>
-</object>
-<object>
-	<name>NotiGroupChannels</name>
-	<action>upsert</action>
-	<data>
-		<notiGcCdId.notiCdOrder>1</notiGcCdId.notiCdOrder>
-		<notiGcCdId.notiCdConfigId.notiConfName>FtNotification</notiGcCdId.notiCdConfigId.notiConfName>
-		<notiGcCdId.notiCdGroupId.grp_name>FT_ADMIN</notiGcCdId.notiCdGroupId.grp_name>
-		<notiGcCdId.notiCdType>GRP</notiGcCdId.notiCdType>
-		<notiGcCdId.notiCdUserId.usr_login/>
-		<notiGcConfchanId.notiConfchanConfId.notiConfName>FtNotification</notiGcConfchanId.notiConfchanConfId.notiConfName>
-		<notiGcConfchanId.notiConfchanChanId.notiChanType>INT</notiGcConfchanId.notiConfchanChanId.notiChanType>
-		<notiGcConfchanId.notiConfchanMethod/>
-		<notiGcSubscribed>1</notiGcSubscribed>
-		<notiGcConfchanId.notiConfchanMandatory>1</notiGcConfchanId.notiConfchanMandatory>
-		<row_module_id.mdl_name>SimFeatures</row_module_id.mdl_name>
 	</data>
 </object>
 </simplicite>

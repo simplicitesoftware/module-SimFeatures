@@ -16,10 +16,33 @@ components:
           type: integer
           enum:
           - 404
+    ArrayOfFtStates:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtStates'
     ArrayOfFtM2m:
       type: array
       items:
         $ref: '#/components/schemas/FtM2m'
+    FtStates:
+      type: object
+      properties:
+        ftStCode:
+          description: Code
+          type: string
+        ftStState:
+          description: State
+          type: string
+          enum:
+          - INITIAL
+          - A
+          - OPTIONAL
+          - B
+          - EXCEPTION
+          - FINAL
+        row_id:
+          description: Unique technical row ID
+          type: string
     FtM2mChild:
       type: object
       properties:
@@ -484,6 +507,42 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/FtListItem'
+    FtStatesHistoric:
+      type: object
+      properties:
+        row_idx:
+          description: History record index
+          type: integer
+        ftStCode:
+          description: Code
+          type: string
+        ftStState:
+          description: State
+          type: string
+          enum:
+          - INITIAL
+          - A
+          - OPTIONAL
+          - B
+          - EXCEPTION
+          - FINAL
+        created_dt_hist:
+          description: Created date
+          type: string
+          example: yyyy-MM-dd HH:mm:ss
+        row_id:
+          description: Unique technical row ID
+          type: string
+        created_by_hist:
+          description: Created by
+          type: string
+        row_ref_id:
+          description: Record row ID
+          type: string
+    ArrayOfFtStatesHistoric:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtStatesHistoric'
     Error400:
       type: object
       properties:
@@ -2069,6 +2128,72 @@ paths:
         required: false
       tags:
       - FtReflexiveMany
+  /rest/FtStates:
+    get:
+      summary: Search FtStates business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftstates-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtStates'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftStCode
+        description: Search filter for Code
+        required: false
+      - schema:
+          type: string
+          enum:
+          - INITIAL
+          - A
+          - OPTIONAL
+          - B
+          - EXCEPTION
+          - FINAL
+        in: query
+        name: ftStState
+        description: Search filter for State
+        required: false
+      tags:
+      - FtStates
   /rest/FtActions/{row_id}/action:ActConfirmFields:
     get:
       summary: Call a custom action for a FtActions business object record or for
@@ -4570,6 +4695,487 @@ paths:
         required: true
       tags:
       - FtTag
+  /rest/FtStates/{row_id}:
+    post:
+      summary: Create a new FtStates business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtStates'
+      operationId: obj-ftstates-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtStates'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtStates
+    get:
+      summary: Get a FtStates business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftstates-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtStates'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtStates
+    delete:
+      summary: Delete a FtStates business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftstates-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtStates
+    put:
+      summary: Update a FtStates business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtStates'
+      operationId: obj-ftstates-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtStates'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtStates
+  /rest/FtStatesHistoric/{row_id}:
+    post:
+      summary: Create a new FtStatesHistoric business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtStatesHistoric'
+      operationId: obj-ftstateshistoric-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtStatesHistoric'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtStatesHistoric
+    get:
+      summary: Get a FtStatesHistoric business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftstateshistoric-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtStatesHistoric'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtStatesHistoric
+    delete:
+      summary: Delete a FtStatesHistoric business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftstateshistoric-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtStatesHistoric
+    put:
+      summary: Update a FtStatesHistoric business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtStatesHistoric'
+      operationId: obj-ftstateshistoric-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtStatesHistoric'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtStatesHistoric
+  /rest/FtStatesHistoric:
+    get:
+      summary: Search FtStatesHistoric business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftstateshistoric-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtStatesHistoric'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: row_ref_id
+        description: Search filter for Record row ID
+        required: false
+      - schema:
+          type: integer
+        in: query
+        name: row_idx
+        description: Search filter for History record index
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: created_by_hist
+        description: Search filter for Created by
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: created_dt_hist
+        description: Search filter for Created date
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftStCode
+        description: Search filter for Code
+        required: false
+      - schema:
+          type: string
+          enum:
+          - INITIAL
+          - A
+          - OPTIONAL
+          - B
+          - EXCEPTION
+          - FINAL
+        in: query
+        name: ftStState
+        description: Search filter for State
+        required: false
+      tags:
+      - FtStatesHistoric
   /rest/FtReflexiveMany/{row_id}:
     post:
       summary: Create a new FtReflexiveMany business object record
@@ -5557,6 +6163,10 @@ tags:
   description: Associated items
 - name: FtSelectObject
   description: Select object
+- name: FtStates
+  description: States
+- name: FtStatesHistoric
+  description: Ft states historic
 - name: FtTag
   description: Tag
 - name: FtTaggedObject
