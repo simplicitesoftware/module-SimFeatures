@@ -305,6 +305,54 @@ Object showcasing all the possible attributes
 | `ftSlcField1`                                                | char(255)                                | yes      | yes       |          | -                                                                                |
 | `ftSlcField2`                                                | char(255)                                |          | yes       |          | -                                                                                |
 
+`FtStates` business object definition
+-------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftStCode`                                                   | char(100)                                | yes*     |           |          | -                                                                                |
+| `ftStState`                                                  | enum(10) using `FT_ST_STATE` list        | yes      | yes       |          | -                                                                                |
+
+### Lists
+
+* `FT_ST_STATE`
+    - `INITIAL` Initial State
+    - `A` State A
+    - `OPTIONAL` Optional State
+    - `B` State B
+    - `EXCEPTION` Exceptional State
+    - `FINAL` Final State
+
+`FtStatesHistoric` business object definition
+---------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `row_ref_id` link to **`FtStates`**                          | id                                       | yes*     |           |          | Record row ID                                                                    |
+| `row_idx`                                                    | int(11)                                  | yes*     | yes       |          | History record index                                                             |
+| `created_by_hist`                                            | char(100)                                | yes*     |           |          | Created by                                                                       |
+| `created_dt_hist`                                            | datetime                                 | yes*     |           |          | Created date                                                                     |
+| `ftStCode`                                                   | char(100)                                | yes*     |           |          | -                                                                                |
+| `ftStState`                                                  | enum(10) using `FT_ST_STATE` list        | yes      | yes       |          | -                                                                                |
+
+### Lists
+
+* `FT_ST_STATE`
+    - `INITIAL` Initial State
+    - `A` State A
+    - `OPTIONAL` Optional State
+    - `B` State B
+    - `EXCEPTION` Exceptional State
+    - `FINAL` Final State
+
 `FtTag` business object definition
 ----------------------------------
 

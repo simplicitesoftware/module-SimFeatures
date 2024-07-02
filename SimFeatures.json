@@ -249,6 +249,18 @@
     },
     {
      "object": "FieldList",
+     "userkey": "FT_ST_STATE",
+     "item": {
+      "lov_name": "FT_ST_STATE",
+      "lov_navbar": null,
+      "lov_navbar_opt": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "lov_model_id__mod_name": null,
+      "lov_model_id__mod_image": null
+     }
+    },
+    {
+     "object": "FieldList",
      "userkey": "FTATTRENUM",
      "item": {
       "lov_name": "FTATTRENUM",
@@ -471,6 +483,96 @@
       "lov_color": null,
       "lov_color_bg": null,
       "lov_icon": null,
+      "lov_display": ["L"]
+     }
+    },
+    {
+     "object": "FieldListCode",
+     "userkey": "FT_ST_STATE~INITIAL",
+     "item": {
+      "lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code": "INITIAL",
+      "lov_order_by": 10,
+      "lov_label": "Initial State",
+      "row_module_id__mdl_name": "SimFeatures",
+      "lov_color": null,
+      "lov_color_bg": "#D9D2E9",
+      "lov_icon": "icon/color/btn_purple",
+      "lov_display": ["L"]
+     }
+    },
+    {
+     "object": "FieldListCode",
+     "userkey": "FT_ST_STATE~A",
+     "item": {
+      "lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code": "A",
+      "lov_order_by": 20,
+      "lov_label": "State A",
+      "row_module_id__mdl_name": "SimFeatures",
+      "lov_color": null,
+      "lov_color_bg": "#C9DAF8",
+      "lov_icon": "icon/color/btn_blue",
+      "lov_display": ["L"]
+     }
+    },
+    {
+     "object": "FieldListCode",
+     "userkey": "FT_ST_STATE~OPTIONAL",
+     "item": {
+      "lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code": "OPTIONAL",
+      "lov_order_by": 30,
+      "lov_label": "Optional State",
+      "row_module_id__mdl_name": "SimFeatures",
+      "lov_color": null,
+      "lov_color_bg": "#C9DAF8",
+      "lov_icon": "icon/color/btn_blue",
+      "lov_display": ["L"]
+     }
+    },
+    {
+     "object": "FieldListCode",
+     "userkey": "FT_ST_STATE~B",
+     "item": {
+      "lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code": "B",
+      "lov_order_by": 40,
+      "lov_label": "State B",
+      "row_module_id__mdl_name": "SimFeatures",
+      "lov_color": null,
+      "lov_color_bg": "#D9EAD3",
+      "lov_icon": "icon/color/btn_green",
+      "lov_display": ["L"]
+     }
+    },
+    {
+     "object": "FieldListCode",
+     "userkey": "FT_ST_STATE~EXCEPTION",
+     "item": {
+      "lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code": "EXCEPTION",
+      "lov_order_by": 50,
+      "lov_label": "Exceptional State",
+      "row_module_id__mdl_name": "SimFeatures",
+      "lov_color": null,
+      "lov_color_bg": "#F4CCCC",
+      "lov_icon": "icon/color/btn_red",
+      "lov_display": ["L"]
+     }
+    },
+    {
+     "object": "FieldListCode",
+     "userkey": "FT_ST_STATE~FINAL",
+     "item": {
+      "lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code": "FINAL",
+      "lov_order_by": 60,
+      "lov_label": "Final State",
+      "row_module_id__mdl_name": "SimFeatures",
+      "lov_color": null,
+      "lov_color_bg": "#ABABAB",
+      "lov_icon": "icon/color/btn_grey",
       "lov_display": ["L"]
      }
     },
@@ -1129,6 +1231,138 @@
       "lov_code_id__lov_code": "B",
       "lov_lang": "FRA",
       "lov_value": "B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~A~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "ENU",
+      "lov_value": "State A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~B~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "ENU",
+      "lov_value": "State B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~INITIAL~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "INITIAL",
+      "lov_lang": "ENU",
+      "lov_value": "Initial State",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~OPTIONAL~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "OPTIONAL",
+      "lov_lang": "ENU",
+      "lov_value": "Optional State",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~EXCEPTION~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "EXCEPTION",
+      "lov_lang": "ENU",
+      "lov_value": "Exceptional State",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~FINAL~ENU",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "FINAL",
+      "lov_lang": "ENU",
+      "lov_value": "Final State",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~A~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "A",
+      "lov_lang": "FRA",
+      "lov_value": "A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~B~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "B",
+      "lov_lang": "FRA",
+      "lov_value": "B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~INITIAL~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "INITIAL",
+      "lov_lang": "FRA",
+      "lov_value": "Initial",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~OPTIONAL~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "OPTIONAL",
+      "lov_lang": "FRA",
+      "lov_value": "Optional",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~EXCEPTION~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "EXCEPTION",
+      "lov_lang": "FRA",
+      "lov_value": "Exception",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "FieldListValue",
+     "userkey": "FT_ST_STATE~FINAL~FRA",
+     "item": {
+      "lov_code_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "lov_code_id__lov_code": "FINAL",
+      "lov_lang": "FRA",
+      "lov_value": "Final",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -6127,6 +6361,95 @@
     },
     {
      "object": "Field",
+     "userkey": "ftStCode",
+     "item": {
+      "fld_name": "ftStCode",
+      "fld_dbname": "ft_st_code",
+      "fld_visible": "3",
+      "fld_updatable": ["0"],
+      "fld_required": true,
+      "fld_fonctid": true,
+      "fld_research": "1",
+      "fld_researchreq": "0",
+      "fld_sort": "C",
+      "fld_more": false,
+      "fld_listmore": false,
+      "fld_listsum": null,
+      "fld_exportable": true,
+      "fld_tray": null,
+      "fld_type": "3",
+      "fld_type_id__flt_code": null,
+      "fld_list_id__lov_name": null,
+      "fld_copy": true,
+      "fld_size": 100,
+      "fld_minsize": null,
+      "fld_precision": null,
+      "fld_fromdate_id__fld_name": null,
+      "fld_dfault": null,
+      "fld_indexable": false,
+      "fld_autocomp": "0",
+      "fld_groupby": false,
+      "fld_updall": true,
+      "fld_case": null,
+      "fld_righttoleft": false,
+      "fld_rendering": null,
+      "fld_speech": null,
+      "fld_calc": null,
+      "fld_objlist": null,
+      "fld_comment": null,
+      "fld_classification": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "fld_incrementsyntax": "S-<000>"
+     }
+    },
+    {
+     "object": "Field",
+     "userkey": "ftStState",
+     "item": {
+      "fld_name": "ftStState",
+      "fld_dbname": "ft_st_state",
+      "fld_visible": "3",
+      "fld_updatable": [
+       "2",
+       "3"
+      ],
+      "fld_required": true,
+      "fld_fonctid": false,
+      "fld_research": "1",
+      "fld_researchreq": "0",
+      "fld_sort": "C",
+      "fld_more": false,
+      "fld_listmore": false,
+      "fld_listsum": null,
+      "fld_exportable": true,
+      "fld_tray": null,
+      "fld_type": "7",
+      "fld_type_id__flt_code": null,
+      "fld_list_id__lov_name": "FT_ST_STATE",
+      "fld_copy": true,
+      "fld_size": 10,
+      "fld_minsize": null,
+      "fld_precision": null,
+      "fld_fromdate_id__fld_name": null,
+      "fld_dfault": null,
+      "fld_indexable": false,
+      "fld_autocomp": "0",
+      "fld_groupby": false,
+      "fld_updall": true,
+      "fld_case": null,
+      "fld_righttoleft": false,
+      "fld_rendering": null,
+      "fld_speech": null,
+      "fld_calc": null,
+      "fld_objlist": null,
+      "fld_comment": null,
+      "fld_classification": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "fld_incrementsyntax": null
+     }
+    },
+    {
+     "object": "Field",
      "userkey": "ftTagName",
      "item": {
       "fld_name": "ftTagName",
@@ -6475,6 +6798,19 @@
     },
     {
      "object": "Template",
+     "userkey": "FtStates",
+     "item": {
+      "tpl_name": "FtStates",
+      "tpl_ui": "<div class=\"area\" data-area=\"1\"><\/div>",
+      "tpl_min": null,
+      "tpl_image": null,
+      "tpl_grid": null,
+      "tpl_context": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Template",
      "userkey": "FtTag",
      "item": {
       "tpl_name": "FtTag",
@@ -6719,6 +7055,18 @@
       "ofa_position": 1,
       "ofa_title": false,
       "ofa_ui": "<div>\n  <div class=\"field\" data-field=\"ftSlcField1\"><\/div>\n  <div class=\"field\" data-field=\"ftSlcField2\"><\/div>\n<\/div>",
+      "ofa_icon": "star",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "ObjectFieldArea",
+     "userkey": "FtStates-1",
+     "item": {
+      "ofa_name": "FtStates-1",
+      "ofa_position": 1,
+      "ofa_title": false,
+      "ofa_ui": "<div>\n  <div class=\"field\" data-field=\"ftStCode\"><\/div>\n  <div class=\"field\" data-field=\"ftStState\"><\/div>\n<\/div>",
       "ofa_icon": "star",
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -7817,6 +8165,166 @@
       "obo_tray": true,
       "obo_dashboard": true,
       "obo_prefix": "slc",
+      "obo_search_ts": null,
+      "obo_minrows": null,
+      "obo_maxrows": null,
+      "obo_sortable": true,
+      "obo_list_areas": null,
+      "obo_minifiable": "M",
+      "obo_minified": false,
+      "obo_permalink": null,
+      "obo_btn_searchform": true
+     }
+    },
+    {
+     "object": "ObjectInternal",
+     "userkey": "FtStates",
+     "item": {
+      "obo_name": "FtStates",
+      "obo_dbtable": "ft_states",
+      "obo_role": "OBJ",
+      "obo_class": null,
+      "obo_script_id": null,
+      "obo_usets": "1",
+      "obo_nosearch": "1",
+      "obo_comment": null,
+      "obo_type": "O",
+      "obo_searchspec": null,
+      "obo_exportorder": null,
+      "obo_distinct": false,
+      "obo_indexable": false,
+      "obo_groupby": false,
+      "obo_dfltref": null,
+      "obo_template_id__tpl_name": "FtStates",
+      "obo_tpl_list_id__tpl_name": null,
+      "obo_tpl_list_id__tpl_context": null,
+      "obo_copy": true,
+      "obo_export": ["1"],
+      "obo_pagine": true,
+      "obo_srh_predef": ["1"],
+      "obo_selrow": true,
+      "obo_updall": true,
+      "obo_delall": true,
+      "obo_listsearch": true,
+      "obo_list_edit": [
+       "N",
+       "L",
+       "E"
+      ],
+      "obo_useform": true,
+      "obo_title": null,
+      "obo_icon": "workflow",
+      "obo_refcount": false,
+      "obo_tree": false,
+      "obo_viewmode": "T",
+      "obo_historic": ["1"],
+      "obo_printable": true,
+      "obo_followlink": true,
+      "obo_mergeable": false,
+      "obo_social": ["1"],
+      "obo_rowid_id__fld_name": null,
+      "obo_extend_id__obj_name": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obo_btn_reload": "P",
+      "obo_btn_prefs": "P",
+      "obo_btn_bookmark": "1",
+      "obo_btn_del": "P",
+      "obo_btn_copy": "P",
+      "obo_btn_export": "P",
+      "obo_btn_listadd": "1",
+      "obo_btn_listedit": "1",
+      "obo_btn_listupsert": "1",
+      "obo_btn_updall": "P",
+      "obo_btn_delall": "P",
+      "obo_btn_merge": "P",
+      "obo_btn_save": true,
+      "obo_btn_saveclose": true,
+      "obo_btn_savenew": true,
+      "obo_btn_savecopy": true,
+      "obo_btn_close": true,
+      "obo_tray": true,
+      "obo_dashboard": true,
+      "obo_prefix": "st",
+      "obo_search_ts": null,
+      "obo_minrows": null,
+      "obo_maxrows": null,
+      "obo_sortable": true,
+      "obo_list_areas": null,
+      "obo_minifiable": "M",
+      "obo_minified": false,
+      "obo_permalink": null,
+      "obo_btn_searchform": true
+     }
+    },
+    {
+     "object": "ObjectInternal",
+     "userkey": "FtStatesHistoric",
+     "item": {
+      "obo_name": "FtStatesHistoric",
+      "obo_dbtable": "ft_states_hist",
+      "obo_role": "OBJ",
+      "obo_class": null,
+      "obo_script_id": null,
+      "obo_usets": "1",
+      "obo_nosearch": "0",
+      "obo_comment": null,
+      "obo_type": "O",
+      "obo_searchspec": null,
+      "obo_exportorder": null,
+      "obo_distinct": false,
+      "obo_indexable": false,
+      "obo_groupby": false,
+      "obo_dfltref": null,
+      "obo_template_id__tpl_name": "FtStates",
+      "obo_tpl_list_id__tpl_name": null,
+      "obo_tpl_list_id__tpl_context": null,
+      "obo_copy": false,
+      "obo_export": ["1"],
+      "obo_pagine": true,
+      "obo_srh_predef": ["1"],
+      "obo_selrow": true,
+      "obo_updall": false,
+      "obo_delall": true,
+      "obo_listsearch": true,
+      "obo_list_edit": [
+       "N",
+       "L",
+       "E"
+      ],
+      "obo_useform": true,
+      "obo_title": null,
+      "obo_icon": null,
+      "obo_refcount": false,
+      "obo_tree": false,
+      "obo_viewmode": "T",
+      "obo_historic": null,
+      "obo_printable": true,
+      "obo_followlink": true,
+      "obo_mergeable": false,
+      "obo_social": ["1"],
+      "obo_rowid_id__fld_name": null,
+      "obo_extend_id__obj_name": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obo_btn_reload": "P",
+      "obo_btn_prefs": "P",
+      "obo_btn_bookmark": "1",
+      "obo_btn_del": "P",
+      "obo_btn_copy": "P",
+      "obo_btn_export": "P",
+      "obo_btn_listadd": "1",
+      "obo_btn_listedit": "1",
+      "obo_btn_listupsert": "1",
+      "obo_btn_updall": "P",
+      "obo_btn_delall": "P",
+      "obo_btn_merge": "P",
+      "obo_btn_save": true,
+      "obo_btn_saveclose": true,
+      "obo_btn_savenew": true,
+      "obo_btn_savecopy": true,
+      "obo_btn_close": true,
+      "obo_tray": true,
+      "obo_dashboard": true,
+      "obo_prefix": "sth",
       "obo_search_ts": null,
       "obo_minrows": null,
       "obo_maxrows": null,
@@ -11850,6 +12358,334 @@
     },
     {
      "object": "ObjectFieldSystem",
+     "userkey": "FtStates~ftStCode~10",
+     "item": {
+      "obf_object_id__obo_name": "FtStates",
+      "obf_object_id__obo_dbtable": "ft_states",
+      "obf_field_id__fld_name": "ftStCode",
+      "obf_field_id__fld_dbname": "ft_st_code",
+      "obf_field_id__fld_type": "3",
+      "obf_order": 10,
+      "obf_group_by": null,
+      "obf_dfault_order": 1,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": "FtStates-1",
+      "obf_area_id__ofa_position": 1,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtStates~ftStState~20",
+     "item": {
+      "obf_object_id__obo_name": "FtStates",
+      "obf_object_id__obo_dbtable": "ft_states",
+      "obf_field_id__fld_name": "ftStState",
+      "obf_field_id__fld_dbname": "ft_st_state",
+      "obf_field_id__fld_type": "7",
+      "obf_order": 20,
+      "obf_group_by": null,
+      "obf_dfault_order": null,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": "FtStates-1",
+      "obf_area_id__ofa_position": 1,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtStatesHistoric~row_ref_id~1",
+     "item": {
+      "obf_object_id__obo_name": "FtStatesHistoric",
+      "obf_object_id__obo_dbtable": "ft_states_hist",
+      "obf_field_id__fld_name": "row_ref_id",
+      "obf_field_id__fld_dbname": "row_ref_id",
+      "obf_field_id__fld_type": "0",
+      "obf_order": 1,
+      "obf_group_by": null,
+      "obf_dfault_order": 1,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": "FtStates",
+      "obf_cascad": "C",
+      "obf_card": "0,n",
+      "obf_visible": true,
+      "obf_ref_export": false,
+      "obf_copy": false,
+      "obf_ref_order": 99990,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": null,
+      "obf_area_id__ofa_position": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtStatesHistoric~row_idx~2",
+     "item": {
+      "obf_object_id__obo_name": "FtStatesHistoric",
+      "obf_object_id__obo_dbtable": "ft_states_hist",
+      "obf_field_id__fld_name": "row_idx",
+      "obf_field_id__fld_dbname": "row_idx",
+      "obf_field_id__fld_type": "1",
+      "obf_order": 2,
+      "obf_group_by": null,
+      "obf_dfault_order": 2,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": null,
+      "obf_area_id__ofa_position": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtStatesHistoric~created_by_hist~3",
+     "item": {
+      "obf_object_id__obo_name": "FtStatesHistoric",
+      "obf_object_id__obo_dbtable": "ft_states_hist",
+      "obf_field_id__fld_name": "created_by_hist",
+      "obf_field_id__fld_dbname": "created_by",
+      "obf_field_id__fld_type": "3",
+      "obf_order": 3,
+      "obf_group_by": null,
+      "obf_dfault_order": 3,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": null,
+      "obf_area_id__ofa_position": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtStatesHistoric~created_dt_hist~4",
+     "item": {
+      "obf_object_id__obo_name": "FtStatesHistoric",
+      "obf_object_id__obo_dbtable": "ft_states_hist",
+      "obf_field_id__fld_name": "created_dt_hist",
+      "obf_field_id__fld_dbname": "created_dt",
+      "obf_field_id__fld_type": "5",
+      "obf_order": 4,
+      "obf_group_by": null,
+      "obf_dfault_order": 4,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": null,
+      "obf_area_id__ofa_position": null,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtStatesHistoric~ftStCode~10",
+     "item": {
+      "obf_object_id__obo_name": "FtStatesHistoric",
+      "obf_object_id__obo_dbtable": "ft_states_hist",
+      "obf_field_id__fld_name": "ftStCode",
+      "obf_field_id__fld_dbname": "ft_st_code",
+      "obf_field_id__fld_type": "3",
+      "obf_order": 10,
+      "obf_group_by": null,
+      "obf_dfault_order": null,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": "FtStates-1",
+      "obf_area_id__ofa_position": 1,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
+     "userkey": "FtStatesHistoric~ftStState~20",
+     "item": {
+      "obf_object_id__obo_name": "FtStatesHistoric",
+      "obf_object_id__obo_dbtable": "ft_states_hist",
+      "obf_field_id__fld_name": "ftStState",
+      "obf_field_id__fld_dbname": "ft_st_state",
+      "obf_field_id__fld_type": "7",
+      "obf_order": 20,
+      "obf_group_by": null,
+      "obf_dfault_order": null,
+      "obf_input": null,
+      "obf_ref_field_id__fld_name": null,
+      "obf_ref_object_id__obo_name": null,
+      "obf_cascad": null,
+      "obf_card": null,
+      "obf_visible": null,
+      "obf_ref_export": true,
+      "obf_copy": null,
+      "obf_ref_order": null,
+      "obf_fld_visible": null,
+      "obf_fld_required": null,
+      "obf_fld_updatable": null,
+      "obf_fld_research": null,
+      "obf_fld_more": null,
+      "obf_fld_listmore": null,
+      "obf_fld_researchreq": null,
+      "obf_fld_dfault": null,
+      "obf_field_id__fld_dfault": null,
+      "obf_fld_exportable": null,
+      "obf_field_id__fld_exportable": true,
+      "obf_fld_uk": null,
+      "obf_area_id__ofa_name": "FtStates-1",
+      "obf_area_id__ofa_position": 1,
+      "row_module_id__mdl_name": "SimFeatures",
+      "obf_joined_id__obf_object_id__obo_name": null,
+      "obf_joined_id__obf_field_id__fld_name": null,
+      "obf_joined_id__obf_order": null
+     }
+    },
+    {
+     "object": "ObjectFieldSystem",
      "userkey": "FtTag~ftTagName~10",
      "item": {
       "obf_object_id__obo_name": "FtTag",
@@ -12296,6 +13132,35 @@
     },
     {
      "object": "Link",
+     "userkey": "1~FtStatesHistoric~row_ref_id",
+     "item": {
+      "obf_ref_object_id__obo_name": "FtStates",
+      "obf_order": 1,
+      "obf_ref_order": 99990,
+      "obf_object_id__obj_name": "FtStatesHistoric",
+      "obf_field_id__fld_name": "row_ref_id",
+      "obf_field_id__fld_dbname": "row_ref_id",
+      "obf_field_id__fld_updatable": ["0"],
+      "obf_field_id__fld_required": true,
+      "obf_field_id__fld_fonctid": true,
+      "obf_cascad": "C",
+      "obf_card": "0,n",
+      "obf_query": null,
+      "obf_filters": null,
+      "obf_visible": true,
+      "obf_ref_export": false,
+      "obf_copy": false,
+      "obf_associate": null,
+      "obf_inline": false,
+      "obf_rendering": null,
+      "obf_treedepth": null,
+      "obf_area_id__ofa_name": null,
+      "obf_area_id__ofa_position": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Link",
      "userkey": "200~FtTgoTag~ftTgotagTagId",
      "item": {
       "obf_ref_object_id__obo_name": "FtTag",
@@ -12529,6 +13394,230 @@
       "act_color": null,
       "act_color_bg": null,
       "act_image": "bi/toggle2-on",
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-A-B",
+     "item": {
+      "act_name": "FT_ST_STATE-A-B",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-A-OPTIONAL",
+     "item": {
+      "act_name": "FT_ST_STATE-A-OPTIONAL",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-B-EXCEPTION",
+     "item": {
+      "act_name": "FT_ST_STATE-B-EXCEPTION",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-B-FINAL",
+     "item": {
+      "act_name": "FT_ST_STATE-B-FINAL",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-EXCEPTION-B",
+     "item": {
+      "act_name": "FT_ST_STATE-EXCEPTION-B",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-INITIAL-A",
+     "item": {
+      "act_name": "FT_ST_STATE-INITIAL-A",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-OPTIONAL-A",
+     "item": {
+      "act_name": "FT_ST_STATE-OPTIONAL-A",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
+      "act_group_id__acg_name": null,
+      "act_queue_id__acq_name": null,
+      "act_queue_id__acq_type": null
+     }
+    },
+    {
+     "object": "Action",
+     "userkey": "FT_ST_STATE-OPTIONAL-B",
+     "item": {
+      "act_name": "FT_ST_STATE-OPTIONAL-B",
+      "act_type": "O",
+      "act_async": "0",
+      "act_job_depth": null,
+      "act_method": null,
+      "act_script": null,
+      "act_url": null,
+      "act_confirm": true,
+      "act_confirm_expr": null,
+      "act_confirm_ui": null,
+      "act_plus": false,
+      "act_comment": "Transition",
+      "row_module_id__mdl_name": "SimFeatures",
+      "act_exec": "NUL",
+      "act_count": null,
+      "act_order": null,
+      "act_color": null,
+      "act_color_bg": null,
+      "act_image": null,
       "act_group_id__acg_name": null,
       "act_queue_id__acq_name": null,
       "act_queue_id__acq_type": null
@@ -13107,6 +14196,45 @@
     },
     {
      "object": "Function",
+     "userkey": "FT_ST_CRUD",
+     "item": {
+      "fct_name": "FT_ST_CRUD",
+      "fct_object_id__obo_type": "O",
+      "fct_object_id__obo_name": "FtStates",
+      "fct_function": "CMS",
+      "fct_action_id__act_name": null,
+      "fct_view_id__viw_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Function",
+     "userkey": "FT_ST_R",
+     "item": {
+      "fct_name": "FT_ST_R",
+      "fct_object_id__obo_type": "O",
+      "fct_object_id__obo_name": "FtStates",
+      "fct_function": "L",
+      "fct_action_id__act_name": null,
+      "fct_view_id__viw_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Function",
+     "userkey": "FT_STH_R",
+     "item": {
+      "fct_name": "FT_STH_R",
+      "fct_object_id__obo_type": "O",
+      "fct_object_id__obo_name": "FtStatesHistoric",
+      "fct_function": "L",
+      "fct_action_id__act_name": null,
+      "fct_view_id__viw_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Function",
      "userkey": "FT_TAG_CRUD",
      "item": {
       "fct_name": "FT_TAG_CRUD",
@@ -13549,6 +14677,34 @@
     },
     {
      "object": "Grant",
+     "userkey": "FT_ADMIN~FT_ST_CRUD~FtStates~",
+     "item": {
+      "grt_group_id__grp_name": "FT_ADMIN",
+      "grt_function_id__fct_name": "FT_ST_CRUD",
+      "grt_function_id__fct_object_id__obo_type": "O",
+      "grt_function_id__fct_object_id__obo_name": "FtStates",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "CMS",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
+     "userkey": "FT_ADMIN~FT_STH_R~FtStatesHistoric~",
+     "item": {
+      "grt_group_id__grp_name": "FT_ADMIN",
+      "grt_function_id__fct_name": "FT_STH_R",
+      "grt_function_id__fct_object_id__obo_type": "O",
+      "grt_function_id__fct_object_id__obo_name": "FtStatesHistoric",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "L",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
      "userkey": "FT_ADMIN~FT_TAG_CRUD~FtTag~",
      "item": {
       "grt_group_id__grp_name": "FT_ADMIN",
@@ -13751,6 +14907,34 @@
       "grt_function_id__fct_name": "FT_SLC_R",
       "grt_function_id__fct_object_id__obo_type": "O",
       "grt_function_id__fct_object_id__obo_name": "FtSelectObject",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "L",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
+     "userkey": "FT_READ~FT_ST_R~FtStates~",
+     "item": {
+      "grt_group_id__grp_name": "FT_READ",
+      "grt_function_id__fct_name": "FT_ST_R",
+      "grt_function_id__fct_object_id__obo_type": "O",
+      "grt_function_id__fct_object_id__obo_name": "FtStates",
+      "grt_function_id__fct_action_id__act_name": null,
+      "grt_function_id__fct_function": "L",
+      "grt_activ": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Grant",
+     "userkey": "FT_READ~FT_STH_R~FtStatesHistoric~",
+     "item": {
+      "grt_group_id__grp_name": "FT_READ",
+      "grt_function_id__fct_name": "FT_STH_R",
+      "grt_function_id__fct_object_id__obo_type": "O",
+      "grt_function_id__fct_object_id__obo_name": "FtStatesHistoric",
       "grt_function_id__fct_action_id__act_name": null,
       "grt_function_id__fct_function": "L",
       "grt_activ": true,
@@ -13994,6 +15178,108 @@
       "sta_alert_id__alt_name": null,
       "row_module_id__mdl_name": "SimFeatures"
      }
+    },
+    {
+     "object": "BPMState",
+     "userkey": "FT_ST_STATE~A",
+     "item": {
+      "sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "sta_state_id__lov_code": "A",
+      "sta_role": "M",
+      "sta_label": "State A",
+      "sta_activ": true,
+      "sta_terminal": false,
+      "sta_read": false,
+      "sta_access": true,
+      "sta_timeout": null,
+      "sta_alert_id__alt_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMState",
+     "userkey": "FT_ST_STATE~B",
+     "item": {
+      "sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "sta_state_id__lov_code": "B",
+      "sta_role": "M",
+      "sta_label": "State B",
+      "sta_activ": true,
+      "sta_terminal": false,
+      "sta_read": false,
+      "sta_access": true,
+      "sta_timeout": null,
+      "sta_alert_id__alt_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMState",
+     "userkey": "FT_ST_STATE~EXCEPTION",
+     "item": {
+      "sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "sta_state_id__lov_code": "EXCEPTION",
+      "sta_role": "M",
+      "sta_label": "Exceptional State",
+      "sta_activ": true,
+      "sta_terminal": false,
+      "sta_read": false,
+      "sta_access": true,
+      "sta_timeout": null,
+      "sta_alert_id__alt_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMState",
+     "userkey": "FT_ST_STATE~FINAL",
+     "item": {
+      "sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "sta_state_id__lov_code": "FINAL",
+      "sta_role": "M",
+      "sta_label": "Final State",
+      "sta_activ": true,
+      "sta_terminal": true,
+      "sta_read": false,
+      "sta_access": true,
+      "sta_timeout": null,
+      "sta_alert_id__alt_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMState",
+     "userkey": "FT_ST_STATE~INITIAL",
+     "item": {
+      "sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "sta_state_id__lov_code": "INITIAL",
+      "sta_role": "M",
+      "sta_label": "Initial State",
+      "sta_activ": true,
+      "sta_terminal": false,
+      "sta_read": false,
+      "sta_access": true,
+      "sta_timeout": null,
+      "sta_alert_id__alt_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMState",
+     "userkey": "FT_ST_STATE~OPTIONAL",
+     "item": {
+      "sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "sta_state_id__lov_code": "OPTIONAL",
+      "sta_role": "M",
+      "sta_label": "Optional State",
+      "sta_activ": true,
+      "sta_terminal": false,
+      "sta_read": false,
+      "sta_access": true,
+      "sta_timeout": null,
+      "sta_alert_id__alt_name": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
    ]
   },
@@ -14038,6 +15324,150 @@
       "stm_action_id__act_name": "FT_ACT_STATE-B-A",
       "row_module_id__mdl_name": "SimFeatures"
      }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-A-B",
+     "item": {
+      "stm_name": "FT_ST_STATE-A-B",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "A",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "B",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-A-B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-A-OPTIONAL",
+     "item": {
+      "stm_name": "FT_ST_STATE-A-OPTIONAL",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "A",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "OPTIONAL",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-A-OPTIONAL",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-B-EXCEPTION",
+     "item": {
+      "stm_name": "FT_ST_STATE-B-EXCEPTION",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "B",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "EXCEPTION",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-B-EXCEPTION",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-B-FINAL",
+     "item": {
+      "stm_name": "FT_ST_STATE-B-FINAL",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "B",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "FINAL",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-B-FINAL",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-EXCEPTION-B",
+     "item": {
+      "stm_name": "FT_ST_STATE-EXCEPTION-B",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "EXCEPTION",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "B",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-EXCEPTION-B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-INITIAL-A",
+     "item": {
+      "stm_name": "FT_ST_STATE-INITIAL-A",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "INITIAL",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "A",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-INITIAL-A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-OPTIONAL-A",
+     "item": {
+      "stm_name": "FT_ST_STATE-OPTIONAL-A",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "OPTIONAL",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "A",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-OPTIONAL-A",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTransition",
+     "userkey": "FT_ST_STATE-OPTIONAL-B",
+     "item": {
+      "stm_name": "FT_ST_STATE-OPTIONAL-B",
+      "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_from_id__sta_state_id__lov_code": "OPTIONAL",
+      "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+      "stm_to_id__sta_state_id__lov_code": "B",
+      "stm_callbackscript": null,
+      "stm_callback": null,
+      "stm_condition": null,
+      "stm_activ": true,
+      "stm_notif_id__alt_name": null,
+      "stm_action_id__act_name": "FT_ST_STATE-OPTIONAL-B",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
    ]
   },
@@ -14066,6 +15496,94 @@
       "stg_group_id__grp_name": "FT_ADMIN",
       "stg_activ": true,
       "stg_object_id__obo_name": "FtActions",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-A-B~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-A-B",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-A-OPTIONAL~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-A-OPTIONAL",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-B-EXCEPTION~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-B-EXCEPTION",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-B-FINAL~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-B-FINAL",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-EXCEPTION-B~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-EXCEPTION-B",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-INITIAL-A~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-INITIAL-A",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-OPTIONAL-A~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-OPTIONAL-A",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "BPMStateTranGroup",
+     "userkey": "FT_ST_STATE-OPTIONAL-B~FT_ADMIN~FtStates",
+     "item": {
+      "stg_transition_id__stm_name": "FT_ST_STATE-OPTIONAL-B",
+      "stg_group_id__grp_name": "FT_ADMIN",
+      "stg_activ": true,
+      "stg_object_id__obo_name": "FtStates",
       "row_module_id__mdl_name": "SimFeatures"
      }
     }
@@ -14124,6 +15642,23 @@
        "object": "ObjectInternal"
       },
       "map_order": 20,
+      "map_ext": false,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "Map",
+     "userkey": "FtDomain~ObjectInternal(FtStates)~25",
+     "item": {
+      "map_domain_id__obd_name": "FtDomain",
+      "map_object": {
+       "item": {"obo_name": "FtStates"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtStates",
+       "object": "ObjectInternal"
+      },
+      "map_order": 25,
       "map_ext": false,
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -14412,40 +15947,6 @@
    "list": [
     {
      "object": "TranslateAction",
-     "userkey": "Action(FtCustomAssociate)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"act_name": "FtCustomAssociate"},
-       "icon": "img/system/action_btn",
-       "label": "Action",
-       "userkeylabel": "FtCustomAssociate",
-       "object": "Action"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Custom associate",
-      "tsl_simplehelp": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateAction",
-     "userkey": "Action(FtCustomAssociate)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"act_name": "FtCustomAssociate"},
-       "icon": "img/system/action_btn",
-       "label": "Action",
-       "userkeylabel": "FtCustomAssociate",
-       "object": "Action"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Custom associate",
-      "tsl_simplehelp": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateAction",
      "userkey": "Action(ActAskFields)~ENU",
      "item": {
       "tsl_object": {
@@ -14474,6 +15975,40 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Demander des champs",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(ActConfirmFields)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "ActConfirmFields"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "ActConfirmFields",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Confirm with fields",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(ActConfirmFields)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "ActConfirmFields"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "ActConfirmFields",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Confirmation avec champs",
       "tsl_simplehelp": null,
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -14548,40 +16083,6 @@
     },
     {
      "object": "TranslateAction",
-     "userkey": "Action(ActConfirmFields)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"act_name": "ActConfirmFields"},
-       "icon": "img/system/action_btn",
-       "label": "Action",
-       "userkeylabel": "ActConfirmFields",
-       "object": "Action"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Confirm with fields",
-      "tsl_simplehelp": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateAction",
-     "userkey": "Action(ActConfirmFields)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"act_name": "ActConfirmFields"},
-       "icon": "img/system/action_btn",
-       "label": "Action",
-       "userkeylabel": "ActConfirmFields",
-       "object": "Action"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Confirmation avec champs",
-      "tsl_simplehelp": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateAction",
      "userkey": "Action(FT_ACT_STATE-B-A)~ENU",
      "item": {
       "tsl_object": {
@@ -14613,6 +16114,312 @@
       "tsl_simplehelp": null,
       "row_module_id__mdl_name": "SimFeatures"
      }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FtCustomAssociate)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FtCustomAssociate"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FtCustomAssociate",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Custom associate",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FtCustomAssociate)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FtCustomAssociate"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FtCustomAssociate",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Custom associate",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-A-B)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-A-B"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-A-B",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "A -> B",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-A-B)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-A-B"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-A-B",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "A -> B",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-A-OPTIONAL)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-A-OPTIONAL"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-A-OPTIONAL",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "A -> Optional",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-A-OPTIONAL)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-A-OPTIONAL"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-A-OPTIONAL",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "A -> Optional",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-B-EXCEPTION)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-B-EXCEPTION"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-B-EXCEPTION",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "B -> Exception",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-B-EXCEPTION)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-B-EXCEPTION"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-B-EXCEPTION",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "B -> Exception",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-B-FINAL)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-B-FINAL"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-B-FINAL",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "B -> Final",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-B-FINAL)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-B-FINAL"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-B-FINAL",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "B -> Final",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-EXCEPTION-B)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-EXCEPTION-B"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-EXCEPTION-B",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Exception -> B",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-EXCEPTION-B)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-EXCEPTION-B"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-EXCEPTION-B",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Exception -> B",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-INITIAL-A)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-INITIAL-A"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-INITIAL-A",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Initial -> A",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-INITIAL-A)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-INITIAL-A"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-INITIAL-A",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Initial -> A",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-OPTIONAL-A)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-OPTIONAL-A"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-OPTIONAL-A",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Optional -> A",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-OPTIONAL-A)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-OPTIONAL-A"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-OPTIONAL-A",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Optional -> A",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-OPTIONAL-B)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-OPTIONAL-B"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-OPTIONAL-B",
+       "object": "Action"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Optional -> B",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateAction",
+     "userkey": "Action(FT_ST_STATE-OPTIONAL-B)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"act_name": "FT_ST_STATE-OPTIONAL-B"},
+       "icon": "img/system/action_btn",
+       "label": "Action",
+       "userkeylabel": "FT_ST_STATE-OPTIONAL-B",
+       "object": "Action"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Optional -> B",
+      "tsl_simplehelp": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
    ]
   },
@@ -14622,50 +16429,6 @@
    "icon": "img/system/translation",
    "field": "row_module_id",
    "list": [
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrBoolean)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrBoolean"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrBoolean",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Boolean",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrBoolean)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrBoolean"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrBoolean",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr boolean",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
     {
      "object": "TranslateField",
      "userkey": "Field(ftActCode)~ENU",
@@ -14701,6 +16464,138 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Code action",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftActDate)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftActDate"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftActDate",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Ft act date",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftActDate)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftActDate"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftActDate",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Date",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftActDate2)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftActDate2"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftActDate2",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Date ?",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftActDate2)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftActDate2"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftActDate2",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Date ?",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftActDocument)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftActDocument"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftActDocument",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Ft act document",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftActDocument)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftActDocument"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftActDocument",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Document PDF",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -14756,17 +16651,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftActDate)~ENU",
+     "userkey": "Field(ftActImage)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftActDate"},
+       "item": {"fld_name": "ftActImage"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftActDate",
+       "userkeylabel": "ftActImage",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Ft act date",
+      "tsl_value": "Ft act image",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -14778,17 +16673,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftActDate)~FRA",
+     "userkey": "Field(ftActImage)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftActDate"},
+       "item": {"fld_name": "ftActImage"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftActDate",
+       "userkeylabel": "ftActImage",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Date",
+      "tsl_value": "Image",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -14932,17 +16827,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftActImage)~ENU",
+     "userkey": "Field(ftAttrBoolean)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftActImage"},
+       "item": {"fld_name": "ftAttrBoolean"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftActImage",
+       "userkeylabel": "ftAttrBoolean",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Ft act image",
+      "tsl_value": "Boolean",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -14954,105 +16849,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftActImage)~FRA",
+     "userkey": "Field(ftAttrBoolean)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftActImage"},
+       "item": {"fld_name": "ftAttrBoolean"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftActImage",
+       "userkeylabel": "ftAttrBoolean",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Image",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftActDate2)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftActDate2"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftActDate2",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Date ?",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftActDate2)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftActDate2"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftActDate2",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Date ?",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftActDocument)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftActDocument"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftActDocument",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Ft act document",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftActDocument)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftActDocument"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftActDocument",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Document PDF",
+      "tsl_value": "Ft attr boolean",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -15196,50 +17003,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrColor)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrColor"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrColor",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Color",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrColor)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrColor"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrColor",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr color",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrCode)~ENU",
      "item": {
       "tsl_object": {
@@ -15273,6 +17036,50 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrColor)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrColor"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrColor",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Color",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrColor)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrColor"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrColor",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr color",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -15460,17 +17267,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrDateTimeToYear)~ENU",
+     "userkey": "Field(ftAttrDateTimeToMinute)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrDateTimeToYear"},
+       "item": {"fld_name": "ftAttrDateTimeToMinute"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrDateTimeToYear",
+       "userkeylabel": "ftAttrDateTimeToMinute",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Date Time (To Year)",
+      "tsl_value": "Date Time (To Minute)",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -15482,17 +17289,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrDateTimeToYear)~FRA",
+     "userkey": "Field(ftAttrDateTimeToMinute)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrDateTimeToYear"},
+       "item": {"fld_name": "ftAttrDateTimeToMinute"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrDateTimeToYear",
+       "userkeylabel": "ftAttrDateTimeToMinute",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft attr date time to year",
+      "tsl_value": "Ft attr date time to minute",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -15537,6 +17344,50 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr date time to month",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrDateTimeToYear)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrDateTimeToYear"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrDateTimeToYear",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Date Time (To Year)",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrDateTimeToYear)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrDateTimeToYear"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrDateTimeToYear",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr date time to year",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -15625,50 +17476,6 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr date to year",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrDateTimeToMinute)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrDateTimeToMinute"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrDateTimeToMinute",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Date Time (To Minute)",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrDateTimeToMinute)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrDateTimeToMinute"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrDateTimeToMinute",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr date time to minute",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -15900,94 +17707,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrDocument)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrDocument"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrDocument",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Document",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrDocument)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrDocument"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrDocument",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr document",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrDocumentMultiList)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrDocumentMultiList"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrDocumentMultiList",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Document (Multi, List)",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrDocumentMultiList)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrDocumentMultiList"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrDocumentMultiList",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr document multi list",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrDecimalProgressBar)~ENU",
      "item": {
       "tsl_object": {
@@ -16032,17 +17751,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrDocumentName)~ENU",
+     "userkey": "Field(ftAttrDocument)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrDocumentName"},
+       "item": {"fld_name": "ftAttrDocument"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrDocumentName",
+       "userkeylabel": "ftAttrDocument",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Document (Name)",
+      "tsl_value": "Document",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -16054,17 +17773,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrDocumentName)~FRA",
+     "userkey": "Field(ftAttrDocument)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrDocumentName"},
+       "item": {"fld_name": "ftAttrDocument"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrDocumentName",
+       "userkeylabel": "ftAttrDocument",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft attr document name",
+      "tsl_value": "Ft attr document",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -16120,17 +17839,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrEnumMulti)~ENU",
+     "userkey": "Field(ftAttrDocumentMultiList)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrEnumMulti"},
+       "item": {"fld_name": "ftAttrDocumentMultiList"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrEnumMulti",
+       "userkeylabel": "ftAttrDocumentMultiList",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Enum Multi",
+      "tsl_value": "Document (Multi, List)",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -16142,17 +17861,105 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrEnumMulti)~FRA",
+     "userkey": "Field(ftAttrDocumentMultiList)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrEnumMulti"},
+       "item": {"fld_name": "ftAttrDocumentMultiList"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrEnumMulti",
+       "userkeylabel": "ftAttrDocumentMultiList",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft attr enum multi",
+      "tsl_value": "Ft attr document multi list",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrDocumentName)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrDocumentName"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrDocumentName",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Document (Name)",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrDocumentName)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrDocumentName"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrDocumentName",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr document name",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEmail)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEmail"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEmail",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Email",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEmail)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEmail"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEmail",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr email",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -16252,50 +18059,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrEnumMultiCheckboxHorizontal)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrEnumMultiCheckboxHorizontal"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrEnumMultiCheckboxHorizontal",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Enum Multi Checkbox Horizontal",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrEnumMultiCheckboxHorizontal)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrEnumMultiCheckboxHorizontal"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrEnumMultiCheckboxHorizontal",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr enum multi checkbox horizontal",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrEnumCheckboxVertical)~ENU",
      "item": {
       "tsl_object": {
@@ -16329,6 +18092,94 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr enum checkbox vertical",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEnumMulti)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEnumMulti"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEnumMulti",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Enum Multi",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEnumMulti)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEnumMulti"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEnumMulti",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr enum multi",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEnumMultiCheckboxHorizontal)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEnumMultiCheckboxHorizontal"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEnumMultiCheckboxHorizontal",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Enum Multi Checkbox Horizontal",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEnumMultiCheckboxHorizontal)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEnumMultiCheckboxHorizontal"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEnumMultiCheckboxHorizontal",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr enum multi checkbox horizontal",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -16428,50 +18279,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrEmail)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrEmail"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrEmail",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Email",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrEmail)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrEmail"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrEmail",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr email",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrEnumMultiRadioHorizontal)~ENU",
      "item": {
       "tsl_object": {
@@ -16560,50 +18367,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrEnumRadioHorizontal)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrEnumRadioHorizontal"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrEnumRadioHorizontal",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Enum Radio Horizontal",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrEnumRadioHorizontal)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrEnumRadioHorizontal"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrEnumRadioHorizontal",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr enum radio horizontal",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrEnumPillbox)~ENU",
      "item": {
       "tsl_object": {
@@ -16637,6 +18400,50 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr enum pillbox",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEnumRadioHorizontal)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEnumRadioHorizontal"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEnumRadioHorizontal",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Enum Radio Horizontal",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrEnumRadioHorizontal)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrEnumRadioHorizontal"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrEnumRadioHorizontal",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr enum radio horizontal",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -16780,50 +18587,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrImage)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrImage"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrImage",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Image",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrImage)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrImage"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrImage",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr image",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrHtml)~ENU",
      "item": {
       "tsl_object": {
@@ -16857,6 +18620,50 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr html",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrImage)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrImage"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrImage",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Image",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrImage)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrImage"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrImage",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr image",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -16956,6 +18763,50 @@
     },
     {
      "object": "TranslateField",
+     "userkey": "Field(ftAttrIntegerMonetary)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrIntegerMonetary"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrIntegerMonetary",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Integer Monetary",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrIntegerMonetary)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrIntegerMonetary"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrIntegerMonetary",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr integer monetary",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
      "userkey": "Field(ftAttrIntegerPercentage)~ENU",
      "item": {
       "tsl_object": {
@@ -17033,6 +18884,50 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr integer progress bar",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrIntegerSlider)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrIntegerSlider"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrIntegerSlider",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Integer Slider",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrIntegerSlider)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrIntegerSlider"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrIntegerSlider",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr integer slider",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -17132,50 +19027,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrIntegerSlider)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrIntegerSlider"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrIntegerSlider",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Integer Slider",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrIntegerSlider)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrIntegerSlider"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrIntegerSlider",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr integer slider",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrLongTextEditor)~ENU",
      "item": {
       "tsl_object": {
@@ -17220,17 +19071,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrIntegerMonetary)~ENU",
+     "userkey": "Field(ftAttrLongTextGrid)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrIntegerMonetary"},
+       "item": {"fld_name": "ftAttrLongTextGrid"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrIntegerMonetary",
+       "userkeylabel": "ftAttrLongTextGrid",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Integer Monetary",
+      "tsl_value": "Long Text Grid",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -17242,17 +19093,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftAttrIntegerMonetary)~FRA",
+     "userkey": "Field(ftAttrLongTextGrid)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftAttrIntegerMonetary"},
+       "item": {"fld_name": "ftAttrLongTextGrid"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftAttrIntegerMonetary",
+       "userkeylabel": "ftAttrLongTextGrid",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft attr integer monetary",
+      "tsl_value": "Ft attr long text grid",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -17297,50 +19148,6 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr long text grid source",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrLongTextGrid)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrLongTextGrid"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrLongTextGrid",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Long Text Grid",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrLongTextGrid)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrLongTextGrid"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrLongTextGrid",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr long text grid",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -17440,6 +19247,50 @@
     },
     {
      "object": "TranslateField",
+     "userkey": "Field(ftAttrNotepadUserActivities)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrNotepadUserActivities"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrNotepadUserActivities",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Notepad (User Activities)",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrNotepadUserActivities)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrNotepadUserActivities"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrNotepadUserActivities",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr notepad user activities",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
      "userkey": "Field(ftAttrPassword)~ENU",
      "item": {
       "tsl_object": {
@@ -17517,50 +19368,6 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr phone number",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrNotepadUserActivities)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrNotepadUserActivities"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrNotepadUserActivities",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Notepad (User Activities)",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrNotepadUserActivities)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrNotepadUserActivities"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrNotepadUserActivities",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr notepad user activities",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -17704,50 +19511,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftLstCode)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftLstCode"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftLstCode",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Code",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftLstCode)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftLstCode"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftLstCode",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft lst code",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftAttrTimeToMinute)~ENU",
      "item": {
       "tsl_object": {
@@ -17781,182 +19544,6 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft attr time to minute",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftLstDescription)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftLstDescription"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftLstDescription",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Description",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftLstDescription)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftLstDescription"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftLstDescription",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft lst description",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftM2mcCode)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftM2mcCode"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftM2mcCode",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Code",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftM2mcCode)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftM2mcCode"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftM2mcCode",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft M2mc code",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrValidatedText)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrValidatedText"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrValidatedText",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Validated Text",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftAttrValidatedText)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftAttrValidatedText"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftAttrValidatedText",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft attr validated text",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftLstType)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftLstType"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftLstType",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Type",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftLstType)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftLstType"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftLstType",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft lst type",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18012,13 +19599,57 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftM2mCode)~ENU",
+     "userkey": "Field(ftAttrValidatedText)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftM2mCode"},
+       "item": {"fld_name": "ftAttrValidatedText"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftM2mCode",
+       "userkeylabel": "ftAttrValidatedText",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Validated Text",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftAttrValidatedText)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftAttrValidatedText"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftAttrValidatedText",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft attr validated text",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftLstCode)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftLstCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftLstCode",
        "object": "Field"
       },
       "tsl_lang": "ENU",
@@ -18034,17 +19665,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftM2mCode)~FRA",
+     "userkey": "Field(ftLstCode)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftM2mCode"},
+       "item": {"fld_name": "ftLstCode"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftM2mCode",
+       "userkeylabel": "ftLstCode",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft M2m code",
+      "tsl_value": "Ft lst code",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18056,17 +19687,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftM2mcId)~ENU",
+     "userkey": "Field(ftLstDescription)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftM2mcId"},
+       "item": {"fld_name": "ftLstDescription"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftM2mcId",
+       "userkeylabel": "ftLstDescription",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Ft M2mm 2mc M2mc id",
+      "tsl_value": "Description",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18078,17 +19709,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftM2mcId)~FRA",
+     "userkey": "Field(ftLstDescription)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftM2mcId"},
+       "item": {"fld_name": "ftLstDescription"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftM2mcId",
+       "userkeylabel": "ftLstDescription",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft M2mm 2mc M2mc id",
+      "tsl_value": "Ft lst description",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18144,6 +19775,182 @@
     },
     {
      "object": "TranslateField",
+     "userkey": "Field(ftLstType)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftLstType"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftLstType",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Type",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftLstType)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftLstType"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftLstType",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft lst type",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftM2mcCode)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftM2mcCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftM2mcCode",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftM2mcCode)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftM2mcCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftM2mcCode",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft M2mc code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftM2mcId)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftM2mcId"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftM2mcId",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Ft M2mm 2mc M2mc id",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftM2mcId)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftM2mcId"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftM2mcId",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft M2mm 2mc M2mc id",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftM2mCode)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftM2mCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftM2mCode",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftM2mCode)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftM2mCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftM2mCode",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft M2m code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
      "userkey": "Field(ftM2mId)~ENU",
      "item": {
       "tsl_object": {
@@ -18177,6 +19984,50 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft M2mm 2mc M2m id",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftNtfCode)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftNtfCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftNtfCode",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": "auto-fill",
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftNtfCode)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftNtfCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftNtfCode",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft ntf code",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18309,50 +20160,6 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Ft O2m code",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftNtfCode)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftNtfCode"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftNtfCode",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Code",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": "auto-fill",
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftNtfCode)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftNtfCode"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftNtfCode",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft ntf code",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18584,50 +20391,6 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftTagName)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftTagName"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftTagName",
-       "object": "Field"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Name",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
-     "userkey": "Field(ftTagName)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"fld_name": "ftTagName"},
-       "icon": "img/system/field",
-       "label": "Field",
-       "userkeylabel": "ftTagName",
-       "object": "Field"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Ft tag name",
-      "tsl_simplehelp": null,
-      "tsl_plural_value": null,
-      "tsl_short_value": null,
-      "tsl_placeholder": null,
-      "tsl_listhelp": null,
-      "tsl_tooltip": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateField",
      "userkey": "Field(ftSlcField2)~ENU",
      "item": {
       "tsl_object": {
@@ -18672,17 +20435,17 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftTgotagTgoId)~ENU",
+     "userkey": "Field(ftTagName)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftTgotagTgoId"},
+       "item": {"fld_name": "ftTagName"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftTgotagTgoId",
+       "userkeylabel": "ftTagName",
        "object": "Field"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Ft tgotag tgo id",
+      "tsl_value": "Name",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18694,17 +20457,61 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftTgotagTgoId)~FRA",
+     "userkey": "Field(ftTagName)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftTgotagTgoId"},
+       "item": {"fld_name": "ftTagName"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftTgotagTgoId",
+       "userkeylabel": "ftTagName",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft tgotag tgo id",
+      "tsl_value": "Ft tag name",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftTgoCode)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftTgoCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftTgoCode",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftTgoCode)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftTgoCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftTgoCode",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft tgo code",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18760,13 +20567,57 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftTgoCode)~ENU",
+     "userkey": "Field(ftTgotagTgoId)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftTgoCode"},
+       "item": {"fld_name": "ftTgotagTgoId"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftTgoCode",
+       "userkeylabel": "ftTgotagTgoId",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Ft tgotag tgo id",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftTgotagTgoId)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftTgotagTgoId"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftTgotagTgoId",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft tgotag tgo id",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftStCode)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftStCode"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftStCode",
        "object": "Field"
       },
       "tsl_lang": "ENU",
@@ -18782,17 +20633,61 @@
     },
     {
      "object": "TranslateField",
-     "userkey": "Field(ftTgoCode)~FRA",
+     "userkey": "Field(ftStCode)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"fld_name": "ftTgoCode"},
+       "item": {"fld_name": "ftStCode"},
        "icon": "img/system/field",
        "label": "Field",
-       "userkeylabel": "ftTgoCode",
+       "userkeylabel": "ftStCode",
        "object": "Field"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Ft tgo code",
+      "tsl_value": "Ft st code",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftStState)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftStState"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftStState",
+       "object": "Field"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "State",
+      "tsl_simplehelp": null,
+      "tsl_plural_value": null,
+      "tsl_short_value": null,
+      "tsl_placeholder": null,
+      "tsl_listhelp": null,
+      "tsl_tooltip": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateField",
+     "userkey": "Field(ftStState)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"fld_name": "ftStState"},
+       "icon": "img/system/field",
+       "label": "Field",
+       "userkeylabel": "ftStState",
+       "object": "Field"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Ft st state",
       "tsl_simplehelp": null,
       "tsl_plural_value": null,
       "tsl_short_value": null,
@@ -18876,6 +20771,38 @@
     },
     {
      "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtAttributes-2)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtAttributes-2"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtAttributes-2",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Text",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtAttributes-2)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtAttributes-2"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtAttributes-2",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "FtAttributes-2",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
      "userkey": "ObjectFieldArea(FtAttributes-3)~ENU",
      "item": {
       "tsl_object": {
@@ -18903,6 +20830,38 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "FtAttributes-3",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtAttributes-4)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtAttributes-4"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtAttributes-4",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Date & Time",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtAttributes-4)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtAttributes-4"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtAttributes-4",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "FtAttributes-4",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -19004,97 +20963,33 @@
     },
     {
      "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtAttributes-4)~ENU",
+     "userkey": "ObjectFieldArea(FtCustomUser-1)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"ofa_name": "FtAttributes-4"},
+       "item": {"ofa_name": "FtCustomUser-1"},
        "icon": "img/system/field_area",
        "label": "Fields area",
-       "userkeylabel": "FtAttributes-4",
+       "userkeylabel": "FtCustomUser-1",
        "object": "ObjectFieldArea"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Date & Time",
+      "tsl_value": "FtCustomUser-1",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
     {
      "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtAttributes-4)~FRA",
+     "userkey": "ObjectFieldArea(FtCustomUser-1)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"ofa_name": "FtAttributes-4"},
+       "item": {"ofa_name": "FtCustomUser-1"},
        "icon": "img/system/field_area",
        "label": "Fields area",
-       "userkeylabel": "FtAttributes-4",
+       "userkeylabel": "FtCustomUser-1",
        "object": "ObjectFieldArea"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "FtAttributes-4",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtAttributes-2)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"ofa_name": "FtAttributes-2"},
-       "icon": "img/system/field_area",
-       "label": "Fields area",
-       "userkeylabel": "FtAttributes-2",
-       "object": "ObjectFieldArea"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Text",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtAttributes-2)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"ofa_name": "FtAttributes-2"},
-       "icon": "img/system/field_area",
-       "label": "Fields area",
-       "userkeylabel": "FtAttributes-2",
-       "object": "ObjectFieldArea"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "FtAttributes-2",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtM2mChild-1)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"ofa_name": "FtM2mChild-1"},
-       "icon": "img/system/field_area",
-       "label": "Fields area",
-       "userkeylabel": "FtM2mChild-1",
-       "object": "ObjectFieldArea"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "FtM2mChild-1",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtM2mChild-1)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"ofa_name": "FtM2mChild-1"},
-       "icon": "img/system/field_area",
-       "label": "Fields area",
-       "userkeylabel": "FtM2mChild-1",
-       "object": "ObjectFieldArea"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "M2m child -1",
+      "tsl_value": "Custom user -1",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -19132,33 +21027,33 @@
     },
     {
      "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtCustomUser-1)~ENU",
+     "userkey": "ObjectFieldArea(FtM2mChild-1)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"ofa_name": "FtCustomUser-1"},
+       "item": {"ofa_name": "FtM2mChild-1"},
        "icon": "img/system/field_area",
        "label": "Fields area",
-       "userkeylabel": "FtCustomUser-1",
+       "userkeylabel": "FtM2mChild-1",
        "object": "ObjectFieldArea"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "FtCustomUser-1",
+      "tsl_value": "FtM2mChild-1",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
     {
      "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtCustomUser-1)~FRA",
+     "userkey": "ObjectFieldArea(FtM2mChild-1)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"ofa_name": "FtCustomUser-1"},
+       "item": {"ofa_name": "FtM2mChild-1"},
        "icon": "img/system/field_area",
        "label": "Fields area",
-       "userkeylabel": "FtCustomUser-1",
+       "userkeylabel": "FtM2mChild-1",
        "object": "ObjectFieldArea"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Custom user -1",
+      "tsl_value": "M2m child -1",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -19356,38 +21251,6 @@
     },
     {
      "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtTag-1)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"ofa_name": "FtTag-1"},
-       "icon": "img/system/field_area",
-       "label": "Fields area",
-       "userkeylabel": "FtTag-1",
-       "object": "ObjectFieldArea"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "FtTag-1",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateFieldArea",
-     "userkey": "ObjectFieldArea(FtTag-1)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"ofa_name": "FtTag-1"},
-       "icon": "img/system/field_area",
-       "label": "Fields area",
-       "userkeylabel": "FtTag-1",
-       "object": "ObjectFieldArea"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Tag -1",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateFieldArea",
      "userkey": "ObjectFieldArea(FtSelectObject-1)~ENU",
      "item": {
       "tsl_object": {
@@ -19420,6 +21283,38 @@
     },
     {
      "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtTag-1)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtTag-1"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtTag-1",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "FtTag-1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtTag-1)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtTag-1"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtTag-1",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Tag -1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
      "userkey": "ObjectFieldArea(FtTaggedObject-1)~ENU",
      "item": {
       "tsl_object": {
@@ -19447,6 +21342,38 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "Tagged object -1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtStates-1)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtStates-1"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtStates-1",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "FtStates-1",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateFieldArea",
+     "userkey": "ObjectFieldArea(FtStates-1)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"ofa_name": "FtStates-1"},
+       "icon": "img/system/field_area",
+       "label": "Fields area",
+       "userkeylabel": "FtStates-1",
+       "object": "ObjectFieldArea"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "States -1",
       "row_module_id__mdl_name": "SimFeatures"
      }
     }
@@ -19578,6 +21505,42 @@
     },
     {
      "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtAttributes)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtAttributes"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtAttributes",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Attributes",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtAttributes)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtAttributes"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtAttributes",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Attributs",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
      "userkey": "ObjectInternal(FtCustomUser)~ENU",
      "item": {
       "tsl_object": {
@@ -19650,107 +21613,17 @@
     },
     {
      "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtRelationshipM2m)~ENU",
+     "userkey": "ObjectInternal(FtM2m)~ANY",
      "item": {
       "tsl_object": {
-       "item": {"obo_name": "FtRelationshipM2m"},
+       "item": {"obo_name": "FtM2m"},
        "icon": "img/system/business_object",
        "label": "Business object",
-       "userkeylabel": "FtRelationshipM2m",
+       "userkeylabel": "FtM2m",
        "object": "ObjectInternal"
       },
-      "tsl_lang": "ENU",
-      "tsl_value": "Relationship (many to many)",
-      "tsl_plural_value": null,
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtRelationshipM2m)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"obo_name": "FtRelationshipM2m"},
-       "icon": "img/system/business_object",
-       "label": "Business object",
-       "userkeylabel": "FtRelationshipM2m",
-       "object": "ObjectInternal"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Relation (N/N)",
-      "tsl_plural_value": null,
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtReflexiveMany)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"obo_name": "FtReflexiveMany"},
-       "icon": "img/system/business_object",
-       "label": "Business object",
-       "userkeylabel": "FtReflexiveMany",
-       "object": "ObjectInternal"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Reflexive item (many)",
-      "tsl_plural_value": null,
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtReflexiveMany)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"obo_name": "FtReflexiveMany"},
-       "icon": "img/system/business_object",
-       "label": "Business object",
-       "userkeylabel": "FtReflexiveMany",
-       "object": "ObjectInternal"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Reflexive item (many)",
-      "tsl_plural_value": null,
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtRxmLink)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"obo_name": "FtRxmLink"},
-       "icon": "img/system/business_object",
-       "label": "Business object",
-       "userkeylabel": "FtRxmLink",
-       "object": "ObjectInternal"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "Associated items",
-      "tsl_plural_value": null,
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtRxmLink)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"obo_name": "FtRxmLink"},
-       "icon": "img/system/business_object",
-       "label": "Business object",
-       "userkeylabel": "FtRxmLink",
-       "object": "ObjectInternal"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "Associated items",
+      "tsl_lang": "ANY",
+      "tsl_value": "N/N",
       "tsl_plural_value": null,
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
@@ -19794,6 +21667,96 @@
     },
     {
      "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtNotification)~ANY",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtNotification"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtNotification",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "ANY",
+      "tsl_value": "Notification Tester",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtReflexiveMany)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtReflexiveMany"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtReflexiveMany",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Reflexive item (many)",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtReflexiveMany)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtReflexiveMany"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtReflexiveMany",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Reflexive item (many)",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtRelationshipM2m)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtRelationshipM2m"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtRelationshipM2m",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Relationship (many to many)",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtRelationshipM2m)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtRelationshipM2m"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtRelationshipM2m",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Relation (N/N)",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
      "userkey": "ObjectInternal(FtRelationshipO2m)~ENU",
      "item": {
       "tsl_object": {
@@ -19830,18 +21793,90 @@
     },
     {
      "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtNotification)~ANY",
+     "userkey": "ObjectInternal(FtRxmLink)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"obo_name": "FtNotification"},
+       "item": {"obo_name": "FtRxmLink"},
        "icon": "img/system/business_object",
        "label": "Business object",
-       "userkeylabel": "FtNotification",
+       "userkeylabel": "FtRxmLink",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Associated items",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtRxmLink)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtRxmLink"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtRxmLink",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Associated items",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtSelectObject)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtSelectObject"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtSelectObject",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "Select object",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtSelectObject)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtSelectObject"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtSelectObject",
+       "object": "ObjectInternal"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "Select object",
+      "tsl_plural_value": null,
+      "tsl_help": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateObject",
+     "userkey": "ObjectInternal(FtTag)~ANY",
+     "item": {
+      "tsl_object": {
+       "item": {"obo_name": "FtTag"},
+       "icon": "img/system/business_object",
+       "label": "Business object",
+       "userkeylabel": "FtTag",
        "object": "ObjectInternal"
       },
       "tsl_lang": "ANY",
-      "tsl_value": "Notification Tester",
-      "tsl_plural_value": null,
+      "tsl_value": "Tag",
+      "tsl_plural_value": "Tags",
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
      }
@@ -19884,17 +21919,17 @@
     },
     {
      "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtAttributes)~ENU",
+     "userkey": "ObjectInternal(FtStates)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"obo_name": "FtAttributes"},
+       "item": {"obo_name": "FtStates"},
        "icon": "img/system/business_object",
        "label": "Business object",
-       "userkeylabel": "FtAttributes",
+       "userkeylabel": "FtStates",
        "object": "ObjectInternal"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Attributes",
+      "tsl_value": "States",
       "tsl_plural_value": null,
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
@@ -19902,17 +21937,17 @@
     },
     {
      "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtAttributes)~FRA",
+     "userkey": "ObjectInternal(FtStates)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"obo_name": "FtAttributes"},
+       "item": {"obo_name": "FtStates"},
        "icon": "img/system/business_object",
        "label": "Business object",
-       "userkeylabel": "FtAttributes",
+       "userkeylabel": "FtStates",
        "object": "ObjectInternal"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Attributs",
+      "tsl_value": "États",
       "tsl_plural_value": null,
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
@@ -19920,53 +21955,17 @@
     },
     {
      "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtM2m)~ANY",
+     "userkey": "ObjectInternal(FtStatesHistoric)~ENU",
      "item": {
       "tsl_object": {
-       "item": {"obo_name": "FtM2m"},
+       "item": {"obo_name": "FtStatesHistoric"},
        "icon": "img/system/business_object",
        "label": "Business object",
-       "userkeylabel": "FtM2m",
-       "object": "ObjectInternal"
-      },
-      "tsl_lang": "ANY",
-      "tsl_value": "N/N",
-      "tsl_plural_value": null,
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtTag)~ANY",
-     "item": {
-      "tsl_object": {
-       "item": {"obo_name": "FtTag"},
-       "icon": "img/system/business_object",
-       "label": "Business object",
-       "userkeylabel": "FtTag",
-       "object": "ObjectInternal"
-      },
-      "tsl_lang": "ANY",
-      "tsl_value": "Tag",
-      "tsl_plural_value": "Tags",
-      "tsl_help": null,
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtSelectObject)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"obo_name": "FtSelectObject"},
-       "icon": "img/system/business_object",
-       "label": "Business object",
-       "userkeylabel": "FtSelectObject",
+       "userkeylabel": "FtStatesHistoric",
        "object": "ObjectInternal"
       },
       "tsl_lang": "ENU",
-      "tsl_value": "Select object",
+      "tsl_value": "Ft states historic",
       "tsl_plural_value": null,
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
@@ -19974,17 +21973,17 @@
     },
     {
      "object": "TranslateObject",
-     "userkey": "ObjectInternal(FtSelectObject)~FRA",
+     "userkey": "ObjectInternal(FtStatesHistoric)~FRA",
      "item": {
       "tsl_object": {
-       "item": {"obo_name": "FtSelectObject"},
+       "item": {"obo_name": "FtStatesHistoric"},
        "icon": "img/system/business_object",
        "label": "Business object",
-       "userkeylabel": "FtSelectObject",
+       "userkeylabel": "FtStatesHistoric",
        "object": "ObjectInternal"
       },
       "tsl_lang": "FRA",
-      "tsl_value": "Select object",
+      "tsl_value": "Ft states historic",
       "tsl_plural_value": null,
       "tsl_help": null,
       "row_module_id__mdl_name": "SimFeatures"
@@ -20138,38 +22137,6 @@
     },
     {
      "object": "TranslateDocIndex",
-     "userkey": "DocIndex(B-ftActImage)~ENU",
-     "item": {
-      "tsl_object": {
-       "item": {"din_name": "B-ftActImage"},
-       "icon": "img/system/bookshelf",
-       "label": "Bookshelf",
-       "userkeylabel": "B-ftActImage",
-       "object": "DocIndex"
-      },
-      "tsl_lang": "ENU",
-      "tsl_value": "B-ft act image",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateDocIndex",
-     "userkey": "DocIndex(B-ftActImage)~FRA",
-     "item": {
-      "tsl_object": {
-       "item": {"din_name": "B-ftActImage"},
-       "icon": "img/system/bookshelf",
-       "label": "Bookshelf",
-       "userkeylabel": "B-ftActImage",
-       "object": "DocIndex"
-      },
-      "tsl_lang": "FRA",
-      "tsl_value": "B-ft act image",
-      "row_module_id__mdl_name": "SimFeatures"
-     }
-    },
-    {
-     "object": "TranslateDocIndex",
      "userkey": "DocIndex(B-ftActDocument2)~ENU",
      "item": {
       "tsl_object": {
@@ -20197,6 +22164,38 @@
       },
       "tsl_lang": "FRA",
       "tsl_value": "B-ft act document 2",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateDocIndex",
+     "userkey": "DocIndex(B-ftActImage)~ENU",
+     "item": {
+      "tsl_object": {
+       "item": {"din_name": "B-ftActImage"},
+       "icon": "img/system/bookshelf",
+       "label": "Bookshelf",
+       "userkeylabel": "B-ftActImage",
+       "object": "DocIndex"
+      },
+      "tsl_lang": "ENU",
+      "tsl_value": "B-ft act image",
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "TranslateDocIndex",
+     "userkey": "DocIndex(B-ftActImage)~FRA",
+     "item": {
+      "tsl_object": {
+       "item": {"din_name": "B-ftActImage"},
+       "icon": "img/system/bookshelf",
+       "label": "Bookshelf",
+       "userkeylabel": "B-ftActImage",
+       "object": "DocIndex"
+      },
+      "tsl_lang": "FRA",
+      "tsl_value": "B-ft act image",
       "row_module_id__mdl_name": "SimFeatures"
      }
     },
@@ -20474,7 +22473,7 @@
   },
   {
    "object": "NotiConfig",
-   "label": "",
+   "label": "Notifications",
    "icon": "img/color/cog_wheel",
    "field": "row_module_id",
    "list": [{
@@ -20491,7 +22490,7 @@
   },
   {
    "object": "NotiConfChan",
-   "label": "",
+   "label": "Broadcast channel",
    "icon": "img/color/pipelines",
    "field": "row_module_id",
    "list": [{
@@ -20508,7 +22507,7 @@
   },
   {
    "object": "NotiConfigContent",
-   "label": "",
+   "label": "Content",
    "icon": "edit",
    "field": "row_module_id",
    "list": [{
@@ -20527,7 +22526,7 @@
   },
   {
    "object": "NotiConfigDest",
-   "label": "",
+   "label": "Recipients",
    "icon": "img/color/group",
    "field": "row_module_id",
    "list": [{
@@ -20546,7 +22545,7 @@
   },
   {
    "object": "NotiGroupChannels",
-   "label": "",
+   "label": "Recipient channels",
    "icon": "img/color/pipelines",
    "field": "row_module_id",
    "list": [{
