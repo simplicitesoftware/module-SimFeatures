@@ -22258,17 +22258,41 @@
    "label": "Broadcast channel",
    "icon": "img/color/pipelines",
    "field": "row_module_id",
-   "list": [{
-    "object": "NotiConfChan",
-    "userkey": "FtNotification~INT",
-    "item": {
-     "notiConfchanConfId__notiConfName": "FtNotification",
-     "notiConfchanChanId__notiChanType": "INT",
-     "notiConfchanMandatory": true,
-     "notiConfchanMethod": null,
-     "row_module_id__mdl_name": "SimFeatures"
+   "list": [
+    {
+     "object": "NotiConfChan",
+     "userkey": "FtNotification~INT",
+     "item": {
+      "notiConfchanConfId__notiConfName": "FtNotification",
+      "notiConfchanChanId__notiChanType": "INT",
+      "notiConfchanMandatory": true,
+      "notiConfchanMethod": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "NotiConfChan",
+     "userkey": "FtNotification~WEBPUSH",
+     "item": {
+      "notiConfchanConfId__notiConfName": "FtNotification",
+      "notiConfchanChanId__notiChanType": "WEBPUSH",
+      "notiConfchanMandatory": false,
+      "notiConfchanMethod": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "NotiConfChan",
+     "userkey": "FtNotification~MAIL",
+     "item": {
+      "notiConfchanConfId__notiConfName": "FtNotification",
+      "notiConfchanChanId__notiChanType": "MAIL",
+      "notiConfchanMandatory": false,
+      "notiConfchanMethod": null,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
-   }]
+   ]
   },
   {
    "object": "NotiConfigContent",
@@ -22280,7 +22304,7 @@
     "userkey": "ENU~FtNotification~~",
     "item": {
      "tsl_lang": "ENU",
-     "notiContContent": "Notif content",
+     "notiContContent": "Notification tester object created",
      "notiContConfId__notiConfName": "FtNotification",
      "notiContConfchanId__notiConfchanConfId__notiConfName": null,
      "notiContConfchanId__notiConfchanChanId__notiChanType": null,
@@ -22313,23 +22337,59 @@
    "label": "Recipient channels",
    "icon": "img/color/pipelines",
    "field": "row_module_id",
-   "list": [{
-    "object": "NotiGroupChannels",
-    "userkey": "1~FtNotification~FT_ADMIN~~FtNotification~INT",
-    "item": {
-     "notiGcCdId__notiCdOrder": 1,
-     "notiGcCdId__notiCdConfigId__notiConfName": "FtNotification",
-     "notiGcCdId__notiCdGroupId__grp_name": "FT_ADMIN",
-     "notiGcCdId__notiCdType": "GRP",
-     "notiGcCdId__notiCdUserId__usr_login": null,
-     "notiGcConfchanId__notiConfchanConfId__notiConfName": "FtNotification",
-     "notiGcConfchanId__notiConfchanChanId__notiChanType": "INT",
-     "notiGcConfchanId__notiConfchanMethod": null,
-     "notiGcSubscribed": true,
-     "notiGcConfchanId__notiConfchanMandatory": true,
-     "row_module_id__mdl_name": "SimFeatures"
+   "list": [
+    {
+     "object": "NotiGroupChannels",
+     "userkey": "1~FtNotification~FT_ADMIN~~FtNotification~INT",
+     "item": {
+      "notiGcCdId__notiCdOrder": 1,
+      "notiGcCdId__notiCdConfigId__notiConfName": "FtNotification",
+      "notiGcCdId__notiCdGroupId__grp_name": "FT_ADMIN",
+      "notiGcCdId__notiCdType": "GRP",
+      "notiGcCdId__notiCdUserId__usr_login": null,
+      "notiGcConfchanId__notiConfchanConfId__notiConfName": "FtNotification",
+      "notiGcConfchanId__notiConfchanChanId__notiChanType": "INT",
+      "notiGcConfchanId__notiConfchanMethod": null,
+      "notiGcSubscribed": true,
+      "notiGcConfchanId__notiConfchanMandatory": true,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "NotiGroupChannels",
+     "userkey": "1~FtNotification~FT_ADMIN~~FtNotification~WEBPUSH",
+     "item": {
+      "notiGcCdId__notiCdOrder": 1,
+      "notiGcCdId__notiCdConfigId__notiConfName": "FtNotification",
+      "notiGcCdId__notiCdGroupId__grp_name": "FT_ADMIN",
+      "notiGcCdId__notiCdType": "GRP",
+      "notiGcCdId__notiCdUserId__usr_login": null,
+      "notiGcConfchanId__notiConfchanConfId__notiConfName": "FtNotification",
+      "notiGcConfchanId__notiConfchanChanId__notiChanType": "WEBPUSH",
+      "notiGcConfchanId__notiConfchanMethod": null,
+      "notiGcSubscribed": true,
+      "notiGcConfchanId__notiConfchanMandatory": false,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
+    },
+    {
+     "object": "NotiGroupChannels",
+     "userkey": "1~FtNotification~FT_ADMIN~~FtNotification~MAIL",
+     "item": {
+      "notiGcCdId__notiCdOrder": 1,
+      "notiGcCdId__notiCdConfigId__notiConfName": "FtNotification",
+      "notiGcCdId__notiCdGroupId__grp_name": "FT_ADMIN",
+      "notiGcCdId__notiCdType": "GRP",
+      "notiGcCdId__notiCdUserId__usr_login": null,
+      "notiGcConfchanId__notiConfchanConfId__notiConfName": "FtNotification",
+      "notiGcConfchanId__notiConfchanChanId__notiChanType": "MAIL",
+      "notiGcConfchanId__notiConfchanMethod": null,
+      "notiGcSubscribed": true,
+      "notiGcConfchanId__notiConfchanMandatory": false,
+      "row_module_id__mdl_name": "SimFeatures"
+     }
     }
-   }]
+   ]
   }
  ]
 }
