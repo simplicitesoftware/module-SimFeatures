@@ -79,6 +79,10 @@ components:
         ftM2mcId__ftM2mcCode:
           description: Ft M2mm 2mc M2mc id Code
           type: string
+    ArrayOfFtPublications:
+      type: array
+      items:
+        $ref: '#/components/schemas/FtPublications'
     PlaceData:
       type: object
       properties:
@@ -588,6 +592,21 @@ components:
           type: integer
           enum:
           - 500
+    FtPublications:
+      type: object
+      properties:
+        ftPubCode:
+          description: Code
+          type: string
+        ftPubHtml:
+          description: Html-&gt;Pdf Content
+          type: string
+        ftPubFile:
+          description: Html-&gt;Pdf File
+          type: object
+        row_id:
+          description: Unique technical row ID
+          type: string
     Error403:
       type: object
       properties:
@@ -2360,6 +2379,201 @@ paths:
         required: false
       tags:
       - FtRelationshipO2m
+  /rest/FtPublications/{row_id}:
+    post:
+      summary: Create a new FtPublications business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtPublications'
+      operationId: obj-ftpublications-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtPublications'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtPublications
+    get:
+      summary: Get a FtPublications business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftpublications-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtPublications'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtPublications
+    delete:
+      summary: Delete a FtPublications business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftpublications-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtPublications
+    put:
+      summary: Update a FtPublications business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtPublications'
+      operationId: obj-ftpublications-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtPublications'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtPublications
   /rest/FtRxmLink/{row_id}:
     post:
       summary: Create a new FtRxmLink business object record
@@ -5868,6 +6082,72 @@ paths:
         required: false
       tags:
       - FtAttributes
+  /rest/FtPublications:
+    get:
+      summary: Search FtPublications business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftpublications-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtPublications'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftPubCode
+        description: Search filter for Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftPubHtml
+        description: Search filter for Html-&gt;Pdf Content
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftPubFile
+        description: Search filter for Html-&gt;Pdf File
+        required: false
+      tags:
+      - FtPublications
   /rest/FtActions:
     get:
       summary: Search FtActions business object records or get contextualized metadata
@@ -6171,6 +6451,8 @@ tags:
   description: Notification Tester
 - name: FtO2mChild
   description: FtO2mChild
+- name: FtPublications
+  description: Publication
 - name: FtReflexiveMany
   description: Reflexive item (many)
 - name: FtRelationshipM2m

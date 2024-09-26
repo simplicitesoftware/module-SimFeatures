@@ -246,6 +246,19 @@ Object showcasing all the possible attributes
 | _Ref. `ftO2mcO2mId.ftO2mCode`_                               | _char(30)_                               |          |           |          | -                                                                                |
 | _Ref. `ftO2mcO2mId.ftO2mDescription`_                        | _char(100)_                              |          |           |          | -                                                                                |
 
+`FtPublications` business object definition
+-------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftPubCode`                                                  | char(100)                                |          |           |          | -                                                                                |
+| `ftPubHtml`                                                  | text(1000)                               |          | yes       |          | -                                                                                |
+| `ftPubFile`                                                  | document                                 |          | yes       |          | -                                                                                |
+
 `FtReflexiveMany` business object definition
 --------------------------------------------
 
