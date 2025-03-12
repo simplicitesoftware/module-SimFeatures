@@ -167,6 +167,7 @@
      "object": "Group",
      "userkey": "FT_ADMIN",
      "item": {
+      "aiGroupGuiVirtual": null,
       "grp_name": "FT_ADMIN",
       "grp_comment": null,
       "grp_type": ["G"],
@@ -179,6 +180,7 @@
      "object": "Group",
      "userkey": "FT_READ",
      "item": {
+      "aiGroupGuiVirtual": null,
       "grp_name": "FT_READ",
       "grp_comment": null,
       "grp_type": ["G"],
@@ -6858,7 +6860,7 @@
      "userkey": "FtAttributes",
      "item": {
       "tpl_name": "FtAttributes",
-      "tpl_ui": "<div>\n  <div class=\"area\" data-area=\"2:+\"><\/div>\n  <div class=\"area\" data-area=\"3:+\"><\/div>\n  <div class=\"area\" data-area=\"4:+\"><\/div>\n  <div class=\"area\" data-area=\"5:+\"><\/div>\n  <div class=\"area\" data-area=\"6:+\"><\/div>\n  <div class=\"area\" data-area=\"7:+\"><\/div>\n<\/div>",
+      "tpl_ui": "<div>\n  <div class=\"area\" data-area=\"2:-\"><\/div>\n  <div class=\"area\" data-area=\"3:-\"><\/div>\n  <div class=\"area\" data-area=\"4:-\"><\/div>\n  <div class=\"area\" data-area=\"5:-\"><\/div>\n  <div class=\"area\" data-area=\"6:-\"><\/div>\n  <div class=\"area\" data-area=\"7:-\"><\/div>\n<\/div>",
       "tpl_min": null,
       "tpl_image": null,
       "tpl_grid": null,
@@ -7431,7 +7433,10 @@
       "obo_btn_savecopy": true,
       "obo_btn_close": true,
       "obo_tray": true,
-      "obo_dashboard": null,
+      "obo_dashboard": [
+       "1",
+       "2"
+      ],
       "obo_prefix": "act",
       "obo_search_ts": null,
       "obo_minrows": null,

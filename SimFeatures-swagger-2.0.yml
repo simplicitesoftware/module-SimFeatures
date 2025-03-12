@@ -4734,6 +4734,7 @@ securityDefinitions:
     type: apiKey
 definitions:
   Error404:
+    description: Not found
     type: object
     properties:
       error:
@@ -4745,22 +4746,27 @@ definitions:
         enum:
         - 404
   ArrayOfFtStates:
+    description: List of States
     type: array
     items:
       $ref: '#/definitions/FtStates'
   ArrayOfFtM2m:
+    description: List of N/N
     type: array
     items:
       $ref: '#/definitions/FtM2m'
   FtStates:
+    description: States
     type: object
     properties:
       ftStCode:
         description: Code
         type: string
+        maxLength: 100
       ftStState:
         description: State
         type: string
+        maxLength: 10
         enum:
         - INITIAL
         - A
@@ -4771,16 +4777,21 @@ definitions:
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   FtM2mChild:
+    description: Child (many to many)
     type: object
     properties:
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftM2mcCode:
         description: Code
         type: string
+        maxLength: 100
   PublicationResult:
+    description: Publication result
     type: object
     properties:
       mime:
@@ -4790,28 +4801,36 @@ definitions:
         description: Content (plain text or base64 encoded)
         type: string
   FtM2m:
+    description: N/N
     type: object
     properties:
       ftM2mId__ftM2mCode:
         description: Ft M2mm 2mc M2m id Code
         type: string
+        maxLength: 100
       ftM2mId:
         description: Ft M2mm 2mc M2m id
         type: string
+        maxLength: 11
       ftM2mcId:
         description: Ft M2mm 2mc M2mc id
         type: string
+        maxLength: 11
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftM2mcId__ftM2mcCode:
         description: Ft M2mm 2mc M2mc id Code
         type: string
+        maxLength: 100
   ArrayOfFtPublications:
+    description: List of Publications
     type: array
     items:
       $ref: '#/definitions/FtPublications'
   PlaceData:
+    description: Place data
     type: object
     properties:
       coord:
@@ -4833,28 +4852,36 @@ definitions:
         description: 'Label #3'
         type: string
   ArrayOfFtM2mChild:
+    description: List of Child (many to many)
     type: array
     items:
       $ref: '#/definitions/FtM2mChild'
   FtO2mChild:
+    description: FtO2mChild
     type: object
     properties:
       ftO2mcO2mId:
         description: Father
         type: string
+        maxLength: 11
       ftO2mcCode:
         description: Code
         type: string
+        maxLength: 20
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftO2mcO2mId__ftO2mCode:
         description: Father Code
         type: string
+        maxLength: 30
       ftO2mcO2mId__ftO2mDescription:
         description: Father Description
         type: string
+        maxLength: 100
   PlaceMapData:
+    description: Places map data
     type: object
     properties:
       places:
@@ -4866,46 +4893,58 @@ definitions:
         description: Name
         type: string
   ArrayOfFtReflexiveMany:
+    description: List of Reflexive item (many)
     type: array
     items:
       $ref: '#/definitions/FtReflexiveMany'
   ArrayOfFtActions:
+    description: List of Actions
     type: array
     items:
       $ref: '#/definitions/FtActions'
   FtRxmLink:
+    description: Associated items
     type: object
     properties:
       ftRxlRxm1:
         description: Item 1
         type: string
+        maxLength: 11
       ftRxlRxm1__ftRxmCode:
         description: Item 1 Code
         type: string
+        maxLength: 100
       ftRxlRxm2:
         description: Item 2
         type: string
+        maxLength: 11
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftRxlRxm2__ftRxmCode:
         description: Code
         type: string
+        maxLength: 100
   FtCustomUser:
+    description: Custom User
     type: object
     properties:
       row_module_id__mdl_name:
         description: Module name
         type: string
+        maxLength: 100
       usr_image_id:
         description: Picture
         type: object
       usr_email:
         description: Email address
         type: string
+        maxLength: 100
       usr_active:
         description: Active
         type: string
+        maxLength: 1
         enum:
         - '0'
         - '1'
@@ -4914,53 +4953,71 @@ definitions:
       row_module_id:
         description: Module
         type: string
+        maxLength: 11
       usr_login:
         description: Login
         type: string
+        maxLength: 100
       usr_home_id__viw_name:
         description: Home page Name
         type: string
+        maxLength: 100
       usr_last_name:
         description: Last name
         type: string
+        maxLength: 50
       usr_cell_num:
         description: Mobile/cellular phone number
         type: string
+        maxLength: 20
       usr_lang:
         description: Language
         type: string
+        maxLength: 3
         enum:
         - ENU
         - FRA
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       usr_home_id:
         description: Home page
         type: string
+        maxLength: 11
       usr_first_name:
         description: First name
         type: string
+        maxLength: 50
   FtAttributes:
+    description: |-
+      Attributes:
+
+      Object showcasing all the possible attributes
     type: object
     properties:
       ftAttrDateTimeToMinute:
         description: Date Time (To Minute)
         type: string
+        maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       ftAttrTimeToMinute:
         description: Time (To Minute)
         type: string
+        maxLength: 8
         example: HH:mm:ss
       ftAttrValidatedText:
         description: Validated Text
         type: string
+        maxLength: 250
       ftAttrPassword:
         description: Password
         type: string
+        maxLength: 100
       ftAttrDateTimeToDay:
         description: Date Time (To Day)
         type: string
+        maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       ftAttrBooleanCombobox:
         description: Boolean Combobox
@@ -4968,6 +5025,7 @@ definitions:
       ftAttrDateTimeToHour:
         description: Date Time (To Hour)
         type: string
+        maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       ftAttrDecimal:
         description: Decimal
@@ -4987,6 +5045,7 @@ definitions:
       ftAttrDateToMonth:
         description: Date (To Month)
         type: string
+        maxLength: 10
         example: yyyy-MM-dd
       ftAttrIntegerEuro:
         description: Integer Euro
@@ -5000,6 +5059,7 @@ definitions:
       ftAttrLongTextGridSource:
         description: Long Text Grid Source
         type: string
+        maxLength: 1500
       ftAttrIntegerStars:
         description: Integer Stars
         type: integer
@@ -5009,10 +5069,12 @@ definitions:
       ftAttrDateToYear:
         description: Date (To Year)
         type: string
+        maxLength: 10
         example: yyyy-MM-dd
       ftAttrEnum:
         description: Enum
         type: string
+        maxLength: 10
         enum:
         - A
         - B
@@ -5026,12 +5088,14 @@ definitions:
       ftAttrLongText:
         description: Long Text
         type: string
+        maxLength: 1000
       ftAttrIntegerMonetary:
         description: Integer Monetary
         type: integer
       ftAttrDateTimeToMonth:
         description: Date Time (To Month)
         type: string
+        maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       ftAttrEnumMultiCheckboxHorizontal:
         description: Enum Multi Checkbox Horizontal
@@ -5045,6 +5109,7 @@ definitions:
       ftAttrEnumMultiCheckboxVertical:
         description: Enum Multi Checkbox Vertical
         type: string
+        maxLength: 100
         enum:
         - A
         - B
@@ -5055,6 +5120,7 @@ definitions:
       ftAttrEnumRadioVertical:
         description: Enum Radio Vertical
         type: string
+        maxLength: 3
         enum:
         - A
         - B
@@ -5062,10 +5128,12 @@ definitions:
       ftAttrDate:
         description: Date
         type: string
+        maxLength: 10
         example: yyyy-MM-dd
       ftAttrEnumRadioHorizontal:
         description: Enum Radio Horizontal
         type: string
+        maxLength: 3
         enum:
         - A
         - B
@@ -5073,9 +5141,11 @@ definitions:
       ftAttrHtml:
         description: Html
         type: string
+        maxLength: 1500
       ftAttrEnumCheckboxHorizontal:
         description: Enum Checkbox Horizontal
         type: string
+        maxLength: 3
         enum:
         - A
         - B
@@ -5083,15 +5153,19 @@ definitions:
       ftAttrPhoneNumber:
         description: Phone Number
         type: string
+        maxLength: 100
       ftAttrLongTextEditor:
         description: Long Text Editor
         type: string
+        maxLength: 1500
       ftAttrShortText:
         description: Short Text
         type: string
+        maxLength: 255
       ftAttrEnumPillbox:
         description: Enum Pillbox
         type: string
+        maxLength: 100
         enum:
         - A
         - B
@@ -5099,15 +5173,18 @@ definitions:
       ftAttrLongTextGrid:
         description: Long Text Grid
         type: string
+        maxLength: 1500
       ftAttrLongTextMarkdown:
         description: Long Text Markdown
         type: string
+        maxLength: 1500
       ftAttrDecimalProgressBar:
         description: Decimal Progress Bar
         type: number
       ftAttrColor:
         description: Color
         type: string
+        maxLength: 30
         example: '#RRGGBB'
       ftAttrDocumentMultiList:
         description: Document (Multi, List)
@@ -5115,19 +5192,23 @@ definitions:
       ftAttrNotepadUserActivities:
         description: Notepad (User Activities)
         type: string
+        maxLength: 10000
       ftAttrDateTimeToYear:
         description: Date Time (To Year)
         type: string
+        maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       ftAttrEmail:
         description: Email
         type: string
+        maxLength: 255
       ftAttrBooleanCheckbox:
         description: Boolean Checkbox
         type: boolean
       ftAttrEnumCheckboxVertical:
         description: Enum Checkbox Vertical
         type: string
+        maxLength: 3
         enum:
         - A
         - B
@@ -5135,6 +5216,7 @@ definitions:
       ftAttrUrl:
         description: Url
         type: string
+        maxLength: 500
       ftAttrDecimalEuro:
         description: Decimal Euro
         type: number
@@ -5144,6 +5226,7 @@ definitions:
       ftAttrEnumMultiRadioVertical:
         description: Enum Multi Radio Vertical
         type: string
+        maxLength: 3
         enum:
         - A
         - B
@@ -5154,10 +5237,12 @@ definitions:
       ftAttrTime:
         description: Time
         type: string
+        maxLength: 8
         example: HH:mm:ss
       ftAttrExternalFile:
         description: External File
         type: string
+        maxLength: 100
       ftAttrEnumMultiPillbox:
         description: Enum Multi Pillbox
         type: array
@@ -5173,23 +5258,28 @@ definitions:
       ftAttrTimeToHour:
         description: Time (To Hour)
         type: string
+        maxLength: 8
         example: HH:mm:ss
       ftAttrGeographicalCoordinates:
         description: Geographical Coordinates
         type: string
+        maxLength: 50
         example: latitude;longitude
       ftAttrCode:
         description: Code
         type: string
+        maxLength: 10
       ftAttrIntegerProgressBar:
         description: Integer Progress Bar
         type: integer
       ftAttrNotepad:
         description: Notepad
         type: string
+        maxLength: 100
       ftAttrDateTime:
         description: Date Time
         type: string
+        maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       ftAttrBooleanSlide:
         description: Boolean Slide
@@ -5197,6 +5287,7 @@ definitions:
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftAttrEnumMulti:
         description: Enum Multi
         type: array
@@ -5210,6 +5301,7 @@ definitions:
         description: Integer Slider
         type: integer
   FtActions:
+    description: Action
     type: object
     properties:
       ftActImage:
@@ -5218,13 +5310,16 @@ definitions:
       ftActCode:
         description: Code
         type: string
+        maxLength: 100
       ftActDate:
         description: Ft act date
         type: string
+        maxLength: 10
         example: yyyy-MM-dd
       ftActState:
         description: Ft act state
         type: string
+        maxLength: 1
         enum:
         - A
         - B
@@ -5234,15 +5329,19 @@ definitions:
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   ArrayOfFtTgoTag:
+    description: List of FtTgoTag
     type: array
     items:
       $ref: '#/definitions/FtTgoTag'
   ArrayOfFtListItem:
+    description: List of List Item
     type: array
     items:
       $ref: '#/definitions/FtListItem'
   FtStatesHistoric:
+    description: Ft states historic
     type: object
     properties:
       row_idx:
@@ -5251,9 +5350,11 @@ definitions:
       ftStCode:
         description: Code
         type: string
+        maxLength: 100
       ftStState:
         description: State
         type: string
+        maxLength: 10
         enum:
         - INITIAL
         - A
@@ -5264,21 +5365,27 @@ definitions:
       created_dt_hist:
         description: Created date
         type: string
+        maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       created_by_hist:
         description: Created by
         type: string
+        maxLength: 100
       row_ref_id:
         description: Record row ID
         type: string
+        maxLength: 11
   ArrayOfFtStatesHistoric:
+    description: List of Ft states historic
     type: array
     items:
       $ref: '#/definitions/FtStatesHistoric'
   Error400:
+    description: Bad request
     type: object
     properties:
       error:
@@ -5290,15 +5397,19 @@ definitions:
         enum:
         - 400
   FtTag:
+    description: Tag
     type: object
     properties:
       ftTagName:
         description: Name
         type: string
+        maxLength: 50
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   Error401:
+    description: Unauthorized
     type: object
     properties:
       error:
@@ -5310,6 +5421,7 @@ definitions:
         enum:
         - 401
   Error500:
+    description: Internal server error
     type: object
     properties:
       error:
@@ -5321,21 +5433,26 @@ definitions:
         enum:
         - 500
   FtPublications:
+    description: Publication
     type: object
     properties:
       ftPubCode:
         description: Code
         type: string
+        maxLength: 100
       ftPubHtml:
         description: Html-&gt;Pdf Content
         type: string
+        maxLength: 1000
       ftPubFile:
         description: Html-&gt;Pdf File
         type: object
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   Error403:
+    description: Forbidden
     type: object
     properties:
       error:
@@ -5347,56 +5464,72 @@ definitions:
         enum:
         - 403
   ArrayOfFtRxmLink:
+    description: List of Associated items
     type: array
     items:
       $ref: '#/definitions/FtRxmLink'
   ArrayOfFtCustomUser:
+    description: List of Custom Users
     type: array
     items:
       $ref: '#/definitions/FtCustomUser'
   ArrayOfFtAttributes:
+    description: List of Attributes
     type: array
     items:
       $ref: '#/definitions/FtAttributes'
   FtReflexiveMany:
+    description: Reflexive item (many)
     type: object
     properties:
       ftRxmCode:
         description: Code
         type: string
+        maxLength: 100
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftRxmId:
         description: Reflexive item (many)
         type: string
+        maxLength: 11
   FtTaggedObject:
+    description: Tagged object
     type: object
     properties:
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftTgoCode:
         description: Code
         type: string
+        maxLength: 100
   FtNotification:
+    description: Notification Tester
     type: object
     properties:
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftNtfCode:
         description: Code
         type: string
+        maxLength: 100
   ArrayOfFtO2mChild:
+    description: List of FtO2mChild
     type: array
     items:
       $ref: '#/definitions/FtO2mChild'
   ArrayOfFtTag:
+    description: List of Tags
     type: array
     items:
       $ref: '#/definitions/FtTag'
   ActionResult:
+    description: Action result
     type: object
     properties:
       result:
@@ -5409,81 +5542,105 @@ definitions:
         description: Object item with lists of linked objects' items
         type: object
   FtSelectObject:
+    description: Select object
     type: object
     properties:
       ftSlcField1:
         description: Field 1
         type: string
+        maxLength: 255
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
       ftSlcField2:
         description: Field 2
         type: string
+        maxLength: 255
   ArrayOfFtTaggedObject:
+    description: List of Tagged object
     type: array
     items:
       $ref: '#/definitions/FtTaggedObject'
   FtTgoTag:
+    description: FtTgoTag
     type: object
     properties:
       ftTgotagTagId__ftTagName:
         description: Ft tgotag tag id Name
         type: string
+        maxLength: 50
       ftTgotagTgoId:
         description: Ft tgotag tgo id
         type: string
+        maxLength: 11
       ftTgotagTagId:
         description: Ft tgotag tag id
         type: string
+        maxLength: 11
       ftTgotagTgoId__ftTgoCode:
         description: Ft tgotag tgo id Code
         type: string
+        maxLength: 100
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   ArrayOfFtNotification:
+    description: List of Notification Tester
     type: array
     items:
       $ref: '#/definitions/FtNotification'
   FtRelationshipM2m:
+    description: Relationship (many to many)
     type: object
     properties:
       ftM2mCode:
         description: Code
         type: string
+        maxLength: 100
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   ArrayOfFtRelationshipM2m:
+    description: List of Relationship (many to many)
     type: array
     items:
       $ref: '#/definitions/FtRelationshipM2m'
   FtRelationshipO2m:
+    description: Relationship (one to many)
     type: object
     properties:
       ftO2mCode:
         description: Code
         type: string
+        maxLength: 30
       ftO2mDescription:
         description: Description
         type: string
+        maxLength: 100
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   ArrayOfFtRelationshipO2m:
+    description: List of Relationship (one to many)
     type: array
     items:
       $ref: '#/definitions/FtRelationshipO2m'
   FtListItem:
+    description: Lists
     type: object
     properties:
       ftLstDescription:
         description: Description
         type: string
+        maxLength: 5000
       ftLstType:
         description: Type
         type: string
+        maxLength: 10
         enum:
         - A
         - B
@@ -5494,10 +5651,13 @@ definitions:
       ftLstCode:
         description: Code
         type: string
+        maxLength: 100
       row_id:
         description: Unique technical row ID
         type: string
+        maxLength: 11
   ArrayOfFtSelectObject:
+    description: List of Select object
     type: array
     items:
       $ref: '#/definitions/FtSelectObject'
