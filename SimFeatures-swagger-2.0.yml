@@ -2888,6 +2888,14 @@ paths:
         - '2'
         - '3'
       - in: query
+        name: ftUsrType
+        description: Search filter for Type
+        type: string
+        required: false
+        enum:
+        - FT_ADMIN
+        - FT_READ
+      - in: query
         name: usr_home_id
         description: Search filter for Home page
         type: string
@@ -4958,6 +4966,13 @@ definitions:
         description: Login
         type: string
         maxLength: 100
+      ftUsrType:
+        description: Type
+        type: string
+        maxLength: 10
+        enum:
+        - FT_ADMIN
+        - FT_READ
       usr_home_id__viw_name:
         description: Home page Name
         type: string

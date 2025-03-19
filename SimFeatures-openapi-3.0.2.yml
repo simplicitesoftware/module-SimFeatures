@@ -230,6 +230,13 @@ components:
           description: Login
           type: string
           maxLength: 100
+        ftUsrType:
+          description: Type
+          type: string
+          maxLength: 10
+          enum:
+          - FT_ADMIN
+          - FT_READ
         usr_home_id__viw_name:
           description: Home page Name
           type: string
@@ -4395,6 +4402,15 @@ paths:
         in: query
         name: usr_active
         description: Search filter for Active
+        required: false
+      - schema:
+          type: string
+          enum:
+          - FT_ADMIN
+          - FT_READ
+        in: query
+        name: ftUsrType
+        description: Search filter for Type
         required: false
       - schema:
           type: string

@@ -174,6 +174,13 @@ Object showcasing all the possible attributes
 
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftUsrType`                                                  | enum(10) using `FTUSRTYPE` list          | yes      | yes       |          | -                                                                                |
+
+### Lists
+
+* `FTUSRTYPE`
+    - `FT_ADMIN` SimFeatures Admin
+    - `FT_READ` SimFeatures Reader
 
 `FtListItem` business object definition
 ---------------------------------------
