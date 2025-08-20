@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtO2mChild-1",
+ "ofa_position": 1,
+ "ofa_title": false,
+ "ofa_ui": "<div>\n  <div class=\"field\" data-field=\"ftO2mcCode\"><\/div>\n  <div class=\"field\" data-field=\"ftO2mcO2mId__ftO2mCode\"><\/div>\n  <div class=\"field\" data-field=\"ftO2mcO2mId__ftO2mDescription\"><\/div>\n<\/div>",
+ "ofa_icon": "star",
+ "row_module_id__mdl_name": "SimFeatures"
+}

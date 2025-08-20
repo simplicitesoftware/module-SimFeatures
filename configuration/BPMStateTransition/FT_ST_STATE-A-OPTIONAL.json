@@ -1,0 +1,14 @@
+{
+ "stm_name": "FT_ST_STATE-A-OPTIONAL",
+ "stm_from_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+ "stm_from_id__sta_state_id__lov_code": "A",
+ "stm_to_id__sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+ "stm_to_id__sta_state_id__lov_code": "OPTIONAL",
+ "stm_callbackscript": null,
+ "stm_callback": null,
+ "stm_condition": null,
+ "stm_activ": true,
+ "stm_notif_id__alt_name": null,
+ "stm_action_id__act_name": "FT_ST_STATE-A-OPTIONAL",
+ "row_module_id__mdl_name": "SimFeatures"
+}

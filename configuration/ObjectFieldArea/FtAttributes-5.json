@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtAttributes-5",
+ "ofa_position": 5,
+ "ofa_title": true,
+ "ofa_ui": "<div class=\"row\">\n  <div class=\"col-sm-4\">\n    <div class=\"field\" data-field=\"ftAttrEnum\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumCheckboxHorizontal\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumCheckboxVertical\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumRadioHorizontal\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumRadioVertical\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumPillbox\"><\/div>\n  <\/div>\n  <div class=\"col-sm-4\">\n    <div class=\"field\" data-field=\"ftAttrEnumMulti\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumMultiCheckboxHorizontal\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumMultiCheckboxVertical\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumMultiRadioHorizontal\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumMultiRadioVertical\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrEnumMultiPillbox\"><\/div>\n  <\/div>\n  <div class=\"col-sm-4\">\n    <div class=\"field\" data-field=\"ftAttrBoolean\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrBooleanCheckbox\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrBooleanCombobox\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrBooleanSlide\"><\/div>\n  <\/div>\n<\/div>",
+ "ofa_icon": "img/system/list_of_values",
+ "row_module_id__mdl_name": "SimFeatures"
+}

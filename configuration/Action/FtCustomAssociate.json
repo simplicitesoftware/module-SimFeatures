@@ -1,0 +1,23 @@
+{
+ "act_name": "FtCustomAssociate",
+ "act_type": "O",
+ "act_async": "0",
+ "act_job_depth": null,
+ "act_method": null,
+ "act_script": null,
+ "act_url": "javascript:customAssociate();",
+ "act_confirm": false,
+ "act_confirm_expr": null,
+ "act_confirm_ui": null,
+ "act_plus": false,
+ "act_comment": null,
+ "row_module_id__mdl_name": "SimFeatures",
+ "act_exec": "FRT",
+ "act_count": null,
+ "act_order": null,
+ "act_color": null,
+ "act_color_bg": "#4A86E8",
+ "act_image": "icon/color/associate",
+ "act_group_id__acg_name": null,
+ "act_queue_id__acq_name": null
+}

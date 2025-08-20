@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "Action",
+  "label": "Action",
+  "userkeylabel": "ActSimple",
+  "icon": "img/system/action_btn",
+  "item": {"act_name": "ActSimple"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Action simple",
+ "tsl_simplehelp": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

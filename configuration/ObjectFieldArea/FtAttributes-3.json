@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtAttributes-3",
+ "ofa_position": 3,
+ "ofa_title": true,
+ "ofa_ui": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftAttrInteger\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrIntegerMonetary\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrIntegerPercentage\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrIntegerEuro\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrIntegerProgressBar\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrIntegerStars\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrIntegerSlider\"><\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftAttrDecimal\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDecimalMonetary\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDecimalPercentage\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDecimalEuro\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDecimalProgressBar\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDecimalCalculator\"><\/div>\n  <\/div>\n<\/div>",
+ "ofa_icon": "img/color/graph",
+ "row_module_id__mdl_name": "SimFeatures"
+}

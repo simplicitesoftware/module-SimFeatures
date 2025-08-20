@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtTag",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtTag"}
+ },
+ "tsl_lang": "ANY",
+ "tsl_value": "Tag",
+ "tsl_plural_value": "Tags",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

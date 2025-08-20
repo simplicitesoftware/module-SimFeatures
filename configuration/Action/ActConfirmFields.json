@@ -1,0 +1,23 @@
+{
+ "act_name": "ActConfirmFields",
+ "act_type": "F",
+ "act_async": "0",
+ "act_job_depth": null,
+ "act_method": "confirmAction",
+ "act_script": null,
+ "act_url": null,
+ "act_confirm": true,
+ "act_confirm_expr": null,
+ "act_confirm_ui": "<div class=\"row\" style=\"width: 60rem\">\n\t<div class=\"col-md-6\">\n\t\t<div class=\"field\" data-field=\"ftActDate\"><\/div>\n\t\t<div class=\"field\" data-field=\"ftActImage\"><\/div>\n\t<\/div>\n\t<div class=\"col-md-6\">\n\t\t<div class=\"field\" data-field=\"ftActDocument\"><\/div>\n\t<\/div>\n<\/div>",
+ "act_plus": false,
+ "act_comment": null,
+ "row_module_id__mdl_name": "SimFeatures",
+ "act_exec": "BCK",
+ "act_count": null,
+ "act_order": null,
+ "act_color": "#FFFFFF",
+ "act_color_bg": "#A57630",
+ "act_image": "fas/check-square",
+ "act_group_id__acg_name": null,
+ "act_queue_id__acq_name": null
+}

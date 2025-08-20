@@ -1,0 +1,16 @@
+{
+ "mod_name": "FtStates",
+ "mod_template_id__mtp_name": "ModelState",
+ "mod_json": null,
+ "mod_doc": {
+  "path": "files/Model/FtStates.svg",
+  "mime": "image/svg+xml",
+  "name": "FtStates.svg"
+ },
+ "mod_image": {
+  "path": "files/Model/FtStates.png",
+  "mime": "image/png",
+  "name": "FtStates.png"
+ },
+ "row_module_id__mdl_name": "SimFeatures"
+}

@@ -1,0 +1,10 @@
+{
+ "scr_code": "CleanTestAppUser",
+ "scr_file": {
+  "path": "resources/sql/CleanTestAppUser.sql",
+  "mime": "text/x-sql",
+  "name": "CleanTestAppUser.sql"
+ },
+ "scr_type": "SQL",
+ "row_module_id__mdl_name": "SimFeatures"
+}

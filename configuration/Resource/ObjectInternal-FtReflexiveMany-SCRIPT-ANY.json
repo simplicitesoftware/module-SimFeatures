@@ -1,0 +1,20 @@
+{
+ "res_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtReflexiveMany",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtReflexiveMany"}
+ },
+ "res_type": "JS",
+ "res_lang": "ANY",
+ "res_code": "SCRIPT",
+ "res_cached": false,
+ "res_file": {
+  "path": "resources/ObjectInternal/FtReflexiveMany/SCRIPT.js",
+  "mime": "text/javascript",
+  "name": "SCRIPT.js"
+ },
+ "res_image": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

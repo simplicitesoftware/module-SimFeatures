@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtAttributes-4",
+ "ofa_position": 4,
+ "ofa_title": true,
+ "ofa_ui": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftAttrDate\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDateToMonth\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDateToYear\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrTime\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrTimeToMinute\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrTimeToHour\"><\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftAttrDateTime\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDateTimeToMinute\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDateTimeToHour\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDateTimeToDay\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDateTimeToMonth\"><\/div>\n    <div class=\"field\" data-field=\"ftAttrDateTimeToYear\"><\/div>\n  <\/div>\n<\/div>",
+ "ofa_icon": "img/color/calendar",
+ "row_module_id__mdl_name": "SimFeatures"
+}

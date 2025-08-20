@@ -1,0 +1,11 @@
+{
+ "lov_list_id__lov_name": "FT_ST_STATE",
+ "lov_code": "EXCEPTION",
+ "lov_order_by": 50,
+ "lov_label": "Exceptional State",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": null,
+ "lov_color_bg": "#F4CCCC",
+ "lov_icon": "icon/color/btn_red",
+ "lov_display": ["L"]
+}

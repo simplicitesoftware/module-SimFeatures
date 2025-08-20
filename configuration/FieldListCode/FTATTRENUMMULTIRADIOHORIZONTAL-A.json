@@ -1,0 +1,11 @@
+{
+ "lov_list_id__lov_name": "FTATTRENUMMULTIRADIOHORIZONTAL",
+ "lov_code": "A",
+ "lov_order_by": 10,
+ "lov_label": "code A",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": null,
+ "lov_color_bg": null,
+ "lov_icon": null,
+ "lov_display": ["L"]
+}

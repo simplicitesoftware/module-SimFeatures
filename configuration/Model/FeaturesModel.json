@@ -1,0 +1,16 @@
+{
+ "mod_name": "FeaturesModel",
+ "mod_template_id__mtp_name": "ModelBusinessObject",
+ "mod_json": null,
+ "mod_doc": {
+  "path": "files/Model/FeaturesModel.svg",
+  "mime": "image/svg+xml",
+  "name": "FeaturesModel.svg"
+ },
+ "mod_image": {
+  "path": "files/Model/FeaturesModel.png",
+  "mime": "image/png",
+  "name": "FeaturesModel.png"
+ },
+ "row_module_id__mdl_name": "SimFeatures"
+}

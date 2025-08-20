@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "DocIndex",
+  "label": "Bookshelf",
+  "userkeylabel": "B-ftAttrDocumentName",
+  "icon": "img/system/bookshelf",
+  "item": {"din_name": "B-ftAttrDocumentName"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "B-ft attr document name",
+ "row_module_id__mdl_name": "SimFeatures"
+}

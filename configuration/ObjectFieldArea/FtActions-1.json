@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtActions-1",
+ "ofa_position": 1,
+ "ofa_title": false,
+ "ofa_ui": "<div>\n  <div class=\"row\">\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftActCode\"><\/div>\n    <\/div>\n    <div class=\"col-sm-6\">\n      <div class=\"row\">\n        <div class=\"col-sm-6\">\n          <div class=\"action\" data-action=\"ActConfirmFields\"><\/div>\n        <\/div>\n        <div class=\"col-sm-6\">\n          <div class=\"action\" data-action=\"ActAskFields\"><\/div>\n        <\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <div class=\"row\">\n    <div class=\"col-sm-6\">\n      <div class=\"row\">\n        <div class=\"col-sm-6\">\n          <div class=\"field\" data-field=\"ftActState\"><\/div>\n        <\/div>\n        <div class=\"col-sm-6\">\n          <div class=\"field\" data-field=\"ftActDate\"><\/div>\n        <\/div>\n      <\/div>\n      <div class=\"field\" data-field=\"ftActDocument\"><\/div>\n    <\/div>\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftActImage\"><\/div>\n    <\/div>\n  <\/div>\n<\/div>",
+ "ofa_icon": "star",
+ "row_module_id__mdl_name": "SimFeatures"
+}

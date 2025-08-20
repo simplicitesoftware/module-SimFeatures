@@ -1,0 +1,11 @@
+{
+ "lov_list_id__lov_name": "FT_ST_STATE",
+ "lov_code": "B",
+ "lov_order_by": 40,
+ "lov_label": "State B",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": null,
+ "lov_color_bg": "#D9EAD3",
+ "lov_icon": "icon/color/btn_green",
+ "lov_display": ["L"]
+}

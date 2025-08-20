@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtActions",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtActions"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Action",
+ "tsl_plural_value": "Actions",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

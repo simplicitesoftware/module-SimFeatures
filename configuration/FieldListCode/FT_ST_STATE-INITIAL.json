@@ -1,0 +1,11 @@
+{
+ "lov_list_id__lov_name": "FT_ST_STATE",
+ "lov_code": "INITIAL",
+ "lov_order_by": 10,
+ "lov_label": "Initial State",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": null,
+ "lov_color_bg": "#D9D2E9",
+ "lov_icon": "icon/color/btn_purple",
+ "lov_display": ["L"]
+}

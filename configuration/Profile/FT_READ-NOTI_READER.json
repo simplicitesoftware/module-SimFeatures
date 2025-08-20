@@ -1,0 +1,5 @@
+{
+ "prf_profile_id__grp_name": "FT_READ",
+ "prf_group_id__grp_name": "NOTI_READER",
+ "row_module_id__mdl_name": "SimFeatures"
+}

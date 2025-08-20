@@ -1,0 +1,9 @@
+{
+ "tsl_lang": "ENU",
+ "notiContContent": "Notification tester object created",
+ "notiContConfId__notiConfName": "FtNotification",
+ "notiContConfchanId__notiConfchanConfId__notiConfName": null,
+ "notiContConfchanId__notiConfchanChanId__notiChanType": null,
+ "row_module_id__mdl_name": "SimFeatures",
+ "notiContSubject": "Notif title"
+}

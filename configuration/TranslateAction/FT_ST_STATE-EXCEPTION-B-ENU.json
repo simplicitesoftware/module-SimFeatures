@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "Action",
+  "label": "Action",
+  "userkeylabel": "FT_ST_STATE-EXCEPTION-B",
+  "icon": "img/system/action_btn",
+  "item": {"act_name": "FT_ST_STATE-EXCEPTION-B"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Exception -> B",
+ "tsl_simplehelp": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "Action",
+  "label": "Action",
+  "userkeylabel": "FtCustomAssociate",
+  "icon": "img/system/action_btn",
+  "item": {"act_name": "FtCustomAssociate"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Custom associate",
+ "tsl_simplehelp": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

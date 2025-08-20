@@ -1,0 +1,6 @@
+{
+ "flt_code": "FTATTRVALIDATEDTEXT",
+ "flt_method": null,
+ "flt_regexp": "^\\\\w$",
+ "row_module_id__mdl_name": "SimFeatures"
+}

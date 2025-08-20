@@ -1,0 +1,8 @@
+{
+ "afd_action_id__act_name": "FT_ACT_STATE-A-B",
+ "afd_field_id__fld_name": "ftActUserId",
+ "afd_order": 100,
+ "afd_ref_field_id__fld_name": null,
+ "afd_ref_object_id__obo_name": "FtCustomUser",
+ "row_module_id__mdl_name": "SimFeatures"
+}

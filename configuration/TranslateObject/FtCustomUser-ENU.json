@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtCustomUser",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtCustomUser"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Custom User",
+ "tsl_plural_value": "Custom Users",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

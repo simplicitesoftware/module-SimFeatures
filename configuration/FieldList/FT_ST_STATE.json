@@ -1,0 +1,7 @@
+{
+ "lov_name": "FT_ST_STATE",
+ "lov_navbar": "METRO",
+ "lov_navbar_opt": ["DATE"],
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_model_id__mod_name": null
+}

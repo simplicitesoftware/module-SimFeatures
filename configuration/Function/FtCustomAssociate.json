@@ -1,0 +1,8 @@
+{
+ "fct_name": "FtCustomAssociate",
+ "fct_object_id__obo_name": "FtReflexiveMany",
+ "fct_function": "A",
+ "fct_action_id__act_name": "FtCustomAssociate",
+ "fct_view_id__viw_name": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

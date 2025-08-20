@@ -1,0 +1,7 @@
+{
+ "stg_transition_id__stm_name": "FT_ACT_STATE-B-A",
+ "stg_group_id__grp_name": "FT_ADMIN",
+ "stg_activ": true,
+ "stg_object_id__obo_name": "FtActions",
+ "row_module_id__mdl_name": "SimFeatures"
+}

@@ -1,0 +1,23 @@
+{
+ "act_name": "FT_ACT_STATE-A-B",
+ "act_type": "F",
+ "act_async": "0",
+ "act_job_depth": null,
+ "act_method": null,
+ "act_script": null,
+ "act_url": null,
+ "act_confirm": true,
+ "act_confirm_expr": null,
+ "act_confirm_ui": "<div class=\"row\" style=\"width:80%\">\n    <div class=\"col-sm-6\">\n\t\t<div class=\"card\">\n\t\t\t<div class=\"card-header\">\n\t\t\t\t<h2 class=\"text\" data-text=\"CONFIRM\"><\/h2>\n\t\t\t<\/div>\n\t\t\t<div class=\"card-body\">\n\t\t\t\t<div class=\"area-body\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActState\"><\/div>\n\t\t\t\t\t\t<\/div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActDate\"><\/div>\n\t\t\t\t\t\t<\/div>\n\t\t\t\t\t<\/div>\n\t\t\t\t\t<div class=\"field\" data-field=\"ftActDocument\" style=\"max-heigth:20rem\"><\/div>\n\t\t\t\t<\/div>\n\t\t\t<\/div>\n\t\t<\/div>\n\t<\/div>\n    <div class=\"col-sm-6\">\n\t\t<div class=\"card\">\n\t\t\t<div class=\"card-header\">\n\t\t\t\t<h2 class=\"text\" data-text=\"IMAGE\"><\/h2>\n\t\t\t<\/div>\n\t\t\t<div class=\"card-body\">\n\t\t\t\t<div class=\"area-body\">\n\t\t\t\t\t<div class=\"field\" data-field=\"ftActImage\"><\/div>\n\t\t\t\t<\/div>\n\t\t\t<\/div>\n\t\t<\/div>\n\t\t<div class=\"card\">\n\t\t\t<div class=\"card-header\">\n\t\t\t\t<h2 class=\"text\" data-text=\"INFO\"><\/h2>\n\t\t\t<\/div>\n\t\t\t<div class=\"card-body\">\n\t\t\t\t<div class=\"area-body\">\n\t\t\t\t\t<div class=\"row\">\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActDate2\"><\/div>\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActDocument2\"><\/div>\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActImage2\"><\/div>\n\t\t\t\t\t\t<\/div>\n\t\t\t\t\t\t<div class=\"col-sm-6\">\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActUserId\"><\/div>\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActUserId__usr_login\"><\/div>\n\t\t\t\t\t\t\t<div class=\"field\" data-field=\"ftActUserId__usr_email\"><\/div>\n\t\t\t\t\t\t<\/div>\n\t\t\t\t\t<\/div>\n\t\t\t\t<\/div>\n\t\t\t<\/div>\n\t\t<\/div>\n\t<\/div>\n<\/div>",
+ "act_plus": false,
+ "act_comment": "Transition",
+ "row_module_id__mdl_name": "SimFeatures",
+ "act_exec": "NUL",
+ "act_count": null,
+ "act_order": null,
+ "act_color": null,
+ "act_color_bg": null,
+ "act_image": "bi/toggle2-off",
+ "act_group_id__acg_name": null,
+ "act_queue_id__acq_name": null
+}

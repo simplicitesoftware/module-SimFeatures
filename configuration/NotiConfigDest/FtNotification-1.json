@@ -1,0 +1,9 @@
+{
+ "notiCdOrder": 1,
+ "notiCdConfigId__notiConfName": "FtNotification",
+ "notiCdGroupId__grp_name": "FT_ADMIN",
+ "notiCdQuery": null,
+ "notiCdUserId__usr_login": null,
+ "row_module_id__mdl_name": "SimFeatures",
+ "notiCdType": "GRP"
+}

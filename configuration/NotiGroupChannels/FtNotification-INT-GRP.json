@@ -1,0 +1,10 @@
+{
+ "notiGcCdId__notiCdOrder": 1,
+ "notiGcCdId__notiCdConfigId__notiConfName": "FtNotification",
+ "notiGcCdId__notiCdGroupId__grp_name": "FT_ADMIN",
+ "notiGcCdId__notiCdUserId__usr_login": null,
+ "notiGcConfchanId__notiConfchanConfId__notiConfName": "FtNotification",
+ "notiGcConfchanId__notiConfchanChanId__notiChanType": "INT",
+ "notiGcSubscribed": true,
+ "row_module_id__mdl_name": "SimFeatures"
+}

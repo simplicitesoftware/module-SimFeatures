@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "View",
+  "label": "View",
+  "userkeylabel": "SimFeaturesScope",
+  "icon": "img/system/view",
+  "item": {"viw_name": "SimFeaturesScope"}
+ },
+ "tsl_lang": "ANY",
+ "tsl_value": "Features",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

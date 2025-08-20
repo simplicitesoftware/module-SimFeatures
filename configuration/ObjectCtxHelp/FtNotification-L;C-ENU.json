@@ -1,0 +1,10 @@
+{
+ "och_object_id__obo_name": "FtNotification",
+ "och_context": [
+  "L",
+  "C"
+ ],
+ "och_lang": "ENU",
+ "och_help": "<p>On creation, the app will send a notification to the <strong>FT_ADMIN<\/strong> group&nbsp; 🛎<\/p>",
+ "row_module_id__mdl_name": "SimFeatures"
+}

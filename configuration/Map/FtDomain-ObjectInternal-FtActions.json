@@ -1,0 +1,13 @@
+{
+ "map_domain_id__obd_name": "FtDomain",
+ "map_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtActions",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtActions"}
+ },
+ "map_order": 100,
+ "map_ext": false,
+ "row_module_id__mdl_name": "SimFeatures"
+}

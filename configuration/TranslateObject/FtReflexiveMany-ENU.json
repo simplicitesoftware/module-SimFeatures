@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtReflexiveMany",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtReflexiveMany"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Reflexive item (many)",
+ "tsl_plural_value": null,
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

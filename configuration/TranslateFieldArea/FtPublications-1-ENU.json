@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "ObjectFieldArea",
+  "label": "Fields area",
+  "userkeylabel": "FtPublications-1",
+  "icon": "img/system/field_area",
+  "item": {"ofa_name": "FtPublications-1"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "FtPublications-1",
+ "row_module_id__mdl_name": "SimFeatures"
+}

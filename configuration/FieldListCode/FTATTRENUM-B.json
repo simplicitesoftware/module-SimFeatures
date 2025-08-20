@@ -1,0 +1,11 @@
+{
+ "lov_list_id__lov_name": "FTATTRENUM",
+ "lov_code": "B",
+ "lov_order_by": 20,
+ "lov_label": "code B",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": null,
+ "lov_color_bg": null,
+ "lov_icon": null,
+ "lov_display": ["L"]
+}

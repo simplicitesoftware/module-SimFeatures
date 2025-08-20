@@ -1,0 +1,8 @@
+{
+ "grt_group_id__grp_name": "FT_ADMIN",
+ "grt_function_id__fct_name": "FtCustomAssociate",
+ "grt_function_id__fct_object_id__obo_name": "FtReflexiveMany",
+ "grt_function_id__fct_action_id__act_name": "FtCustomAssociate",
+ "grt_activ": true,
+ "row_module_id__mdl_name": "SimFeatures"
+}

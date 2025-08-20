@@ -1,0 +1,7 @@
+{
+ "notiConfchanConfId__notiConfName": "FtNotification",
+ "notiConfchanChanId__notiChanType": "INT",
+ "notiConfchanMandatory": true,
+ "notiConfchanMethod": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

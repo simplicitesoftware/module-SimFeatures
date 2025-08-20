@@ -1,0 +1,11 @@
+{
+ "lov_list_id__lov_name": "FT_ST_STATE",
+ "lov_code": "FINAL",
+ "lov_order_by": 60,
+ "lov_label": "Final State",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": null,
+ "lov_color_bg": "#ABABAB",
+ "lov_icon": "icon/color/btn_grey",
+ "lov_display": ["L"]
+}

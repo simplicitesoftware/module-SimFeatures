@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "ObjectFieldArea",
+  "label": "Fields area",
+  "userkeylabel": "FtRelationshipO2m-1",
+  "icon": "img/system/field_area",
+  "item": {"ofa_name": "FtRelationshipO2m-1"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Relationship O2m -1",
+ "row_module_id__mdl_name": "SimFeatures"
+}

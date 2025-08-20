@@ -1,0 +1,12 @@
+{
+ "tpl_name": "FtStates-row",
+ "tpl_ui": "<div class=\"row\">\n  <div class=\"col-sm-3\">\n    <div class=\"row\">\n      <div class=\"col-sm-6\">\n        <div class=\"field\" data-field=\"ftStOrder\"><\/div>\n      <\/div>\n      <div class=\"col-sm-6\">\n        <div class=\"field\" data-field=\"ftStState\"><\/div>\n      <\/div>\n    <\/div>\n  <\/div>\n  <div class=\"col-sm-3\">\n    <div class=\"field\" data-field=\"ftStCode\"><\/div>\n  <\/div>\n  <div class=\"col-sm-3\">\n    <div class=\"field\" data-field=\"ftStMyuserId__usr_login\"><\/div>\n  <\/div>\n  <div class=\"col-sm-3\">\n    <div class=\"field\" data-field=\"ftStMyuserId__usr_first_name\"><\/div>\n  <\/div>\n<\/div>",
+ "tpl_min": null,
+ "tpl_image": null,
+ "tpl_grid": null,
+ "tpl_context": [
+  "M",
+  "P"
+ ],
+ "row_module_id__mdl_name": "SimFeatures"
+}

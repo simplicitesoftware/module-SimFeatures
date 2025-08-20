@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "FieldType",
+  "label": "Field type",
+  "userkeylabel": "FTATTRVALIDATEDTEXT",
+  "icon": "img/system/field_type",
+  "item": {"flt_code": "FTATTRVALIDATEDTEXT"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "FTATTRVALIDATEDTEXT",
+ "row_module_id__mdl_name": "SimFeatures"
+}

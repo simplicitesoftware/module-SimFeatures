@@ -1,0 +1,18 @@
+{
+ "tsl_object": {
+  "object": "Link",
+  "label": "Link",
+  "userkeylabel": "ftRxmId",
+  "icon": "img/system/link",
+  "item": {
+   "obf_order": 100,
+   "obf_object_id__obj_name": "FtReflexiveMany",
+   "obf_field_id__fld_name": "ftRxmId"
+  }
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Virtual link",
+ "tsl_plural_value": null,
+ "tsl_simplehelp": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

@@ -1,0 +1,7 @@
+{
+ "notiConfName": "FtNotification",
+ "notiConfAction": "3",
+ "notiConfObjectinternalId__obo_name": "FtNotification",
+ "row_module_id__mdl_name": "SimFeatures",
+ "notiConfExpression": "true"
+}

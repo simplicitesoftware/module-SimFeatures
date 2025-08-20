@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "ObjectFieldArea",
+  "label": "Fields area",
+  "userkeylabel": "FtReflexiveMany-1",
+  "icon": "img/system/field_area",
+  "item": {"ofa_name": "FtReflexiveMany-1"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "FtReflexiveMany-1",
+ "row_module_id__mdl_name": "SimFeatures"
+}

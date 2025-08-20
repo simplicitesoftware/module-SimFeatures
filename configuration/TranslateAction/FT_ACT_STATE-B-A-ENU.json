@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "Action",
+  "label": "Action",
+  "userkeylabel": "FT_ACT_STATE-B-A",
+  "icon": "img/system/action_btn",
+  "item": {"act_name": "FT_ACT_STATE-B-A"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Back to A",
+ "tsl_simplehelp": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

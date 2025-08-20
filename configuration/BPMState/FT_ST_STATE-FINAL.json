@@ -1,0 +1,13 @@
+{
+ "sta_state_id__lov_list_id__lov_name": "FT_ST_STATE",
+ "sta_state_id__lov_code": "FINAL",
+ "sta_role": "M",
+ "sta_label": "Final State",
+ "sta_activ": true,
+ "sta_terminal": true,
+ "sta_read": false,
+ "sta_access": true,
+ "sta_timeout": null,
+ "sta_alert_id__alt_name": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}
