@@ -13,8 +13,8 @@ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
   <description>Simplicite module: SimFeatures</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <simplicite.url>https://demo62.sca.simplicite.io</simplicite.url>
-    <simplicite.version>6.2-SNAPSHOT</simplicite.version>
+    <simplicite.url>https://demo63.sca.simplicite.io</simplicite.url>
+    <simplicite.version>6.3-SNAPSHOT</simplicite.version>
     <maven.compiler.source>17</maven.compiler.source>
     <maven.compiler.target>17</maven.compiler.target>
     <maven.compiler.proc>full</maven.compiler.proc>

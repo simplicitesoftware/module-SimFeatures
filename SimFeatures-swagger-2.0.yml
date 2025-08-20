@@ -1184,6 +1184,11 @@ paths:
         type: boolean
         required: false
       - in: query
+        name: ftStOrder
+        description: Search filter for Order
+        type: integer
+        required: false
+      - in: query
         name: ftStCode
         description: Search filter for Code
         type: string
@@ -3859,6 +3864,12 @@ paths:
         type: string
         required: false
       - in: query
+        name: row_diff
+        description: Search filter for Calculated difference between two sibling rows
+          of historic object
+        type: string
+        required: false
+      - in: query
         name: ftStCode
         description: Search filter for Code
         type: string
@@ -4786,6 +4797,9 @@ definitions:
         description: Unique technical row ID
         type: string
         maxLength: 11
+      ftStOrder:
+        description: Order
+        type: integer
   FtM2mChild:
     description: Child (many to many)
     type: object
@@ -5074,7 +5088,7 @@ definitions:
       ftAttrLongTextGridSource:
         description: Long Text Grid Source
         type: string
-        maxLength: 1500
+        maxLength: 4000
       ftAttrIntegerStars:
         description: Integer Stars
         type: integer
@@ -5103,7 +5117,7 @@ definitions:
       ftAttrLongText:
         description: Long Text
         type: string
-        maxLength: 1000
+        maxLength: 4000
       ftAttrIntegerMonetary:
         description: Integer Monetary
         type: integer
@@ -5156,7 +5170,7 @@ definitions:
       ftAttrHtml:
         description: Html
         type: string
-        maxLength: 1500
+        maxLength: 4000
       ftAttrEnumCheckboxHorizontal:
         description: Enum Checkbox Horizontal
         type: string
@@ -5172,7 +5186,7 @@ definitions:
       ftAttrLongTextEditor:
         description: Long Text Editor
         type: string
-        maxLength: 1500
+        maxLength: 4000
       ftAttrShortText:
         description: Short Text
         type: string
@@ -5188,11 +5202,11 @@ definitions:
       ftAttrLongTextGrid:
         description: Long Text Grid
         type: string
-        maxLength: 1500
+        maxLength: 4000
       ftAttrLongTextMarkdown:
         description: Long Text Markdown
         type: string
-        maxLength: 1500
+        maxLength: 4000
       ftAttrDecimalProgressBar:
         description: Decimal Progress Bar
         type: number
@@ -5207,7 +5221,7 @@ definitions:
       ftAttrNotepadUserActivities:
         description: Notepad (User Activities)
         type: string
-        maxLength: 10000
+        maxLength: 2147483647
       ftAttrDateTimeToYear:
         description: Date Time (To Year)
         type: string
@@ -5290,7 +5304,7 @@ definitions:
       ftAttrNotepad:
         description: Notepad
         type: string
-        maxLength: 100
+        maxLength: 2147483647
       ftAttrDateTime:
         description: Date Time
         type: string
@@ -5390,6 +5404,10 @@ definitions:
         description: Created by
         type: string
         maxLength: 100
+      row_diff:
+        description: Calculated difference between two sibling rows of historic object
+        type: string
+        maxLength: 2000000
       row_ref_id:
         description: Record row ID
         type: string
@@ -5458,7 +5476,7 @@ definitions:
       ftPubHtml:
         description: Html-&gt;Pdf Content
         type: string
-        maxLength: 1000
+        maxLength: 4000
       ftPubFile:
         description: Html-&gt;Pdf File
         type: object

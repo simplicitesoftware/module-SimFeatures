@@ -52,12 +52,12 @@ Object showcasing all the possible attributes
 | `ftAttrCode`                                                 | char(10)                                 | yes*     | yes       |          | -                                                                                |
 | `ftAttrShortText`                                            | char(255)                                |          | yes       |          | -                                                                                |
 | `ftAttrValidatedText`                                        | regexp(250)                              |          | yes       |          | -                                                                                |
-| `ftAttrLongText`                                             | text(1000)                               |          | yes       |          | -                                                                                |
-| `ftAttrLongTextEditor`                                       | text(1500)                               |          | yes       |          | -                                                                                |
-| `ftAttrLongTextMarkdown`                                     | text(1500)                               |          | yes       |          | -                                                                                |
-| `ftAttrLongTextGrid`                                         | text(1500)                               |          | yes       |          | -                                                                                |
-| `ftAttrLongTextGridSource`                                   | text(1500)                               |          |           |          | -                                                                                |
-| `ftAttrHtml`                                                 | html(1500)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongText`                                             | text(4000)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongTextEditor`                                       | text(4000)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongTextMarkdown`                                     | text(4000)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongTextGrid`                                         | text(4000)                               |          | yes       |          | -                                                                                |
+| `ftAttrLongTextGridSource`                                   | text(4000)                               |          |           |          | -                                                                                |
+| `ftAttrHtml`                                                 | html(4000)                               |          | yes       |          | -                                                                                |
 | `ftAttrInteger`                                              | int(5)                                   |          | yes       |          | -                                                                                |
 | `ftAttrIntegerMonetary`                                      | int(5)                                   |          | yes       |          | -                                                                                |
 | `ftAttrIntegerPercentage`                                    | int(3)                                   |          | yes       |          | -                                                                                |
@@ -90,11 +90,11 @@ Object showcasing all the possible attributes
 | `ftAttrEnumRadioVertical`                                    | enum(3) using `FTATTRENUMRADIOVERTICAL` list |          | yes       |          | -                                                                                |
 | `ftAttrEnumPillbox`                                          | enum(100) using `FTATTRENUMPILLBOX` list |          | yes       |          | -                                                                                |
 | `ftAttrEnumMulti`                                            | multi(100) using `FTATTRENUMMULTI` list  |          | yes       |          | -                                                                                |
-| `ftAttrEnumMultiCheckboxHorizontal`                          | multi(3) using `FTATTRENUMMULTICHECKBOXHORIZONTAL` list |          | yes       |          | -                                                                                |
+| `ftAttrEnumMultiCheckboxHorizontal`                          | multi(5) using `FTATTRENUMMULTICHECKBOXHORIZONTAL` list |          | yes       |          | -                                                                                |
 | `ftAttrEnumMultiCheckboxVertical`                            | enum(100) using `FTATTRENUMMULTICHECKBOXVERTICAL` list |          | yes       |          | -                                                                                |
-| `ftAttrEnumMultiRadioHorizontal`                             | multi(3) using `FTATTRENUMMULTIRADIOHORIZONTAL` list |          | yes       |          | -                                                                                |
+| `ftAttrEnumMultiRadioHorizontal`                             | multi(5) using `FTATTRENUMMULTIRADIOHORIZONTAL` list |          | yes       |          | -                                                                                |
 | `ftAttrEnumMultiRadioVertical`                               | enum(3) using `FTATTRENUMMULTIRADIOVERTICAL` list |          | yes       |          | -                                                                                |
-| `ftAttrEnumMultiPillbox`                                     | multi(3) using `FTATTRENUMMULTIPILLBOX` list |          | yes       |          | -                                                                                |
+| `ftAttrEnumMultiPillbox`                                     | multi(5) using `FTATTRENUMMULTIPILLBOX` list |          | yes       |          | -                                                                                |
 | `ftAttrBoolean`                                              | boolean                                  |          | yes       |          | -                                                                                |
 | `ftAttrBooleanCheckbox`                                      | boolean                                  |          | yes       |          | -                                                                                |
 | `ftAttrBooleanCombobox`                                      | boolean                                  |          | yes       |          | -                                                                                |
@@ -111,8 +111,8 @@ Object showcasing all the possible attributes
 | `ftAttrPhoneNumber`                                          | phone(100)                               |          | yes       |          | -                                                                                |
 | `ftAttrColor`                                                | color                                    |          | yes       |          | -                                                                                |
 | `ftAttrGeographicalCoordinates`                              | geocoords                                |          | yes       |          | -                                                                                |
-| `ftAttrNotepad`                                              | notepad(100)                             |          | yes       |          | -                                                                                |
-| `ftAttrNotepadUserActivities`                                | notepad(10000)                           |          | yes       |          | -                                                                                |
+| `ftAttrNotepad`                                              | notepad(2147483647)                      |          | yes       |          | -                                                                                |
+| `ftAttrNotepadUserActivities`                                | notepad(2147483647)                      |          | yes       |          | -                                                                                |
 
 ### Lists
 
@@ -262,8 +262,8 @@ Object showcasing all the possible attributes
 
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| `ftPubCode`                                                  | char(100)                                |          |           |          | -                                                                                |
-| `ftPubHtml`                                                  | text(1000)                               |          | yes       |          | -                                                                                |
+| `ftPubCode`                                                  | char(100)                                | *        |           |          | -                                                                                |
+| `ftPubHtml`                                                  | text(4000)                               |          | yes       |          | -                                                                                |
 | `ftPubFile`                                                  | document                                 |          | yes       |          | -                                                                                |
 
 `FtReflexiveMany` business object definition
@@ -336,6 +336,7 @@ Object showcasing all the possible attributes
 
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftStOrder`                                                  | int(11)                                  | yes      | yes       |          | -                                                                                |
 | `ftStCode`                                                   | char(100)                                | yes*     |           |          | -                                                                                |
 | `ftStState`                                                  | enum(10) using `FT_ST_STATE` list        | yes      | yes       |          | -                                                                                |
 
