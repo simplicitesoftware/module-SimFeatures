@@ -924,6 +924,9 @@ components:
           description: Description
           type: string
           maxLength: 5000
+        ftLstOrder:
+          description: Order
+          type: integer
         ftLstType:
           description: Type
           type: string
@@ -3054,6 +3057,12 @@ paths:
         in: query
         name: ftLstCode
         description: Search filter for Code
+        required: false
+      - schema:
+          type: integer
+        in: query
+        name: ftLstOrder
+        description: Search filter for Order
         required: false
       - schema:
           type: string

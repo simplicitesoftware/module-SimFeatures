@@ -1,9 +1,5 @@
 {
- "obo_name": {
-  "value": "FtStates",
-  "oldvalue": "zFtStates",
-  "oldvalue1": "FtStates"
- },
+ "obo_name": "FtStates",
  "obo_dbtable": "ft_states",
  "obo_role": "OBJ",
  "obo_class": null,

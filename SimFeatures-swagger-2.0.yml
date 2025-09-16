@@ -1755,6 +1755,11 @@ paths:
         type: string
         required: false
       - in: query
+        name: ftLstOrder
+        description: Search filter for Order
+        type: integer
+        required: false
+      - in: query
         name: ftLstType
         description: Search filter for Type
         type: string
@@ -5670,6 +5675,9 @@ definitions:
         description: Description
         type: string
         maxLength: 5000
+      ftLstOrder:
+        description: Order
+        type: integer
       ftLstType:
         description: Type
         type: string
