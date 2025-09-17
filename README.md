@@ -316,6 +316,33 @@ Object showcasing all the possible attributes
 | `ftRxlRxm2` link to **`FtReflexiveMany`**                    | id                                       | yes*     | yes       |          | -                                                                                |
 | _Ref. `ftRxlRxm2.ftRxmCode`_                                 | _char(100)_                              |          |           |          | -                                                                                |
 
+`FtSearch` business object definition
+-------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftSchCode`                                                  | char(20)                                 | yes*     | yes       |          | -                                                                                |
+| `ftSchDate`                                                  | date                                     |          | yes       |          | -                                                                                |
+| `ftSchCoordinates`                                           | geocoords                                |          | yes       |          | -                                                                                |
+| `ftSchSrfId` link to **`FtSearchReference`**                 | id                                       |          | yes       |          | -                                                                                |
+| _Ref. `ftSchSrfId.ftSrfCode`_                                | _char(100)_                              |          |           |          | -                                                                                |
+| `ftSchFormField`                                             | char(100)                                |          | yes       |          | -                                                                                |
+
+`FtSearchReference` business object definition
+----------------------------------------------
+
+
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftSrfCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+
 `FtSelectObject` business object definition
 -------------------------------------------
 

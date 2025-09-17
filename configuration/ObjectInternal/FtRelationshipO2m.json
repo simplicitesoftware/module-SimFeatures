@@ -35,7 +35,7 @@
  "obo_refcount": false,
  "obo_tree": false,
  "obo_viewmode": "T",
- "obo_historic": null,
+ "obo_historic": ["3"],
  "obo_printable": true,
  "obo_followlink": true,
  "obo_mergeable": false,

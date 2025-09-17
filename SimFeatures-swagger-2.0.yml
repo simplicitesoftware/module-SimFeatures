@@ -167,6 +167,168 @@ paths:
       - FtRelationshipO2m
       consumes:
       - application/json
+  /rest/FtSearchReference/{row_id}:
+    post:
+      summary: Create a new FtSearchReference business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearchreference-create
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtSearchReference'
+          description: Success in creating a new business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtSearchReference'
+        in: body
+        name: body
+      tags:
+      - FtSearchReference
+      consumes:
+      - application/json
+    get:
+      summary: Get a FtSearchReference business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearchreference-get
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtSearchReference'
+          description: Success in getting a single business object record
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - in: query
+        name: _inline_documents
+        description: Inline documents?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_objects
+        description: Inline objects?
+        type: boolean
+        required: false
+      tags:
+      - FtSearchReference
+    delete:
+      summary: Delete a FtSearchReference business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearchreference-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      tags:
+      - FtSearchReference
+    put:
+      summary: Update a FtSearchReference business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearchreference-update
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtSearchReference'
+          description: Success in updating a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtSearchReference'
+        in: body
+        name: body
+      tags:
+      - FtSearchReference
+      consumes:
+      - application/json
   /rest/FtM2m/{row_id}:
     post:
       summary: Create a new FtM2m business object record
@@ -1826,6 +1988,57 @@ paths:
         required: false
       tags:
       - FtRelationshipM2m
+  /rest/FtSearchReference:
+    get:
+      summary: Search FtSearchReference business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearchreference-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtSearchReference'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: _indexsearch
+        description: Index search query
+        type: string
+        required: false
+      - in: query
+        name: ftSrfCode
+        description: Search filter for Code
+        type: string
+        required: false
+      tags:
+      - FtSearchReference
   /rest/FtM2m:
     get:
       summary: Search FtM2m business object records or get contextualized metadata
@@ -4749,6 +4962,243 @@ paths:
       - FtO2mChild
       consumes:
       - application/json
+  /rest/FtSearch/{row_id}:
+    post:
+      summary: Create a new FtSearch business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearch-create
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtSearch'
+          description: Success in creating a new business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtSearch'
+        in: body
+        name: body
+      tags:
+      - FtSearch
+      consumes:
+      - application/json
+    get:
+      summary: Get a FtSearch business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearch-get
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtSearch'
+          description: Success in getting a single business object record
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - in: query
+        name: _inline_documents
+        description: Inline documents?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_objects
+        description: Inline objects?
+        type: boolean
+        required: false
+      tags:
+      - FtSearch
+    delete:
+      summary: Delete a FtSearch business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearch-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      tags:
+      - FtSearch
+    put:
+      summary: Update a FtSearch business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearch-update
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtSearch'
+          description: Success in updating a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtSearch'
+        in: body
+        name: body
+      tags:
+      - FtSearch
+      consumes:
+      - application/json
+  /rest/FtSearch:
+    get:
+      summary: Search FtSearch business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftsearch-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtSearch'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: _indexsearch
+        description: Index search query
+        type: string
+        required: false
+      - in: query
+        name: ftSchCode
+        description: Search filter for Code
+        type: string
+        required: false
+      - in: query
+        name: ftSchDate
+        description: Search filter for Date
+        type: string
+        required: false
+      - in: query
+        name: ftSchCoordinates
+        description: Search filter for Coordinates
+        type: string
+        required: false
+      - in: query
+        name: ftSchSrfId
+        description: Search filter for Reference
+        type: string
+        required: false
+      - in: query
+        name: ftSchSrfId__ftSrfCode
+        description: Search filter for Reference Code
+        type: string
+        required: false
+      - in: query
+        name: ftSchFormField
+        description: Search filter for Form Field
+        type: string
+        required: false
+      tags:
+      - FtSearch
 securityDefinitions:
   basicAuth:
     type: basic
@@ -4757,28 +5207,6 @@ securityDefinitions:
     name: Authorization
     type: apiKey
 definitions:
-  Error404:
-    description: Not found
-    type: object
-    properties:
-      error:
-        description: Error message
-        type: string
-      status:
-        description: Error status
-        type: integer
-        enum:
-        - 404
-  ArrayOfFtStates:
-    description: List of States
-    type: array
-    items:
-      $ref: '#/definitions/FtStates'
-  ArrayOfFtM2m:
-    description: List of N/N
-    type: array
-    items:
-      $ref: '#/definitions/FtM2m'
   FtStates:
     description: States
     type: object
@@ -4805,6 +5233,214 @@ definitions:
       ftStOrder:
         description: Order
         type: integer
+  ArrayOfFtPublications:
+    description: List of Publications
+    type: array
+    items:
+      $ref: '#/definitions/FtPublications'
+  PlaceData:
+    description: Place data
+    type: object
+    properties:
+      coord:
+        description: Geographical coordinates
+        type: string
+      address:
+        description: Address
+        type: string
+      row_id:
+        description: Row ID
+        type: string
+      label1:
+        description: 'Label #1'
+        type: string
+      label2:
+        description: 'Label #2'
+        type: string
+      label3:
+        description: 'Label #3'
+        type: string
+  ArrayOfFtM2mChild:
+    description: List of Child (many to many)
+    type: array
+    items:
+      $ref: '#/definitions/FtM2mChild'
+  PlaceMapData:
+    description: Places map data
+    type: object
+    properties:
+      places:
+        description: Places
+        type: array
+        items:
+          $ref: '#/definitions/PlaceData'
+      name:
+        description: Name
+        type: string
+  ArrayOfFtReflexiveMany:
+    description: List of Reflexive item (many)
+    type: array
+    items:
+      $ref: '#/definitions/FtReflexiveMany'
+  ArrayOfFtActions:
+    description: List of Actions
+    type: array
+    items:
+      $ref: '#/definitions/FtActions'
+  FtActions:
+    description: Action
+    type: object
+    properties:
+      ftActImage:
+        description: Ft act image
+        type: object
+      ftActCode:
+        description: Code
+        type: string
+        maxLength: 100
+      ftActDate:
+        description: Ft act date
+        type: string
+        maxLength: 10
+        example: yyyy-MM-dd
+      ftActState:
+        description: Ft act state
+        type: string
+        maxLength: 1
+        enum:
+        - A
+        - B
+      ftActDocument:
+        description: Ft act document
+        type: object
+      row_id:
+        description: Unique technical row ID
+        type: string
+        maxLength: 11
+  ArrayOfFtListItem:
+    description: List of List Item
+    type: array
+    items:
+      $ref: '#/definitions/FtListItem'
+  Error500:
+    description: Internal server error
+    type: object
+    properties:
+      error:
+        description: Error message
+        type: string
+      status:
+        description: Error status
+        type: integer
+        enum:
+        - 500
+  ArrayOfFtRxmLink:
+    description: List of Associated items
+    type: array
+    items:
+      $ref: '#/definitions/FtRxmLink'
+  FtNotification:
+    description: Notification Tester
+    type: object
+    properties:
+      row_id:
+        description: Unique technical row ID
+        type: string
+        maxLength: 11
+      ftNtfCode:
+        description: Code
+        type: string
+        maxLength: 100
+  ArrayOfFtO2mChild:
+    description: List of Child object
+    type: array
+    items:
+      $ref: '#/definitions/FtO2mChild'
+  FtSearchReference:
+    description: Reference
+    type: object
+    properties:
+      ftSrfCode:
+        description: Code
+        type: string
+        maxLength: 100
+      row_id:
+        description: Unique technical row ID
+        type: string
+        maxLength: 11
+  ActionResult:
+    description: Action result
+    type: object
+    properties:
+      result:
+        description: Action result
+        type: string
+  ArrayOfFtTaggedObject:
+    description: List of Tagged object
+    type: array
+    items:
+      $ref: '#/definitions/FtTaggedObject'
+  FtTgoTag:
+    description: FtTgoTag
+    type: object
+    properties:
+      ftTgotagTagId__ftTagName:
+        description: Ft tgotag tag id Name
+        type: string
+        maxLength: 50
+      ftTgotagTgoId:
+        description: Ft tgotag tgo id
+        type: string
+        maxLength: 11
+      ftTgotagTagId:
+        description: Ft tgotag tag id
+        type: string
+        maxLength: 11
+      ftTgotagTgoId__ftTgoCode:
+        description: Ft tgotag tgo id Code
+        type: string
+        maxLength: 100
+      row_id:
+        description: Unique technical row ID
+        type: string
+        maxLength: 11
+  ArrayOfFtRelationshipM2m:
+    description: List of Relationship (many to many)
+    type: array
+    items:
+      $ref: '#/definitions/FtRelationshipM2m'
+  ArrayOfFtRelationshipO2m:
+    description: List of Relationship (one to many)
+    type: array
+    items:
+      $ref: '#/definitions/FtRelationshipO2m'
+  ArrayOfFtSelectObject:
+    description: List of Select object
+    type: array
+    items:
+      $ref: '#/definitions/FtSelectObject'
+  Error404:
+    description: Not found
+    type: object
+    properties:
+      error:
+        description: Error message
+        type: string
+      status:
+        description: Error status
+        type: integer
+        enum:
+        - 404
+  ArrayOfFtStates:
+    description: List of States
+    type: array
+    items:
+      $ref: '#/definitions/FtStates'
+  ArrayOfFtM2m:
+    description: List of N/N
+    type: array
+    items:
+      $ref: '#/definitions/FtM2m'
   FtM2mChild:
     description: Child (many to many)
     type: object
@@ -4851,40 +5487,13 @@ definitions:
         description: Ft M2mm 2mc M2mc id Code
         type: string
         maxLength: 100
-  ArrayOfFtPublications:
-    description: List of Publications
+  ArrayOfFtSearch:
+    description: List of Search
     type: array
     items:
-      $ref: '#/definitions/FtPublications'
-  PlaceData:
-    description: Place data
-    type: object
-    properties:
-      coord:
-        description: Geographical coordinates
-        type: string
-      address:
-        description: Address
-        type: string
-      row_id:
-        description: Row ID
-        type: string
-      label1:
-        description: 'Label #1'
-        type: string
-      label2:
-        description: 'Label #2'
-        type: string
-      label3:
-        description: 'Label #3'
-        type: string
-  ArrayOfFtM2mChild:
-    description: List of Child (many to many)
-    type: array
-    items:
-      $ref: '#/definitions/FtM2mChild'
+      $ref: '#/definitions/FtSearch'
   FtO2mChild:
-    description: FtO2mChild
+    description: Child object
     type: object
     properties:
       ftO2mcO2mId:
@@ -4907,28 +5516,6 @@ definitions:
         description: Father Description
         type: string
         maxLength: 100
-  PlaceMapData:
-    description: Places map data
-    type: object
-    properties:
-      places:
-        description: Places
-        type: array
-        items:
-          $ref: '#/definitions/PlaceData'
-      name:
-        description: Name
-        type: string
-  ArrayOfFtReflexiveMany:
-    description: List of Reflexive item (many)
-    type: array
-    items:
-      $ref: '#/definitions/FtReflexiveMany'
-  ArrayOfFtActions:
-    description: List of Actions
-    type: array
-    items:
-      $ref: '#/definitions/FtActions'
   FtRxmLink:
     description: Associated items
     type: object
@@ -5334,46 +5921,11 @@ definitions:
       ftAttrIntegerSlider:
         description: Integer Slider
         type: integer
-  FtActions:
-    description: Action
-    type: object
-    properties:
-      ftActImage:
-        description: Ft act image
-        type: object
-      ftActCode:
-        description: Code
-        type: string
-        maxLength: 100
-      ftActDate:
-        description: Ft act date
-        type: string
-        maxLength: 10
-        example: yyyy-MM-dd
-      ftActState:
-        description: Ft act state
-        type: string
-        maxLength: 1
-        enum:
-        - A
-        - B
-      ftActDocument:
-        description: Ft act document
-        type: object
-      row_id:
-        description: Unique technical row ID
-        type: string
-        maxLength: 11
   ArrayOfFtTgoTag:
     description: List of FtTgoTag
     type: array
     items:
       $ref: '#/definitions/FtTgoTag'
-  ArrayOfFtListItem:
-    description: List of List Item
-    type: array
-    items:
-      $ref: '#/definitions/FtListItem'
   FtStatesHistoric:
     description: Ft states historic
     type: object
@@ -5458,18 +6010,6 @@ definitions:
         type: integer
         enum:
         - 401
-  Error500:
-    description: Internal server error
-    type: object
-    properties:
-      error:
-        description: Error message
-        type: string
-      status:
-        description: Error status
-        type: integer
-        enum:
-        - 500
   FtPublications:
     description: Publication
     type: object
@@ -5501,11 +6041,6 @@ definitions:
         type: integer
         enum:
         - 403
-  ArrayOfFtRxmLink:
-    description: List of Associated items
-    type: array
-    items:
-      $ref: '#/definitions/FtRxmLink'
   ArrayOfFtCustomUser:
     description: List of Custom Users
     type: array
@@ -5544,35 +6079,50 @@ definitions:
         description: Code
         type: string
         maxLength: 100
-  FtNotification:
-    description: Notification Tester
+  ArrayOfFtSearchReference:
+    description: List of Reference
+    type: array
+    items:
+      $ref: '#/definitions/FtSearchReference'
+  FtSearch:
+    description: Search
     type: object
     properties:
+      ftSchDate:
+        description: Date
+        type: string
+        maxLength: 10
+        example: yyyy-MM-dd
+      ftSchFormField:
+        description: Form Field
+        type: string
+        maxLength: 100
+      ftSchSrfId:
+        description: Reference
+        type: string
+        maxLength: 11
+      ftSchSrfId__ftSrfCode:
+        description: Reference Code
+        type: string
+        maxLength: 100
+      ftSchCoordinates:
+        description: Coordinates
+        type: string
+        maxLength: 50
+        example: latitude;longitude
       row_id:
         description: Unique technical row ID
         type: string
         maxLength: 11
-      ftNtfCode:
+      ftSchCode:
         description: Code
         type: string
-        maxLength: 100
-  ArrayOfFtO2mChild:
-    description: List of FtO2mChild
-    type: array
-    items:
-      $ref: '#/definitions/FtO2mChild'
+        maxLength: 20
   ArrayOfFtTag:
     description: List of Tags
     type: array
     items:
       $ref: '#/definitions/FtTag'
-  ActionResult:
-    description: Action result
-    type: object
-    properties:
-      result:
-        description: Action result
-        type: string
   TreeviewData:
     type: object
     properties:
@@ -5595,35 +6145,6 @@ definitions:
         description: Field 2
         type: string
         maxLength: 255
-  ArrayOfFtTaggedObject:
-    description: List of Tagged object
-    type: array
-    items:
-      $ref: '#/definitions/FtTaggedObject'
-  FtTgoTag:
-    description: FtTgoTag
-    type: object
-    properties:
-      ftTgotagTagId__ftTagName:
-        description: Ft tgotag tag id Name
-        type: string
-        maxLength: 50
-      ftTgotagTgoId:
-        description: Ft tgotag tgo id
-        type: string
-        maxLength: 11
-      ftTgotagTagId:
-        description: Ft tgotag tag id
-        type: string
-        maxLength: 11
-      ftTgotagTgoId__ftTgoCode:
-        description: Ft tgotag tgo id Code
-        type: string
-        maxLength: 100
-      row_id:
-        description: Unique technical row ID
-        type: string
-        maxLength: 11
   ArrayOfFtNotification:
     description: List of Notification Tester
     type: array
@@ -5641,11 +6162,6 @@ definitions:
         description: Unique technical row ID
         type: string
         maxLength: 11
-  ArrayOfFtRelationshipM2m:
-    description: List of Relationship (many to many)
-    type: array
-    items:
-      $ref: '#/definitions/FtRelationshipM2m'
   FtRelationshipO2m:
     description: Relationship (one to many)
     type: object
@@ -5662,11 +6178,6 @@ definitions:
         description: Unique technical row ID
         type: string
         maxLength: 11
-  ArrayOfFtRelationshipO2m:
-    description: List of Relationship (one to many)
-    type: array
-    items:
-      $ref: '#/definitions/FtRelationshipO2m'
   FtListItem:
     description: Lists
     type: object
@@ -5697,11 +6208,6 @@ definitions:
         description: Unique technical row ID
         type: string
         maxLength: 11
-  ArrayOfFtSelectObject:
-    description: List of Select object
-    type: array
-    items:
-      $ref: '#/definitions/FtSelectObject'
 swagger: '2.0'
 info:
   license:
@@ -5730,7 +6236,7 @@ tags:
 - name: FtNotification
   description: Notification Tester
 - name: FtO2mChild
-  description: FtO2mChild
+  description: Child object
 - name: FtPublications
   description: Publication
 - name: FtReflexiveMany
@@ -5741,6 +6247,10 @@ tags:
   description: Relationship (one to many)
 - name: FtRxmLink
   description: Associated items
+- name: FtSearch
+  description: Search
+- name: FtSearchReference
+  description: Reference
 - name: FtSelectObject
   description: Select object
 - name: FtStates
