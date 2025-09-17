@@ -1,0 +1,8 @@
+{
+ "sys_code": "FEATURE_FLAGS",
+ "sys_value": "{\n  \"images_in_excel_exports\": true\n}",
+ "sys_type": "PRV",
+ "sys_event": false,
+ "sys_desc": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}
