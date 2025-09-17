@@ -79,6 +79,6 @@
  "obo_search_column": "1",
  "obo_search_dialog": true,
  "obo_search_docked": false,
- "obo_tpl_search_id__tpl_name": null,
+ "obo_tpl_search_id__tpl_name": "FtSearch-search",
  "obo_tpl_search_pos": null
 }
