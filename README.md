@@ -69,7 +69,7 @@ Object showcasing all the possible attributes
 | `ftAttrDecimalMonetary`                                      | float(10, 2)                             |          | yes       |          | -                                                                                |
 | `ftAttrDecimalPercentage`                                    | float(6, 4)                              |          | yes       |          | -                                                                                |
 | `ftAttrDecimalEuro`                                          | float(10, 2)                             |          | yes       |          | -                                                                                |
-| `ftAttrDecimalProgressBar`                                   | float(100, 4)                            |          | yes       |          | -                                                                                |
+| `ftAttrDecimalProgressBar`                                   | float(15, 4)                             |          | yes       |          | -                                                                                |
 | `ftAttrDecimalCalculator`                                    | float(10, 2)                             |          | yes       |          | -                                                                                |
 | `ftAttrDate`                                                 | date                                     |          | yes       |          | -                                                                                |
 | `ftAttrDateToMonth`                                          | date                                     |          | yes       |          | -                                                                                |
@@ -113,6 +113,9 @@ Object showcasing all the possible attributes
 | `ftAttrGeographicalCoordinates`                              | geocoords                                |          | yes       |          | -                                                                                |
 | `ftAttrNotepad`                                              | notepad(2147483647)                      |          | yes       |          | -                                                                                |
 | `ftAttrNotepadUserActivities`                                | notepad(2147483647)                      |          | yes       |          | -                                                                                |
+| `ftAttrDateStart`                                            | date                                     |          | yes       |          | -                                                                                |
+| `ftAttrDateEnd`                                              | date                                     |          | yes       |          | -                                                                                |
+| `ftAttrHtmlReadOnly`                                         | html(4000)                               |          |           |          | -                                                                                |
 
 ### Lists
 

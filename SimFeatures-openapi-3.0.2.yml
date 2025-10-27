@@ -608,6 +608,11 @@ components:
         ftAttrDocumentMultiList:
           description: Document (Multi, List)
           type: object
+        ftAttrDateStart:
+          description: Date start
+          type: string
+          maxLength: 10
+          example: yyyy-MM-dd
         ftAttrNotepadUserActivities:
           description: Notepad (User Activities)
           type: string
@@ -653,6 +658,10 @@ components:
         ftAttrDocumentMultiBox:
           description: Document (Multi, Box)
           type: object
+        ftAttrHtmlReadOnly:
+          description: Html read only
+          type: string
+          maxLength: 4000
         ftAttrTime:
           description: Time
           type: string
@@ -716,6 +725,11 @@ components:
             - A
             - B
             - C
+        ftAttrDateEnd:
+          description: Date end
+          type: string
+          maxLength: 10
+          example: yyyy-MM-dd
         ftAttrIntegerSlider:
           description: Integer Slider
           type: integer
@@ -6596,6 +6610,24 @@ paths:
         in: query
         name: ftAttrNotepadUserActivities
         description: Search filter for Notepad (User Activities)
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftAttrDateStart
+        description: Search filter for Date start
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftAttrDateEnd
+        description: Search filter for Date end
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftAttrHtmlReadOnly
+        description: Search filter for Html read only
         required: false
       tags:
       - FtAttributes

@@ -7,6 +7,6 @@
   "item": {"flt_code": "FTATTRVALIDATEDTEXT"}
  },
  "tsl_lang": "FRA",
- "tsl_value": "FTATTRVALIDATEDTEXT",
+ "tsl_value": "a-z, A-Z, 0-9, _",
  "row_module_id__mdl_name": "SimFeatures"
 }

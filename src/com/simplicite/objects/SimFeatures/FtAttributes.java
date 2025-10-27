@@ -14,4 +14,11 @@ public class FtAttributes extends ObjectDB {
 	public void initUpdate() {
 		setFieldValue("ftAttrLongTextGridSource", getFieldValue("ftAttrLongTextGrid"));
 	}
+	
+	@Override
+	public String preSave() {
+		// Preview HTML field
+		setFieldValue("ftAttrHtmlReadOnly", getFieldValue("ftAttrHtml"));
+		return super.preSave();
+	}
 }
