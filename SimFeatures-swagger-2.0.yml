@@ -4067,6 +4067,11 @@ paths:
         type: string
         required: false
       - in: query
+        name: row_ref_id__ftStCode
+        description: Search filter for Reference Code
+        type: string
+        required: false
+      - in: query
         name: row_idx
         description: Search filter for History record index
         type: integer
@@ -5998,6 +6003,10 @@ definitions:
         description: Record row ID
         type: string
         maxLength: 11
+      row_ref_id__ftStCode:
+        description: Reference Code
+        type: string
+        maxLength: 100
   ArrayOfFtStatesHistoric:
     description: List of Ft states historic
     type: array

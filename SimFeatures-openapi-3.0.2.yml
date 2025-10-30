@@ -782,6 +782,10 @@ components:
           description: Record row ID
           type: string
           maxLength: 11
+        row_ref_id__ftStCode:
+          description: Reference Code
+          type: string
+          maxLength: 100
     ArrayOfFtStatesHistoric:
       description: List of Ft states historic
       type: array
@@ -5892,6 +5896,12 @@ paths:
         in: query
         name: row_ref_id
         description: Search filter for Record row ID
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: row_ref_id__ftStCode
+        description: Search filter for Reference Code
         required: false
       - schema:
           type: integer
