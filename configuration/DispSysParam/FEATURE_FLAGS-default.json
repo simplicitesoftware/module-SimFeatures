@@ -1,0 +1,6 @@
+{
+ "dsp_disp_id__dis_code": "default",
+ "dsp_param_id__sys_code": "FEATURE_FLAGS",
+ "dsp_value": "{\n  \"images_in_excel_exports\": true,\n  \"history_diff_mode\": true,\n  \"truncate_too_long_text\": false\n}",
+ "row_module_id__mdl_name": "SimFeatures"
+}
