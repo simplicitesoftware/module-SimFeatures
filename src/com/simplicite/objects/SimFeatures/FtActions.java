@@ -1,6 +1,12 @@
 package com.simplicite.objects.SimFeatures;
 
+import java.util.*;
+
 import com.simplicite.util.*;
+import com.simplicite.util.exceptions.*;
+import com.simplicite.util.tools.*;
+import com.simplicite.util.JobQueue;
+import com.simplicite.util.engine.Platform;
 import java.io.File;
 
 /**

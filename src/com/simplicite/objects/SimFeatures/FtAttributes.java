@@ -1,6 +1,8 @@
 package com.simplicite.objects.SimFeatures;
 
+import java.util.*;
 import com.simplicite.util.*;
+import com.simplicite.util.tools.*;
 
 /**
  * Business object FtAttributes

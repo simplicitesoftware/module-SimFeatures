@@ -4,6 +4,6 @@
  "mdl_version": "0.1",
  "mdl_type": "X",
  "mdl_icon": null,
- "mdl_url": "{\n    \"origin\": {\"uri\": \"https://github.com/simplicitesoftware/module-SimFeatures.git\"},\n    \"type\": \"git\",\n    \"branch\": \"7.0\"\n}",
+ "mdl_url": "{\n    \"maven\": {\n        \"eslint\": true,\n        \"stylelint\": true,\n        \"jshint\": true,\n        \"checkstyle\": true,\n        \"repositoryUrl\": \"https://platform.simplicite.io/7.0/maven\"\n    },\n    \"origin\": {\"uri\": \"https://github.com/simplicitesoftware/module-SimFeatures.git\"},\n    \"type\": \"git\",\n    \"branch\": \"7.0\"\n}",
  "mdl_comment": null
 }

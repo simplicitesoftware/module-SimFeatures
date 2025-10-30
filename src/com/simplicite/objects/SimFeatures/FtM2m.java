@@ -1,6 +1,10 @@
 package com.simplicite.objects.SimFeatures;
 
+import java.util.*;
+
 import com.simplicite.util.*;
+import com.simplicite.util.exceptions.*;
+import com.simplicite.util.tools.*;
 
 /**
  * Business object FtM2m

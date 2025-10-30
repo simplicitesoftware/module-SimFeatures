@@ -24,7 +24,7 @@
  "fld_minsize": null,
  "fld_precision": null,
  "fld_fromdate_id__fld_name": null,
- "fld_dfault": null,
+ "fld_dfault": "48.8753213,2.3455624",
  "fld_indexable": false,
  "fld_autocomp": "0",
  "fld_groupby": false,
