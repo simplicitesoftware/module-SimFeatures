@@ -560,7 +560,10 @@ components:
         ftAttrHtml:
           description: Html
           type: string
-          maxLength: 4000
+          maxLength: 100000
+        ftAttrSignaturePad:
+          description: Signature pad
+          type: object
         ftAttrEnumCheckboxHorizontal:
           description: Enum Checkbox Horizontal
           type: string
@@ -661,7 +664,7 @@ components:
         ftAttrHtmlReadOnly:
           description: Html read only
           type: string
-          maxLength: 4000
+          maxLength: 100000
         ftAttrTime:
           description: Time
           type: string
@@ -888,6 +891,10 @@ components:
       description: Tagged object
       type: object
       properties:
+        ftTgoStatus:
+          description: Tgo status
+          type: string
+          maxLength: 10
         row_id:
           description: Unique technical row ID
           type: string
@@ -950,6 +957,11 @@ components:
       description: Select object
       type: object
       properties:
+        ftSlcFieldDt:
+          description: Slc field dt
+          type: string
+          maxLength: 10
+          example: yyyy-MM-dd
         ftSlcField1:
           description: Field 1
           type: string
@@ -1952,6 +1964,12 @@ paths:
         in: query
         name: ftSlcField2
         description: Search filter for Field 2
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftSlcFieldDt
+        description: Search filter for Slc field dt
         required: false
       tags:
       - FtSelectObject
@@ -5258,6 +5276,12 @@ paths:
         name: ftTgoCode
         description: Search filter for Code
         required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTgoStatus
+        description: Search filter for Tgo status
+        required: false
       tags:
       - FtTaggedObject
   /rest/FtTag/{row_id}:
@@ -6638,6 +6662,12 @@ paths:
         in: query
         name: ftAttrHtmlReadOnly
         description: Search filter for Html read only
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftAttrSignaturePad
+        description: Search filter for Signature pad
         required: false
       tags:
       - FtAttributes

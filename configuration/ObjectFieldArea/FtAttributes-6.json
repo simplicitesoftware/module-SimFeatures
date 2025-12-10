@@ -2,7 +2,7 @@
  "ofa_name": "FtAttributes-6",
  "ofa_position": 6,
  "ofa_title": true,
- "ofa_ui": "<div>\n  <div class=\"row\">\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftAttrDocument\"><\/div>\n      <div class=\"field\" data-field=\"ftAttrDocumentName\"><\/div>\n    <\/div>\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftAttrDocumentMultiBox\"><\/div>\n      <div class=\"field\" data-field=\"ftAttrDocumentMultiList\"><\/div>\n    <\/div>\n  <\/div>\n  <div class=\"field\" data-field=\"ftAttrExternalFile\"><\/div>\n  <div class=\"field\" data-field=\"ftAttrImage\"><\/div>\n<\/div>",
+ "ofa_ui": "<div>\n  <div class=\"row\">\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftAttrDocument\"><\/div>\n      <div class=\"field\" data-field=\"ftAttrDocumentName\"><\/div>\n    <\/div>\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftAttrDocumentMultiBox\"><\/div>\n      <div class=\"field\" data-field=\"ftAttrDocumentMultiList\"><\/div>\n    <\/div>\n  <\/div>\n  <div class=\"field\" data-field=\"ftAttrExternalFile\"><\/div>\n  <div class=\"row\">\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftAttrImage\"><\/div>\n    <\/div>\n    <div class=\"col-sm-6\">\n      <div class=\"field\" data-field=\"ftAttrSignaturePad\"><\/div>\n    <\/div>\n  <\/div>\n<\/div>",
  "ofa_icon": "attach",
  "row_module_id__mdl_name": "SimFeatures"
 }

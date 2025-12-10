@@ -11,7 +11,7 @@
  "obf_filters": null,
  "obf_visible": true,
  "obf_ref_export": true,
- "obf_copy": false,
+ "obf_copy": true,
  "obf_associate": null,
  "obf_inline": false,
  "obf_rendering": "C",

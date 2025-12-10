@@ -12,7 +12,7 @@
  "obf_card": "0,n",
  "obf_visible": true,
  "obf_ref_export": true,
- "obf_copy": false,
+ "obf_copy": true,
  "obf_ref_order": 20,
  "obf_fld_visible": null,
  "obf_fld_required": null,

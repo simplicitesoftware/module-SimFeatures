@@ -768,6 +768,11 @@ paths:
         description: Search filter for Field 2
         type: string
         required: false
+      - in: query
+        name: ftSlcFieldDt
+        description: Search filter for Slc field dt
+        type: string
+        required: false
       tags:
       - FtSelectObject
   /rest/FtActions/{row_id}:
@@ -3534,6 +3539,11 @@ paths:
         description: Search filter for Code
         type: string
         required: false
+      - in: query
+        name: ftTgoStatus
+        description: Search filter for Tgo status
+        type: string
+        required: false
       tags:
       - FtTaggedObject
   /rest/FtTag/{row_id}:
@@ -4694,6 +4704,11 @@ paths:
         description: Search filter for Html read only
         type: string
         required: false
+      - in: query
+        name: ftAttrSignaturePad
+        description: Search filter for Signature pad
+        type: string
+        required: false
       tags:
       - FtAttributes
   /rest/FtPublications:
@@ -5782,7 +5797,10 @@ definitions:
       ftAttrHtml:
         description: Html
         type: string
-        maxLength: 4000
+        maxLength: 100000
+      ftAttrSignaturePad:
+        description: Signature pad
+        type: object
       ftAttrEnumCheckboxHorizontal:
         description: Enum Checkbox Horizontal
         type: string
@@ -5883,7 +5901,7 @@ definitions:
       ftAttrHtmlReadOnly:
         description: Html read only
         type: string
-        maxLength: 4000
+        maxLength: 100000
       ftAttrTime:
         description: Time
         type: string
@@ -6109,6 +6127,10 @@ definitions:
     description: Tagged object
     type: object
     properties:
+      ftTgoStatus:
+        description: Tgo status
+        type: string
+        maxLength: 10
       row_id:
         description: Unique technical row ID
         type: string
@@ -6171,6 +6193,11 @@ definitions:
     description: Select object
     type: object
     properties:
+      ftSlcFieldDt:
+        description: Slc field dt
+        type: string
+        maxLength: 10
+        example: yyyy-MM-dd
       ftSlcField1:
         description: Field 1
         type: string

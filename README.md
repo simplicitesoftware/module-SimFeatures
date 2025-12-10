@@ -57,7 +57,7 @@ Object showcasing all the possible attributes
 | `ftAttrLongTextMarkdown`                                     | text(4000)                               |          | yes       |          | -                                                                                |
 | `ftAttrLongTextGrid`                                         | text(4000)                               |          | yes       |          | -                                                                                |
 | `ftAttrLongTextGridSource`                                   | text(4000)                               |          |           |          | -                                                                                |
-| `ftAttrHtml`                                                 | html(4000)                               |          | yes       |          | -                                                                                |
+| `ftAttrHtml`                                                 | html(100000)                             |          | yes       |          | -                                                                                |
 | `ftAttrInteger`                                              | int(5)                                   |          | yes       |          | -                                                                                |
 | `ftAttrIntegerMonetary`                                      | int(5)                                   |          | yes       |          | -                                                                                |
 | `ftAttrIntegerPercentage`                                    | int(3)                                   |          | yes       |          | -                                                                                |
@@ -115,7 +115,8 @@ Object showcasing all the possible attributes
 | `ftAttrNotepadUserActivities`                                | notepad(2147483647)                      |          | yes       |          | -                                                                                |
 | `ftAttrDateStart`                                            | date                                     |          | yes       |          | -                                                                                |
 | `ftAttrDateEnd`                                              | date                                     |          | yes       |          | -                                                                                |
-| `ftAttrHtmlReadOnly`                                         | html(4000)                               |          |           |          | -                                                                                |
+| `ftAttrHtmlReadOnly`                                         | html(100000)                             |          |           |          | -                                                                                |
+| `ftAttrSignaturePad`                                         | image                                    |          | yes       |          | -                                                                                |
 
 ### Lists
 
@@ -357,6 +358,7 @@ Object showcasing all the possible attributes
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftSlcField1`                                                | char(255)                                | yes      | yes       |          | -                                                                                |
 | `ftSlcField2`                                                | char(255)                                |          | yes       |          | -                                                                                |
+| `ftSlcFieldDt`                                               | date                                     |          | yes       |          | -                                                                                |
 
 `FtStates` business object definition
 -------------------------------------
@@ -429,6 +431,7 @@ Object showcasing all the possible attributes
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftTgoCode`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+| `ftTgoStatus`                                                | char(10)                                 |          | yes       |          | -                                                                                |
 
 `FtTgoTag` business object definition
 -------------------------------------

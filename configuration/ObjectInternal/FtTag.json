@@ -3,7 +3,11 @@
  "obo_dbtable": "ft_tag",
  "obo_role": "OBJ",
  "obo_class": null,
- "obo_script_id": null,
+ "obo_script_id": {
+  "path": "src/com/simplicite/objects/SimFeatures/FtTag.java",
+  "mime": "text/plain",
+  "name": "FtTag.java"
+ },
  "obo_usets": "1",
  "obo_nosearch": "1",
  "obo_comment": null,

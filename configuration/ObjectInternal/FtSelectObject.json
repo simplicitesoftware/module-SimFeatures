@@ -3,12 +3,16 @@
  "obo_dbtable": "select",
  "obo_role": "OBJ",
  "obo_class": null,
- "obo_script_id": null,
+ "obo_script_id": {
+  "path": "src/com/simplicite/objects/SimFeatures/FtSelectObject.java",
+  "mime": "text/plain",
+  "name": "FtSelectObject.java"
+ },
  "obo_usets": "0",
  "obo_nosearch": "1",
  "obo_comment": null,
  "obo_type": "O",
- "obo_searchspec": "SELECT fld_name, fld_dbname FROM m_field f\nLEFT JOIN m_objfield of\nON of.obf_field_id=f.row_id\nWHERE of.row_id IS NULL",
+ "obo_searchspec": "SELECT f.fld_name as field1, f.fld_dbname as field2, null as dt\nFROM m_field f\nLEFT JOIN m_objfield of\nON of.obf_field_id=f.row_id\nWHERE of.row_id IS NULL",
  "obo_exportorder": null,
  "obo_distinct": false,
  "obo_indexable": false,
