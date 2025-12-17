@@ -63,10 +63,10 @@ sim_cicd_deploy_stack() {
 
   # Create stack
   echo "[sim-cicd] Creating stack '$name' on $PORTAINER_URL (endpoint $ENV_ID) from $compose_file..."
-  curl -s -X POST "https://$PORTAINER_URL/api/stacks/create/standalone/file?endpointId=$ENV_ID" \
+  curl -v -X POST "https://$PORTAINER_URL/api/stacks/create/standalone/file?endpointId=$ENV_ID" \
     -H "X-API-Key:$PORTAINER_API_TOKEN" \
     -F "Name=$name" \
-    -F "file=@$compose_file" >/dev/null
+    -F "file=@$compose_file"
 
   # Get container ID
   local container_id
