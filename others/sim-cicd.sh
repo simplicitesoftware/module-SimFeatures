@@ -5,19 +5,49 @@ set -euo pipefail
 # Default configuration (can be overridden via environment variables)
 ENV_ID="${ENV_ID:-1}"
 
+# Ensure required tools are installed (curl, jq)
+_sim_cicd_require_tools() {
+  local install_cmd
+  for cmd in curl jq; do
+    if ! command -v "$cmd" >/dev/null 2>&1; then
+      echo "[sim-cicd] Missing required command: $cmd, attempting to install..."
+      
+      # Detect package manager and install
+      if command -v apt-get >/dev/null 2>&1; then
+        install_cmd="sudo apt-get update -qq && sudo apt-get install -y $cmd"
+      elif command -v yum >/dev/null 2>&1; then
+        install_cmd="sudo yum install -y $cmd"
+      elif command -v dnf >/dev/null 2>&1; then
+        install_cmd="sudo dnf install -y $cmd"
+      elif command -v apk >/dev/null 2>&1; then
+        install_cmd="sudo apk add --no-cache $cmd"
+      elif command -v brew >/dev/null 2>&1; then
+        install_cmd="brew install $cmd"
+      else
+        echo "[sim-cicd] Could not detect package manager to install $cmd" >&2
+        exit 1
+      fi
+      
+      if eval "$install_cmd"; then
+        echo "[sim-cicd] Successfully installed $cmd"
+      else
+        echo "[sim-cicd] Failed to install $cmd" >&2
+        exit 1
+      fi
+    fi
+  done
+
+  return 0
+}
+
 # sim_cicd_deploy_stack [stack_name] [compose_file]
 # Creates a stack and waits for its container to be healthy.
 sim_cicd_deploy_stack() {
   local name="${1:-$STACK_NAME}"
   local compose_file="${2:-portainer-stack.yml}"
 
-  # Check required tools
-  for cmd in curl jq; do
-    if ! command -v "$cmd" >/dev/null 2>&1; then
-      echo "[sim-cicd] Missing required command: $cmd" >&2
-      exit 1
-    fi
-  done
+  # Ensure tools are available (install if missing)
+  _sim_cicd_require_tools
 
   # Check API token
   if [[ -z "$PORTAINER_API_TOKEN" ]]; then
