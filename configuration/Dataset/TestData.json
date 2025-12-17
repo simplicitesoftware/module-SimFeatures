@@ -1,0 +1,10 @@
+{
+ "row_module_id__mdl_name": "SimFeatures",
+ "dt_name": "TestData",
+ "dt_file": null,
+ "dt_desc": "Main dataset for tests",
+ "dt_exportdate_from": null,
+ "dt_exportdate_to": null,
+ "dt_export_format": "json",
+ "dt_export_zip": true
+}

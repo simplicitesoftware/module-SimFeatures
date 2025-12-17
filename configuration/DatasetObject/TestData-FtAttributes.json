@@ -1,0 +1,7 @@
+{
+ "dto_order": 1,
+ "dto_dt_id__row_module_id__mdl_name": "SimFeatures",
+ "dto_dt_id__dt_name": "TestData",
+ "dto_obo_id__obo_name": "FtAttributes",
+ "row_module_id__mdl_name": "SimFeatures"
+}

@@ -1,0 +1,6 @@
+{
+ "usp_user_id__usr_login": "user",
+ "usp_param_id__sys_code": "CLIENT_ID",
+ "usp_value": "[{\n \"dt\": \"2025-12-17 17:48:09\",\n \"ag\": \"Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:146.0) Gecko/20100101 Firefox/146.0\",\n \"id\": \"nzj92rci4095pf8ecxzkzyvdcsp0w2mrp92tmjytp71hecn9squjgmwaqpeynsj21765992293433\"\n}]",
+ "row_module_id__mdl_name": "SimFeatures"
+}
