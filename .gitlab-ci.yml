@@ -1,9 +1,9 @@
 deploy-prod:
   stage: deploy
   script:
+    - export PORTAINER_URL="${PORTAINER_URL}"
+    - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
+    - export ENV_ID="${ENV_ID:-1}"
     - source others/sim-cicd.sh
     - sim_cicd_deploy_stack "gitlab-simfeatures" "${COMPOSE_FILE:-others/portainer-stack.yml}"
   environment: production
-  variables:
-    PORTAINER_URL: "${PORTAINER_URL}"
-    PORTAINER_API_TOKEN: "${PORTAINER_API_TOKEN}"

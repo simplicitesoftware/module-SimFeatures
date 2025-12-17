@@ -49,15 +49,21 @@ sim_cicd_deploy_stack() {
   # Ensure tools are available (install if missing)
   _sim_cicd_require_tools
 
-  # Check API token
-  if [[ -z "$PORTAINER_URL" ]]; then
-    echo "[sim-cicd] PORTAINER_URL is not set. Export it before running." >&2
+  # Debug: show environment variables (mask sensitive values)
+  echo "[sim-cicd] Environment check:"
+  echo "[sim-cicd]   PORTAINER_URL=${PORTAINER_URL:-<not set>}"
+  echo "[sim-cicd]   ENV_ID=${ENV_ID:-<not set>}"
+  echo "[sim-cicd]   PORTAINER_API_TOKEN=${PORTAINER_API_TOKEN:+<set>}${PORTAINER_API_TOKEN:-<not set>}"
+  echo "[sim-cicd]   STACK_NAME=${STACK_NAME:-<not set>}"
+
+  # Check required variables
+  if [[ -z "${PORTAINER_URL:-}" ]]; then
+    echo "[sim-cicd] ERROR: PORTAINER_URL is not set. Export it before running." >&2
     exit 1
   fi
 
-  # Check API token
-  if [[ -z "$PORTAINER_API_TOKEN" ]]; then
-    echo "[sim-cicd] PORTAINER_API_TOKEN is not set. Export it before running." >&2
+  if [[ -z "${PORTAINER_API_TOKEN:-}" ]]; then
+    echo "[sim-cicd] ERROR: PORTAINER_API_TOKEN is not set. Export it before running." >&2
     exit 1
   fi
 
