@@ -50,6 +50,12 @@ sim_cicd_deploy_stack() {
   _sim_cicd_require_tools
 
   # Check API token
+  if [[ -z "$PORTAINER_URL" ]]; then
+    echo "[sim-cicd] PORTAINER_URL is not set. Export it before running." >&2
+    exit 1
+  fi
+
+  # Check API token
   if [[ -z "$PORTAINER_API_TOKEN" ]]; then
     echo "[sim-cicd] PORTAINER_API_TOKEN is not set. Export it before running." >&2
     exit 1
@@ -63,7 +69,7 @@ sim_cicd_deploy_stack() {
 
   # Create stack
   echo "[sim-cicd] Creating stack '$name' on $PORTAINER_URL (endpoint $ENV_ID) from $compose_file..."
-  curl -v -X POST "https://$PORTAINER_URL/api/stacks/create/standalone/file?endpointId=$ENV_ID" \
+  curl -vvv -X POST "https://$PORTAINER_URL/api/stacks/create/standalone/file?endpointId=$ENV_ID" \
     -H "X-API-Key:$PORTAINER_API_TOKEN" \
     -F "Name=$name" \
     -F "file=@$compose_file"
