@@ -1,9 +1,5 @@
 {
- "fld_name": {
-  "value": "ftSlcField2",
-  "oldvalue": "ftSlcField2",
-  "oldvalue1": "ftSlcField2"
- },
+ "fld_name": "ftSlcField2",
  "fld_dbname": "field2",
  "fld_visible": "3",
  "fld_updatable": [

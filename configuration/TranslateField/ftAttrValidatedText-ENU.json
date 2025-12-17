@@ -8,7 +8,7 @@
  },
  "tsl_lang": "ENU",
  "tsl_value": "Validated Text",
- "tsl_simplehelp": null,
+ "tsl_simplehelp": "<p>^\\w+$<\/p>",
  "tsl_plural_value": null,
  "tsl_short_value": null,
  "tsl_placeholder": null,
