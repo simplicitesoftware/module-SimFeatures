@@ -14,13 +14,13 @@ _sim_cicd_require_tools() {
       
       # Detect package manager and install
       if command -v apt-get >/dev/null 2>&1; then
-        install_cmd="sudo apt-get update -qq && sudo apt-get install -y $cmd"
+        install_cmd="apt-get update -qq && apt-get install -y $cmd"
       elif command -v yum >/dev/null 2>&1; then
-        install_cmd="sudo yum install -y $cmd"
+        install_cmd="yum install -y $cmd"
       elif command -v dnf >/dev/null 2>&1; then
-        install_cmd="sudo dnf install -y $cmd"
+        install_cmd="dnf install -y $cmd"
       elif command -v apk >/dev/null 2>&1; then
-        install_cmd="sudo apk add --no-cache $cmd"
+        install_cmd="apk add --no-cache $cmd"
       elif command -v brew >/dev/null 2>&1; then
         install_cmd="brew install $cmd"
       else
