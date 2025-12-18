@@ -1,12 +1,10 @@
 #!/bin/bash
 
-PORTAINER_URL="portainer.sca.simplicite.io"
-ENV_ID=1
+PORTAINER_SERVER="sca.simplicite.io"
 PORTAINER_API_TOKEN="ptr_ez1gqDCpFgADiOIYf717VwJNBnDhuqqVR6tV/+Kmue8="
 STACK_NAME="curl-test"
+IO_PASSWORD="R1xUATk7i39osda1yCxpO1Awvry99OP0c"
 
-# Source the sim-cicd functions
-source "$(dirname "$0")/sim-cicd.sh"
-
-# Deploy the stack
-sim_cicd_deploy_stack "$STACK_NAME" "portainer-stack.yml"
+export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
+export IO_PASSWORD="${IO_PASSWORD}"
+./sim-cicd/simci deploy-portainer-stack -n $STACK_NAME -f portainer-stack.yml $PORTAINER_SERVER

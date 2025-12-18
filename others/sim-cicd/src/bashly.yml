@@ -1,0 +1,41 @@
+name: simci
+help: Simplicité CI/CD Tooling
+version: 0.1.0
+
+commands:
+- name: deploy-portainer-stack
+  help: Deploys a Portainer stack
+
+  args:
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  flags:
+  - long: --name
+    short: -n
+    help: Stack name
+    arg: stack
+    required: true
+  
+  - long: --file
+    short: -f
+    help: Docker compose file path 
+    arg: file
+    required: true
+
+  - long: --environment
+    help: Portainer environment
+    arg: env
+    default: "1"
+
+  examples:
+  - simci deploy-portainer-stack -n mystackname -f docker-compose.yml <base_url>
+
+  environment_variables:
+  - name: IO_PASSWORD
+    help: Simplicité IO password
+    required: true
+  - name: PORTAINER_API_TOKEN
+    required: true
+
