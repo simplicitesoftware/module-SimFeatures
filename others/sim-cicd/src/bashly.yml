@@ -7,17 +7,15 @@ commands:
   help: Deploys a Portainer stack
 
   args:
+  - name: stack
+    required: true
+    help: Stack name
+
   - name: portainer_server
     required: true
     help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
 
   flags:
-  - long: --name
-    short: -n
-    help: Stack name
-    arg: stack
-    required: true
-  
   - long: --file
     short: -f
     help: Docker compose file path 
@@ -39,3 +37,23 @@ commands:
   - name: PORTAINER_API_TOKEN
     required: true
 
+- name: run-unit-tests
+  help: Runs unit tests
+
+  args:
+  - name: module
+    required: true
+    help: Simplicité module name
+
+  - name: stack
+    required: true
+    help: Stack name
+
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  environment_variables:
+  - name: IO_PASSWORD
+    help: Simplicité IO password
+    required: true

@@ -1,14 +1,14 @@
 portainer_server=${args[portainer_server]}
 portainer_url="portainer.$portainer_server"
-name=${args[--name]}
+stack=${args[stack]}
 compose_file=${args[--file]}
 env_id=${args[--environment]}
 
 # Create stack
-echo "[sim-cicd] Creating stack '$name' on $portainer_url (endpoint $env_id) from $compose_file..."
+echo "[sim-cicd] Creating stack '$stack' on $portainer_url (endpoint $env_id) from $compose_file..."
 curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpointId=$env_id" \
     -H "X-API-Key:$PORTAINER_API_TOKEN" \
-    -F "Name=$name" \
+    -F "Name=$stack" \
     -F "Env=[{\"name\":\"IO_PASSWORD\",\"value\":\"$IO_PASSWORD\"}]" \
     -F "file=@$compose_file"
 
@@ -16,10 +16,10 @@ curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpoi
 local container_id
 container_id=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=1" \
     -H "X-API-Key:$PORTAINER_API_TOKEN" \
-    | jq -r ".[] | select(.Labels[\"com.docker.compose.project\"]==\"$name\") | .Id" | head -n 1)
+    | jq -r ".[] | select(.Labels[\"com.docker.compose.project\"]==\"$stack\") | .Id" | head -n 1)
 
 if [[ -z "$container_id" ]]; then
-    echo "[sim-cicd] No container found for stack '$name'" >&2
+    echo "[sim-cicd] No container found for stack '$stack'" >&2
     exit 1
 fi
 

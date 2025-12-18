@@ -4,6 +4,9 @@ services:
     restart: always
     container_name: ${COMPOSE_PROJECT_NAME}-app
     environment:
+      USE_IO: "yes"
+      USE_IO_TESTER: "yes"
+      DEV_MODE: true
       MODULES_IMPORT_SPEC: |
         title: "${COMPOSE_PROJECT_NAME}"
         modules:

@@ -27,6 +27,7 @@ simci_usage() {
   # :command.usage_commands
   printf "%s\n" "Commands:"
   printf "  %s   Deploys a Portainer stack\n" "deploy-portainer-stack"
+  printf "  %s   Runs unit tests\n" "run-unit-tests        "
   echo
 
   # :command.long_usage
@@ -50,7 +51,7 @@ simci_deploy_portainer_stack_usage() {
   printf "simci deploy-portainer-stack - Deploys a Portainer stack\n\n"
 
   printf "%s\n" "Usage:"
-  printf "  simci deploy-portainer-stack PORTAINER_SERVER [OPTIONS]\n"
+  printf "  simci deploy-portainer-stack STACK PORTAINER_SERVER [OPTIONS]\n"
   printf "  simci deploy-portainer-stack --help | -h\n"
   echo
 
@@ -60,11 +61,6 @@ simci_deploy_portainer_stack_usage() {
     printf "%s\n" "Options:"
 
     # :command.usage_flags
-    # :flag.usage
-    printf "  %s\n" "--name, -n STACK (required)"
-    printf "    Stack name\n"
-    echo
-
     # :flag.usage
     printf "  %s\n" "--file, -f FILE (required)"
     printf "    Docker compose file path\n"
@@ -83,6 +79,11 @@ simci_deploy_portainer_stack_usage() {
 
     # :command.usage_args
     printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "STACK"
+    printf "    Stack name\n"
+    echo
 
     # :argument.usage
     printf "  %s\n" "PORTAINER_SERVER"
@@ -105,6 +106,54 @@ simci_deploy_portainer_stack_usage() {
     # :command.usage_examples
     printf "%s\n" "Examples:"
     printf "  simci deploy-portainer-stack -n mystackname -f docker-compose.yml <base_url>\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+simci_run_unit_tests_usage() {
+  printf "simci run-unit-tests - Runs unit tests\n\n"
+
+  printf "%s\n" "Usage:"
+  printf "  simci run-unit-tests MODULE STACK PORTAINER_SERVER\n"
+  printf "  simci run-unit-tests --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n "$long_usage" ]]; then
+    # :command.usage_options
+    printf "%s\n" "Options:"
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "MODULE"
+    printf "    Simplicité module name\n"
+    echo
+
+    # :argument.usage
+    printf "  %s\n" "STACK"
+    printf "    Stack name\n"
+    echo
+
+    # :argument.usage
+    printf "  %s\n" "PORTAINER_SERVER"
+    printf "    Base URL used by traefik for server (portainer.<base_url> ,\n    my-app.<base_url>, etc.)\n"
+    echo
+
+    # :command.usage_environment_variables
+    printf "%s\n" "Environment Variables:"
+
+    # :environment_variable.usage
+    printf "  %s\n" "IO_PASSWORD (required)"
+    printf "    Simplicité IO password\n"
     echo
 
   fi
@@ -182,15 +231,15 @@ simci_deploy_portainer_stack_command() {
   # src/deploy_portainer_stack_command.sh
   portainer_server=${args[portainer_server]}
   portainer_url="portainer.$portainer_server"
-  name=${args[--name]}
+  stack=${args[stack]}
   compose_file=${args[--file]}
   env_id=${args[--environment]}
 
   # Create stack
-  echo "[sim-cicd] Creating stack '$name' on $portainer_url (endpoint $env_id) from $compose_file..."
+  echo "[sim-cicd] Creating stack '$stack' on $portainer_url (endpoint $env_id) from $compose_file..."
   curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpointId=$env_id" \
       -H "X-API-Key:$PORTAINER_API_TOKEN" \
-      -F "Name=$name" \
+      -F "Name=$stack" \
       -F "Env=[{\"name\":\"IO_PASSWORD\",\"value\":\"$IO_PASSWORD\"}]" \
       -F "file=@$compose_file"
 
@@ -198,10 +247,10 @@ simci_deploy_portainer_stack_command() {
   local container_id
   container_id=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=1" \
       -H "X-API-Key:$PORTAINER_API_TOKEN" \
-      | jq -r ".[] | select(.Labels[\"com.docker.compose.project\"]==\"$name\") | .Id" | head -n 1)
+      | jq -r ".[] | select(.Labels[\"com.docker.compose.project\"]==\"$stack\") | .Id" | head -n 1)
 
   if [[ -z "$container_id" ]]; then
-      echo "[sim-cicd] No container found for stack '$name'" >&2
+      echo "[sim-cicd] No container found for stack '$stack'" >&2
       exit 1
   fi
 
@@ -227,6 +276,20 @@ simci_deploy_portainer_stack_command() {
           sleep "$interval"
       fi
   done
+}
+
+# :command.function
+simci_run_unit_tests_command() {
+
+  # src/run_unit_tests_command.sh
+  portainer_server=${args[portainer_server]}
+  stack=${args[stack]}
+  instance="$stack.$portainer_server"
+  module=${args[module]}
+
+  echo "===================="
+  curl -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io
+  echo "===================="
 }
 
 # :command.parse_requirements
@@ -265,6 +328,13 @@ parse_requirements() {
       action="deploy-portainer-stack"
       shift
       simci_deploy_portainer_stack_parse_requirements "$@"
+      shift $#
+      ;;
+
+    run-unit-tests)
+      action="run-unit-tests"
+      shift
+      simci_run_unit_tests_parse_requirements "$@"
       shift $#
       ;;
 
@@ -346,20 +416,6 @@ simci_deploy_portainer_stack_parse_requirements() {
     key="$1"
     case "$key" in
       # :flag.case
-      --name | -n)
-
-        # :flag.case_arg
-        if [[ -n ${2+x} ]]; then
-          args['--name']="$2"
-          shift
-          shift
-        else
-          printf "%s\n" "--name requires an argument: --name, -n STACK" >&2
-          exit 1
-        fi
-        ;;
-
-      # :flag.case
       --file | -f)
 
         # :flag.case_arg
@@ -396,7 +452,11 @@ simci_deploy_portainer_stack_parse_requirements() {
         # :command.parse_requirements_case
         # :command.parse_requirements_case_simple
         # :argument.case
-        if [[ -z ${args['portainer_server']+x} ]]; then
+        if [[ -z ${args['stack']+x} ]]; then
+          args['stack']=$1
+          shift
+        # :argument.case
+        elif [[ -z ${args['portainer_server']+x} ]]; then
           args['portainer_server']=$1
           shift
         else
@@ -410,17 +470,19 @@ simci_deploy_portainer_stack_parse_requirements() {
   done
 
   # :command.required_args_filter
+  if [[ -z ${args['stack']+x} ]]; then
+    printf "missing required argument: STACK\nusage: simci deploy-portainer-stack STACK PORTAINER_SERVER [OPTIONS]\n" >&2
+
+    exit 1
+  fi
+
   if [[ -z ${args['portainer_server']+x} ]]; then
-    printf "missing required argument: PORTAINER_SERVER\nusage: simci deploy-portainer-stack PORTAINER_SERVER [OPTIONS]\n" >&2
+    printf "missing required argument: PORTAINER_SERVER\nusage: simci deploy-portainer-stack STACK PORTAINER_SERVER [OPTIONS]\n" >&2
 
     exit 1
   fi
 
   # :command.required_flags_filter
-  if [[ -z ${args['--name']+x} ]]; then
-    printf "missing required flag: --name, -n STACK\n" >&2
-    exit 1
-  fi
   if [[ -z ${args['--file']+x} ]]; then
     printf "missing required flag: --file, -f FILE\n" >&2
     exit 1
@@ -428,6 +490,94 @@ simci_deploy_portainer_stack_parse_requirements() {
 
   # :command.default_assignments
   [[ -n ${args['--environment']:-} ]] || args['--environment']="1"
+
+}
+
+# :command.parse_requirements
+simci_run_unit_tests_parse_requirements() {
+  local key
+
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      --help | -h)
+        long_usage=yes
+        simci_run_unit_tests_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.environment_variables_filter
+
+  env_var_names+=("IO_PASSWORD")
+  if [[ -z "${IO_PASSWORD:-}" ]]; then
+    printf "missing required environment variable: IO_PASSWORD\n" >&2
+    exit 1
+  fi
+
+  # :command.command_filter
+  action="run-unit-tests"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        # :argument.case
+        if [[ -z ${args['module']+x} ]]; then
+          args['module']=$1
+          shift
+        # :argument.case
+        elif [[ -z ${args['stack']+x} ]]; then
+          args['stack']=$1
+          shift
+        # :argument.case
+        elif [[ -z ${args['portainer_server']+x} ]]; then
+          args['portainer_server']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
+
+        ;;
+
+    esac
+  done
+
+  # :command.required_args_filter
+  if [[ -z ${args['module']+x} ]]; then
+    printf "missing required argument: MODULE\nusage: simci run-unit-tests MODULE STACK PORTAINER_SERVER\n" >&2
+
+    exit 1
+  fi
+
+  if [[ -z ${args['stack']+x} ]]; then
+    printf "missing required argument: STACK\nusage: simci run-unit-tests MODULE STACK PORTAINER_SERVER\n" >&2
+
+    exit 1
+  fi
+
+  if [[ -z ${args['portainer_server']+x} ]]; then
+    printf "missing required argument: PORTAINER_SERVER\nusage: simci run-unit-tests MODULE STACK PORTAINER_SERVER\n" >&2
+
+    exit 1
+  fi
 
 }
 
@@ -495,6 +645,7 @@ run() {
 
   case "$action" in
     "deploy-portainer-stack") simci_deploy_portainer_stack_command ;;
+    "run-unit-tests") simci_run_unit_tests_command ;;
   esac
 }
 
