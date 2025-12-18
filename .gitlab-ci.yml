@@ -1,5 +1,5 @@
 deploy-test:
-  stage: deploy-test
+  stage: build
   script:
     - export PORTAINER_URL="${PORTAINER_URL}"
     - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
