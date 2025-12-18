@@ -76,7 +76,7 @@ sim_cicd_deploy_stack() {
   curl -s -X POST "https://$PORTAINER_URL/api/stacks/create/standalone/file?endpointId=$ENV_ID" \
     -H "X-API-Key:$PORTAINER_API_TOKEN" \
     -F "Name=$name" \
-    -F "Env=[{'name':'IO_PASSWORD','value':'$IO_PASSWORD'}]" \
+    -F "Env=[{\"name\":\"IO_PASSWORD\",\"value\":\"$IO_PASSWORD\"}]" \
     -F "file=@$compose_file"
 
   # Get container ID
