@@ -20,3 +20,10 @@ History
 3. [18/12/25] check unit tests
     - added dummy dataset and junit test to SimFeature
     - add IO_PASSWORD env to stack to call instance
+    - paused dev until `USE_IO` setting at startup is possible... 
+4. [22/12/25] set sonar
+    - added sonar project to soncarcloud org
+    - added sonar config to module config on SimpFeatures 7.0
+    - add sonarcloud analysis
+    - TODO check that the cache system works...
+    
