@@ -17,7 +17,7 @@
  "fld_exportable": true,
  "fld_tray": null,
  "fld_type": "3",
- "fld_clipboard": null,
+ "fld_clipboard": false,
  "fld_type_id__flt_code": null,
  "fld_list_id__lov_name": null,
  "fld_copy": true,
