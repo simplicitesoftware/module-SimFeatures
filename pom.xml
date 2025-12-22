@@ -13,18 +13,20 @@ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
   <description>Simplicite module: SimFeatures</description>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <simplicite.url>https://gitlab-simfeatures.sca.simplicite.io</simplicite.url>
+    <simplicite.url>https://demo70.sca.simplicite.io</simplicite.url>
     <simplicite.version>7.0-SNAPSHOT</simplicite.version>
     <maven.compiler.source>21</maven.compiler.source>
     <maven.compiler.target>21</maven.compiler.target>
     <maven.compiler.proc>full</maven.compiler.proc>
     <skipTests>true</skipTests>
-    <sonar.projectKey>simplicite-modules-SimFeatures</sonar.projectKey>
+    <sonar.projectKey>module-simfeatures</sonar.projectKey>
     <sonar.projectName>SimFeatures</sonar.projectName>
     <sonar.projectVersion>0.1</sonar.projectVersion>
     <sonar.sources>src,resources</sonar.sources>
     <sonar.exclusions>SimFeatures.xml,SimFeatures.json,SimFeatures-*.yml,configuration/**,**.min.js,**.min.css</sonar.exclusions>
     <sonar.coverage.exclusions>resources/**.js,src/**.java</sonar.coverage.exclusions>
+    <sonar.organization>simplicite-software-gitlab</sonar.organization>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
   <packaging>jar</packaging>
   <url>${simplicite.url}</url>
