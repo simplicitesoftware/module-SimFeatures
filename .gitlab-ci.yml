@@ -1,6 +1,21 @@
+variables:
+  SONARCLOUD_ENABLED: "true"
+
 deploy-test:
   stage: build
   script:
     - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
     - export IO_PASSWORD="${IO_PASSWORD}"
     - ./others/sim-cicd/simci deploy-portainer-stack -f ./others/portainer-stack.yml gitlab-simfeatures $PORTAINER_URL
+
+sonarcloud-check:
+  image: maven:3.9-eclipse-temurin-21-alpine
+  stage: test
+  cache:
+    key: "${CI_JOB_NAME}"
+    paths:
+      - .sonar/cache
+  script:
+    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=module-simfeatures
+  rules:
+    - if: '$SONARCLOUD_ENABLED'
