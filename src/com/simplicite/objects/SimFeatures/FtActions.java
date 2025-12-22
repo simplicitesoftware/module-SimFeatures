@@ -1,12 +1,6 @@
 package com.simplicite.objects.SimFeatures;
 
-import java.util.*;
-
 import com.simplicite.util.*;
-import com.simplicite.util.exceptions.*;
-import com.simplicite.util.tools.*;
-import com.simplicite.util.JobQueue;
-import com.simplicite.util.engine.Platform;
 import java.io.File;
 
 /**
@@ -47,15 +41,15 @@ public class FtActions extends ObjectDB {
 				+ "\n - last name = " + userLName.getValue();
 	
 			DocumentDB doc = a.getConfirmField("ftActDocument2").getDocument();
-			file = doc==null ? null : doc.getUploadFile();
-			if (file!=null)
+			file = doc == null ? null : doc.getUploadFile();
+			if (file != null)
 				msg += "\n\n - doc name = " + doc.getPath() 
 					+  "\n --- tmp file = " + file.getAbsolutePath() 
 					+  "\n --- file size = " + file.length();
 	
 			DocumentDB img = a.getConfirmField("ftActImage2").getDocument();
-			byte[] data = img==null ? null : img.getBytes();
-			if (data!=null)
+			byte[] data = img == null ? null : img.getBytes();
+			if (data != null)
 				msg += "\n\n - img name = " + img.getPath() 
 					+  "\n --- data size = " + data.length;
 
@@ -63,18 +57,16 @@ public class FtActions extends ObjectDB {
 
 			// debug message
 			return Message.formatSimpleWarning(msg);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return Message.formatSimpleError(e.getMessage());
-		}
-		finally {
+		} finally {
 			// clean temp file when used
-			if (file!=null)
+			if (file != null)
 				file.delete();
 		}
 	}
 
-	public String asyncAction(){
+	public String asyncAction() {
 		return "to implement in v6.0";
 	}
 	

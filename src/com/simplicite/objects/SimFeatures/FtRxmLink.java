@@ -3,8 +3,6 @@ package com.simplicite.objects.SimFeatures;
 import java.util.*;
 
 import com.simplicite.util.*;
-import com.simplicite.util.exceptions.*;
-import com.simplicite.util.tools.*;
 
 /**
  * Business object FtRxmLink
@@ -19,10 +17,10 @@ public class FtRxmLink extends ObjectDB {
 		return super.preValidate();
 	}
 	
-	private void orderKeys(){
+	private void orderKeys() {
 		String c1 = getFieldValue("ftRxlRxm1.ftRxmCode");
 		String c2 = getFieldValue("ftRxlRxm2.ftRxmCode");
-		if(c1.compareTo(c2)>0){
+		if (c1.compareTo(c2) > 0) {
 			setFieldValue("ftRxlRxm1.ftRxmCode", c2);
 			setFieldValue("ftRxlRxm2.ftRxmCode", c1);
 			completeForeignKeys();

@@ -5,9 +5,6 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 import com.simplicite.util.*;
-import com.simplicite.bpm.*;
-import com.simplicite.util.exceptions.*;
-import com.simplicite.util.tools.*;
 
 /**
  * Shared code FtTestMain
@@ -17,9 +14,9 @@ public class FtTestMain implements java.io.Serializable {
 	private static final String FT_USER_SCOPE = "SimFeaturesScope";
 	private Grant grant = null;
 	
-	private Grant getGrant(){
+	private Grant getGrant() {
 		// Load grant once
-		if (grant==null) {
+		if (grant == null) {
 			grant = new Grant();
 			// the login must be a declared user with responsibilities to access objects used in the test
 			grant.init("user", "testSessionId", Globals.ENDPOINT_UI, FT_USER_SCOPE, null);

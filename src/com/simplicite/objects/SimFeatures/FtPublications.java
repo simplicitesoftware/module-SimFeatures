@@ -1,9 +1,6 @@
 package com.simplicite.objects.SimFeatures;
 
-import java.util.*;
-
 import com.simplicite.util.*;
-import com.simplicite.util.exceptions.*;
 import com.simplicite.util.tools.*;
 
 /**
@@ -14,15 +11,14 @@ public class FtPublications extends ObjectDB {
 	
 	@Override
 	public String preSave() {
-		try{
-			if(!getField("ftPubHtml").isEmpty())
+		try {
+			if (!getField("ftPubHtml").isEmpty())
 				getField("ftPubFile").setDocument(
 					this,
-					getFieldValue("ftPubCode")+".pdf",
+					getFieldValue("ftPubCode") + ".pdf",
 					HTMLToPDFTool.toPDF(getFieldValue("ftPubHtml"))
 				);
-		}
-		catch(Exception e){
+		} catch (Exception e) {
 			
 		}
 		return null;
