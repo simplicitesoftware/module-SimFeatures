@@ -3,8 +3,6 @@ package com.simplicite.objects.SimFeatures;
 import java.util.*;
 
 import com.simplicite.util.*;
-import com.simplicite.util.exceptions.*;
-import com.simplicite.util.tools.*;
 
 /**
  * Business object FtCustomUser
@@ -50,39 +48,39 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
 		autoRespAttribution(getRowId(),getFieldValue("ftUsrType"));
         
         // meh practice... query instead of adding usr_menu attribute to objet
-        getGrant().update("update m_user set usr_menu='1' where row_id="+getRowId());
+        getGrant().update("update m_user set usr_menu='1' where row_id=" + getRowId());
         return super.postSave();
     }
     
     /**
      * customise depending on specific business rules, 
      */
-    private static void autoRespAttribution(String userId, String userType){
-    	List<String> groups = new ArrayList();
-        switch(userType){
+    private static void autoRespAttribution(String userId, String userType) {
+    	List<String> groups = new ArrayList<String>();
+        switch (userType) {
             case "FT_ADMIN": groups.add("FT_ADMIN"); break;
             case "FT_READ": groups.add("FT_READ"); break;
         }
         setRespList(userId,groups);
     }
     
-    private static void setRespList(String userId, List<String> newGroupsList){
+    private static void setRespList(String userId, List<String> newGroupsList) {
         List<String> oldGroupsList = getRespList(userId);
         // remove old unused groups
-        for(String oldGroup : oldGroupsList)
-            if(!newGroupsList.contains(oldGroup))
+        for (String oldGroup : oldGroupsList)
+            if (!newGroupsList.contains(oldGroup))
                 Grant.removeResponsibility(userId, oldGroup);
         // add new missing groups
-        for(String newGroup : newGroupsList)
-            if(!oldGroupsList.contains(newGroup))
+        for (String newGroup : newGroupsList)
+            if (!oldGroupsList.contains(newGroup))
                 Grant.addResponsibility(userId, newGroup, Tool.getCurrentDate(), null, true, "ApplicationUsers");
     }
     
-    private static List<String> getRespList(String userId){
-        if(Tool.isEmpty(userId))
+    private static List<String> getRespList(String userId) {
+        if (Tool.isEmpty(userId))
             return null;
         Grant g = Grant.getSystemAdmin();
-        String[] groups = g.queryFirstColumn("select distinct g.grp_name from m_resp r inner join m_group as g on r.rsp_group_id=g.row_id where r.rsp_login_id="+userId);
-        return groups!=null && groups.length>0 ? Arrays.asList(groups) : new ArrayList<String>();
+        String[] groups = g.queryFirstColumn("select distinct g.grp_name from m_resp r inner join m_group as g on r.rsp_group_id=g.row_id where r.rsp_login_id=" + userId);
+        return groups != null && groups.length > 0 ? Arrays.asList(groups) : new ArrayList<String>();
     }
 }
