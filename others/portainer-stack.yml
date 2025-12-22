@@ -4,8 +4,9 @@ services:
     restart: always
     container_name: ${COMPOSE_PROJECT_NAME}-app
     environment:
-      USE_IO: "yes"
-      USE_IO_TESTER: "yes"
+      SYSPARAM_USE_IO: "yes"
+      SYSPARAM_USE_IO_TESTER: "yes"
+      IO_PASSWORD: "${IO_PASSWORD}"
       DEV_MODE: true
       MODULES_IMPORT_SPEC: |
         title: "${COMPOSE_PROJECT_NAME}"
@@ -14,6 +15,7 @@ services:
             git: 
               uri: "https://github.com/simplicitesoftware/module-SimFeatures.git"
               branch: "7.0"
+            datasets: true
     networks:
       - proxy
     labels:
