@@ -16,6 +16,7 @@ sonarcloud-check:
     paths:
       - .sonar/cache
   script:
+    - apk update && apk add nodejs npm
     - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=module-simfeatures
   rules:
     - if: '$SONARCLOUD_ENABLED'
