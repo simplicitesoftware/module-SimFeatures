@@ -18,6 +18,7 @@ History
     - through gitlab job
         - started a tool for common CICD+portainer jobs (sim-cicd.sh)
         - works
+    - delete stack if exists before pipeline
 2. Unit tests
     - added dummy dataset and junit test to SimFeature
     - add IO_PASSWORD env to stack to call instance
@@ -31,4 +32,7 @@ History
     - fixed various checkstyle violations
     - TODO check job KO when gates fail
 4. Jacoco
+    - update stack
+    - TODO test cli
+5. Playright
     - TODO !

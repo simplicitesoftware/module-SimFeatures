@@ -4,6 +4,7 @@ stack=${args[stack]}
 compose_file=${args[--file]}
 env_id=${args[--environment]}
 
+echo "[sim-cicd] === DEPLOY PORTAINER STACK"
 # Create stack
 echo "[sim-cicd] Creating stack '$stack' on $portainer_url (endpoint $env_id) from $compose_file..."
 curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpointId=$env_id" \

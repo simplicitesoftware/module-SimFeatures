@@ -27,6 +27,7 @@ simci_usage() {
   # :command.usage_commands
   printf "%s\n" "Commands:"
   printf "  %s   Deploys a Portainer stack\n" "deploy-portainer-stack"
+  printf "  %s   Deletes a Portainer stack\n" "delete-portainer-stack"
   printf "  %s   Runs unit tests\n" "run-unit-tests        "
   echo
 
@@ -105,7 +106,62 @@ simci_deploy_portainer_stack_usage() {
 
     # :command.usage_examples
     printf "%s\n" "Examples:"
-    printf "  simci deploy-portainer-stack -n mystackname -f docker-compose.yml <base_url>\n"
+    printf "  simci deploy-portainer-stack -f docker-compose.yml  mystackname <base_url>\n"
+    echo
+
+  fi
+}
+
+# :command.usage
+simci_delete_portainer_stack_usage() {
+  printf "simci delete-portainer-stack - Deletes a Portainer stack\n\n"
+
+  printf "%s\n" "Usage:"
+  printf "  simci delete-portainer-stack STACK PORTAINER_SERVER [OPTIONS]\n"
+  printf "  simci delete-portainer-stack --help | -h\n"
+  echo
+
+  # :command.long_usage
+  if [[ -n "$long_usage" ]]; then
+    # :command.usage_options
+    printf "%s\n" "Options:"
+
+    # :command.usage_flags
+    # :flag.usage
+    printf "  %s\n" "--environment ENV"
+    printf "    Portainer environment\n"
+    printf "    %s\n" "Default: 1"
+    echo
+
+    # :command.usage_fixed_flags
+    printf "  %s\n" "--help, -h"
+    printf "    Show this help\n"
+    echo
+
+    # :command.usage_args
+    printf "%s\n" "Arguments:"
+
+    # :argument.usage
+    printf "  %s\n" "STACK"
+    printf "    Stack name\n"
+    echo
+
+    # :argument.usage
+    printf "  %s\n" "PORTAINER_SERVER"
+    printf "    Base URL used by traefik for server (portainer.<base_url> ,\n    my-app.<base_url>, etc.)\n"
+    echo
+
+    # :command.usage_environment_variables
+    printf "%s\n" "Environment Variables:"
+
+    # :environment_variable.usage
+    printf "  %s\n" "PORTAINER_API_TOKEN (required)"
+    printf "\n"
+    echo
+
+    # :command.usage_examples
+    printf "%s\n" "Examples:"
+    printf "  simci delete-portainer-stack mystackname <base_url>\n"
     echo
 
   fi
@@ -235,6 +291,7 @@ simci_deploy_portainer_stack_command() {
   compose_file=${args[--file]}
   env_id=${args[--environment]}
 
+  echo "[sim-cicd] === DEPLOY PORTAINER STACK"
   # Create stack
   echo "[sim-cicd] Creating stack '$stack' on $portainer_url (endpoint $env_id) from $compose_file..."
   curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpointId=$env_id" \
@@ -279,6 +336,31 @@ simci_deploy_portainer_stack_command() {
 }
 
 # :command.function
+simci_delete_portainer_stack_command() {
+
+  # src/delete_portainer_stack_command.sh
+  portainer_server=${args[portainer_server]}
+  portainer_url="portainer.$portainer_server"
+  stack=${args[stack]}
+  env_id=${args[--environment]}
+
+  echo "[sim-cicd] === DELETE PORTAINER STACK"
+  echo "[sim-cicd] Getting stacks on $portainer_url (endpoint $env_id)."
+  stacks=$(curl -s -G "https://$portainer_url/api/stacks" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      -d "filter={'EndpointID':$env_id}")
+  stack_id=$(jq -r --arg s "$stack" '.[] | select(.Name==$s) | .Id' <<<"$stacks")
+
+  if [ -z "$stack_id" ] || [ "$stack_id" = "null" ]; then
+      echo "[sim-cicd] Stack '$stack' not found. Nothing to delete."
+  else
+      echo "[sim-cicd] $stack's ID found: $stack_id => Deleting stack..."
+      curl -s -X DELETE "https://$portainer_url/api/stacks/$stack_id?endpointId=$env_id" \
+          -H "X-API-Key:$PORTAINER_API_TOKEN"
+  fi
+}
+
+# :command.function
 simci_run_unit_tests_command() {
 
   # src/run_unit_tests_command.sh
@@ -287,9 +369,8 @@ simci_run_unit_tests_command() {
   instance="$stack.$portainer_server"
   module=${args[module]}
 
-  echo "===================="
+  echo "[sim-cicd] === RUN UNIT TESTS"
   curl -s -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io
-  echo "===================="
 }
 
 # :command.parse_requirements
@@ -328,6 +409,13 @@ parse_requirements() {
       action="deploy-portainer-stack"
       shift
       simci_deploy_portainer_stack_parse_requirements "$@"
+      shift $#
+      ;;
+
+    delete-portainer-stack)
+      action="delete-portainer-stack"
+      shift
+      simci_delete_portainer_stack_parse_requirements "$@"
       shift $#
       ;;
 
@@ -494,6 +582,100 @@ simci_deploy_portainer_stack_parse_requirements() {
 }
 
 # :command.parse_requirements
+simci_delete_portainer_stack_parse_requirements() {
+  local key
+
+  # :command.fixed_flags_filter
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      --help | -h)
+        long_usage=yes
+        simci_delete_portainer_stack_usage
+        exit
+        ;;
+
+      *)
+        break
+        ;;
+
+    esac
+  done
+
+  # :command.environment_variables_filter
+
+  env_var_names+=("PORTAINER_API_TOKEN")
+  if [[ -z "${PORTAINER_API_TOKEN:-}" ]]; then
+    printf "missing required environment variable: PORTAINER_API_TOKEN\n" >&2
+    exit 1
+  fi
+
+  # :command.command_filter
+  action="delete-portainer-stack"
+
+  # :command.parse_requirements_while
+  while [[ $# -gt 0 ]]; do
+    key="$1"
+    case "$key" in
+      # :flag.case
+      --environment)
+
+        # :flag.case_arg
+        if [[ -n ${2+x} ]]; then
+          args['--environment']="$2"
+          shift
+          shift
+        else
+          printf "%s\n" "--environment requires an argument: --environment ENV" >&2
+          exit 1
+        fi
+        ;;
+
+      -?*)
+        printf "invalid option: %s\n" "$key" >&2
+        exit 1
+        ;;
+
+      *)
+        # :command.parse_requirements_case
+        # :command.parse_requirements_case_simple
+        # :argument.case
+        if [[ -z ${args['stack']+x} ]]; then
+          args['stack']=$1
+          shift
+        # :argument.case
+        elif [[ -z ${args['portainer_server']+x} ]]; then
+          args['portainer_server']=$1
+          shift
+        else
+          printf "invalid argument: %s\n" "$key" >&2
+          exit 1
+        fi
+
+        ;;
+
+    esac
+  done
+
+  # :command.required_args_filter
+  if [[ -z ${args['stack']+x} ]]; then
+    printf "missing required argument: STACK\nusage: simci delete-portainer-stack STACK PORTAINER_SERVER [OPTIONS]\n" >&2
+
+    exit 1
+  fi
+
+  if [[ -z ${args['portainer_server']+x} ]]; then
+    printf "missing required argument: PORTAINER_SERVER\nusage: simci delete-portainer-stack STACK PORTAINER_SERVER [OPTIONS]\n" >&2
+
+    exit 1
+  fi
+
+  # :command.default_assignments
+  [[ -n ${args['--environment']:-} ]] || args['--environment']="1"
+
+}
+
+# :command.parse_requirements
 simci_run_unit_tests_parse_requirements() {
   local key
 
@@ -645,6 +827,7 @@ run() {
 
   case "$action" in
     "deploy-portainer-stack") simci_deploy_portainer_stack_command ;;
+    "delete-portainer-stack") simci_delete_portainer_stack_command ;;
     "run-unit-tests") simci_run_unit_tests_command ;;
   esac
 }

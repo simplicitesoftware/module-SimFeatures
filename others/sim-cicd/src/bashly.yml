@@ -28,12 +28,37 @@ commands:
     default: "1"
 
   examples:
-  - simci deploy-portainer-stack -n mystackname -f docker-compose.yml <base_url>
+  - simci deploy-portainer-stack -f docker-compose.yml  mystackname <base_url>
 
   environment_variables:
   - name: IO_PASSWORD
     help: Simplicité IO password
     required: true
+  - name: PORTAINER_API_TOKEN
+    required: true
+
+- name: delete-portainer-stack
+  help: Deletes a Portainer stack
+
+  args:
+  - name: stack
+    required: true
+    help: Stack name
+
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  flags:
+  - long: --environment
+    help: Portainer environment
+    arg: env
+    default: "1"
+
+  examples:
+  - simci delete-portainer-stack mystackname <base_url>
+
+  environment_variables:
   - name: PORTAINER_API_TOKEN
     required: true
 
