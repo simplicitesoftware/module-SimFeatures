@@ -4,5 +4,5 @@ instance="$stack.$portainer_server"
 module=${args[module]}
 
 echo "===================="
-curl -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io
+curl -s -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io
 echo "===================="

@@ -288,7 +288,7 @@ simci_run_unit_tests_command() {
   module=${args[module]}
 
   echo "===================="
-  curl -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io
+  curl -s -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io
   echo "===================="
 }
 

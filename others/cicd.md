@@ -11,19 +11,24 @@ Target infrastructure:
 History
 -------
 
-1. [17/12/25] deploy a portainer stack through bash
-    - stack webhook not usable in community edition, let's try API
-    - works, plus implemente health check with docker API through portainer
-2. deploy portainer stack from gitlab job
-    - started a tool for common CICD+portainer jobs (sim-cicd.sh)
-    - works
-3. [18/12/25] check unit tests
+1. deploy Portainer stack
+    - through CLI
+        - stack webhook not usable in community edition, let's try API
+        - works, plus implemente health check with docker API through portainer
+    - through gitlab job
+        - started a tool for common CICD+portainer jobs (sim-cicd.sh)
+        - works
+2. Unit tests
     - added dummy dataset and junit test to SimFeature
     - add IO_PASSWORD env to stack to call instance
-    - paused dev until `USE_IO` setting at startup is possible... 
-4. [22/12/25] set sonar
+    - fixed dataset
+    - run from CLI, then gitlab job
+    - TODO check job KO when test KO
+3. Sonar
     - added sonar project to soncarcloud org
     - added sonar config to module config on SimpFeatures 7.0
     - add sonarcloud analysis
-    - TODO check that the cache system works...
-    
+    - fixed various checkstyle violations
+    - TODO check job KO when gates fail
+4. Jacoco
+    - TODO !
