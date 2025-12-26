@@ -28,7 +28,7 @@ public class FtTestMain implements java.io.Serializable {
 	public void testImportedDataset() {
 		try (BusinessObject bo = getGrant().getBusinessObject("FtAttributes")) {
 			long countAttr1 = bo
-				.filters(Map.of("ftAttrCode", "ATTR_1"))
+				.filters(Map.of("ftAttrCode", "Dataset_01"))
 				.getCount();
 			
 			assertEquals(1,countAttr1);
