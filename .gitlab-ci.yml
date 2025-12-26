@@ -26,3 +26,9 @@ sonarcloud-check:
     - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=module-simfeatures
   rules:
     - if: '$SONARCLOUD_ENABLED'
+
+unit-tests:
+  stage: test
+  script:
+    - export IO_PASSWORD="${IO_PASSWORD}"
+    - ./others/sim-cicd/simci run-unit-tests SimFeatures gitlab-simfeatures $PORTAINER_URL
