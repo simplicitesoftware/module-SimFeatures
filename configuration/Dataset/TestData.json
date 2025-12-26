@@ -1,10 +1,14 @@
 {
  "row_module_id__mdl_name": "SimFeatures",
  "dt_name": "TestData",
- "dt_file": null,
+ "dt_file": {
+  "path": "data/TestData.json",
+  "mime": "application/json",
+  "name": "SimFeatures-dataOrdered-20251226122940.json"
+ },
  "dt_desc": "Main dataset for tests",
  "dt_exportdate_from": null,
  "dt_exportdate_to": null,
  "dt_export_format": "json",
- "dt_export_zip": true
+ "dt_export_zip": false
 }
