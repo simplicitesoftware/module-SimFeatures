@@ -13,6 +13,10 @@ cd ..
 export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
 export IO_PASSWORD="${IO_PASSWORD}"
 
-./sim-cicd/simci delete-portainer-stack $STACK_NAME $PORTAINER_SERVER
-./sim-cicd/simci deploy-portainer-stack -f portainer-stack.yml $STACK_NAME $PORTAINER_SERVER
-./sim-cicd/simci run-unit-tests $MODULE_NAME $STACK_NAME $PORTAINER_SERVER
+# ./sim-cicd/simci portainer-stack-get-id -v $STACK_NAME $PORTAINER_SERVER
+# ./sim-cicd/simci portainer-stack-delete $STACK_NAME $PORTAINER_SERVER
+# ./sim-cicd/simci portainer-stack-deploy -f portainer-stack.yml $STACK_NAME $PORTAINER_SERVER
+# ./sim-cicd/simci portainer-stack-start -v $STACK_NAME $PORTAINER_SERVER
+# ./sim-cicd/simci simplicite-run-unit-tests $MODULE_NAME $STACK_NAME $PORTAINER_SERVER
+#./sim-cicd/simci portainer-stack-get-file -v $STACK_NAME $PORTAINER_SERVER
+./sim-cicd/simci portainer-stack-get-coverage -v $STACK_NAME $PORTAINER_SERVER

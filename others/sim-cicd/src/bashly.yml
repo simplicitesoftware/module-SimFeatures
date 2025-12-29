@@ -3,7 +3,7 @@ help: Simplicité CI/CD Tooling
 version: 0.1.0
 
 commands:
-- name: deploy-portainer-stack
+- name: portainer-stack-deploy
   help: Deploys a Portainer stack
 
   args:
@@ -28,7 +28,7 @@ commands:
     default: "1"
 
   examples:
-  - simci deploy-portainer-stack -f docker-compose.yml  mystackname <base_url>
+  - simci portainer-stack-deploy -f docker-compose.yml  <stack_name> <base_url>
 
   environment_variables:
   - name: IO_PASSWORD
@@ -37,7 +37,7 @@ commands:
   - name: PORTAINER_API_TOKEN
     required: true
 
-- name: delete-portainer-stack
+- name: portainer-stack-delete
   help: Deletes a Portainer stack
 
   args:
@@ -56,14 +56,159 @@ commands:
     default: "1"
 
   examples:
-  - simci delete-portainer-stack mystackname <base_url>
+  - simci portainer-stack-delete <stack_name> <base_url>
 
   environment_variables:
   - name: PORTAINER_API_TOKEN
     required: true
 
-- name: run-unit-tests
-  help: Runs unit tests
+- name: portainer-stack-stop
+  help: Stops a Portainer stack
+
+  args:
+  - name: stack
+    required: true
+    help: Stack name
+
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  flags:
+  - long: --environment
+    help: Portainer environment
+    arg: env
+    default: "1"
+
+  - long: --verbose
+    short: -v
+    help: Verbose output with all echo statements
+
+  examples:
+  - simci portainer-stack-stop <stack_name> <base_url>
+
+  environment_variables:
+  - name: PORTAINER_API_TOKEN
+    required: true
+
+- name: portainer-stack-start
+  help: Starts a Portainer stack
+
+  args:
+  - name: stack
+    required: true
+    help: Stack name
+
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  flags:
+  - long: --environment
+    help: Portainer environment
+    arg: env
+    default: "1"
+
+  - long: --verbose
+    short: -v
+    help: Verbose output with all echo statements
+
+  examples:
+  - simci portainer-stack-start <stack_name> <base_url>
+
+  environment_variables:
+  - name: PORTAINER_API_TOKEN
+    required: true
+
+- name: portainer-stack-get-id
+  help: Gets the ID of a Portainer stack
+
+  args:
+  - name: stack
+    required: true
+    help: Stack name
+
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  flags:
+  - long: --environment
+    help: Portainer environment
+    arg: env
+    default: "1"
+  - long: --verbose
+    short: -v
+    help: Verbose output with all echo statements
+
+  examples:
+  - simci portainer-stack-get-id <stack_name> <base_url>
+
+  environment_variables:
+  - name: PORTAINER_API_TOKEN
+    required: true
+
+- name: portainer-stack-get-file
+  help: Gets a file from a stack's volume
+
+  args:
+  - name: stack
+    required: true
+    help: Stack name
+
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  flags:
+  - long: --environment
+    help: Portainer environment
+    arg: env
+    default: "1"
+  - long: --verbose
+    short: -v
+    help: Verbose output with all echo statements
+
+  examples:
+  - simci portainer-stack-get-id <stack_name> <base_url>
+
+  environment_variables:
+  - name: PORTAINER_API_TOKEN
+    required: true
+
+- name: portainer-stack-get-coverage
+  help: Gets a unit test coverage file from a stack's volume
+
+  args:
+  - name: stack
+    required: true
+    help: Stack name
+
+  - name: portainer_server
+    required: true
+    help: Base URL used by traefik for server (portainer.<base_url> , my-app.<base_url>, etc.)
+
+  flags:
+  - long: --environment
+    help: Portainer environment
+    arg: env
+    default: "1"
+  - long: --verbose
+    short: -v
+    help: Verbose output with all echo statements
+
+  examples:
+  - simci portainer-stack-get-coverage <stack_name> <base_url>
+
+  environment_variables:
+  - name: PORTAINER_API_TOKEN
+    required: true
+
+- name: simplicite-run-unit-tests
+  help: Runs unit tests on Simplicité instance
+
+  examples:
+  - simci simplicite-run-unit-tests <module_name> <stack_name> <base_url>
 
   args:
   - name: module

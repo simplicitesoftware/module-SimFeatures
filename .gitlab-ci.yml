@@ -31,5 +31,7 @@ sonarcloud-check:
 unit-tests:
   stage: test
   script:
+    - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
     - export IO_PASSWORD="${IO_PASSWORD}"
     - ./others/sim-cicd/simci run-unit-tests SimFeatures gitlab-simfeatures $PORTAINER_URL
+    - ./others/sim-cicd/simci portainer-stack-get-coverage -v gitlab-simfeatures $PORTAINER_URL

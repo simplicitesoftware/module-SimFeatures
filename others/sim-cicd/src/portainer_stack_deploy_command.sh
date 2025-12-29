@@ -25,24 +25,6 @@ if [[ -z "$container_id" ]]; then
 fi
 
 # Wait for container to be healthy
-local interval=3
-local elapsed=0
-while true; do
-    local status
-    status=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/$container_id/json" \
-        -H "X-API-Key:$PORTAINER_API_TOKEN" \
-        | jq -r ".State | .Health | .Status")
-
-    elapsed=$((elapsed + interval))
-
-    if [[ "$status" == "healthy" ]]; then
-        echo "[sim-cicd] Container is healthy after ${elapsed}s!"
-        break
-    elif [[ "$status" == "unhealthy" ]]; then
-        echo "[sim-cicd] Container is unhealthy after ${elapsed}s!" >&2
-        exit 1
-    else
-        echo "[sim-cicd] Waiting for container health check... (current: ${status:-starting} - ${elapsed}s)"
-        sleep "$interval"
-    fi
-done
+if ! _sim_cicd_wait_for_container_health "$portainer_url" "$env_id" "$container_id"; then
+    exit 1
+fi

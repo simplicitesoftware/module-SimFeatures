@@ -33,4 +33,36 @@ _sim_cicd_require_tools() {
   return 0
 }
 
+# Wait for container to be healthy
+_sim_cicd_wait_for_container_health() {
+  local portainer_url="$1"
+  local env_id="$2"
+  local container_id="$3"
+  local interval="${4:-3}"
+  local max_wait="${5:-300}"
+  
+  local elapsed=0
+  while [ $elapsed -lt $max_wait ]; do
+    local status
+    status=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/$container_id/json" \
+        -H "X-API-Key:$PORTAINER_API_TOKEN" \
+        | jq -r ".State | .Health | .Status" 2>/dev/null)
+    
+    if [ "$status" = "healthy" ]; then
+      echo "[sim-cicd] Container is healthy after ${elapsed}s!"
+      return 0
+    elif [ "$status" = "unhealthy" ]; then
+      echo "[sim-cicd] Container is unhealthy after ${elapsed}s!" >&2
+      return 1
+    fi
+    
+    echo "[sim-cicd] Waiting for container health check... (current: ${status:-starting} - ${elapsed}s)"
+    sleep "$interval"
+    elapsed=$((elapsed + interval))
+  done
+  
+  echo "[sim-cicd] Timeout waiting for container to become healthy (${elapsed}s)" >&2
+  return 1
+}
+
 _sim_cicd_require_tools
