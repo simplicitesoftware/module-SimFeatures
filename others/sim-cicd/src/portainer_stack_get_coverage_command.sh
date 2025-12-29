@@ -10,4 +10,4 @@ echo "[sim-cicd] === GET COVERAGE FROM PORTAINER STACK"
 simci_portainer_stack_stop_command "$stack" "$portainer_server" "$env_id" ""
 simci_portainer_stack_start_command "$stack" "$portainer_server" "$env_id" ""
 
-curl -fL https://$instance/content/jacoco/jacoco.xml > jacoco.xml
+curl https://$instance/content/jacoco/jacoco.xml > jacoco.xml
