@@ -43,6 +43,7 @@ sonarcloud-check:
     MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   script:
     - apk update && apk add nodejs npm
+    - ls -halt
     - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=module-simfeatures -Dsonar.coverage.jacoco.xmlReportPaths=jacoco.xml
   rules:
     - if: '$SONARCLOUD_ENABLED'
