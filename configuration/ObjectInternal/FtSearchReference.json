@@ -78,7 +78,7 @@
  "obo_search_index": "1",
  "obo_search_column": "1",
  "obo_search_dialog": true,
- "obo_search_docked": null,
+ "obo_search_docked": false,
  "obo_tpl_search_id__tpl_name": null,
  "obo_tpl_search_pos": null
 }
