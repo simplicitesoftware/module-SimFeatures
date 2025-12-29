@@ -1,6 +1,11 @@
 variables:
   SONARCLOUD_ENABLED: "true"
 
+stages:
+  - build
+  - test
+  - code-quality
+
 deploy-test:
   stage: build
   script:
@@ -9,9 +14,23 @@ deploy-test:
     - ./others/sim-cicd/simci delete-portainer-stack gitlab-simfeatures $PORTAINER_URL
     - ./others/sim-cicd/simci deploy-portainer-stack -f ./others/portainer-stack.yml gitlab-simfeatures $PORTAINER_URL
 
+unit-tests:
+  stage: test
+  script:
+    - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
+    - export IO_PASSWORD="${IO_PASSWORD}"
+    - ./others/sim-cicd/simci run-unit-tests SimFeatures gitlab-simfeatures $PORTAINER_URL
+    - ./others/sim-cicd/simci portainer-stack-get-coverage -v gitlab-simfeatures $PORTAINER_URL
+  artifacts:
+    paths:
+      - jacoco.xml
+    expire_in: 1 hour
+
 sonarcloud-check:
   image: maven:3.9-eclipse-temurin-21-alpine
-  stage: test
+  stage: code-quality
+  dependencies:
+    - unit-tests
   cache:
     key:
       files:
@@ -24,14 +43,7 @@ sonarcloud-check:
     MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
   script:
     - apk update && apk add nodejs npm
-    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=module-simfeatures
+    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=module-simfeatures -Dsonar.coverage.jacoco.xmlReportPaths=jacoco.xml
   rules:
     - if: '$SONARCLOUD_ENABLED'
 
-unit-tests:
-  stage: test
-  script:
-    - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
-    - export IO_PASSWORD="${IO_PASSWORD}"
-    - ./others/sim-cicd/simci run-unit-tests SimFeatures gitlab-simfeatures $PORTAINER_URL
-    - ./others/sim-cicd/simci portainer-stack-get-coverage -v gitlab-simfeatures $PORTAINER_URL
