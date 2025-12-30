@@ -33,6 +33,8 @@ History
     - TODO check job KO when gates fail
 4. Jacoco
     - update stack
-    - TODO test cli
+    - managed to get xml
+    - had to update module conf to NOT exclude java files from coverage analysis
 5. Playright
     - TODO !
+6. Sonar report artifact
