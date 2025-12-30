@@ -4,7 +4,7 @@
  "dt_file": {
   "path": "data/TestData.json",
   "mime": "application/json",
-  "name": "SimFeatures-dataOrdered-20251226122940.json"
+  "name": "TestData.json"
  },
  "dt_desc": "Main dataset for tests",
  "dt_exportdate_from": null,

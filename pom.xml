@@ -26,6 +26,7 @@ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
     <sonar.exclusions>SimFeatures.xml,SimFeatures.json,SimFeatures-*.yml,configuration/**,**.min.js,**.min.css</sonar.exclusions>
     <sonar.coverage.exclusions>resources/**.js,src/**.java</sonar.coverage.exclusions>
     <sonar.organization>simplicite-software-gitlab</sonar.organization>
+    <sonar.coverage.exclusions>resources/**.js</sonar.coverage.exclusions>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>
   <packaging>jar</packaging>
