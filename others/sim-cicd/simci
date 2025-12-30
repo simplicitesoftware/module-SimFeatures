@@ -824,9 +824,26 @@ simci_portainer_stack_get_coverage_command() {
 
   echo "[sim-cicd] === GET COVERAGE FROM PORTAINER STACK"
 
-  simci_portainer_stack_stop_command "$stack" "$portainer_server" "$env_id" ""
-  simci_portainer_stack_start_command "$stack" "$portainer_server" "$env_id" ""
+  # Get the main container ID from the stack
+  CONTAINER_ID=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=1" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      | jq -r ".[] | select(.Labels[\"com.docker.compose.project\"]==\"$stack\") | .Id" | head -n 1)
 
+  if [ -z "$CONTAINER_ID" ]; then
+      echo "[sim-cicd] No container found for stack '$stack'" >&2
+      exit 1
+  fi
+
+  # Restart container
+  curl -s -X POST "https://$portainer_url/api/endpoints/$env_id/docker/containers/$CONTAINER_ID/restart" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN"
+
+  # Wait for container to be healthy
+  if ! _sim_cicd_wait_for_container_health "$portainer_url" "$env_id" "$CONTAINER_ID"; then
+      exit 1
+  fi
+
+  sleep 30
   curl https://$instance/content/jacoco/jacoco.xml > jacoco.xml
 }
 

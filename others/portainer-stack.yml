@@ -4,8 +4,8 @@ services:
     restart: always
     container_name: ${COMPOSE_PROJECT_NAME}-app
     environment:
-      SYSPARAM_USE_IO: "yes"
-      SYSPARAM_USE_IO_TESTER: "yes"
+      SIMPLICITE_SYSPARAM_USE_IO: "yes"
+      SIMPLICITE_SYSPARAM_USE_IO_TESTER: "yes"
       IO_PASSWORD: "${IO_PASSWORD}"
       DEV_MODE: true
       MODULES_IMPORT_SPEC: |
@@ -17,7 +17,6 @@ services:
               branch: "7.0"
             datasets: true
       JACOCO_MODULES: "SimFeatures"
-      JACOCO_DESTFILE_APPEND: false
     volumes:
       - jacoco-data:/usr/local/tomcat/webapps/ROOT/WEB-INF/dbdoc/content/jacoco
     networks:
