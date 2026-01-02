@@ -443,12 +443,14 @@ test('Special fields', async ({ page }) => {
 });
 
 async function openTestRow(page: Page, object: string, field: string, key: string) {
-  await page.locator(`[data-obj='${object}']`).click();
   // Wait for list to load
   await skeletonDismissed(page);
+  await expect(page.locator("#list_FtAttributes_the_ajax_FtAttributes")).toBeVisible()
+  // Wait for the specific row to be visible before clicking
   await page.locator(`[data-list='list_${object}_the_ajax_${object}'] [data-field='${field}']`).getByText(`${key}`).click();
   // Wait for form to load
   await skeletonDismissed(page);
+  await loaded(page);
 }
 
 function getField(page: Page, name: string) {
