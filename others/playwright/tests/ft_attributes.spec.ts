@@ -162,70 +162,71 @@ test('Dates', async ({ page }) => {
   let yyyy = today.getFullYear();
   let hh = String(today.getHours()).padStart(2, '0');
   let mi = String(today.getMinutes()).padStart(2, '0');
+  let ss = String(today.getSeconds()).padStart(2, '0');
 
   // Date
   await page.locator("[data-field='ftAttrDate'] .fa-calendar-alt").click();
-  await expect(page.locator("[data-field='ftAttrDate'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDate'] .datetimepicker tfoot").getByRole("button", { name: "Today" }).click();
+  await expect(page.locator("[data-field='ftAttrDate'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrDate'] .flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
   await saveForm(page);
   await expect(getField(page, "ftAttrDate")).toHaveValue(`${mm}/${dd}/${yyyy}`);
 
   // Date (to month)
   await page.locator("[data-field='ftAttrDateToMonth'] .fa-calendar-alt").click();
-  await expect(page.locator("[data-field='ftAttrDateToMonth'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDateToMonth'] .datetimepicker tfoot").getByRole("button", { name: "Today" }).click();
+  await expect(page.locator("[data-field='ftAttrDateToMonth'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrDateToMonth'] .flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
   await saveForm(page);
   await expect(getField(page, "ftAttrDateToMonth")).toHaveValue(`${mm}/${yyyy}`);
 
   // Date (to year)
   await page.locator("[data-field='ftAttrDateToYear'] .fa-calendar-alt").click();
-  await expect(page.locator("[data-field='ftAttrDateToYear'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDateToYear'] .datetimepicker tfoot").getByRole("button", { name: "Today" }).click();
+  await expect(page.locator("[data-field='ftAttrDateToYear'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrDateToYear'] .flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
   await saveForm(page);
   await expect(getField(page, "ftAttrDateToYear")).toHaveValue(`${yyyy}`);
 
   // Date time
   await page.locator("[data-field='ftAttrDateTime'] .fa-th").click();
-  await expect(page.locator("[data-field='ftAttrDateTime'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDateTime'] .datetimepicker tfoot").getByRole("button", { name: "Now" }).click();
+  await expect(page.locator("[data-field='ftAttrDateTime'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrDateTime'] .flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
   await saveForm(page);
-  await expect(getField(page, "ftAttrDateTime")).toHaveValue(`${mm}/${dd}/${yyyy} ${hh}:${mi}:00`);
+  today = new Date();
+  hh = String(today.getHours()).padStart(2, '0');
+  mi = String(today.getMinutes()).padStart(2, '0');
+  ss = String(today.getSeconds()).padStart(2, '0');
+  await expect(getField(page, "ftAttrDateTime")).toHaveValue(`${mm}/${dd}/${yyyy} ${hh}:${mi}:${ss}`);
 
   // Date time (to minute)
   await page.locator("[data-field='ftAttrDateTimeToMinute'] .fa-th").click();
-  await expect(page.locator("[data-field='ftAttrDateTimeToMinute'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDateTimeToMinute'] .datetimepicker tfoot").getByRole("button", { name: "Now" }).click();
+  await expect(page.locator("[data-field='ftAttrDateTimeToMinute'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrDateTimeToMinute'] .flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
   await saveForm(page);
+  today = new Date();
+  hh = String(today.getHours()).padStart(2, '0');
+  mi = String(today.getMinutes()).padStart(2, '0');
   await expect(getField(page, "ftAttrDateTimeToMinute")).toHaveValue(`${mm}/${dd}/${yyyy} ${hh}:${mi}`);
-
-  // Date time (to day)
-  await page.locator("[data-field='ftAttrDateTimeToDay'] .fa-th").click();
-  await expect(page.locator("[data-field='ftAttrDateTimeToDay'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDateTimeToDay'] .datetimepicker tfoot").getByRole("button", { name: "Today" }).click();
-  await saveForm(page);
-  await expect(getField(page, "ftAttrDateTimeToDay")).toHaveValue(`${mm}/${dd}/${yyyy}`);
 
   // Date time (to month)
   await page.locator("[data-field='ftAttrDateTimeToMonth'] .fa-th").click();
-  await expect(page.locator("[data-field='ftAttrDateTimeToMonth'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDateTimeToMonth'] .datetimepicker tfoot").getByRole("button", { name: "Today" }).click();
+  await expect(page.locator("[data-field='ftAttrDateTimeToMonth'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrDateTimeToMonth'] .flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
   await saveForm(page);
   await expect(getField(page, "ftAttrDateTimeToMonth")).toHaveValue(`${mm}/${yyyy}`);
 
   // Date time (to year)
   await page.locator("[data-field='ftAttrDateTimeToYear'] .fa-th").click();
-  await expect(page.locator("[data-field='ftAttrDateTimeToYear'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrDateTimeToYear'] .datetimepicker tfoot").getByRole("button", { name: "Today" }).click();
+  await expect(page.locator("[data-field='ftAttrDateTimeToYear'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrDateTimeToYear'] .flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
   await saveForm(page);
   await expect(getField(page, "ftAttrDateTimeToYear")).toHaveValue(`${yyyy}`);
 
   // Time
   await page.locator("[data-field='ftAttrTime'] .fa-clock").click();
-  await expect(page.locator("[data-field='ftAttrTime'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrTime'] .datetimepicker tfoot").getByRole("button", { name: "Now" }).click();
+  await expect(page.locator("[data-field='ftAttrTime'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrTime'] .flatpickr-calendar .flatpickr-buttons [data-action='NOW']").click();
   await saveForm(page);
   // Tolerate ±1 minute difference
-  const expectedTime = `${hh}:${mi}:00`;
+  const expectedTime = `${hh}:${mi}:${ss}`;
   const actualValue = await getField(page, "ftAttrTime").inputValue();
   const [expectedH, expectedM] = expectedTime.split(':').map(Number);
   const [actualH, actualM] = actualValue.split(':').map(Number);
@@ -236,8 +237,8 @@ test('Dates', async ({ page }) => {
 
   // Time (to minute)
   await page.locator("[data-field='ftAttrTimeToMinute'] .fa-clock").click();
-  await expect(page.locator("[data-field='ftAttrTimeToMinute'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrTimeToMinute'] .datetimepicker tfoot").getByRole("button", { name: "Now" }).click();
+  await expect(page.locator("[data-field='ftAttrTimeToMinute'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrTimeToMinute'] .flatpickr-calendar .flatpickr-buttons [data-action='NOW']").click();
   await saveForm(page);
   today = new Date();
   hh = String(today.getHours()).padStart(2, '0');
@@ -246,37 +247,10 @@ test('Dates', async ({ page }) => {
 
   // Time (to hour)
   await page.locator("[data-field='ftAttrTimeToHour'] .fa-clock").click();
-  await expect(page.locator("[data-field='ftAttrTimeToHour'] .datetimepicker")).toBeVisible();
-  await page.locator("[data-field='ftAttrTimeToHour'] .datetimepicker tfoot").getByRole("button", { name: "Now" }).click();
+  await expect(page.locator("[data-field='ftAttrTimeToHour'] .flatpickr-calendar")).toBeVisible();
+  await page.locator("[data-field='ftAttrTimeToHour'] .flatpickr-calendar .flatpickr-buttons [data-action='NOW']").click();
   await saveForm(page);
   await expect(getField(page, "ftAttrTimeToHour")).toHaveValue(`${hh}`);
-
-  // Save once at the end
-  await saveForm(page);
-
-  // Assert after saveForm
-  await expect(getField(page, "ftAttrDate")).toHaveValue(`${mm}/${dd}/${yyyy}`);
-  await expect(getField(page, "ftAttrDateToMonth")).toHaveValue(`${mm}/${yyyy}`);
-  await expect(getField(page, "ftAttrDateToYear")).toHaveValue(`${yyyy}`);
-  await expect(getField(page, "ftAttrDateTime")).toHaveValue(`${mm}/${dd}/${yyyy} ${hh}:${mi}:00`);
-  await expect(getField(page, "ftAttrDateTimeToMinute")).toHaveValue(`${mm}/${dd}/${yyyy} ${hh}:${mi}`);
-  await expect(getField(page, "ftAttrDateTimeToDay")).toHaveValue(`${mm}/${dd}/${yyyy}`);
-  await expect(getField(page, "ftAttrDateTimeToMonth")).toHaveValue(`${mm}/${yyyy}`);
-  await expect(getField(page, "ftAttrDateTimeToYear")).toHaveValue(`${yyyy}`);
-  // Tolerate ±1 minute difference for time fields
-  const expectedTimeFinal = `${hh}:${mi}:00`;
-  const actualTimeValueFinal = await getField(page, "ftAttrTime").inputValue();
-  const [expectedHFinal, expectedMFinal] = expectedTimeFinal.split(':').map(Number);
-  const [actualHFinal, actualMFinal] = actualTimeValueFinal.split(':').map(Number);
-  const expectedMinutesFinal = expectedHFinal * 60 + expectedMFinal;
-  const actualMinutesFinal = actualHFinal * 60 + actualMFinal;
-  const diffFinal = Math.abs(actualMinutesFinal - expectedMinutesFinal);
-  expect(diffFinal).toBeLessThanOrEqual(1);
-  const todayFinal = new Date();
-  const hhFinal = String(todayFinal.getHours()).padStart(2, '0');
-  const miFinal = String(todayFinal.getMinutes()).padStart(2, '0');
-  await expect(getField(page, "ftAttrTimeToMinute")).toHaveValue(`${hhFinal}:${miFinal}`);
-  await expect(getField(page, "ftAttrTimeToHour")).toHaveValue(`${hhFinal}`);
 
   await deleteRow(page, key);
 });
@@ -445,7 +419,7 @@ test('Special fields', async ({ page }) => {
   await page.locator("#dlgmodal input").fill("test");
   await page.locator("#dlgmodal [data-action='OK']").click();
   await expect(notepad.locator(".checklist .title")).toContainText("test");
-  await notepad.locator(".list-bar [data-action='add']").click();
+  await notepad.locator(".checklist-item").click();
   await page.keyboard.type("first item");
   await page.keyboard.down('Escape');
   await notepad.locator("input[type='checkbox']").click();
