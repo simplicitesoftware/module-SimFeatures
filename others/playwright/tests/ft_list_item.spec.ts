@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { login, logout, saveList, randomString, skeletonDismissed, loaded } from './helpers';
+import { login, logout, saveList, randomString, skeletonDismissed, loaded, openList } from './helpers';
 
 test.beforeEach(async ({ page }) => {
   await login(page);
@@ -10,7 +10,7 @@ test.afterEach(async ({ page }) => {
 });
 
 test('Create on list', async ({ page }) => {
-  await openList(page, "FtListItems");
+  await openList(page, "FtDomain", "FtListItems");
 
   await page.locator("button[data-action='addlist']").click();
   await expect(page.locator(('#list_FtListItem_the_ajax_FtListItem tr[data-rowid="0"]'))).toBeVisible();
@@ -20,7 +20,7 @@ test('Create on list', async ({ page }) => {
 });
 
 test('Update on list', async ({ page }) => {
-  await openList(page, "FtListItems");
+  await openList(page, "FtDomain", "FtListItems");
   const code = randomString(10);
   await page.locator("button[data-action='addlist']").click();
   await skeletonDismissed(page);
@@ -44,7 +44,7 @@ test('Update on list', async ({ page }) => {
 });
 
 test('Reorder list', async ({ page }) => {
-  await openList(page, "FtListItems");
+  await openList(page, "FtDomain", "FtListItems");
   
   // create two elements
   await page.locator("button[data-action='addlist']").click();
@@ -62,22 +62,6 @@ test('Reorder list', async ({ page }) => {
   await page.mouse.up();
 
 });
-
-/*test('Reorder on list', async ({ page }) => {
-  await openList(page, "FtListItems");
-
-  await page.locator("button[data-action='addlist']").click();
-  await saveList(page);
-
-});
-*/
-
-async function openList(page: Page, object: string) {
-  if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
-    await page.locator("[data-domain='FtDomain']").click();
-  } 
-  await page.locator("[data-obj='FtListItem']").click();
-}
 
 function getField(page: Page, name: string) {
   return page.locator(`#field_${name}`);
