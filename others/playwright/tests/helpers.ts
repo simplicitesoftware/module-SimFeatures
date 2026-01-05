@@ -79,3 +79,10 @@ export async function saveList(page: Page) {
 export function randomString(length: number) {
   return Math.random().toString(36).substring(2, length);
 }
+
+export async function openList(page: Page, domain: string, object: string) {
+  if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
+    await page.locator(`[data-domain='${domain}']`).click();
+  } 
+  await page.locator(`[data-obj='${object}']`).click();
+}
