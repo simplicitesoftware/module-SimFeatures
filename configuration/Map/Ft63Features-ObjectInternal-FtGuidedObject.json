@@ -1,0 +1,13 @@
+{
+ "map_domain_id__obd_name": "Ft63Features",
+ "map_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtGuidedObject",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtGuidedObject"}
+ },
+ "map_order": 1010,
+ "map_ext": false,
+ "row_module_id__mdl_name": "SimFeatures"
+}
