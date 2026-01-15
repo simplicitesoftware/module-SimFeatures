@@ -80,9 +80,17 @@ export function randomString(length: number) {
   return Math.random().toString(36).substring(2, length);
 }
 
-export async function openList(page: Page, domain: string, object: string) {
+export async function openList(page: Page, domain: string, object: string, path?: string) {
   if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
-    await page.locator(`[data-domain='${domain}']`).click();
+    if (path) {
+      let parent = path.split('.')[0];
+      if (parent) {
+        await page.locator(`[data-domain='${parent}']`).click();
+        await page.locator(` [data-path='${path}']`).click();
+      }
+    } else {
+      await page.locator(`[data-domain='${domain}']`).click();
+    }
   } 
   await page.locator(`[data-obj='${object}']`).click();
 }
