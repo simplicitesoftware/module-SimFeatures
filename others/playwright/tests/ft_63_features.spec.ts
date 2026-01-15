@@ -22,7 +22,7 @@ test('Context menu on lists', async ({ page }) => {
     await skeletonDismissed(page);
     await page.locator("tr[data-rowid='0'] [data-field='ftLstType'] span.select2").click();
     await page.locator("tr[data-rowid='0'] [data-field='ftLstType'] .select2-results li").first().click();
-    await page.locator("tr[data-rowid='0'] [data-field='ftLstDescription'] .htmleditor").click();
+    await page.locator("tr[data-rowid='0'] [data-field='ftLstDescription'] iframe").click();
     await page.keyboard.type(code);
     await saveList(page);
     await page.locator('button[data-action="cancel"]').click();
