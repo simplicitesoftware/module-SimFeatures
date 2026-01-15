@@ -182,6 +182,17 @@ Object showcasing all the possible attributes
     - `FT_ADMIN` SimFeatures Admin
     - `FT_READ` SimFeatures Reader
 
+`FtGuidedObject` business object definition
+-------------------------------------------
+
+[Object with user guide](https://docs.simplicite.io/versions/release-notes/v6-3/#ui-guides)
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftGoUserKey`                                                | char(100)                                | yes*     | yes       |          | -                                                                                |
+
 `FtListItem` business object definition
 ---------------------------------------
 

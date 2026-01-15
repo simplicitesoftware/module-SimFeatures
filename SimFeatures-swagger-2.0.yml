@@ -3958,6 +3958,52 @@ paths:
       - FtActions
       consumes:
       - application/json
+  /rest/FtGuidedObject:
+    get:
+      summary: Search FtGuidedObject business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftguidedobject-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtGuidedObject'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: ftGoUserKey
+        description: Search filter for User key
+        type: string
+        required: false
+      tags:
+      - FtGuidedObject
   /rest/FtTgoTag/{row_id}:
     post:
       summary: Create a new FtTgoTag business object record
@@ -5020,6 +5066,168 @@ paths:
       - FtStatesHistoric
       consumes:
       - application/json
+  /rest/FtGuidedObject/{row_id}:
+    post:
+      summary: Create a new FtGuidedObject business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftguidedobject-create
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtGuidedObject'
+          description: Success in creating a new business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtGuidedObject'
+        in: body
+        name: body
+      tags:
+      - FtGuidedObject
+      consumes:
+      - application/json
+    get:
+      summary: Get a FtGuidedObject business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftguidedobject-get
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtGuidedObject'
+          description: Success in getting a single business object record
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - in: query
+        name: _inline_documents
+        description: Inline documents?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_objects
+        description: Inline objects?
+        type: boolean
+        required: false
+      tags:
+      - FtGuidedObject
+    delete:
+      summary: Delete a FtGuidedObject business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftguidedobject-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      tags:
+      - FtGuidedObject
+    put:
+      summary: Update a FtGuidedObject business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftguidedobject-update
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtGuidedObject'
+          description: Success in updating a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtGuidedObject'
+        in: body
+        name: body
+      tags:
+      - FtGuidedObject
+      consumes:
+      - application/json
   /rest/FtActions:
     get:
       summary: Search FtActions business object records or get contextualized metadata
@@ -5420,6 +5628,21 @@ securityDefinitions:
     name: Authorization
     type: apiKey
 definitions:
+  FtGuidedObject:
+    description: |-
+      Guided object:
+
+      [Object with user guide](https://docs.simplicite.io/versions/release-notes/v6-3/#ui-guides)
+    type: object
+    properties:
+      ftGoUserKey:
+        description: User key
+        type: string
+        maxLength: 100
+      row_id:
+        description: Unique technical row ID
+        type: string
+        maxLength: 11
   FtStates:
     description: States
     type: object
@@ -6144,6 +6367,11 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/FtTgoTag'
+  ArrayOfFtGuidedObject:
+    description: List of Guided object
+    type: array
+    items:
+      $ref: '#/definitions/FtGuidedObject'
   FtStatesHistoric:
     description: Ft states historic
     type: object
@@ -6463,6 +6691,8 @@ tags:
   description: Attributes
 - name: FtCustomUser
   description: Custom User
+- name: FtGuidedObject
+  description: Guided object
 - name: FtListItem
   description: Lists
 - name: FtListOrdering
