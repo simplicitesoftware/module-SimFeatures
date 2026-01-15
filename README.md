@@ -204,6 +204,18 @@ Object showcasing all the possible attributes
     - `B` code B
     - `C` code C
 
+`FtListOrdering` business object definition
+-------------------------------------------
+
+[Quick list ordering](https://docs.simplicite.io/versions/release-notes/v6-3/#quick-list-ordering)
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftLoOrder`                                                  | int(100)                                 |          | yes       |          | -                                                                                |
+| `ftLoLabel`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
+
 `FtM2m` business object definition
 ----------------------------------
 

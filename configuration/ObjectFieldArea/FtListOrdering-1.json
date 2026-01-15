@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtListOrdering-1",
+ "ofa_position": 1,
+ "ofa_title": false,
+ "ofa_ui": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftLoOrder\"><\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftLoLabel\"><\/div>\n  <\/div>\n<\/div>",
+ "ofa_icon": "star",
+ "row_module_id__mdl_name": "SimFeatures"
+}
