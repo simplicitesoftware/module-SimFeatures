@@ -10,7 +10,7 @@ test.afterEach(async ({ page }) => {
 });
 
 test('Create on list', async ({ page }) => {
-  await openList(page, "FtDomain", "FtListItems");
+  await openList(page, "FtDomain", "FtListItem");
 
   await page.locator("button[data-action='addlist']").click();
   await expect(page.locator(('#list_FtListItem_the_ajax_FtListItem tr[data-rowid="0"]'))).toBeVisible();
@@ -20,7 +20,7 @@ test('Create on list', async ({ page }) => {
 });
 
 test('Update on list', async ({ page }) => {
-  await openList(page, "FtDomain", "FtListItems");
+  await openList(page, "FtDomain", "FtListItem");
   const code = randomString(10);
   await page.locator("button[data-action='addlist']").click();
   await skeletonDismissed(page);
@@ -44,7 +44,7 @@ test('Update on list', async ({ page }) => {
 });
 
 test('Reorder list', async ({ page }) => {
-  await openList(page, "FtDomain", "FtListItems");
+  await openList(page, "FtDomain", "FtListItem");
   
   // create two elements
   await page.locator("button[data-action='addlist']").click();
