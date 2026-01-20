@@ -34,7 +34,7 @@ test('Context menu on lists', async ({ page }) => {
 });
 
 test('Quick list ordering', async ({ page }) => {
-    await openList(page, "Ft63Features", "FtListOrdering", "FtDomain.Ft63Features");
+    await openList(page, "FtDomain", "FtListOrdering");
     // Create first element
     await page.locator("button[data-action='addlist']").click();
     await skeletonDismissed(page);
@@ -74,7 +74,7 @@ test('Quick list ordering', async ({ page }) => {
 });
 
 test('UI guides', async ({ page }) => {
-  await openList(page, "Ft63Features", "FtGuidedObject", "FtDomain.Ft63Features");
+  await openList(page, "FtDomain", "FtGuidedObject");
   await page.locator(".list-actionbar [data-action='playguide']").click();
 
   await expect(page.locator(".guide-overlay")).toBeVisible();
