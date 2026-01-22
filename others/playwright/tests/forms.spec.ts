@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { skeletonDismissed, loaded, login, logout, saveForm } from './helpers';
+import { skeletonDismissed, loaded, login, logout, saveForm } from '../tools/helpers';
 
 test.beforeEach(async ({ page }) => {
   // Runs before each test and signs in each page.
