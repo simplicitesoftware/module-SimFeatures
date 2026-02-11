@@ -186,6 +186,17 @@ Object showcasing all the possible attributes
     - `FT_ADMIN` SimFeatures Admin
     - `FT_READ` SimFeatures Reader
 
+`FtGuidedObject` business object definition
+-------------------------------------------
+
+[Object with user guide](https://docs.simplicite.io/versions/release-notes/v6-3/#ui-guides)
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftGoUserKey`                                                | char(100)                                | yes*     | yes       |          | -                                                                                |
+
 `FtListItem` business object definition
 ---------------------------------------
 
@@ -207,6 +218,18 @@ Object showcasing all the possible attributes
     - `A` code A
     - `B` code B
     - `C` code C
+
+`FtListOrdering` business object definition
+-------------------------------------------
+
+[Quick list ordering](https://docs.simplicite.io/versions/release-notes/v6-3/#quick-list-ordering)
+
+### Fields
+
+| Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftLoOrder`                                                  | int(100)                                 |          | yes       |          | -                                                                                |
+| `ftLoLabel`                                                  | char(100)                                | yes*     | yes       |          | -                                                                                |
 
 `FtM2m` business object definition
 ----------------------------------
