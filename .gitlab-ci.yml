@@ -11,16 +11,16 @@ deploy-test:
   script:
     - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
     - export IO_PASSWORD="${IO_PASSWORD}"
-    - ./others/sim-cicd/simci portainer-stack-delete gitlab-simfeatures $PORTAINER_URL
-    - ./others/sim-cicd/simci portainer-stack-deploy -f ./others/portainer-stack.yml gitlab-simfeatures $PORTAINER_URL
+    - ./others/cicd/simci portainer-stack-delete gitlab-simfeatures $PORTAINER_URL
+    - ./others/cicd/simci portainer-stack-deploy -f ./others/cicd/portainer-stack.yml gitlab-simfeatures $PORTAINER_URL
 
 unit-tests:
   stage: test
   script:
     - export PORTAINER_API_TOKEN="${PORTAINER_API_TOKEN}"
     - export IO_PASSWORD="${IO_PASSWORD}"
-    - ./others/sim-cicd/simci simplicite-run-unit-tests SimFeatures gitlab-simfeatures $PORTAINER_URL
-    - ./others/sim-cicd/simci portainer-stack-get-coverage -v gitlab-simfeatures $PORTAINER_URL
+    - ./others/cicd/simci simplicite-run-unit-tests SimFeatures gitlab-simfeatures $PORTAINER_URL
+    - ./others/cicd/simci portainer-stack-get-coverage -v gitlab-simfeatures $PORTAINER_URL
   artifacts:
     paths:
       - jacoco.xml

@@ -843,7 +843,6 @@ simci_portainer_stack_get_coverage_command() {
       exit 1
   fi
 
-  sleep 30
   curl https://$instance/content/jacoco/jacoco.xml > jacoco.xml
 }
 
@@ -857,7 +856,18 @@ simci_simplicite_run_unit_tests_command() {
   module=${args[module]}
 
   echo "[sim-cicd] === RUN UNIT TESTS"
-  curl -s -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io
+
+  # Run unit tests and capture output
+  response=$(curl -s -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io)
+
+  # Print the response
+  echo "$response"
+
+  # If the response contains "ERROR", fail with exit code 1 so the pipeline fails
+  if echo "$response" | grep -q "ERROR"; then
+    exit 1
+  fi
+
 }
 
 # :command.parse_requirements
