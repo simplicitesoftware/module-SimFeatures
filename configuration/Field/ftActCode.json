@@ -38,5 +38,6 @@
  "fld_classification": null,
  "fld_anon": null,
  "row_module_id__mdl_name": "SimFeatures",
- "fld_incrementsyntax": "Action #<00>"
+ "fld_incrementsyntax": "Action #<00>",
+ "fld_deprecated": null
 }

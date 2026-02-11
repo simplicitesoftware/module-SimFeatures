@@ -2,6 +2,7 @@
  "obd_name": "FtDomain",
  "obd_comment": null,
  "obd_type": "D",
+ "obd_menu": "L",
  "obd_view_id__viw_name": null,
  "obd_nohome": true,
  "obd_icon": "img/color/test_tube",

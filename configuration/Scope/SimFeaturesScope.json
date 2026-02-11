@@ -1,0 +1,11 @@
+{
+ "sco_name": "SimFeaturesScope",
+ "sco_order": 1,
+ "sco_lang": null,
+ "sco_group": null,
+ "sco_icon": "img/color/test_tube",
+ "sco_permalink": null,
+ "sco_disp_id__dis_code": null,
+ "sco_home_id__viw_name": "SimFeaturesScope",
+ "row_module_id__mdl_name": "SimFeatures"
+}

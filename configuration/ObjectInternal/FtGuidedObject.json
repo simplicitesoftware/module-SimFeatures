@@ -76,9 +76,9 @@
  "obo_permalink": null,
  "obo_btn_searchform": true,
  "obo_search_index": null,
- "obo_search_column": null,
- "obo_search_dialog": null,
- "obo_search_docked": null,
+ "obo_search_column": "C",
+ "obo_search_dialog": true,
+ "obo_search_docked": false,
  "obo_tpl_search_id__tpl_name": null,
  "obo_tpl_search_pos": null
 }
