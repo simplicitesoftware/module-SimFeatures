@@ -82,6 +82,5 @@ jobs:
       - name: Run SonarCloud analysis
         run: |
           mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -Dsonar.projectKey=module-simfeatures \
             -Dsonar.coverage.jacoco.xmlReportPaths=jacoco.xml
 

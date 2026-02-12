@@ -1,5 +1,5 @@
 variables:
-  SONARCLOUD_ENABLED: "true"
+  SONARCLOUD_ENABLED: "false"
 
 stages:
   - build
@@ -44,7 +44,7 @@ sonarcloud-check:
   script:
     - apk update && apk add nodejs npm
     - ls -halt
-    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.projectKey=module-simfeatures -Dsonar.coverage.jacoco.xmlReportPaths=jacoco.xml
+    - mvn verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar -Dsonar.coverage.jacoco.xmlReportPaths=jacoco.xml
   rules:
     - if: '$SONARCLOUD_ENABLED'
 

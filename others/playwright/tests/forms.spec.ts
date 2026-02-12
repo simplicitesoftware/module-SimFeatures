@@ -160,9 +160,7 @@ test('Dates', async ({ page }) => {
   let mm = String(today.getMonth() + 1).padStart(2, '0');
   let dd = String(today.getDate()).padStart(2, '0');
   let yyyy = today.getFullYear();
-  let hh = String(today.getHours()).padStart(2, '0');
-  let mi = String(today.getMinutes()).padStart(2, '0');
-  let ss = String(today.getSeconds()).padStart(2, '0');
+  let hh, mi, ss;
 
   // Date
   await page.locator("[data-field='ftAttrDate'] .fa-calendar-alt").click();
@@ -350,7 +348,7 @@ test('Files', async ({ page }) => {
   const downloadPromise = page.waitForEvent('download');
   await page.locator("[data-field='ftAttrDocument'] .bopen_field_ftAttrDocument").click();
   const download = await downloadPromise;
-  await expect(download.suggestedFilename()).toBe("dummyfile.txt");
+  expect(download.suggestedFilename()).toBe("dummyfile.txt");
 
   // Preview document
   await page.locator("[data-field='ftAttrDocument'] .bpreview_field_ftAttrDocument").click();
@@ -413,7 +411,7 @@ test('Special fields', async ({ page }) => {
   await expect(page.locator("[data-field='ftAttrColor'] .color-picker")).not.toBeVisible();
 
   // Notepad user activities
-  const notepad = await page.locator("[data-field='ftAttrNotepadUserActivities']");
+  const notepad = page.locator("[data-field='ftAttrNotepadUserActivities']");
   await notepad.locator(".btn-newlist").click();
   expect(page.locator("#dlgmodal")).toBeVisible();
   await page.locator("#dlgmodal input").fill("test");

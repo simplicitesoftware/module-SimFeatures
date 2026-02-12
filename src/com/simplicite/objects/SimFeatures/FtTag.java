@@ -7,6 +7,5 @@ import com.simplicite.util.*;
  */
 public class FtTag extends ObjectDB {
 	private static final long serialVersionUID = 1L;
-	
 
 }

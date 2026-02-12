@@ -17,7 +17,6 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
         getField("usr_first_name").setVisibility(ObjectField.VIS_HIDDEN);
         getField("usr_last_name").setVisibility(ObjectField.VIS_HIDDEN);
         getField("usr_image_id").setVisibility(ObjectField.VIS_HIDDEN);
-        //getField("usr_email").setVisibility(ObjectField.VIS_HIDDEN);
         getField("usr_lang").setVisibility(ObjectField.VIS_HIDDEN);
         getField("usr_cell_num").setVisibility(ObjectField.VIS_HIDDEN);
         getField("usr_active").setVisibility(ObjectField.VIS_HIDDEN);
@@ -37,8 +36,7 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
         setFieldValue("row_module_id", ModuleDB.getModuleId("ApplicationUsers"));
         //following does not work because usr_menu is not part of SimpleUser
         // we manage it in a postSave query to avoid adding a useless object attribute
-        //setFieldValue("usr_menu", "1");
-        setFieldValue("usr_active", Grant.USER_ACTIVE);
+        setFieldValue("usr_active", GrantCore.USER_ACTIVE);
         
         return super.preValidate();
     }
@@ -53,17 +51,24 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
     }
     
     /**
-     * customise depending on specific business rules, 
+     * Customize depending on specific business rules, 
+     * @param userId User ID
+     * @param userType User type
      */
     private static void autoRespAttribution(String userId, String userType) {
-    	List<String> groups = new ArrayList<String>();
-        switch (userType) {
-            case "FT_ADMIN": groups.add("FT_ADMIN"); break;
-            case "FT_READ": groups.add("FT_READ"); break;
-        }
+    	List<String> groups = new ArrayList<>();
+        if ("FT_ADMIN".equals(userType))
+            groups.add("FT_ADMIN");
+        if ("FT_READ".equals(userType))
+            groups.add("FT_READ");
         setRespList(userId,groups);
     }
     
+    /**
+     * Set the responsibility list for a user
+     * @param userId User ID
+     * @param newGroupsList New groups list
+     */
     private static void setRespList(String userId, List<String> newGroupsList) {
         List<String> oldGroupsList = getRespList(userId);
         // remove old unused groups
@@ -72,15 +77,20 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
                 Grant.removeResponsibility(userId, oldGroup);
         // add new missing groups
         for (String newGroup : newGroupsList)
-            if (!oldGroupsList.contains(newGroup))
+            if (oldGroupsList != null && !oldGroupsList.contains(newGroup))
                 Grant.addResponsibility(userId, newGroup, Tool.getCurrentDate(), null, true, "ApplicationUsers");
     }
     
+    /**
+     * Get the responsibility list for a user
+     * @param userId User ID
+     * @return Responsibility list
+     */
     private static List<String> getRespList(String userId) {
         if (Tool.isEmpty(userId))
-            return null;
+            return new ArrayList<>();
         Grant g = Grant.getSystemAdmin();
         String[] groups = g.queryFirstColumn("select distinct g.grp_name from m_resp r inner join m_group as g on r.rsp_group_id=g.row_id where r.rsp_login_id=" + userId);
-        return groups != null && groups.length > 0 ? Arrays.asList(groups) : new ArrayList<String>();
+        return groups != null && groups.length > 0 ? Arrays.asList(groups) : new ArrayList<>();
     }
 }

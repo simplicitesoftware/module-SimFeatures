@@ -41,35 +41,37 @@ test('FT_0025', async ({ page }) => {
   await page.locator("[data-action='close']").click();
   await toggleFieldInSearchPrefs(page, "left");
 
-  async function toggleFieldInSearchPrefs(page: Page, direction: "left" | "right") {
-    await page.locator(".btn-plus").click();
-    await page.locator("[data-action='prefs']").click();
-    const dialog = page.locator("#dlgmodal_prefs");
-    await dialog.locator("[href='#preftab_1']").click();
-    await dialog.locator("option[value='ftLstCode']").click();
-    await dialog.locator(`#preftab_1 [data-action='${direction}']`).click();
-    await dialog.locator("[data-action='save']").click();
-  }
-  
-  async function reorderColumns(page: Page, field: String) {
-    await page.locator(".btn-plus").click();
-    await page.locator("[data-action='prefs']").click();
-    let dialog = page.locator("#dlgmodal_prefs");
-    await dialog.locator(`option[value='0:${field}']`).click();
-    await dialog.locator(`#preftab_0 [data-action='down']`).click();
-    await dialog.locator("[data-action='save']").click();
-  }
-
-  async function addOrRemoveImageFieldFromList(page: Page, direction: "left" | "right") {
-    await page.locator(".btn-plus").click();
-    await page.locator("[data-action='prefs']").click();
-    let dialog = page.locator("#dlgmodal_prefs");
-    await expect(dialog).toBeVisible();
-    await dialog.locator("option[value='0:ftLstImage']").click();
-    await dialog.locator(`#preftab_0 [data-action='${direction}']`).click();
-    await dialog.locator("[data-action='save']").click();
-  }
 });
+
+async function reorderColumns(page: Page, field: string) {
+  await page.locator(".btn-plus").click();
+  await page.locator("[data-action='prefs']").click();
+  let dialog = page.locator("#dlgmodal_prefs");
+  await dialog.locator(`option[value='0:${field}']`).click();
+  await dialog.locator(`#preftab_0 [data-action='down']`).click();
+  await dialog.locator("[data-action='save']").click();
+}
+
+async function addOrRemoveImageFieldFromList(page: Page, direction: "left" | "right") {
+  await page.locator(".btn-plus").click();
+  await page.locator("[data-action='prefs']").click();
+  let dialog = page.locator("#dlgmodal_prefs");
+  await expect(dialog).toBeVisible();
+  await dialog.locator("option[value='0:ftLstImage']").click();
+  await dialog.locator(`#preftab_0 [data-action='${direction}']`).click();
+  await dialog.locator("[data-action='save']").click();
+}
+
+async function toggleFieldInSearchPrefs(page: Page, direction: "left" | "right") {
+  await page.locator(".btn-plus").click();
+  await page.locator("[data-action='prefs']").click();
+  const dialog = page.locator("#dlgmodal_prefs");
+  await dialog.locator("[href='#preftab_1']").click();
+  await dialog.locator("option[value='ftLstCode']").click();
+  await dialog.locator(`#preftab_1 [data-action='${direction}']`).click();
+  await dialog.locator("[data-action='save']").click();
+}
+
 
 // Context menu on lists test
 test('CHG_00092', async ({ page }) => {
