@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "Scope",
+  "label": "Scope",
+  "userkeylabel": "SimFeaturesScope",
+  "icon": "scope",
+  "item": {"sco_name": "SimFeaturesScope"}
+ },
+ "tsl_lang": "ANY",
+ "tsl_value": "Features",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

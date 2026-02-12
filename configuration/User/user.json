@@ -10,7 +10,6 @@
  "usr_last_name": null,
  "usr_first_name": null,
  "usr_email": null,
- "usr_home_id__viw_name": "SimFeaturesScope",
  "usr_work_num": null,
  "usr_home_num": null,
  "usr_cell_num": null,
@@ -28,6 +27,8 @@
  "usr_dateformat": null,
  "usr_numformat": null,
  "usr_lang_pref": "ENU",
+ "usr_scope_id__sco_name": "SimFeaturesScope",
+ "usr_scope_id__sco_home_id__viw_name": "SimFeaturesScope",
  "usr_mfa_method": null,
  "usr_mfa_settings": {}
 }

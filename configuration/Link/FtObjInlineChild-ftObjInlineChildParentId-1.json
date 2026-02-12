@@ -1,0 +1,22 @@
+{
+ "obf_ref_object_id__obo_name": "FtObjInlineParent",
+ "obf_order": 1,
+ "obf_ref_order": 10,
+ "obf_object_id__obj_name": "FtObjInlineChild",
+ "obf_field_id__fld_name": "ftObjInlineChildParentId",
+ "obf_cascad": "C",
+ "obf_anon": null,
+ "obf_card": "1,1",
+ "obf_query": null,
+ "obf_filters": null,
+ "obf_visible": true,
+ "obf_ref_export": true,
+ "obf_copy": true,
+ "obf_associate": null,
+ "obf_inline": true,
+ "obf_rendering": null,
+ "obf_treedepth": null,
+ "obf_redolog": null,
+ "obf_area_id__ofa_name": "FtObjInlineChild-1",
+ "row_module_id__mdl_name": "SimFeatures"
+}

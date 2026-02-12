@@ -1,0 +1,13 @@
+{
+ "map_domain_id__obd_name": "FtDomainInline",
+ "map_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtObjInlineChild",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtObjInlineChild"}
+ },
+ "map_order": 160,
+ "map_ext": false,
+ "row_module_id__mdl_name": "SimFeatures"
+}
