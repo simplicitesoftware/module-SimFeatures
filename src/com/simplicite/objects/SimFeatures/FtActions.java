@@ -1,7 +1,10 @@
 package com.simplicite.objects.SimFeatures;
 
 import com.simplicite.util.*;
+import com.simplicite.util.annotations.BusinessObjectAction;
+
 import java.io.File;
+import java.nio.file.Files;
 
 /**
  * Business object FtActions
@@ -23,10 +26,12 @@ public class FtActions extends ObjectDB {
 		}
 	}
 
+	@BusinessObjectAction
 	public String confirmAction(Action a) {
 		return Message.formatSimpleInfo("confirmAction is done");
 	}
 	
+	@BusinessObjectAction
 	public String askAction(Action a) {
 		File file = null;
 		try {
@@ -61,8 +66,13 @@ public class FtActions extends ObjectDB {
 			return Message.formatSimpleError(e.getMessage());
 		} finally {
 			// clean temp file when used
-			if (file != null)
-				file.delete();
+			if (file != null) {
+				try {
+					Files.delete(file.toPath());
+				} catch (java.io.IOException e) {
+					AppLog.error("Failed to delete file: " + file.getAbsolutePath(), e);
+				}
+			}
 		}
 	}
 

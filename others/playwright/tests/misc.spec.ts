@@ -1,5 +1,5 @@
-import { test, expect, Page } from '@playwright/test';
-import { login, logout, openList, randomString, skeletonDismissed, saveList } from '../tools/helpers';
+import { test, expect } from '@playwright/test';
+import { login, logout, openList } from '../tools/helpers';
 
 test.beforeEach(async ({ page }) => {
   // Runs before each test and signs in each page.
@@ -9,11 +9,6 @@ test.beforeEach(async ({ page }) => {
 test.afterEach(async ({ page }) => {
   await logout(page);
 });
-
-/*test('Cartographical search', async ({ page }) => {
-    //TODO: Implement cartographical search test
-});*/
-
 
 // User onboarding test
 test('CHG_00075', async ({ page }) => {

@@ -12,11 +12,13 @@ public class FtRxmLink extends ObjectDB {
 	
 	@Override
 	public List<String> preValidate() {
-		// ensure the tupple {A,B} is the same as {B,A}
 		orderKeys(); 
 		return super.preValidate();
 	}
 	
+	/*
+	 * Ensure the tuple [ftRxlRxm1,ftRxlRxm2] is the same as [ftRxlRxm2,ftRxlRxm1]
+	 */
 	private void orderKeys() {
 		String c1 = getFieldValue("ftRxlRxm1.ftRxmCode");
 		String c2 = getFieldValue("ftRxlRxm2.ftRxmCode");

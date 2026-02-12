@@ -19,7 +19,7 @@ public class FtPublications extends ObjectDB {
 					HTMLToPDFTool.toPDF(getFieldValue("ftPubHtml"))
 				);
 		} catch (Exception e) {
-			
+			AppLog.error("Failed to save publication: " + getFieldValue("ftPubCode"), e);
 		}
 		return null;
 	}
