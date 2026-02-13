@@ -1,0 +1,6 @@
+{
+ "dlk_link_id__dlk_name": "FTDataLinkSample",
+ "dlk_host_id__dlh_name": "SimFeatureSlave",
+ "dlk_type": "S",
+ "row_module_id__mdl_name": "SimFeatures"
+}
