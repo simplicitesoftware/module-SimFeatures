@@ -2,7 +2,7 @@
  "ofa_name": "FtObjInlineParent-1",
  "ofa_position": 1,
  "ofa_title": true,
- "ofa_ui": "<div class=\"field\" data-field=\"ftObjInlineParentName\"><\/div>",
+ "ofa_ui": "<div>\n  <div class=\"field\" data-field=\"ftObjInlineParentName\"><\/div>\n  <div class=\"field\" data-field=\"ftObjInlineParentDescription\"><\/div>\n<\/div>",
  "ofa_icon": "fas/charging-station",
  "row_module_id__mdl_name": "SimFeatures"
 }

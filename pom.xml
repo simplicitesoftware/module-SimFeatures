@@ -19,13 +19,13 @@ ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ
     <maven.compiler.target>21</maven.compiler.target>
     <maven.compiler.proc>full</maven.compiler.proc>
     <skipTests>true</skipTests>
-    <sonar.projectKey>module-simfeatures</sonar.projectKey>
+    <sonar.projectKey>simplicitesoftware_module-SimFeatures</sonar.projectKey>
     <sonar.projectName>SimFeatures</sonar.projectName>
     <sonar.projectVersion>0.1</sonar.projectVersion>
     <sonar.sources>src,resources</sonar.sources>
     <sonar.exclusions>SimFeatures.xml,SimFeatures.json,SimFeatures-*.yml,configuration/**,**.min.js,**.min.css</sonar.exclusions>
     <sonar.coverage.exclusions>resources/**.js,src/**.java</sonar.coverage.exclusions>
-    <sonar.organization>simplicite-software-gitlab</sonar.organization>
+    <sonar.organization>simplicitesoftware</sonar.organization>
     <sonar.coverage.exclusions>resources/**.js</sonar.coverage.exclusions>
     <sonar.host.url>https://sonarcloud.io</sonar.host.url>
   </properties>

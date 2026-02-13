@@ -980,6 +980,10 @@ components:
           description: Parent name
           type: string
           maxLength: 50
+        ftObjInlineParentDescription:
+          description: Description
+          type: string
+          maxLength: 4000
         row_id:
           description: Unique technical row ID
           type: string
@@ -6718,6 +6722,12 @@ paths:
         in: query
         name: ftObjInlineParentName
         description: Search filter for Parent name
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftObjInlineParentDescription
+        description: Search filter for Description
         required: false
       tags:
       - FtObjInlineParent

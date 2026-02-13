@@ -309,6 +309,7 @@ Object showcasing all the possible attributes
 | Name                                                         | Type                                     | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftObjInlineParentName`                                      | char(50)                                 | yes*     | yes       |          | -                                                                                |
+| `ftObjInlineParentDescription`                               | text(4000)                               |          | yes       |          | -                                                                                |
 
 `FtPublications` business object definition
 -------------------------------------------
