@@ -1,10 +1,8 @@
 package com.simplicite.objects.SimFeatures;
 
-import java.util.*;
-
 import com.simplicite.util.*;
-import com.simplicite.util.exceptions.*;
-import com.simplicite.util.tools.*;
+import com.simplicite.util.exceptions.SaveException;
+import com.simplicite.util.exceptions.ValidateException;
 
 /**
  * Business object FtObjInlineChild
@@ -12,31 +10,29 @@ import com.simplicite.util.tools.*;
 public class FtObjInlineChild extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 
+	private void updateParent(String desc) {
+	    String parentId = getFieldValue("ftObjInlineChildParentId");
+		try (BusinessObject parent = getGrant().getBusinessObject("FtObjInlineParent")) {
+			parent
+			.withAllAccess()
+			.forUpdate(parentId)
+			.withValue("ftObjInlineParentDescription", desc)
+			.validateAndSave();
+		}
+		catch (ValidateException | SaveException e) {
+			AppLog.error("Error updateParent", e);
+		}
+	}
+
 	@Override
 	public String postCreate() {
-
-	    String parentId = getFieldValue("ftObjInlineChildParentId");
-	    ObjectDB p = getGrant().getTmpObject("FtObjInlineParent");
-	    p.resetFilters();
-	    if (p.select(parentId)) {
-	    	p.setFieldValue("ftObjInlineParentDescription", "Updated by child postCreate");
-	    	p.update();
-	    }
-
+		updateParent("Updated by child postCreate");
 	    return null;
 	}
 
 	@Override
 	public String postUpdate() {
-
-	    String parentId = getFieldValue("ftObjInlineChildParentId");
-	    ObjectDB p = getGrant().getTmpObject("FtObjInlineParent");
-	    p.resetFilters();
-	    if (p.select(parentId)) {
-	    	p.setFieldValue("ftObjInlineParentDescription", "Updated by child postUpdate");
-	    	p.update();
-	    }
-
+		updateParent("Updated by child postUpdate");
 	    return null;
 	}
 }
