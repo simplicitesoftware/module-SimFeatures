@@ -1,0 +1,11 @@
+{
+ "obd_name": "FtDomainInline",
+ "obd_comment": null,
+ "obd_type": "D",
+ "obd_view_id__viw_name": null,
+ "obd_nohome": true,
+ "obd_icon": "fas/car-battery",
+ "obd_order": 1010,
+ "obd_domain_id__obd_name": "FtDomain",
+ "row_module_id__mdl_name": "SimFeatures"
+}

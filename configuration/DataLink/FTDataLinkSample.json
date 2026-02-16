@@ -1,0 +1,6 @@
+{
+ "dlk_name": "FTDataLinkSample",
+ "row_module_id__mdl_name": "SimFeatures",
+ "dlk_enabled": true,
+ "dlk_order": 10
+}

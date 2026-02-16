@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "DocIndex",
+  "label": "Bookshelf",
+  "userkeylabel": "B-ftObjInlineDocMulti",
+  "icon": "img/system/bookshelf",
+  "item": {"din_name": "B-ftObjInlineDocMulti"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "B-ft obj inline doc multi",
+ "row_module_id__mdl_name": "SimFeatures"
+}

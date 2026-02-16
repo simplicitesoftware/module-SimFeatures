@@ -1,0 +1,21 @@
+{
+ "tsl_object": {
+  "object": "ObjectFieldSystem",
+  "label": "Object field",
+  "userkeylabel": "FtObjInlineChild ftObjInlineParentName 2",
+  "icon": "img/system/object_field",
+  "item": {
+   "obf_object_id__obo_name": "FtObjInlineChild",
+   "obf_field_id__fld_name": "ftObjInlineParentName",
+   "obf_order": 2
+  }
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Parent name",
+ "tsl_plural_value": null,
+ "tsl_simplehelp": null,
+ "tsl_short_value": null,
+ "tsl_listhelp": null,
+ "tsl_placeholder": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

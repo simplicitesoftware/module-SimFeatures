@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "Domain",
+  "label": "Domain",
+  "userkeylabel": "FtDomainInline",
+  "icon": "img/system/domain",
+  "item": {"obd_name": "FtDomainInline"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Domain inline",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}
