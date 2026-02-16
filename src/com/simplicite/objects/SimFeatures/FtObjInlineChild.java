@@ -20,8 +20,7 @@ public class FtObjInlineChild extends ObjectDB {
 			.forUpdate(parentId)
 			.withValue("ftObjInlineParentDescription", desc)
 			.validateAndSave();
-		}
-		catch (ValidateException | SaveException e) {
+		} catch (ValidateException | SaveException e) {
 			AppLog.error("Error updateParent", e);
 		}
 	}

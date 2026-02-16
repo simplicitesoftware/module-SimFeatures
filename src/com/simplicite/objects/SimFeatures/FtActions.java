@@ -53,10 +53,11 @@ public class FtActions extends ObjectDB {
 	
 			DocumentDB doc = a.getConfirmField("ftActDocument2").getDocument();
 			file = doc == null ? null : doc.getUploadFile();
-			if (file != null)
+			if (file != null) {
 				msg += "\n\n - doc name = " + doc.getPath() 
-					+  "\n --- tmp file = " + file.getAbsolutePath() 
-					+  "\n --- file size = " + file.length();
+				+  "\n --- tmp file = " + file.getAbsolutePath() 
+				+  "\n --- file size = " + file.length();
+			}
 	
 			DocumentDB img = a.getConfirmField("ftActImage2").getDocument();
 			byte[] data = img == null ? null : img.getBytes();
@@ -64,7 +65,7 @@ public class FtActions extends ObjectDB {
 				msg += "\n\n - img name = " + img.getPath() 
 					+  "\n --- data size = " + data.length;
 
-			// do someting with data...
+			// do something with data...
 
 			// debug message
 			return Message.formatSimpleWarning(msg);
