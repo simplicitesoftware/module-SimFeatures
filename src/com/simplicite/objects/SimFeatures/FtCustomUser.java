@@ -63,10 +63,12 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
      */
     private static void autoRespAttribution(String userId, String userType) {
     	List<String> groups = new ArrayList<>();
-        if ("FT_ADMIN".equals(userType))
+        if ("FT_ADMIN".equals(userType)) {
             groups.add("FT_ADMIN");
-        if ("FT_READ".equals(userType))
+        }
+        if ("FT_READ".equals(userType)) {
             groups.add("FT_READ");
+        }
         setRespList(userId,groups);
     }
     
@@ -78,13 +80,17 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
     private static void setRespList(String userId, List<String> newGroupsList) {
         List<String> oldGroupsList = getRespList(userId);
         // remove old unused groups
-        for (String oldGroup : oldGroupsList)
-            if (!newGroupsList.contains(oldGroup))
+        for (String oldGroup : oldGroupsList) {
+            if (!newGroupsList.contains(oldGroup)) {
                 Grant.removeResponsibility(userId, oldGroup);
+            }
+        }
         // add new missing groups
-        for (String newGroup : newGroupsList)
-            if (oldGroupsList != null && !oldGroupsList.contains(newGroup))
+        for (String newGroup : newGroupsList) {
+            if (oldGroupsList != null && !oldGroupsList.contains(newGroup)) {
                 Grant.addResponsibility(userId, newGroup, Tool.getCurrentDate(), null, true, "ApplicationUsers");
+            }
+        }
     }
     
     /**
@@ -93,10 +99,21 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
      * @return Responsibility list
      */
     private static List<String> getRespList(String userId) {
-        if (Tool.isEmpty(userId))
+        if (Tool.isEmpty(userId)) {
             return new ArrayList<>();
-        Grant g = Grant.getSystemAdmin();
-        String[] groups = g.queryFirstColumn("select distinct g.grp_name from m_resp r inner join m_group as g on r.rsp_group_id=g.row_id where r.rsp_login_id=" + userId);
-        return groups != null && groups.length > 0 ? Arrays.asList(groups) : new ArrayList<>();
+        }
+        var g = Grant.getSystemAdmin();
+        String[] groups = g.queryFirstColumn(
+            """
+            select distinct
+                g.grp_name
+            from m_resp r
+                inner join m_group as g
+                    on r.rsp_group_id = g.row_id
+            where r.rsp_login_id = """ + userId);
+        if (groups == null || groups.length == 0) {
+            return new ArrayList<>();
+        }
+        return Arrays.asList(groups);
     }
 }

@@ -18,6 +18,8 @@ import com.simplicite.util.annotations.BusinessObjectAction;
 public class FtActions extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 
+	private static final int SEVEN_DAYS = 7;
+	
 	@Override
 	public void initAction(Action action) {
 		if ("ActAskFields".equals(action.getName())) {
@@ -26,7 +28,7 @@ public class FtActions extends ObjectDB {
 			// Example to set default value of date2 to date + 7
 			if (!Tool.isEmpty(date)) {
 				ObjectField date2 = action.getConfirmField("ftActDate2");
-				date2.setDefaultValue(Tool.shiftDays(date, 7));
+				date2.setDefaultValue(Tool.shiftDays(date, SEVEN_DAYS));
 				date2.setRequired(false);
 			}
 		}
@@ -52,7 +54,8 @@ public class FtActions extends ObjectDB {
 				+ "\n - last name = " + userLName.getValue();
 	
 			DocumentDB doc = a.getConfirmField("ftActDocument2").getDocument();
-			file = doc == null ? null : doc.getUploadFile();
+			if (doc != null)
+				file = doc.getUploadFile();
 			if (file != null) {
 				msg += "\n\n - doc name = " + doc.getPath() 
 				+  "\n --- tmp file = " + file.getAbsolutePath() 
@@ -60,7 +63,9 @@ public class FtActions extends ObjectDB {
 			}
 	
 			DocumentDB img = a.getConfirmField("ftActImage2").getDocument();
-			byte[] data = img == null ? null : img.getBytes();
+			byte[] data = null;
+			if (img != null)
+				data = img.getBytes();
 			if (data != null) {
 				msg += "\n\n - img name = " + img.getPath() 
 					+  "\n --- data size = " + data.length;
@@ -70,8 +75,6 @@ public class FtActions extends ObjectDB {
 
 			// debug message
 			return Message.formatSimpleWarning(msg);
-		} catch (Exception e) {
-			return Message.formatSimpleError(e.getMessage());
 		} finally {
 			// clean temp file when used
 			if (file != null) {
