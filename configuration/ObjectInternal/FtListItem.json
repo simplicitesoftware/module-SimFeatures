@@ -67,7 +67,7 @@
  "obo_minrows": null,
  "obo_maxrows": null,
  "obo_sortable": true,
- "obo_list_areas": null,
+ "obo_list_areas": "1",
  "obo_minifiable": "M",
  "obo_minified": false,
  "obo_permalink": null,
