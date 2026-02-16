@@ -118,6 +118,7 @@ test('Numbers', async ({ page }) => {
   // Decimal calculator
   await getField(page, "ftAttrDecimalCalculator").click();
   await expect(page.locator("[data-field='ftAttrDecimalCalculator'] .calculator")).toBeVisible();
+  await page.locator("[data-field='ftAttrDecimalCalculator'] .calculator button").getByText("C").click();
   await page.locator("[data-field='ftAttrDecimalCalculator'] .calculator button").getByText("1").click();
   await page.locator("[data-field='ftAttrDecimalCalculator'] .calculator button").getByText("+").click();
   await page.locator("[data-field='ftAttrDecimalCalculator'] .calculator button").getByText("1").click();
