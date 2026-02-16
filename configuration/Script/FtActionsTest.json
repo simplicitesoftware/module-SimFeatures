@@ -1,0 +1,10 @@
+{
+ "scr_code": "FtActionsTest",
+ "scr_file": {
+  "path": "test/src/com/simplicite/tests/SimFeatures/FtActionsTest.java",
+  "mime": "text/plain",
+  "name": "FtActionsTest.java"
+ },
+ "scr_type": "TST",
+ "row_module_id__mdl_name": "SimFeatures"
+}

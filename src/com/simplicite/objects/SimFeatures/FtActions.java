@@ -61,9 +61,10 @@ public class FtActions extends ObjectDB {
 	
 			DocumentDB img = a.getConfirmField("ftActImage2").getDocument();
 			byte[] data = img == null ? null : img.getBytes();
-			if (data != null)
+			if (data != null) {
 				msg += "\n\n - img name = " + img.getPath() 
 					+  "\n --- data size = " + data.length;
+			}
 
 			// do something with data...
 
