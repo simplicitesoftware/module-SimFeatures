@@ -29,7 +29,14 @@ test('FT_0025', async ({ page }) => {
   await reorderColumns(page, "ftLstCode");
   await expect(headerCells.nth(0)).toHaveAttribute("data-name", "ftLstOrder");
   await expect(headerCells.nth(1)).toHaveAttribute("data-name", "ftLstCode");
-  await reorderColumns(page, "ftLstOrder"); //reset to original order
+  
+  // Reset column order
+  await page.locator(".list-actionbar .btn-plus").click();
+  await page.locator("[data-action='prefs']").click();
+  let dialog = page.locator("#dlgmodal_prefs");
+  await dialog.locator('[data-action="restore"]').click();
+  await expect(headerCells.nth(0)).toHaveAttribute("data-name", "ftLstCode");
+  await expect(headerCells.nth(1)).toHaveAttribute("data-name", "ftLstOrder");
 
   // Search prefs
   await page.locator(".btn-search").click();
@@ -44,7 +51,7 @@ test('FT_0025', async ({ page }) => {
 });
 
 async function reorderColumns(page: Page, field: string) {
-  await page.locator(".btn-plus").click();
+  await page.locator(".list-actionbar .btn-plus").click();
   await page.locator("[data-action='prefs']").click();
   let dialog = page.locator("#dlgmodal_prefs");
   await dialog.locator(`option[value='0:${field}']`).click();
@@ -53,7 +60,7 @@ async function reorderColumns(page: Page, field: string) {
 }
 
 async function addOrRemoveImageFieldFromList(page: Page, direction: "left" | "right") {
-  await page.locator(".btn-plus").click();
+  await page.locator(".list-actionbar .btn-plus").click();
   await page.locator("[data-action='prefs']").click();
   let dialog = page.locator("#dlgmodal_prefs");
   await expect(dialog).toBeVisible();
@@ -63,7 +70,7 @@ async function addOrRemoveImageFieldFromList(page: Page, direction: "left" | "ri
 }
 
 async function toggleFieldInSearchPrefs(page: Page, direction: "left" | "right") {
-  await page.locator(".btn-plus").click();
+  await page.locator(".list-actionbar .btn-plus").click();
   await page.locator("[data-action='prefs']").click();
   const dialog = page.locator("#dlgmodal_prefs");
   await dialog.locator("[href='#preftab_1']").click();

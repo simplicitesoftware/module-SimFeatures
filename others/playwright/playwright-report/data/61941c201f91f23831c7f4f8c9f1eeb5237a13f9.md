@@ -1,0 +1,249 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - banner [ref=e5]:
+        - link "" [ref=e6] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e7]: 
+        - link "Simplicité" [ref=e9] [cursor=pointer]:
+          - /url: "#"
+          - img "Simplicité" [ref=e10]
+        - search [ref=e12] [cursor=pointer]:
+          - button "" [ref=e14]:
+            - generic [ref=e15]: 
+          - button "Open Bookmarks" [ref=e16]:
+            - generic [ref=e17]: 
+        - generic [ref=e18]:
+          - text: 
+          - generic [ref=e19]:
+            - button "Shortcuts User filters" [ref=e20] [cursor=pointer]:
+              - img [ref=e21]
+            - button "Shortcuts Dashboards" [ref=e22] [cursor=pointer]:
+              - img [ref=e23]
+            - button "Shortcuts Visible modules" [ref=e24] [cursor=pointer]:
+              - img [ref=e25]
+            - button "Shortcuts UI monitoring" [ref=e26] [cursor=pointer]:
+              - img [ref=e27]
+            - button "Shortcuts Modeler" [ref=e28] [cursor=pointer]:
+              - img [ref=e29]
+          - generic [ref=e30]:
+            - button "Undo" [ref=e31]:
+              - img [ref=e32]
+            - button "Redo" [ref=e33]:
+              - img [ref=e34]
+          - link "Simplicité Administrator Simplicité Administrator" [ref=e37] [cursor=pointer]:
+            - /url: "#"
+            - text: 
+            - generic "Simplicité Administrator" [ref=e38]:
+              - img [ref=e39]
+            - text: Simplicité Administrator
+          - generic [ref=e41]:
+            - link "Avatar Designer" [ref=e42] [cursor=pointer]:
+              - /url: "#"
+              - img "Avatar" [ref=e43]
+              - text: Designer
+            - text:    
+          - generic [ref=e44]:
+            - link "" [ref=e45] [cursor=pointer]:
+              - /url: "#"
+              - generic [ref=e46]: 
+            - text:                          
+      - complementary "Bookmarks" [ref=e47]:
+        - generic [ref=e48]:
+          - link "FtAttributes" [ref=e49] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e50]
+            - generic [ref=e51]: FtAttributes
+          - link "u3if1cee" [ref=e52] [cursor=pointer]:
+            - /url: ""
+            - img [ref=e53]
+            - generic [ref=e54]: u3if1cee
+        - button [ref=e56] [cursor=pointer]: 
+    - generic [ref=e57]:
+      - navigation "menu" [ref=e59]:
+        - generic [ref=e61]:
+          - generic [ref=e63] [cursor=pointer]: 
+          - textbox "Search in menu" [ref=e64]
+          - text: 
+        - menu [ref=e65]:
+          - menuitem "Features " [expanded] [ref=e66] [cursor=pointer]:
+            - img [ref=e68]
+            - generic [ref=e69]: Features
+            - text: 
+          - menu [ref=e70]:
+            - menuitem "Attributes" [ref=e71] [cursor=pointer]:
+              - img [ref=e73]
+              - generic [ref=e74]: Attributes
+            - menuitem "List Item" [ref=e75] [cursor=pointer]:
+              - img [ref=e77]
+              - generic [ref=e78]: List Item
+            - menuitem "Custom Users" [ref=e79] [cursor=pointer]:
+              - img [ref=e81]
+              - generic [ref=e82]: Custom Users
+            - menuitem "States " [ref=e83] [cursor=pointer]:
+              - img [ref=e85]
+              - generic [ref=e86]: States
+              - text: 
+            - text:   
+            - menuitem "Relationship (one to many)" [ref=e87] [cursor=pointer]:
+              - img [ref=e89]
+              - generic [ref=e90]: Relationship (one to many)
+            - menuitem "Relationship (many to many)" [ref=e91] [cursor=pointer]:
+              - img [ref=e93]
+              - generic [ref=e94]: Relationship (many to many)
+            - menuitem "Child (many to many)" [ref=e95] [cursor=pointer]:
+              - img [ref=e97]
+              - generic [ref=e98]: Child (many to many)
+            - menuitem "Reflexive item (many)" [ref=e99] [cursor=pointer]:
+              - img [ref=e101]
+              - generic [ref=e102]: Reflexive item (many)
+            - menuitem "Tagged object" [ref=e103] [cursor=pointer]:
+              - img [ref=e105]
+              - generic [ref=e106]: Tagged object
+            - menuitem "Tags" [ref=e107] [cursor=pointer]:
+              - img [ref=e109]
+              - generic [ref=e110]: Tags
+            - menuitem "Select object" [ref=e111] [cursor=pointer]:
+              - img [ref=e113]
+              - generic [ref=e114]: Select object
+            - menuitem "Notification Tester" [ref=e115] [cursor=pointer]:
+              - img [ref=e117]
+              - generic [ref=e118]: Notification Tester
+            - menuitem "Actions " [ref=e119] [cursor=pointer]:
+              - img [ref=e121]
+              - generic [ref=e122]: Actions
+              - text: 
+            - text:    
+            - menuitem "Publications" [ref=e123] [cursor=pointer]:
+              - img [ref=e125]
+              - generic [ref=e126]: Publications
+            - menuitem "Search" [ref=e127] [cursor=pointer]:
+              - img [ref=e129]
+              - generic [ref=e130]: Search
+            - menuitem "List ordering" [ref=e131] [cursor=pointer]:
+              - img [ref=e133]
+              - generic [ref=e134]: List ordering
+            - menuitem "Guided object" [ref=e135] [cursor=pointer]:
+              - img [ref=e137]
+              - generic [ref=e138]: Guided object
+            - menuitem "Domain inline " [ref=e139] [cursor=pointer]:
+              - generic [ref=e141]: 
+              - generic [ref=e142]: Domain inline
+              - text: 
+            - text:  
+          - menuitem "Demo " [ref=e143] [cursor=pointer]:
+            - img [ref=e145]
+            - generic [ref=e146]: Demo
+            - text: 
+          - text:                           
+          - menuitem "Project " [ref=e147] [cursor=pointer]:
+            - img [ref=e149]
+            - generic [ref=e150]: Project
+            - text: 
+          - text:  
+          - menuitem "Settings " [ref=e151] [cursor=pointer]:
+            - img [ref=e153]
+            - generic [ref=e154]: Settings
+            - text: 
+          - text: 
+          - menuitem "Users and rights " [ref=e155] [cursor=pointer]:
+            - img [ref=e157]
+            - generic [ref=e158]: Users and rights
+            - text: 
+          - text:    
+          - menuitem "Business objects " [ref=e159] [cursor=pointer]:
+            - img [ref=e161]
+            - generic [ref=e162]: Business objects
+            - text: 
+          - menuitem "User interface " [ref=e163] [cursor=pointer]:
+            - img [ref=e165]
+            - generic [ref=e166]: User interface
+            - text: 
+          - text:                      
+          - menuitem "Business process " [ref=e167] [cursor=pointer]:
+            - img [ref=e169]
+            - generic [ref=e170]: Business process
+            - text: 
+          - text:   
+          - menuitem "Document " [ref=e171] [cursor=pointer]:
+            - img [ref=e173]
+            - generic [ref=e174]: Document
+            - text: 
+          - text:  
+          - menuitem "User interaction " [ref=e175] [cursor=pointer]:
+            - img [ref=e177]
+            - generic [ref=e178]: User interaction
+            - text: 
+          - text:         
+          - menuitem "Modeler " [ref=e179] [cursor=pointer]:
+            - img [ref=e181]
+            - generic [ref=e182]: Modeler
+            - text: 
+          - text:        
+          - menuitem "Operation " [ref=e183] [cursor=pointer]:
+            - img [ref=e185]
+            - generic [ref=e186]: Operation
+            - text: 
+          - text:       
+      - main [ref=e187]:
+        - generic [ref=e189]:
+          - navigation "Navigation" [ref=e190]:
+            - list [ref=e191]:
+              - listitem [ref=e192]:
+                - link "Guided object" [ref=e193] [cursor=pointer]:
+                  - /url: ""
+              - listitem [ref=e194]:
+                - text: 
+                - link "Create Guided object" [ref=e195] [cursor=pointer]:
+                  - /url: ""
+          - generic [ref=e198]:
+            - generic [ref=e200]:
+              - generic [ref=e201]:
+                - img [ref=e203]
+                - generic [ref=e204]: Create Guided object
+              - generic [ref=e206]:
+                - generic [ref=e207]:
+                  - button "Save" [ref=e208] [cursor=pointer]
+                  - button "Save Options" [ref=e209] [cursor=pointer]:
+                    - generic [ref=e210]: 
+                  - text:  
+                - button "Save & Close" [ref=e211] [cursor=pointer]
+                - generic [ref=e213]:
+                  - button "Search in form" [ref=e214] [cursor=pointer]:
+                    - generic [ref=e215]: 
+                  - textbox "Search in form"
+                  - text: 
+                - button "Go to object definition" [ref=e216] [cursor=pointer]:
+                  - img [ref=e217]
+                - generic [ref=e218]:
+                  - button "Plus" [ref=e219] [cursor=pointer]:
+                    - generic [ref=e220]: 
+                  - text: 
+                - button "Close" [ref=e221] [cursor=pointer]
+                - button "Create element" [ref=e222] [cursor=pointer]:
+                  - generic [ref=e223]: 
+            - generic [ref=e234]:
+              - generic [ref=e235] [cursor=pointer]: User key*
+              - textbox "User key*" [active] [ref=e237]
+    - contentinfo [ref=e239]:
+      - list [ref=e240]:
+        - listitem [ref=e241]: © Simplicité Software
+        - listitem [ref=e242]:
+          - link "Legal mentions" [ref=e243] [cursor=pointer]:
+            - /url: ""
+        - listitem [ref=e244]:
+          - link "Accessibility" [ref=e245] [cursor=pointer]:
+            - /url: ""
+  - generic "Create item tooltip" [ref=e246]:
+    - generic [ref=e247]:
+      - generic [ref=e249]:
+        - generic [ref=e250]:
+          - generic [ref=e251]: 
+          - text: Create item tooltip
+        - button [ref=e252] [cursor=pointer]: 
+      - generic [ref=e254]: Create item long tooltip
+  - img
+```
