@@ -1,8 +1,14 @@
 package com.simplicite.objects.SimFeatures;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-import com.simplicite.util.*;
+import com.simplicite.util.Grant;
+import com.simplicite.util.GrantCore;
+import com.simplicite.util.ModuleDB;
+import com.simplicite.util.ObjectField;
+import com.simplicite.util.Tool;
 
 /**
  * Business object FtCustomUser

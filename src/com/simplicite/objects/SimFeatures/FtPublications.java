@@ -1,7 +1,8 @@
 package com.simplicite.objects.SimFeatures;
 
-import com.simplicite.util.*;
-import com.simplicite.util.tools.*;
+import com.simplicite.util.AppLog;
+import com.simplicite.util.ObjectDB;
+import com.simplicite.util.tools.HTMLToPDFTool;
 
 /**
  * Business object FtPublications

@@ -1,10 +1,16 @@
 package com.simplicite.objects.SimFeatures;
 
-import com.simplicite.util.*;
-import com.simplicite.util.annotations.BusinessObjectAction;
-
 import java.io.File;
 import java.nio.file.Files;
+
+import com.simplicite.util.Action;
+import com.simplicite.util.AppLog;
+import com.simplicite.util.DocumentDB;
+import com.simplicite.util.Message;
+import com.simplicite.util.ObjectDB;
+import com.simplicite.util.ObjectField;
+import com.simplicite.util.Tool;
+import com.simplicite.util.annotations.BusinessObjectAction;
 
 /**
  * Business object FtActions

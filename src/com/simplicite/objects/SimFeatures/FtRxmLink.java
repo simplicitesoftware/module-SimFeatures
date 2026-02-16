@@ -1,8 +1,8 @@
 package com.simplicite.objects.SimFeatures;
 
-import java.util.*;
+import java.util.List;
 
-import com.simplicite.util.*;
+import com.simplicite.util.ObjectDB;
 
 /**
  * Business object FtRxmLink
