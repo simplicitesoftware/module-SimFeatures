@@ -1,0 +1,10 @@
+{
+ "scr_code": "FtObjInlineChildTest",
+ "scr_file": {
+  "path": "test/src/com/simplicite/tests/SimFeatures/FtObjInlineChildTest.java",
+  "mime": "text/plain",
+  "name": "FtObjInlineChildTest.java"
+ },
+ "scr_type": "TST",
+ "row_module_id__mdl_name": "SimFeatures"
+}
