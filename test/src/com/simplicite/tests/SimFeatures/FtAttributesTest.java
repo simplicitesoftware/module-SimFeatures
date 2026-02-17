@@ -34,6 +34,4 @@ import com.simplicite.util.Grant;
         attributes.preSave();
         assertEquals("ftAttrHtmlReadOnly should be set to ftAttrHtml", "test", attributes.getFieldValue("ftAttrHtmlReadOnly"));
     }
-
-
 }
