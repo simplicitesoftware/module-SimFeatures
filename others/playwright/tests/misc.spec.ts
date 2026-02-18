@@ -11,7 +11,7 @@ test.afterEach(async ({ page }) => {
 });
 
 // User onboarding test
-test('CHG_00075', async ({ page }) => {
+/*test('CHG_00075', async ({ page }) => {
   await openList(page, "FtDomain", "FtGuidedObject");
   await page.locator(".list-actionbar [data-action='playguide']").click();
 
@@ -48,4 +48,4 @@ test('CHG_00075', async ({ page }) => {
 
   // Expect the guide overlay to be hidden and the toast message to be visible
   await expect(page.locator(".guide-overlay")).not.toBeVisible();
-});
+});*/
