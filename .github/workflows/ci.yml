@@ -80,7 +80,7 @@ jobs:
         env:
           CI: true
           BASE_URL: "https://gitlab-simfeatures.${{ secrets.PORTAINER_URL }}/ui"
-          USER_NAME: playwright
+          USER_NAME: user
           PASSWORD: ${{ secrets.PLAYWRIGHT_PASSWORD }}
         run: npx playwright test --project=firefox
 
