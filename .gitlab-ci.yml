@@ -14,6 +14,35 @@ deploy-test:
     - ./others/cicd/simci portainer-stack-delete gitlab-simfeatures $PORTAINER_URL
     - ./others/cicd/simci portainer-stack-deploy -f ./others/cicd/portainer-stack.yml gitlab-simfeatures $PORTAINER_URL
 
+playwright-tests:
+  stage: test
+  needs: [deploy-test]
+  image: mcr.microsoft.com/playwright:v1.56.1-jammy
+  variables:
+    BASE_URL: "https://gitlab-simfeatures.${PORTAINER_URL}/ui"
+    USER_NAME: playwright
+    PASSWORD: "${PLAYWRIGHT_PASSWORD}"
+  before_script:
+    - cd others/playwright
+    - npm ci
+  script:
+    - |
+      for i in $(seq 1 30); do
+        if curl -sf -o /dev/null "$BASE_URL"; then
+          echo "App is ready"
+          break
+        fi
+        echo "Waiting for app... ($i/30)"
+        sleep 10
+      done
+      curl -sf -o /dev/null "$BASE_URL" || (echo "App failed to become ready" && exit 1)
+    - npx playwright test --project=chromium
+  artifacts:
+    when: on_failure
+    paths:
+      - others/playwright/playwright-report/
+    expire_in: 7 days
+
 unit-tests:
   stage: test
   script:

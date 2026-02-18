@@ -22,12 +22,15 @@ export default defineConfig({
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
+  /* Retry on CI only (1 retry = 2 attempts max) */
+  retries: process.env.CI ? 1 : 0,
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [
+    ['list'],
+    ['html'],
+  ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('')`. */
@@ -36,17 +39,17 @@ export default defineConfig({
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     
-    /* Increase timeouts for web instances with higher latency */
-    actionTimeout: 30000, // 30 seconds for actions (default is 5s)
-    navigationTimeout: 30000, // 30 seconds for navigation (default is 30s)
+    /* Timeouts for web instances */
+    actionTimeout: 15000, // 15 seconds for actions
+    navigationTimeout: 15000, // 15 seconds for navigation
   },
-  
+
   /* Global test timeout */
-  timeout: 60000, // 60 seconds per test (default is 30s)
-  
+  timeout: 30000, // 30 seconds per test
+
   /* Expect timeout for assertions */
   expect: {
-    timeout: 10000, // 10 seconds for assertions (default is 5s)
+    timeout: 5000, // 5 seconds for assertions
   },
 
   /* Configure projects for major browsers */
