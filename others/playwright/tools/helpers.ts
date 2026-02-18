@@ -81,7 +81,7 @@ export function randomString(length: number) {
 }
 
 export async function openList(page: Page, domain: string, object: string, path?: string) {
-  if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
+  /*if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
     if (path) {
       let parent = path.split('.')[0];
       if (parent) {
@@ -91,6 +91,6 @@ export async function openList(page: Page, domain: string, object: string, path?
     } else {
       await page.locator(`[data-domain='${domain}']`).click();
     }
-  } 
+  } */
   await page.locator(`[data-obj='${object}']`).click();
 }

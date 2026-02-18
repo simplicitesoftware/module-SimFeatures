@@ -1,0 +1,175 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e3]:
+    - banner [ref=e5]:
+      - link "" [ref=e6] [cursor=pointer]:
+        - /url: "#"
+        - generic [ref=e7]: 
+      - link "Simplicité" [ref=e9] [cursor=pointer]:
+        - /url: "#"
+        - img "Simplicité" [ref=e10]
+      - search [ref=e12] [cursor=pointer]:
+        - button "" [ref=e14]:
+          - generic [ref=e15]: 
+      - generic [ref=e16]:
+        - text: 
+        - generic [ref=e17]:
+          - button "Undo" [ref=e18]:
+            - img [ref=e19]
+          - button "Redo" [ref=e20]:
+            - img [ref=e21]
+        - generic [ref=e23]:
+          - link " playwright" [ref=e24] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e26]: 
+            - text: playwright
+          - text:    
+        - generic [ref=e27]:
+          - link "" [ref=e28] [cursor=pointer]:
+            - /url: "#"
+            - generic [ref=e29]: 
+          - text:   
+    - generic [ref=e30]:
+      - navigation "menu" [ref=e32]:
+        - generic [ref=e34]:
+          - generic [ref=e36] [cursor=pointer]: 
+          - textbox "Search in menu" [ref=e37]
+          - text: 
+        - menu [ref=e38]:
+          - text: 
+          - menu [ref=e39]:
+            - menuitem "Attributes" [ref=e40] [cursor=pointer]:
+              - img [ref=e42]
+              - generic [ref=e43]: Attributes
+            - menuitem "List Item" [ref=e44] [cursor=pointer]:
+              - img [ref=e46]
+              - generic [ref=e47]: List Item
+            - menuitem "Custom Users" [ref=e48] [cursor=pointer]:
+              - img [ref=e50]
+              - generic [ref=e51]: Custom Users
+            - menuitem "States " [ref=e52] [cursor=pointer]:
+              - img [ref=e54]
+              - generic [ref=e55]: States
+              - text: 
+            - text:   
+            - menuitem "Relationship (one to many)" [ref=e56] [cursor=pointer]:
+              - img [ref=e58]
+              - generic [ref=e59]: Relationship (one to many)
+            - menuitem "Relationship (many to many)" [ref=e60] [cursor=pointer]:
+              - img [ref=e62]
+              - generic [ref=e63]: Relationship (many to many)
+            - menuitem "Child (many to many)" [ref=e64] [cursor=pointer]:
+              - img [ref=e66]
+              - generic [ref=e67]: Child (many to many)
+            - menuitem "Reflexive item (many)" [ref=e68] [cursor=pointer]:
+              - img [ref=e70]
+              - generic [ref=e71]: Reflexive item (many)
+            - menuitem "Tagged object" [ref=e72] [cursor=pointer]:
+              - img [ref=e74]
+              - generic [ref=e75]: Tagged object
+            - menuitem "Tags" [ref=e76] [cursor=pointer]:
+              - img [ref=e78]
+              - generic [ref=e79]: Tags
+            - menuitem "Select object" [ref=e80] [cursor=pointer]:
+              - img [ref=e82]
+              - generic [ref=e83]: Select object
+            - menuitem "Notification Tester" [ref=e84] [cursor=pointer]:
+              - img [ref=e86]
+              - generic [ref=e87]: Notification Tester
+            - menuitem "Actions " [ref=e88] [cursor=pointer]:
+              - img [ref=e90]
+              - generic [ref=e91]: Actions
+              - text: 
+            - text:    
+            - menuitem "Publications" [ref=e92] [cursor=pointer]:
+              - img [ref=e94]
+              - generic [ref=e95]: Publications
+            - menuitem "Search" [ref=e96] [cursor=pointer]:
+              - img [ref=e98]
+              - generic [ref=e99]: Search
+            - menuitem "List ordering" [ref=e100] [cursor=pointer]:
+              - img [ref=e102]
+              - generic [ref=e103]: List ordering
+            - menuitem "Guided object" [ref=e104] [cursor=pointer]:
+              - img [ref=e106]
+              - generic [ref=e107]: Guided object
+            - menuitem "Domain inline " [ref=e108] [cursor=pointer]:
+              - generic [ref=e110]: 
+              - generic [ref=e111]: Domain inline
+              - text: 
+            - text:  
+      - main [ref=e112]:
+        - generic [ref=e114]:
+          - navigation "Navigation" [ref=e115]:
+            - list [ref=e116]:
+              - listitem [ref=e117]:
+                - link "Guided object" [ref=e118] [cursor=pointer]:
+                  - /url: ""
+          - generic [ref=e121]:
+            - generic [ref=e123]:
+              - generic [ref=e124]:
+                - img [ref=e126]
+                - generic [ref=e127]:
+                  - generic [ref=e128]: Guided object
+                  - generic [ref=e130]: Total 1
+              - generic [ref=e132]:
+                - button "Create" [ref=e133] [cursor=pointer]
+                - button "Open the search dialog" [ref=e134] [cursor=pointer]:
+                  - generic [ref=e135]: 
+                - button "Create on list" [ref=e136] [cursor=pointer]:
+                  - img [ref=e137]
+                  - generic [ref=e138]: Create on list
+                - button "Edit list" [ref=e139] [cursor=pointer]:
+                  - img [ref=e140]
+                  - generic [ref=e141]: Edit list
+                - button "Plus" [ref=e143] [cursor=pointer]:
+                  - generic [ref=e144]: 
+            - table "Guided object" [ref=e148]:
+              - rowgroup [ref=e149]:
+                - row "Open Select this page Show the filters by column in the table header User key" [ref=e150]:
+                  - columnheader "Open Select this page Show the filters by column in the table header" [ref=e151]:
+                    - generic [ref=e152]:
+                      - button "Open Select this page" [ref=e154] [cursor=pointer]:
+                        - img [ref=e155]
+                      - button "Show the filters by column in the table header" [ref=e156] [cursor=pointer]:
+                        - generic [ref=e157]: 
+                  - columnheader "User key" [ref=e158]:
+                    - link "User key" [ref=e159] [cursor=pointer]:
+                      - /url: ""
+                      - generic [ref=e160]: User key
+                      - generic [ref=e161]: 
+              - rowgroup [ref=e162]:
+                - row "Select Plus test" [ref=e163] [cursor=pointer]:
+                  - cell "Select Plus" [ref=e164]:
+                    - generic [ref=e165]:
+                      - checkbox "Select" [ref=e166]
+                      - button "Plus" [ref=e168]:
+                        - generic [ref=e169]: 
+                  - cell "test" [ref=e170]:
+                    - generic [ref=e171]: test
+            - generic [ref=e173]:
+              - generic [ref=e174]: Total 1
+              - button "List" [ref=e177] [cursor=pointer]:
+                - generic [ref=e178]: 
+    - contentinfo [ref=e180]:
+      - list [ref=e181]:
+        - listitem [ref=e182]: © Simplicité Software
+        - listitem [ref=e183]:
+          - link "Legal mentions" [ref=e184] [cursor=pointer]:
+            - /url: ""
+        - listitem [ref=e185]:
+          - link "Accessibility" [ref=e186] [cursor=pointer]:
+            - /url: ""
+  - dialog "Confirm" [ref=e187]:
+    - generic [ref=e188]:
+      - generic [ref=e190]: Confirm
+      - generic [ref=e191]: Do you want to quit?
+      - generic [ref=e192]:
+        - generic [ref=e193]:
+          - checkbox "Don't ask again" [ref=e194]
+          - text: Don't ask again
+        - button "Ok" [ref=e195] [cursor=pointer]
+        - button "Cancel" [ref=e196] [cursor=pointer]
+```
