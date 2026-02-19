@@ -1,0 +1,10 @@
+{
+ "scr_code": "FtTestMermaidTest",
+ "scr_file": {
+  "path": "test/src/com/simplicite/tests/SimFeatures/FtTestMermaidTest.java",
+  "mime": "text/plain",
+  "name": "FtTestMermaidTest.java"
+ },
+ "scr_type": "TST",
+ "row_module_id__mdl_name": "SimFeatures"
+}

@@ -1,0 +1,13 @@
+{
+ "map_domain_id__obd_name": "FtDomain",
+ "map_object": {
+  "object": "ObjectExternal",
+  "label": "External object",
+  "userkeylabel": "FtTestMermaid",
+  "icon": "img/system/external_object",
+  "item": {"obe_name": "FtTestMermaid"}
+ },
+ "map_order": 80,
+ "map_ext": false,
+ "row_module_id__mdl_name": "SimFeatures"
+}

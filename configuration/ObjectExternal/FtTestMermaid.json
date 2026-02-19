@@ -1,0 +1,19 @@
+{
+ "obe_name": "FtTestMermaid",
+ "obe_type": "E",
+ "obe_nature": "com_simplicite_webapp_web_ResponsiveExternalObject",
+ "obe_url": null,
+ "obe_settings": "graph LR\n  subgraph City A\n    subgraph Street B\n      subgraph Shop 1\n        a[Product 1] --> b\n      end\n      subgraph Shop 2\n        b[Product 2] --> c\n        c[Product 3] --> a\n      end\n    end\n  end",
+ "obe_comment": null,
+ "obe_help": null,
+ "obe_class": null,
+ "obe_script_id": {
+  "path": "src/com/simplicite/extobjects/SimFeatures/FtTestMermaid.java",
+  "mime": "text/plain",
+  "name": "AppTestMermaid.java"
+ },
+ "obe_icon": "fas/project-diagram",
+ "obe_permalink": null,
+ "obe_widget": true,
+ "row_module_id__mdl_name": "SimFeatures"
+}
