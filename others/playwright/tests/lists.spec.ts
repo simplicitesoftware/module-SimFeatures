@@ -11,7 +11,12 @@ test.afterEach(async ({ page }) => {
 });
 
 // List preferences
-test('FT_0025', async ({ page }) => {
+test('FT_0025', {
+  annotation: {
+    type: 'feature',
+    description: 'List preferences',
+  },
+}, async ({ page }) => {
   await openList(page, "FtDomain", "FtListItem");
 
   // Remove image field from list
@@ -81,7 +86,12 @@ async function toggleFieldInSearchPrefs(page: Page, direction: "left" | "right")
 
 
 // Context menu on lists test
-test('CHG_00092', async ({ page }) => {
+test('CHG_00092', {
+  annotation: {
+    type: 'feature',
+    description: 'Context menu on lists',
+  },
+}, async ({ page }) => {
     await openList(page, "FtDomain", "FtListItem");
     const code = randomString(10);
     // Create a new list item
@@ -101,7 +111,12 @@ test('CHG_00092', async ({ page }) => {
 });
 
 // Quick list ordering test
-test('CHG_00074', async ({ page }) => {
+test('CHG_00074', {
+  annotation: {
+    type: 'feature',
+    description: 'Quick list ordering',
+  },
+}, async ({ page }) => {
     await openList(page, "FtDomain", "FtListOrdering");
     // Create first element
     await page.locator("button[data-action='addlist']").click();
@@ -143,8 +158,12 @@ test('CHG_00074', async ({ page }) => {
     
 });
 
-
-test('Create on list', async ({ page }) => {
+test('FT_0095', {
+  annotation: {
+    type: 'feature',
+    description: 'Create on list',
+  },
+}, async ({ page }) => {
     await openList(page, "FtDomain", "FtListItem");
   
     await page.locator("button[data-action='addlist']").click();
@@ -154,7 +173,12 @@ test('Create on list', async ({ page }) => {
     await expect(page.locator("tr:not([data-rowid='0']) td[data-field='ftLstCode']").first()).toContainText("Item");
   });
   
-test('Update on list', async ({ page }) => {
+test('FT_0096', {
+  annotation: {
+    type: 'feature',
+    description: 'Update on list',
+  },
+}, async ({ page }) => {
     await openList(page, "FtDomain", "FtListItem");
     const code = randomString(10);
     await page.locator("button[data-action='addlist']").click();

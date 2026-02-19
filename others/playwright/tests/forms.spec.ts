@@ -10,7 +10,12 @@ test.afterEach(async ({ page }) => {
   await logout(page);
 });
 
-test('Text', async ({ page }) => {
+test('FT_0097', {
+  annotation: {
+    type: 'feature',
+    description: 'Text fields',
+  },
+}, async ({ page }) => {
 
   const key = randomString(10);
   await createTestRow(page, key);
@@ -55,7 +60,12 @@ test('Text', async ({ page }) => {
 
 });
 
-test('Numbers', async ({ page }) => {
+test('FT_0098', {
+  annotation: {
+    type: 'feature',
+    description: 'Number fields',
+  },
+}, async ({ page }) => {
 
   const key = randomString(10);
   await createTestRow(page, key);
@@ -151,7 +161,12 @@ test('Numbers', async ({ page }) => {
   await deleteRow(page, key);
 });
 
-test('Dates', async ({ page }) => {
+test('FT_0099', {
+  annotation: {
+    type: 'feature',
+    description: 'Date/Time fields',
+  },
+}, async ({ page }) => {
 
   const key = randomString(10);
   await createTestRow(page, key);
@@ -257,7 +272,12 @@ test('Dates', async ({ page }) => {
   await deleteRow(page, key);
 });
 
-test('Lists', async ({ page }) => {
+test('FT_0100', {
+  annotation: {
+    type: 'feature',
+    description: 'Enum fields',
+  },
+}, async ({ page }) => {
 
   const key = randomString(10);
   await createTestRow(page, key);
@@ -331,7 +351,12 @@ test('Lists', async ({ page }) => {
   await deleteRow(page, key);
 });
 
-test('Files', async ({ page }) => {
+test('FT_0101', {
+  annotation: {
+    type: 'feature',
+    description: 'File fields',
+  },
+}, async ({ page }) => {
 
   const key = randomString(10);
   await createTestRow(page, key);
