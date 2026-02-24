@@ -29,14 +29,14 @@ export async function instanceReady(page: Page) {
  * @param page Playwright page object
  */
 export async function login(page: Page) {
-    await page.goto(process.env.BASE_URL || 'http://localhost:8080');
-    // Wait for page to be fully loaded before interacting
-    await page.waitForLoadState();
-    await page.getByRole('textbox', { name: 'Login' }).fill(process.env.USER_NAME || '');
-    await page.getByRole('textbox', { name: 'Password' }).fill(process.env.PASSWORD || '');
-    await page.getByRole('button', { name: 'Connection' }).click();
-    // Wait for login to complete and page to load
-    await instanceReady(page);
+  await page.goto('/');
+  // Wait for page to be fully loaded before interacting
+  await page.waitForLoadState();
+  await page.getByRole('textbox', { name: 'Login' }).fill(process.env.USER_NAME || '');
+  await page.getByRole('textbox', { name: 'Password' }).fill(process.env.PASSWORD || '');
+  await page.getByRole('button', { name: 'Connection' }).click();
+  // Wait for login to complete and page to load
+  await instanceReady(page);
 }
 
 /**
@@ -44,9 +44,9 @@ export async function login(page: Page) {
  * @param page Playwright page object
  */
 export async function logout(page: Page) {
-    await page.locator(".header .logged-user").click();
-    await page.locator("li.user-logout").click();
-    await page.locator("#dlgmodal_CONFIRM_LOGOUT .btn-OK").click();
+  await page.locator(".header .logged-user").click();
+  await page.locator("li.user-logout").click();
+  await page.locator("#dlgmodal_CONFIRM_LOGOUT .btn-OK").click();
 }
 
 /**
@@ -81,7 +81,7 @@ export function randomString(length: number) {
 }
 
 export async function openList(page: Page, domain: string, object: string, path?: string) {
-  if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
+  /*if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
     if (path) {
       let parent = path.split('.')[0];
       if (parent) {
@@ -91,6 +91,6 @@ export async function openList(page: Page, domain: string, object: string, path?
     } else {
       await page.locator(`[data-domain='${domain}']`).click();
     }
-  } 
+  } */
   await page.locator(`[data-obj='${object}']`).click();
 }

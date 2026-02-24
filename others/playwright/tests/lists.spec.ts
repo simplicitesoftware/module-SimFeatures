@@ -1,8 +1,19 @@
 import { test, expect, Page } from '@playwright/test';
-import { login, logout, openList, randomString, skeletonDismissed, saveList, loaded } from '../tools/helpers';
+import {
+  login,
+  logout,
+  openList,
+  randomString,
+  skeletonDismissed,
+  saveList,
+  loaded,
+} from '../tools/helpers';
+
+const DOMAIN = 'FtDomain';
+const LIST_ORDERING = 'FtListOrdering';
+const LIST_ITEM = 'FtListItem';
 
 test.beforeEach(async ({ page }) => {
-  // Runs before each test and signs in each page.
   await login(page);
 });
 
@@ -10,100 +21,215 @@ test.afterEach(async ({ page }) => {
   await logout(page);
 });
 
-// Context menu on lists test
-test('CHG_00092', async ({ page }) => {
-    await openList(page, "FtDomain", "FtListItem");
-    const code = randomString(10);
-    // Create a new list item
-    await page.locator("button[data-action='addlist']").click();
-    await skeletonDismissed(page);
-    await page.locator("tr[data-rowid='0'] [data-field='ftLstType'] span.select2").click();
-    await page.locator("tr[data-rowid='0'] [data-field='ftLstType'] .select2-results li").first().click();
-    await page.locator("tr[data-rowid='0'] [data-field='ftLstDescription'] iframe").click();
-    await page.keyboard.type(code);
-    await saveList(page);
-    await page.locator('button[data-action="cancel"]').click();
-    await skeletonDismissed(page);
+// --- List helpers (FtListOrdering) ---
 
-    const row = page.getByRole("row", { name: code });
-    await row.click({button: "right"});
-    await expect(page.locator(".context-menu-dropdown")).toBeVisible();
+async function addListOrderingRow(
+  page: Page,
+  order: string,
+  label: string,
+) {
+  await page.locator("button[data-action='addlist']").click();
+  await skeletonDismissed(page);
+  await page.locator('#field_ftLoOrder_id0').fill(order);
+  await page.locator('#field_ftLoLabel_id0').fill(label);
+  await saveList(page);
+  await page.locator('button[data-action="cancel"]').click();
+  await skeletonDismissed(page);
+}
+
+// --- List helpers (FtListItem) ---
+
+const newRow = () => "tr[data-rowid='0']";
+
+async function createFtListItemWithCode(page: Page, code: string) {
+  await page.locator("button[data-action='addlist']").click();
+  await skeletonDismissed(page);
+  await page.locator(`${newRow()} [data-field='ftLstType'] span.select2`).click();
+  await page.locator(`${newRow()} [data-field='ftLstType'] .select2-results li`).first().click();
+  await page.locator(`${newRow()} [data-field='ftLstDescription'] iframe`).click();
+  await page.keyboard.type(code);
+  await saveList(page);
+  await page.locator('button[data-action="cancel"]').click();
+  await skeletonDismissed(page);
+}
+
+// --- Prefs dialog helpers ---
+
+async function openListPrefs(page: Page) {
+  await page.locator('.list-actionbar .btn-plus').click();
+  await page.locator("[data-action='prefs']").click();
+  const dialog = page.locator('#dlgmodal_prefs');
+  await expect(dialog).toBeVisible();
+  return dialog;
+}
+
+async function reorderColumns(page: Page, field: string) {
+  const dialog = await openListPrefs(page);
+  await dialog.locator(`option[value='0:${field}']`).click();
+  await dialog.locator('#preftab_0 [data-action="down"]').click();
+  await dialog.locator("[data-action='save']").click();
+}
+
+async function addOrRemoveImageFieldFromList(
+  page: Page,
+  direction: 'left' | 'right',
+) {
+  const dialog = await openListPrefs(page);
+  await dialog.locator("option[value='0:ftLstImage']").click();
+  await dialog.locator(`#preftab_0 [data-action='${direction}']`).click();
+  await dialog.locator("[data-action='save']").click();
+}
+
+async function restoreListPrefs(page: Page) {
+  const dialog = await openListPrefs(page);
+  await dialog.locator('[data-action="restore"]').click();
+}
+
+async function toggleFieldInSearchPrefs(
+  page: Page,
+  direction: 'left' | 'right',
+) {
+  const dialog = await openListPrefs(page);
+  await dialog.locator("[href='#preftab_1']").click();
+  await dialog.locator("option[value='ftLstCode']").click();
+  await dialog.locator(`#preftab_1 [data-action='${direction}']`).click();
+  await dialog.locator("[data-action='save']").click();
+}
+
+// --- Tests ---
+
+test('FT_0022', {
+  annotation: { type: 'feature', description: 'Multi-column ordering' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, LIST_ORDERING);
+
+  await addListOrderingRow(page, '1', 'A');
+  await addListOrderingRow(page, '2', 'B');
+  await addListOrderingRow(page, '3', 'C');
+
+  await page.locator("[data-name='ftLoLabel'] .sort").click();
+  await expect(page.locator("[data-field='ftLoLabel']").first()).toContainText('A');
+  await expect(page.locator("[data-field='ftLoOrder']").nth(1)).toContainText('2');
+
+  await page.locator("[data-name='ftLoLabel'] .sort").click();
+  await expect(page.locator("[data-field='ftLoLabel']").first()).toContainText('C');
+
+  await page.locator('.btn-selrows').click();
+  await page.locator('.list-actionbar div.dropdown').click();
+  await page.locator("[data-action='delall']").click();
+  await page.locator('#dlgmodal .btn-OK').click();
+  await expect(page.locator('.simple-toast')).toBeVisible();
 });
 
-// Quick list ordering test
-test('CHG_00074', async ({ page }) => {
-    await openList(page, "FtDomain", "FtListOrdering");
-    // Create first element
-    await page.locator("button[data-action='addlist']").click();
-    await skeletonDismissed(page);
-    const item1 = randomString(10);
-    await page.locator("#field_ftLoLabel_id0").fill(item1);
-    await saveList(page);
+test('FT_0025', {
+  annotation: { type: 'feature', description: 'List preferences' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, LIST_ITEM);
 
-    // Create second element
-    const item2 = randomString(10);
-    await page.locator("#field_ftLoLabel_id0").fill(item2);
-    await saveList(page);
+  await addOrRemoveImageFieldFromList(page, 'right');
+  await expect(page.locator("th[data-name='ftLstImage']")).not.toBeVisible();
 
-    await page.locator('button[data-action="cancel"]').click();
+  await addOrRemoveImageFieldFromList(page, 'left');
+  await expect(page.locator("th[data-name='ftLstImage']")).toBeVisible();
 
-    // Use the reorder list action
-    await page.locator('.list-actionbar .dropdown').click();
-    await page.locator('.list-actionbar .dropdown').locator('[data-action="reorder"]').click();
-    await expect(page.locator("#dlgmodal_confirm")).toBeVisible();
-    // Reorder based on the current search
-    await page.locator("#field_reorder_action_idreorder").click();
-    await page.locator("button.btn-confirm").click();
+  const headerCells = page.locator('thead tr.head th:not(.col-action)');
+  await expect(headerCells.nth(0)).toHaveAttribute('data-name', 'ftLstCode');
+  await expect(headerCells.nth(1)).toHaveAttribute('data-name', 'ftLstOrder');
 
-    // Expect the two rows to have an order of 1 and 2
-    const row1 = page.getByRole("row", { name: item1 });
-    const row2 = page.getByRole("row", { name: item2 });
-    await expect(row1.locator("[data-field='ftLoOrder']")).not.toBeEmpty();
-    await expect(row2.locator("[data-field='ftLoOrder']")).not.toBeEmpty();
+  await reorderColumns(page, 'ftLstCode');
+  await expect(headerCells.nth(0)).toHaveAttribute('data-name', 'ftLstOrder');
+  await expect(headerCells.nth(1)).toHaveAttribute('data-name', 'ftLstCode');
 
-    // Reorder elements
-    await row2.locator('[data-action="reorder"]').hover();
-    await page.mouse.down();
-    await page.mouse.move(330,300);
-    await page.locator('.dock.before').first().hover();
-    await page.mouse.up();
+  await restoreListPrefs(page);
+  await expect(headerCells.nth(0)).toHaveAttribute('data-name', 'ftLstCode');
+  await expect(headerCells.nth(1)).toHaveAttribute('data-name', 'ftLstOrder');
 
-    // Expect row 2 to be before row 1
-    await expect(page.locator("[data-field='ftLoLabel']").first()).toContainText(item2);
-    
+  await page.locator('.btn-search').click();
+  await expect(page.locator(".field-search[data-field='ftLstCode']")).toBeVisible();
+  await page.locator("[data-action='close']").click();
+
+  await toggleFieldInSearchPrefs(page, 'right');
+  await page.locator('.btn-search').click();
+  await expect(page.locator(".field-search[data-field='ftLstCode']")).not.toBeVisible();
+  await page.locator("[data-action='close']").click();
+  await toggleFieldInSearchPrefs(page, 'left');
 });
 
+test('CHG_00092', {
+  annotation: { type: 'feature', description: 'Context menu on lists' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, LIST_ITEM);
+  const code = randomString(10);
+  await createFtListItemWithCode(page, code);
 
-test('Create on list', async ({ page }) => {
-    await openList(page, "FtDomain", "FtListItem");
-  
-    await page.locator("button[data-action='addlist']").click();
-    await expect(page.locator(('#list_FtListItem_the_ajax_FtListItem tr[data-rowid="0"]'))).toBeVisible();
-    
-    await saveList(page);
-    await expect(page.locator("tr:not([data-rowid='0']) td[data-field='ftLstCode']").first()).toContainText("Item");
-  });
-  
-test('Update on list', async ({ page }) => {
-    await openList(page, "FtDomain", "FtListItem");
-    const code = randomString(10);
-    await page.locator("button[data-action='addlist']").click();
-    await skeletonDismissed(page);
-    await page.locator("tr[data-rowid='0'] [data-field='ftLstType'] span.select2").click();
-    await page.locator("tr[data-rowid='0'] [data-field='ftLstType'] .select2-results li").first().click();
-    await page.locator("tr[data-rowid='0'] [data-field='ftLstDescription'] iframe").click();
-    await page.keyboard.type(code);
-    await saveList(page);
-    await page.locator('button[data-action="cancel"]').click();
-    await skeletonDismissed(page);
+  const row = page.getByRole('row', { name: code });
+  await row.click({ button: 'right' });
+  await expect(page.locator('.context-menu-dropdown')).toBeVisible();
+});
 
-    const row = page.getByRole("row", { name: code });
-    await expect(row.locator("[data-field='ftLstType']")).toContainText("A");
-    await expect(row.locator("[data-field='ftLstDescription']")).toContainText(code);
+test('CHG_00074', {
+  annotation: { type: 'feature', description: 'Quick list ordering' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, LIST_ORDERING);
 
-    await row.locator("[data-field='ftLstType'] span.select2").click();
-    await row.locator("[data-field='ftLstType'] .select2-results li").last().click();
-    await loaded(page);
-    await skeletonDismissed(page);
-    await expect(row.locator("[data-field='ftLstType']")).toContainText("C");
+  await page.locator("button[data-action='addlist']").click();
+  await skeletonDismissed(page);
+  const item1 = randomString(10);
+  await page.locator('#field_ftLoLabel_id0').fill(item1);
+  await saveList(page);
+
+  const item2 = randomString(10);
+  await page.locator('#field_ftLoLabel_id0').fill(item2);
+  await saveList(page);
+  await page.locator('button[data-action="cancel"]').click();
+
+  await page.locator('.list-actionbar .dropdown').click();
+  await page.locator('.list-actionbar .dropdown').locator('[data-action="reorder"]').click();
+  await expect(page.locator('#dlgmodal_confirm')).toBeVisible();
+  await page.locator('#field_reorder_action_idreorder').click();
+  await page.locator('button.btn-confirm').click();
+
+  const row1 = page.getByRole('row', { name: item1 });
+  const row2 = page.getByRole('row', { name: item2 });
+  await expect(row1.locator("[data-field='ftLoOrder']")).not.toBeEmpty();
+  await expect(row2.locator("[data-field='ftLoOrder']")).not.toBeEmpty();
+
+  // Drag row2 above row1 using drop target
+  await row2.locator('[data-action="reorder"]').dragTo(page.locator('.dock.before').first());
+
+  await expect(page.locator("[data-field='ftLoLabel']").first()).toContainText(item2);
+});
+
+test('FT_0095', {
+  annotation: { type: 'feature', description: 'Create on list' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, LIST_ITEM);
+
+  await page.locator("button[data-action='addlist']").click();
+  await expect(
+    page.locator('#list_FtListItem_the_ajax_FtListItem tr[data-rowid="0"]'),
+  ).toBeVisible();
+
+  await saveList(page);
+  await expect(
+    page.locator("tr:not([data-rowid='0']) td[data-field='ftLstCode']").first(),
+  ).toContainText('Item');
+});
+
+test('FT_0096', {
+  annotation: { type: 'feature', description: 'Update on list' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, LIST_ITEM);
+  const code = randomString(10);
+  await createFtListItemWithCode(page, code);
+
+  const row = page.getByRole('row', { name: code });
+  await expect(row.locator("[data-field='ftLstType']")).toContainText('A');
+  await expect(row.locator("[data-field='ftLstDescription']")).toContainText(code);
+
+  await row.locator("[data-field='ftLstType'] span.select2").click();
+  await row.locator("[data-field='ftLstType'] .select2-results li").last().click();
+  await loaded(page);
+  await skeletonDismissed(page);
+  await expect(row.locator("[data-field='ftLstType']")).toContainText('C');
 });
