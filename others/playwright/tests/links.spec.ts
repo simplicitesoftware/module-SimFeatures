@@ -10,9 +10,12 @@ import {
 } from '../tools/helpers';
 
 const DOMAIN = 'FtDomain';
+const INLINE_DOMAIN = 'FtDomainInline';
 const O2M_OBJECT = 'FtRelationshipO2m';
 const M2M_OBJECT = 'FtRelationshipM2m';
 const M2M_CHILD_OBJECT = 'FtM2mChild';
+const INLINE_OBJECT = 'FtObjInlineParent';
+const INLINE_CHILD = 'FtObjInlineChild';
 
 const O2M_FORM = '#form_FtRelationshipO2m_the_ajax_FtRelationshipO2m_0';
 const O2M_CHILD_PANEL = '#list_FtO2mChild_panel_ajax_FtO2mChild_ftO2mcO2mId';
@@ -51,7 +54,7 @@ test('FT_0104', {
   await childPanel.locator("[data-action='create']").click();
   await skeletonDismissed(page);
 
-  await expect(page.locator('#field_ftO2mcO2mId__ftO2mCode')).toContainText(o2mCode);
+  await expect(page.locator('#field_ftO2mcO2mId__ftO2mCode')).toHaveValue(o2mCode);
   const childCode = randomString(10);
   await page.locator('#field_ftO2mcCode').fill(childCode);
   await page.locator("[data-action='saveclose']").click();
@@ -97,4 +100,27 @@ test('FT_0107', {
   await page.locator("[data-action='multiselect']").click();
 
   await expect(page.locator(`[data-list='${M2M_PANEL_LIST_DATA}'] tr`)).toHaveCount(2);
+});
+
+
+test('FT_0103', {
+  annotation: {
+    type: 'feature',
+    description: 'Creates a parent with an inlined child object, fills parent and child fields, saves, and verifies parent description is updated by child hooks.'
+  },
+}, async ({ page }) => {
+  await openList(page, INLINE_DOMAIN, INLINE_OBJECT);
+  
+  await page.locator("[data-action='create']").click();
+  await skeletonDismissed(page);
+
+  await expect(page.locator(`[data-object='${INLINE_CHILD}']`)).toHaveAttribute('data-rowid', '0');
+  await page.locator("#field_ftObjInlineParentName").fill(randomString(10));
+  await page.locator("#field_ftObjInlineName_idftObjInlineChildParentId").fill(randomString(10));
+
+  await page.locator("[data-action='save']").click();
+  await expect(page.locator("#field_ftObjInlineParentDescription")).toHaveValue("Updated by child postCreate");
+
+  await page.locator("[data-action='save']").click();
+  await expect(page.locator("#field_ftObjInlineParentDescription")).toHaveValue("Updated by child postUpdate");
 });

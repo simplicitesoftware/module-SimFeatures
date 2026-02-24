@@ -81,16 +81,11 @@ export function randomString(length: number) {
 }
 
 export async function openList(page: Page, domain: string, object: string, path?: string) {
-  /*if (!(await page.locator(`[data-obj='${object}']`).isVisible())) {
-    if (path) {
-      let parent = path.split('.')[0];
-      if (parent) {
-        await page.locator(`[data-domain='${parent}']`).click();
-        await page.locator(` [data-path='${path}']`).click();
-      }
-    } else {
+  await expect(page.locator("ul.main-menu")).toBeVisible();
+  const objVisible = await page.locator(`[data-obj='${object}']`).isVisible();
+  if (!objVisible) {
       await page.locator(`[data-domain='${domain}']`).click();
-    }
-  } */
+  }
+  await expect(page.locator(`[data-obj='${object}']`)).toBeVisible();
   await page.locator(`[data-obj='${object}']`).click();
 }
