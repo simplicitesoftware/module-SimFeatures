@@ -602,6 +602,21 @@ simci_portainer_stack_deploy_command() {
   env_id=${args[--environment]}
 
   echo "[sim-cicd] === DEPLOY PORTAINER STACK"
+  # Pull images before deploying (only when REGISTRY_AUTH is set)
+  if [[ -n "${REGISTRY_AUTH:-}" ]]; then
+    local images
+    images=$(grep -E '^\s+image:' "$compose_file" 2>/dev/null | sed -E 's/^[[:space:]]*image:[[:space:]]*//;s/^["'\'']//;s/["'\'']$//' | sort -u || true)
+    if [[ -n "$images" ]]; then
+      while IFS= read -r img; do
+        [[ -z "$img" ]] && continue
+        echo "[sim-cicd] Pulling image $img..."
+        curl -s -X POST "https://$portainer_url/api/endpoints/$env_id/docker/images/create?fromImage=$img" \
+          -H "X-API-Key:$PORTAINER_API_TOKEN" \
+          -H "X-Registry-Auth:$REGISTRY_AUTH" \
+          -o /dev/null -w "%{http_code}" | grep -qE '^(200|201|304)' || true
+      done <<< "$images"
+    fi
+  fi
   # Create stack
   echo "[sim-cicd] Creating stack '$stack' on $portainer_url (endpoint $env_id) from $compose_file..."
   curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpointId=$env_id" \

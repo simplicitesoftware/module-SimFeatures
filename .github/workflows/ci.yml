@@ -17,6 +17,7 @@ jobs:
           chmod +x ./others/cicd/simci
           export PORTAINER_API_TOKEN="${{ secrets.PORTAINER_API_TOKEN }}"
           export IO_PASSWORD="${{ secrets.IO_PASSWORD }}"
+          export REGISTRY_AUTH="${{ secrets.REGISTRY_AUTH }}"
           ./others/cicd/simci portainer-stack-delete gitlab-simfeatures "${{ secrets.PORTAINER_URL }}"
           ./others/cicd/simci portainer-stack-deploy -f ./others/cicd/portainer-stack.yml gitlab-simfeatures "${{ secrets.PORTAINER_URL }}"
 
