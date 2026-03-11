@@ -164,7 +164,7 @@ test('CHG_00092', {
 
   const row = page.getByRole('row', { name: code });
   await row.click({ button: 'right' });
-  await expect(page.locator('.context-menu-dropdown')).toBeVisible();
+  await expect(page.locator('.dropdown-menu.ctx-menu')).toBeVisible();
 });
 
 test('CHG_00074', {

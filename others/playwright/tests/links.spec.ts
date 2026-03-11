@@ -116,7 +116,7 @@ test('FT_0103', {
 
   await expect(page.locator(`[data-object='${INLINE_CHILD}']`)).toHaveAttribute('data-rowid', '0');
   await page.locator("#field_ftObjInlineParentName").fill(randomString(10));
-  await page.locator("#field_ftObjInlineName_idftObjInlineChildParentId").fill(randomString(10));
+  await page.locator("#field_ftObjInlineName").fill(randomString(10));
 
   await page.locator("[data-action='save']").click();
   await expect(page.locator("#field_ftObjInlineParentDescription")).toHaveValue("Updated by child postCreate");
