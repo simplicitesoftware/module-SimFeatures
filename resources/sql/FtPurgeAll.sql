@@ -1,0 +1,24 @@
+-- Shared SQL FtPurgeAll
+delete from ft_actions;
+delete from ft_attributes;
+delete from ft_guided_object;
+delete from ft_list_item;
+delete from ft_list_ordering;
+delete from ft_m2m;
+delete from ft_m2m_child;
+delete from ft_notification;
+delete from ft_o2m_child;
+delete from ft_obj_inline_child;
+delete from ft_obj_inline_parent;
+delete from ft_publications;
+delete from ft_reflexive_many;
+delete from ft_relationship_m2m;
+delete from ft_relationship_o2m;
+delete from ft_rxm_link;
+delete from ft_search;
+delete from ft_search_reference;
+delete from ft_states;
+delete from ft_states_hist;
+delete from ft_tag;
+delete from ft_tagged_object;
+delete from ft_tgo_tag;
