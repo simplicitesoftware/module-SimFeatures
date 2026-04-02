@@ -1,0 +1,10 @@
+{
+ "scr_code": "FtPurgeAll",
+ "scr_file": {
+  "path": "resources/sql/FtPurgeAll.sql",
+  "mime": "text/x-sql",
+  "name": "FtPurgeAll.sql"
+ },
+ "scr_type": "SQL",
+ "row_module_id__mdl_name": "SimFeatures"
+}
