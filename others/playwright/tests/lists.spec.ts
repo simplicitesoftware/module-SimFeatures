@@ -12,6 +12,7 @@ import {
 const DOMAIN = 'FtDomain';
 const LIST_ORDERING = 'FtListOrdering';
 const LIST_ITEM = 'FtListItem';
+const SEARCH_ITEM = 'FtSearch';
 
 test.beforeEach(async ({ page }) => {
   await login(page);
@@ -37,7 +38,7 @@ async function addListOrderingRow(
   await skeletonDismissed(page);
 }
 
-// --- List helpers (FtListItem) ---
+// --- List helpers ---
 
 const newRow = () => "tr[data-rowid='0']";
 
@@ -51,6 +52,25 @@ async function createFtListItemWithCode(page: Page, code: string) {
   await saveList(page);
   await page.locator('button[data-action="cancel"]').click();
   await skeletonDismissed(page);
+}
+
+async function createSearchItemRow(page: Page, code: string, refCode: string, date: string, coordinates: string) {
+  await page.locator("button[data-action='addlist']").click();
+  await skeletonDismissed(page);
+  const row = page.locator(`tr[data-rowid='0']`);
+  await row.locator("#ftSchCode").fill(code);
+  await row.locator("#field_ftSchDate_id0").fill(date);
+  await row.locator("#ftSchCoordinates").fill(coordinates);
+
+  await row.locator("[data-field='ftSchSrfId__ftSrfCode'] button.dropdown-toggle").click();
+  await row.locator("[data-field='ftSchSrfId__ftSrfCode'] ul a[data-name='refnew_field_ftSchSrfId__ftSrfCode_id0']").click();
+  await expect(page.locator("#form_FtSearchReference_the_ajax_FtSearchReference_0")).toBeVisible();
+
+  const refForm = page.locator("#form_FtSearchReference_the_ajax_FtSearchReference_0");
+  await refForm.locator("#field_ftSrfCode").fill(refCode);
+  await refForm.locator("[data-action='saveclose']").click();
+  await page.locator("button[data-action='save']").click();  
+  await page.locator("button[data-action='cancel']").click();
 }
 
 // --- Prefs dialog helpers ---
@@ -236,4 +256,31 @@ test('FT_0096', {
   await loaded(page);
   await skeletonDismissed(page);
   await expect(row.locator("[data-field='ftLstType']")).toContainText('C');
+});
+
+test('FT_0111', {
+  annotation: { type: 'feature', description: 'Search dialog' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, SEARCH_ITEM);
+  const code = randomString(10);
+  const refCode = randomString(10);
+  const date = "01/01/2026";
+  const coordinates = "48.8753213,2.3455624";
+  await createSearchItemRow(page, code, refCode, date, coordinates);
+
+  await page.locator('[data-action="search"]').click();
+  const searchDialog = page.locator("#dlgmodal_search");
+  await expect(searchDialog).toBeVisible();
+  const searchForm = page.locator("#search_FtSearch_the_ajax_FtSearch");
+  await searchForm.locator("input[name='ftSchCode']").fill(code);
+  await searchForm.locator("#ftSchDate").fill(date);
+  await searchForm.locator("input[name='ftSchCoordinates']").fill(coordinates);
+  await searchForm.locator("input[name='ftSchSrfId__ftSrfCode']").fill(refCode);
+  await page.locator(".modal-content button[data-action='search']").click();
+  await expect(page.locator("#list_FtSearch_the_ajax_FtSearch")).toBeVisible();
+  await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch']")).toHaveCount(1);
+  await expect(page.locator("td[data-field='ftSchCode']")).toContainText(code);
+  await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch'] td[data-field='ftSchDate']")).toContainText(date);
+  await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch'] td[data-field='ftSchCoordinates']")).toContainText(coordinates);
+  await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch'] td[data-field='ftSchSrfId__ftSrfCode']")).toContainText(refCode);
 });
