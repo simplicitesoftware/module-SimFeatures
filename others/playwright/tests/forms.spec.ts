@@ -22,11 +22,11 @@ test.afterEach(async ({ page }) => {
 
 // --- Form helpers ---
 
-function getField(page: Page, name: string) {
+function getFieldById(page: Page, name: string) {
   return page.locator(`#field_${name}`);
 }
 
-function fieldLocator(page: Page, name: string) {
+function getFieldByAttr(page: Page, name: string) {
   return page.locator(`[data-field='${name}']`);
 }
 
@@ -72,24 +72,24 @@ function getTextFile(name: string) {
 }
 
 async function setDateToToday(page: Page, field: string, icon: '.fa-calendar-alt' | '.fa-th' = '.fa-calendar-alt') {
-  await fieldLocator(page, field).locator(icon).click();
-  await expect(fieldLocator(page, field).locator('.flatpickr-calendar')).toBeVisible();
-  await fieldLocator(page, field).locator(".flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
+  await getFieldByAttr(page, field).locator(icon).click();
+  await expect(getFieldByAttr(page, field).locator('.flatpickr-calendar')).toBeVisible();
+  await getFieldByAttr(page, field).locator(".flatpickr-calendar .flatpickr-buttons [data-action='TODAY']").click();
 }
 
 async function setTimeToNow(page: Page, field: string) {
-  await fieldLocator(page, field).locator('.fa-clock').click();
-  await expect(fieldLocator(page, field).locator('.flatpickr-calendar')).toBeVisible();
-  await fieldLocator(page, field).locator(".flatpickr-calendar .flatpickr-buttons [data-action='NOW']").click();
+  await getFieldByAttr(page, field).locator('.fa-clock').click();
+  await expect(getFieldByAttr(page, field).locator('.flatpickr-calendar')).toBeVisible();
+  await getFieldByAttr(page, field).locator(".flatpickr-calendar .flatpickr-buttons [data-action='NOW']").click();
 }
 
 async function useCalculator(page: Page, field: string, keys: string[]) {
-  await getField(page, field).click();
-  await expect(fieldLocator(page, field).locator('.calculator')).toBeVisible();
+  await getFieldById(page, field).click();
+  await expect(getFieldByAttr(page, field).locator('.calculator')).toBeVisible();
   for (const key of keys) {
-    await fieldLocator(page, field).locator('.calculator button').getByText(key).click();
+    await getFieldByAttr(page, field).locator('.calculator button').getByText(key).click();
   }
-  await expect(fieldLocator(page, field).locator('.calculator')).not.toBeVisible();
+  await expect(getFieldByAttr(page, field).locator('.calculator')).not.toBeVisible();
 }
 
 // --- Tests ---
@@ -102,19 +102,19 @@ test('FT_0097', {
   await openTestRow(page, 'ftAttrCode', key);
 
   const shortTextValue = randomString(10);
-  await getField(page, 'ftAttrShortText').fill(shortTextValue);
+  await getFieldById(page, 'ftAttrShortText').fill(shortTextValue);
 
   const validatedTextValue = 'abc';
-  await getField(page, 'ftAttrValidatedText').fill(validatedTextValue);
+  await getFieldById(page, 'ftAttrValidatedText').fill(validatedTextValue);
 
   const longTextValue = randomString(400);
-  await getField(page, 'ftAttrLongText').fill(longTextValue);
+  await getFieldById(page, 'ftAttrLongText').fill(longTextValue);
 
   const aceEditorValue = randomString(400);
-  await expect(fieldLocator(page, 'ftAttrLongTextEditor').locator('.btn-ace-fullscreen.open')).toBeVisible();
-  await fieldLocator(page, 'ftAttrLongTextEditor').locator('.ace_text-input').fill(aceEditorValue);
+  await expect(getFieldByAttr(page, 'ftAttrLongTextEditor').locator('.btn-ace-fullscreen.open')).toBeVisible();
+  await getFieldByAttr(page, 'ftAttrLongTextEditor').locator('.ace_text-input').fill(aceEditorValue);
 
-  const mdeditBtn = fieldLocator(page, 'ftAttrLongTextMarkdown').locator('.mdedit_field_ftAttrLongTextMarkdown');
+  const mdeditBtn = getFieldByAttr(page, 'ftAttrLongTextMarkdown').locator('.mdedit_field_ftAttrLongTextMarkdown');
   await expect(mdeditBtn).toBeVisible();
   await mdeditBtn.click();
   await page.locator('.markdown-edit .ace_text-input').fill('# Markdown title');
@@ -125,12 +125,12 @@ test('FT_0097', {
 
   await saveForm(page);
 
-  await expect(getField(page, 'ftAttrShortText')).toHaveValue(shortTextValue);
-  await expect(getField(page, 'ftAttrValidatedText')).toHaveValue(validatedTextValue);
-  await expect(getField(page, 'ftAttrLongText')).toHaveValue(longTextValue);
-  await expect(getField(page, 'ftAttrLongTextEditor')).toHaveValue(aceEditorValue);
+  await expect(getFieldById(page, 'ftAttrShortText')).toHaveValue(shortTextValue);
+  await expect(getFieldById(page, 'ftAttrValidatedText')).toHaveValue(validatedTextValue);
+  await expect(getFieldById(page, 'ftAttrLongText')).toHaveValue(longTextValue);
+  await expect(getFieldById(page, 'ftAttrLongTextEditor')).toHaveValue(aceEditorValue);
   await expect(
-    fieldLocator(page, 'ftAttrLongTextMarkdown').locator('.markdown-html').getByRole('heading', { name: 'Markdown title' }),
+    getFieldByAttr(page, 'ftAttrLongTextMarkdown').locator('.markdown-html').getByRole('heading', { name: 'Markdown title' }),
   ).toBeVisible();
 
   await deleteRow(page, key);
@@ -143,71 +143,71 @@ test('FT_0098', {
   await createTestRow(page, key);
   await openTestRow(page, 'ftAttrCode', key);
 
-  await getField(page, 'ftAttrInteger').fill('123');
+  await getFieldById(page, 'ftAttrInteger').fill('123');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrInteger')).toHaveValue('123');
+  await expect(getFieldById(page, 'ftAttrInteger')).toHaveValue('123');
 
-  await getField(page, 'ftAttrDecimal').fill('123.45');
+  await getFieldById(page, 'ftAttrDecimal').fill('123.45');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDecimal')).toHaveValue('123.45');
+  await expect(getFieldById(page, 'ftAttrDecimal')).toHaveValue('123.45');
 
-  await getField(page, 'ftAttrIntegerMonetary').fill('1000');
+  await getFieldById(page, 'ftAttrIntegerMonetary').fill('1000');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrIntegerMonetary')).toHaveValue('1,000');
+  await expect(getFieldById(page, 'ftAttrIntegerMonetary')).toHaveValue('1,000');
 
-  await getField(page, 'ftAttrDecimalMonetary').fill('1000.10');
+  await getFieldById(page, 'ftAttrDecimalMonetary').fill('1000.10');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDecimalMonetary')).toHaveValue('1,000.10');
+  await expect(getFieldById(page, 'ftAttrDecimalMonetary')).toHaveValue('1,000.10');
 
-  await getField(page, 'ftAttrIntegerPercentage').fill('10');
+  await getFieldById(page, 'ftAttrIntegerPercentage').fill('10');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrIntegerPercentage').locator('.render').getByText('%')).toBeVisible();
-  await expect(getField(page, 'ftAttrIntegerPercentage')).toHaveValue('10');
+  await expect(getFieldByAttr(page, 'ftAttrIntegerPercentage').locator('.render').getByText('%')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrIntegerPercentage')).toHaveValue('10');
 
-  await getField(page, 'ftAttrDecimalPercentage').fill('10.5');
+  await getFieldById(page, 'ftAttrDecimalPercentage').fill('10.5');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrDecimalPercentage').locator('.render').getByText('%')).toBeVisible();
-  await expect(getField(page, 'ftAttrDecimalPercentage')).toHaveValue('10.50');
+  await expect(getFieldByAttr(page, 'ftAttrDecimalPercentage').locator('.render').getByText('%')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrDecimalPercentage')).toHaveValue('10.50');
 
-  await getField(page, 'ftAttrIntegerEuro').fill('100');
+  await getFieldById(page, 'ftAttrIntegerEuro').fill('100');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrIntegerEuro').locator('.render-euro')).toBeVisible();
-  await expect(getField(page, 'ftAttrIntegerEuro')).toHaveValue('100');
+  await expect(getFieldByAttr(page, 'ftAttrIntegerEuro').locator('.render-euro')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrIntegerEuro')).toHaveValue('100');
 
-  await getField(page, 'ftAttrDecimalEuro').fill('100');
+  await getFieldById(page, 'ftAttrDecimalEuro').fill('100');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrDecimalEuro').locator('.render-euro')).toBeVisible();
-  await expect(getField(page, 'ftAttrDecimalEuro')).toHaveValue('100.00');
+  await expect(getFieldByAttr(page, 'ftAttrDecimalEuro').locator('.render-euro')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrDecimalEuro')).toHaveValue('100.00');
 
-  await getField(page, 'ftAttrIntegerProgressBar').fill('50');
+  await getFieldById(page, 'ftAttrIntegerProgressBar').fill('50');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrIntegerProgressBar').locator('.progress-bar')).toHaveText('50%');
+  await expect(getFieldByAttr(page, 'ftAttrIntegerProgressBar').locator('.progress-bar')).toHaveText('50%');
 
-  await getField(page, 'ftAttrDecimalProgressBar').fill('50.5');
+  await getFieldById(page, 'ftAttrDecimalProgressBar').fill('50.5');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrDecimalProgressBar').locator('.progress-bar')).toHaveText('51%');
+  await expect(getFieldByAttr(page, 'ftAttrDecimalProgressBar').locator('.progress-bar')).toHaveText('51%');
 
   await useCalculator(page, 'ftAttrDecimalCalculator', ['C', '1', '+', '1', 'Ok']);
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDecimalCalculator')).toHaveValue('2.00');
+  await expect(getFieldById(page, 'ftAttrDecimalCalculator')).toHaveValue('2.00');
 
   await saveForm(page);
 
-  await expect(getField(page, 'ftAttrInteger')).toHaveValue('123');
-  await expect(getField(page, 'ftAttrDecimal')).toHaveValue('123.45');
-  await expect(getField(page, 'ftAttrIntegerMonetary')).toHaveValue('1,000');
-  await expect(getField(page, 'ftAttrDecimalMonetary')).toHaveValue('1,000.10');
-  await expect(fieldLocator(page, 'ftAttrIntegerPercentage').locator('.render').getByText('%')).toBeVisible();
-  await expect(getField(page, 'ftAttrIntegerPercentage')).toHaveValue('10');
-  await expect(fieldLocator(page, 'ftAttrDecimalPercentage').locator('.render').getByText('%')).toBeVisible();
-  await expect(getField(page, 'ftAttrDecimalPercentage')).toHaveValue('10.50');
-  await expect(fieldLocator(page, 'ftAttrIntegerEuro').locator('.render-euro')).toBeVisible();
-  await expect(getField(page, 'ftAttrIntegerEuro')).toHaveValue('100');
-  await expect(fieldLocator(page, 'ftAttrDecimalEuro').locator('.render-euro')).toBeVisible();
-  await expect(getField(page, 'ftAttrDecimalEuro')).toHaveValue('100.00');
-  await expect(fieldLocator(page, 'ftAttrIntegerProgressBar').locator('.progress-bar')).toHaveText('50%');
-  await expect(fieldLocator(page, 'ftAttrDecimalProgressBar').locator('.progress-bar')).toHaveText('51%');
-  await expect(getField(page, 'ftAttrDecimalCalculator')).toHaveValue('2.00');
+  await expect(getFieldById(page, 'ftAttrInteger')).toHaveValue('123');
+  await expect(getFieldById(page, 'ftAttrDecimal')).toHaveValue('123.45');
+  await expect(getFieldById(page, 'ftAttrIntegerMonetary')).toHaveValue('1,000');
+  await expect(getFieldById(page, 'ftAttrDecimalMonetary')).toHaveValue('1,000.10');
+  await expect(getFieldByAttr(page, 'ftAttrIntegerPercentage').locator('.render').getByText('%')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrIntegerPercentage')).toHaveValue('10');
+  await expect(getFieldByAttr(page, 'ftAttrDecimalPercentage').locator('.render').getByText('%')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrDecimalPercentage')).toHaveValue('10.50');
+  await expect(getFieldByAttr(page, 'ftAttrIntegerEuro').locator('.render-euro')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrIntegerEuro')).toHaveValue('100');
+  await expect(getFieldByAttr(page, 'ftAttrDecimalEuro').locator('.render-euro')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrDecimalEuro')).toHaveValue('100.00');
+  await expect(getFieldByAttr(page, 'ftAttrIntegerProgressBar').locator('.progress-bar')).toHaveText('50%');
+  await expect(getFieldByAttr(page, 'ftAttrDecimalProgressBar').locator('.progress-bar')).toHaveText('51%');
+  await expect(getFieldById(page, 'ftAttrDecimalCalculator')).toHaveValue('2.00');
 
   await deleteRow(page, key);
 });
@@ -226,22 +226,22 @@ test('FT_0099', {
 
   await setDateToToday(page, 'ftAttrDate');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDate')).toHaveValue(`${mm}/${dd}/${yyyy}`);
+  await expect(getFieldById(page, 'ftAttrDate')).toHaveValue(`${mm}/${dd}/${yyyy}`);
 
   await setDateToToday(page, 'ftAttrDateToMonth');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDateToMonth')).toHaveValue(`${mm}/${yyyy}`);
+  await expect(getFieldById(page, 'ftAttrDateToMonth')).toHaveValue(`${mm}/${yyyy}`);
 
   await setDateToToday(page, 'ftAttrDateToYear');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDateToYear')).toHaveValue(`${yyyy}`);
+  await expect(getFieldById(page, 'ftAttrDateToYear')).toHaveValue(`${yyyy}`);
 
   await setDateToToday(page, 'ftAttrDateTime', '.fa-th');
   await saveForm(page);
   const today2 = new Date();
   const hh = String(today2.getHours()).padStart(2, '0');
   const mi = String(today2.getMinutes()).padStart(2, '0');
-  const actualDateTime = await getField(page, 'ftAttrDateTime').inputValue();
+  const actualDateTime = await getFieldById(page, 'ftAttrDateTime').inputValue();
   expect(actualDateTime.startsWith(`${mm}/${dd}/${yyyy} ${hh}:${mi}:`)).toBeTruthy();
 
   await setDateToToday(page, 'ftAttrDateTimeToMinute', '.fa-th');
@@ -249,20 +249,20 @@ test('FT_0099', {
   const today3 = new Date();
   const hh3 = String(today3.getHours()).padStart(2, '0');
   const mi3 = String(today3.getMinutes()).padStart(2, '0');
-  await expect(getField(page, 'ftAttrDateTimeToMinute')).toHaveValue(`${mm}/${dd}/${yyyy} ${hh3}:${mi3}`);
+  await expect(getFieldById(page, 'ftAttrDateTimeToMinute')).toHaveValue(`${mm}/${dd}/${yyyy} ${hh3}:${mi3}`);
 
   await setDateToToday(page, 'ftAttrDateTimeToMonth', '.fa-th');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDateTimeToMonth')).toHaveValue(`${mm}/${yyyy}`);
+  await expect(getFieldById(page, 'ftAttrDateTimeToMonth')).toHaveValue(`${mm}/${yyyy}`);
 
   await setDateToToday(page, 'ftAttrDateTimeToYear', '.fa-th');
   await saveForm(page);
-  await expect(getField(page, 'ftAttrDateTimeToYear')).toHaveValue(`${yyyy}`);
+  await expect(getFieldById(page, 'ftAttrDateTimeToYear')).toHaveValue(`${yyyy}`);
 
   await setTimeToNow(page, 'ftAttrTime');
   await saveForm(page);
   const timeCheckDate = new Date();
-  const actualValue = await getField(page, 'ftAttrTime').inputValue();
+  const actualValue = await getFieldById(page, 'ftAttrTime').inputValue();
   const [actualH, actualM] = actualValue.split(':').map(Number);
   const expectedMinutes = timeCheckDate.getHours() * 60 + timeCheckDate.getMinutes();
   const actualMinutes = actualH * 60 + actualM;
@@ -273,13 +273,13 @@ test('FT_0099', {
   const today4 = new Date();
   const hh4 = String(today4.getHours()).padStart(2, '0');
   const mi4 = String(today4.getMinutes()).padStart(2, '0');
-  await expect(getField(page, 'ftAttrTimeToMinute')).toHaveValue(`${hh4}:${mi4}`);
+  await expect(getFieldById(page, 'ftAttrTimeToMinute')).toHaveValue(`${hh4}:${mi4}`);
 
   await setTimeToNow(page, 'ftAttrTimeToHour');
   await saveForm(page);
   const today5 = new Date();
   const hh5 = String(today5.getHours()).padStart(2, '0');
-  await expect(getField(page, 'ftAttrTimeToHour')).toHaveValue(hh5);
+  await expect(getFieldById(page, 'ftAttrTimeToHour')).toHaveValue(hh5);
 
   await deleteRow(page, key);
 });
@@ -291,63 +291,63 @@ test('FT_0100', {
   await createTestRow(page, key);
   await openTestRow(page, 'ftAttrCode', key);
 
-  await fieldLocator(page, 'ftAttrEnum').locator('span.select2').click();
-  await fieldLocator(page, 'ftAttrEnum').locator('.select2-results li').first().click();
+  await getFieldByAttr(page, 'ftAttrEnum').locator('span.select2').click();
+  await getFieldByAttr(page, 'ftAttrEnum').locator('.select2-results li').first().click();
   await saveForm(page);
-  await expect(getField(page, 'ftAttrEnum')).toHaveValue('A');
+  await expect(getFieldById(page, 'ftAttrEnum')).toHaveValue('A');
 
-  await fieldLocator(page, 'ftAttrEnumMulti').locator('span.select2').click();
-  await fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-results li').first().click();
-  await fieldLocator(page, 'ftAttrEnumMulti').locator('span.select2').click();
-  await fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-results li').last().click();
+  await getFieldByAttr(page, 'ftAttrEnumMulti').locator('span.select2').click();
+  await getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-results li').first().click();
+  await getFieldByAttr(page, 'ftAttrEnumMulti').locator('span.select2').click();
+  await getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-results li').last().click();
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-selection__choice')).toHaveCount(2);
-  await expect(fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').first()).toContainText('A');
-  await expect(fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').last()).toContainText('C');
+  await expect(getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-selection__choice')).toHaveCount(2);
+  await expect(getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').first()).toContainText('A');
+  await expect(getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').last()).toContainText('C');
 
-  await fieldLocator(page, 'ftAttrBoolean').locator('.form-check-input').first().click();
+  await getFieldByAttr(page, 'ftAttrBoolean').locator('.form-check-input').first().click();
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrBoolean').locator('.form-check-input').first()).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrBoolean').locator('.form-check-input').first()).toBeChecked();
 
   await expect(page.locator('#field_ftAttrEnumCheckboxHorizontal_empty')).toBeVisible();
-  await fieldLocator(page, 'ftAttrEnumCheckboxHorizontal').locator("[value='A']").click();
+  await getFieldByAttr(page, 'ftAttrEnumCheckboxHorizontal').locator("[value='A']").click();
   await saveForm(page);
   await expect(page.locator('#field_ftAttrEnumCheckboxHorizontal_empty')).not.toBeChecked();
-  await expect(fieldLocator(page, 'ftAttrEnumCheckboxHorizontal').locator("[value='A']")).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrEnumCheckboxHorizontal').locator("[value='A']")).toBeChecked();
 
-  await fieldLocator(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='A']").click();
-  await fieldLocator(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='C']").click();
+  await getFieldByAttr(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='A']").click();
+  await getFieldByAttr(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='C']").click();
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='A']")).toBeChecked();
-  await expect(fieldLocator(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='C']")).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='A']")).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='C']")).toBeChecked();
 
-  await fieldLocator(page, 'ftAttrBooleanCheckbox').getByRole('checkbox').click();
+  await getFieldByAttr(page, 'ftAttrBooleanCheckbox').getByRole('checkbox').click();
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrBooleanCheckbox').getByRole('checkbox')).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrBooleanCheckbox').getByRole('checkbox')).toBeChecked();
 
-  await fieldLocator(page, 'ftAttrEnumPillbox').locator('span.select2').click();
-  await fieldLocator(page, 'ftAttrEnumPillbox').locator('.select2-search__field').fill('A');
-  await expect(fieldLocator(page, 'ftAttrEnumPillbox').locator('.select2-results .select2-results__options')).toHaveCount(1);
+  await getFieldByAttr(page, 'ftAttrEnumPillbox').locator('span.select2').click();
+  await getFieldByAttr(page, 'ftAttrEnumPillbox').locator('.select2-search__field').fill('A');
+  await expect(getFieldByAttr(page, 'ftAttrEnumPillbox').locator('.select2-results .select2-results__options')).toHaveCount(1);
   await expect(
-    fieldLocator(page, 'ftAttrEnumPillbox').locator('.select2-results .select2-results__options').first(),
+    getFieldByAttr(page, 'ftAttrEnumPillbox').locator('.select2-results .select2-results__options').first(),
   ).toContainText('A');
-  await fieldLocator(page, 'ftAttrEnumPillbox').locator('.select2-results .select2-results__options').first().click();
+  await getFieldByAttr(page, 'ftAttrEnumPillbox').locator('.select2-results .select2-results__options').first().click();
   await saveForm(page);
-  await expect(getField(page, 'ftAttrEnumPillbox')).toHaveValue('A');
+  await expect(getFieldById(page, 'ftAttrEnumPillbox')).toHaveValue('A');
 
   await saveForm(page);
 
-  await expect(getField(page, 'ftAttrEnum')).toHaveValue('A');
-  await expect(fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-selection__choice')).toHaveCount(2);
-  await expect(fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').first()).toContainText('A');
-  await expect(fieldLocator(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').last()).toContainText('C');
-  await expect(fieldLocator(page, 'ftAttrBoolean').locator('.form-check-input').first()).toBeChecked();
+  await expect(getFieldById(page, 'ftAttrEnum')).toHaveValue('A');
+  await expect(getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-selection__choice')).toHaveCount(2);
+  await expect(getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').first()).toContainText('A');
+  await expect(getFieldByAttr(page, 'ftAttrEnumMulti').locator('.select2-selection__choice').last()).toContainText('C');
+  await expect(getFieldByAttr(page, 'ftAttrBoolean').locator('.form-check-input').first()).toBeChecked();
   await expect(page.locator('#field_ftAttrEnumCheckboxHorizontal_empty')).not.toBeChecked();
-  await expect(fieldLocator(page, 'ftAttrEnumCheckboxHorizontal').locator("[value='A']")).toBeChecked();
-  await expect(fieldLocator(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='A']")).toBeChecked();
-  await expect(fieldLocator(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='C']")).toBeChecked();
-  await expect(fieldLocator(page, 'ftAttrBooleanCheckbox').getByRole('checkbox')).toBeChecked();
-  await expect(getField(page, 'ftAttrEnumPillbox')).toHaveValue('A');
+  await expect(getFieldByAttr(page, 'ftAttrEnumCheckboxHorizontal').locator("[value='A']")).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='A']")).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrEnumMultiCheckboxHorizontal').locator("[value='C']")).toBeChecked();
+  await expect(getFieldByAttr(page, 'ftAttrBooleanCheckbox').getByRole('checkbox')).toBeChecked();
+  await expect(getFieldById(page, 'ftAttrEnumPillbox')).toHaveValue('A');
 
   await deleteRow(page, key);
 });
@@ -359,7 +359,7 @@ test('FT_0101', {
   await createTestRow(page, key);
   await openTestRow(page, 'ftAttrCode', key);
 
-  const docField = fieldLocator(page, 'ftAttrDocument');
+  const docField = getFieldByAttr(page, 'ftAttrDocument');
   await page.locator('#file_field_ftAttrDocument').setInputFiles(getTextFile('dummyfile'));
   await saveForm(page);
   await expect(page.locator('#doc_field_ftAttrDocument')).toHaveValue('dummyfile.txt');
@@ -409,24 +409,24 @@ test('FT_0102', {
   await createTestRow(page, key);
   await openTestRow(page, 'ftAttrCode', key);
 
-  await getField(page, 'ftAttrUrl').fill('website.foo');
+  await getFieldById(page, 'ftAttrUrl').fill('website.foo');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrUrl').locator('.burl_field_ftAttrUrl')).toBeVisible();
-  await expect(getField(page, 'ftAttrUrl')).toHaveValue('website.foo');
+  await expect(getFieldByAttr(page, 'ftAttrUrl').locator('.burl_field_ftAttrUrl')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrUrl')).toHaveValue('website.foo');
 
-  await getField(page, 'ftAttrEmail').fill('user@website.foo');
+  await getFieldById(page, 'ftAttrEmail').fill('user@website.foo');
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrEmail').locator('.bmail_field_ftAttrEmail')).toBeVisible();
-  await expect(getField(page, 'ftAttrEmail')).toHaveValue('user@website.foo');
+  await expect(getFieldByAttr(page, 'ftAttrEmail').locator('.bmail_field_ftAttrEmail')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrEmail')).toHaveValue('user@website.foo');
 
   await page.locator('#field_ftAttrColor').click();
-  await expect(fieldLocator(page, 'ftAttrColor').locator('.color-picker')).toBeVisible();
-  await fieldLocator(page, 'ftAttrColor').locator(".color-picker [title='#000000']").click();
+  await expect(getFieldByAttr(page, 'ftAttrColor').locator('.color-picker')).toBeVisible();
+  await getFieldByAttr(page, 'ftAttrColor').locator(".color-picker [title='#000000']").click();
   await saveForm(page);
-  await expect(getField(page, 'ftAttrColor')).toHaveValue('#000000');
-  await expect(fieldLocator(page, 'ftAttrColor').locator('.color-picker')).not.toBeVisible();
+  await expect(getFieldById(page, 'ftAttrColor')).toHaveValue('#000000');
+  await expect(getFieldByAttr(page, 'ftAttrColor').locator('.color-picker')).not.toBeVisible();
 
-  const notepad = fieldLocator(page, 'ftAttrNotepadUserActivities');
+  const notepad = getFieldByAttr(page, 'ftAttrNotepadUserActivities');
   await notepad.locator('.btn-newlist').click();
   await expect(page.locator('#dlgmodal')).toBeVisible();
   await page.locator('#dlgmodal input').fill('test');
@@ -440,12 +440,12 @@ test('FT_0102', {
   await expect(notepad.locator('.checklist .progress-bar')).toHaveText('100%');
 
   await saveForm(page);
-  await expect(fieldLocator(page, 'ftAttrUrl').locator('.burl_field_ftAttrUrl')).toBeVisible();
-  await expect(getField(page, 'ftAttrUrl')).toHaveValue('website.foo');
-  await expect(fieldLocator(page, 'ftAttrEmail').locator('.bmail_field_ftAttrEmail')).toBeVisible();
-  await expect(getField(page, 'ftAttrEmail')).toHaveValue('user@website.foo');
-  await expect(getField(page, 'ftAttrColor')).toHaveValue('#000000');
-  await expect(fieldLocator(page, 'ftAttrColor').locator('.color-picker')).not.toBeVisible();
+  await expect(getFieldByAttr(page, 'ftAttrUrl').locator('.burl_field_ftAttrUrl')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrUrl')).toHaveValue('website.foo');
+  await expect(getFieldByAttr(page, 'ftAttrEmail').locator('.bmail_field_ftAttrEmail')).toBeVisible();
+  await expect(getFieldById(page, 'ftAttrEmail')).toHaveValue('user@website.foo');
+  await expect(getFieldById(page, 'ftAttrColor')).toHaveValue('#000000');
+  await expect(getFieldByAttr(page, 'ftAttrColor').locator('.color-picker')).not.toBeVisible();
   await expect(notepad.locator('.checklist .title')).toContainText('test');
   await expect(notepad.locator('.checklist .progress-bar')).toHaveText('100%');
 

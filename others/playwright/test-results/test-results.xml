@@ -1,0 +1,10 @@
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="17.374818999998272">
+<testsuite name="lists.spec.ts" timestamp="2026-04-13T11:51:50.262Z" hostname="firefox" tests="1" failures="0" skipped="0" time="16.514" errors="0">
+<testcase name="FT_0024" classname="lists.spec.ts" time="16.514">
+<properties>
+<property name="feature" value="List search">
+</property>
+</properties>
+</testcase>
+</testsuite>
+</testsuites>

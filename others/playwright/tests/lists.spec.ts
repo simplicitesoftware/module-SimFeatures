@@ -284,3 +284,19 @@ test('FT_0111', {
   await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch'] td[data-field='ftSchCoordinates']")).toContainText(coordinates);
   await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch'] td[data-field='ftSchSrfId__ftSrfCode']")).toContainText(refCode);
 });
+
+
+test('FT_0024', {
+  annotation: { type: 'feature', description: 'List search' },
+}, async ({ page }) => {
+  await openList(page, DOMAIN, SEARCH_ITEM);
+  const code = randomString(10);
+  const refCode = randomString(10);
+  const date = "01/01/2026";
+  const coordinates = "48.8753213,2.3455624";
+  await createSearchItemRow(page, code, refCode, date, coordinates);
+
+  await page.locator("#ftSchCode_searchby").fill(code);
+  await page.locator("#ftSchCode_searchby").blur();
+  await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch']")).toHaveCount(1);
+});

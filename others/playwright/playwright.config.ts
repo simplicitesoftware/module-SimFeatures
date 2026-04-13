@@ -30,6 +30,7 @@ export default defineConfig({
   reporter: [
     ['list'],
     ['html'],
+    ['junit', { outputFile: 'test-results/test-results.xml' }],
   ],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
