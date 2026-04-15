@@ -1,6 +1,6 @@
 {
  "tpl_name": "FtSearch-search",
- "tpl_ui": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftSchCode\"><\/div>\n    <div class=\"field\" data-field=\"ftSchDate\"><\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftSchCoordinates\"><\/div>\n    <div class=\"field\" data-field=\"ftSchSrfId__ftSrfCode\"><\/div>\n  <\/div>\n<\/div>",
+ "tpl_ui": "<div class=\"row\">\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftSchCode\"><\/div>\n    <div class=\"field\" data-field=\"ftSchDate\"><\/div>\n  <\/div>\n  <div class=\"col-sm-6\">\n    <div class=\"field\" data-field=\"ftSchCoordinates\"><\/div>\n    <div class=\"field\" data-field=\"ftSchSrfId__ftSrfCode\"><\/div>\n    <div class=\"action\" data-action=\"listSearch\" data-size=\"btn-sm\"><\/div>\n  <\/div>\n<\/div>",
  "tpl_min": null,
  "tpl_image": null,
  "tpl_grid": null,
