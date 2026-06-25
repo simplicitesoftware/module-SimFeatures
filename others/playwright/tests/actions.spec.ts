@@ -6,12 +6,12 @@ import {
   skeletonDismissed,
   loaded,
   saveForm,
+  randomString,
 } from '../tools/helpers';
 
 const OBJECT = 'FtActions';
 const LIST_SELECTOR = `#list_${OBJECT}_the_ajax_${OBJECT}`;
 const FORM_SELECTOR = '.objform';
-const CUSTOM_USER_LOGIN = 'testuser';
 const STATE_TRANSITION_A_TO_B = 'FT_ACT_STATE-A-B';
 const STATE_TRANSITION_B_TO_A = 'FT_ACT_STATE-B-A';
 const FIXTURES_DIR = join(__dirname, '..', 'fixtures');
@@ -26,6 +26,10 @@ test.afterEach(async ({ page }) => {
   const warningDialog = page.locator('#dlgmodal.dlg-alert');
   if (await warningDialog.isVisible()) {
     await page.locator('#dlgmodal .btn-OK').click();
+  }
+  const createUserDialog = page.locator('#dlgmodal_create_FtCustomUser_the_ajax_FtCustomUser');
+  if (await createUserDialog.isVisible()) {
+    await createUserDialog.locator('[data-action="close"]').click();
   }
   const confirmDialog = page.locator('#dlgmodal_confirm.show');
   if (await confirmDialog.isVisible()) {
@@ -79,27 +83,29 @@ async function openAskFieldsOnFirstRow(page: Page) {
   return dialog;
 }
 
-async function selectCustomUserInDialog(
+async function createCustomUserInDialog(
   page: Page,
   dialog: ReturnType<typeof getAskFieldsDialog>,
-  loginFieldAction: string,
-  login: string,
+  actionName: string,
 ) {
-  await dialog.locator(`[data-action="${loginFieldAction}"]`).click();
-  const refDialog = page.locator('#dlgmodal_selectRef_FtCustomUser_ftActUserId');
-  await expect(refDialog).toBeVisible();
-  await refDialog.locator('td[data-field="usr_login"]').getByText(login).click();
-  await expect(refDialog).not.toBeVisible();
-}
+  const login = `pwuser_${randomString(8)}`;
+  await dialog
+    .locator(`button.refnew_field_ftActUserId__usr_login_id${actionName}`)
+    .click();
 
-async function selectCustomUser(page: Page, dialog: ReturnType<typeof getAskFieldsDialog>, login: string) {
-  await selectCustomUserInDialog(
-    page,
-    dialog,
-    'refsel_field_ftActUserId__usr_login_idActAskFields',
-    login,
-  );
-  await expect(dialog.locator('#field_ftActUserId__usr_login_idActAskFields')).toHaveValue(login);
+  const createDialog = page.locator('#dlgmodal_create_FtCustomUser_the_ajax_FtCustomUser');
+  await expect(createDialog).toBeVisible();
+  const userForm = createDialog.locator('#form_FtCustomUser_the_ajax_FtCustomUser_0');
+  await userForm.locator('#field_usr_login').fill(login);
+  await userForm.locator('#field_usr_email').fill(`${login}@test.com`);
+  await userForm.locator('[data-action="saveclose"]').click();
+  await loaded(page);
+  await expect(createDialog.locator('.alert-danger')).not.toBeVisible();
+  await expect(createDialog).not.toBeVisible();
+  await expect(dialog.locator(`#field_ftActUserId__usr_login_id${actionName}`)).toHaveValue(login);
+
+  const userId = await dialog.locator(`#field_ftActUserId_id${actionName}`).inputValue();
+  return { login, userId };
 }
 
 async function setDateToTodayInField(scope: Page | Locator, field: string) {
@@ -153,18 +159,11 @@ async function fillStateTransitionDialog(
   dialog: ReturnType<typeof getAskFieldsDialog>,
   actionName: string,
   options: {
-    login: string;
     documentName: string;
     imageAlt?: string;
   },
 ) {
-  await selectCustomUserInDialog(
-    page,
-    dialog,
-    `refsel_field_ftActUserId__usr_login_id${actionName}`,
-    options.login,
-  );
-  await expect(dialog.locator(`#field_ftActUserId__usr_login_id${actionName}`)).toHaveValue(options.login);
+  await createCustomUserInDialog(page, dialog, actionName);
 
   await setDateToTodayInField(dialog, 'ftActDate2');
   await dialog
@@ -190,12 +189,11 @@ async function fillAskFieldsDialog(
   page: Page,
   dialog: ReturnType<typeof getAskFieldsDialog>,
   options: {
-    login: string;
     documentName: string;
     imageAlt?: string;
   },
 ) {
-  await selectCustomUser(page, dialog, options.login);
+  const { userId } = await createCustomUserInDialog(page, dialog, 'ActAskFields');
 
   await setDateToTodayInField(dialog, 'ftActDate2');
 
@@ -216,6 +214,8 @@ async function fillAskFieldsDialog(
   if (options.imageAlt) {
     await dialog.locator('input.image-alt').fill(options.imageAlt);
   }
+
+  return { userId };
 }
 
 function todayIsoDate() {
@@ -232,8 +232,7 @@ test('Ask fields action', {
   await openActionsShowAll(page);
 
   const dialog = await openAskFieldsOnFirstRow(page);
-  await fillAskFieldsDialog(page, dialog, {
-    login: CUSTOM_USER_LOGIN,
+  const { userId } = await fillAskFieldsDialog(page, dialog, {
     documentName: 'askfields-doc',
     imageAlt: 'Action image alt text',
   });
@@ -244,7 +243,7 @@ test('Ask fields action', {
   const result = page.locator('.alert-warning');
   await expect(result).toContainText('askAction is done with confirmed values');
   await expect(result).toContainText(`date = ${todayIsoDate()}`);
-  await expect(result).toContainText('user id = 10');
+  await expect(result).toContainText(`user id = ${userId}`);
   await expect(result).toContainText('doc name = askfields-doc.txt');
 
   await page.locator('#dlgmodal .btn-OK').click();
@@ -266,7 +265,6 @@ test('Create action and transition state A to B', {
   await expect(dialog.locator(`#field_ftActUserId__usr_login_id${STATE_TRANSITION_A_TO_B}`)).toBeVisible();
 
   await fillStateTransitionDialog(page, dialog, STATE_TRANSITION_A_TO_B, {
-    login: CUSTOM_USER_LOGIN,
     documentName: 'transition-doc',
     imageAlt: 'Transition image alt text',
   });
