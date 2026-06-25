@@ -1,8 +1,8 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="17.374818999998272">
-<testsuite name="lists.spec.ts" timestamp="2026-04-13T11:51:50.262Z" hostname="firefox" tests="1" failures="0" skipped="0" time="16.514" errors="0">
-<testcase name="FT_0024" classname="lists.spec.ts" time="16.514">
+<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="9.616956999999937">
+<testsuite name="actions.spec.ts" timestamp="2026-06-24T12:01:48.272Z" hostname="firefox" tests="1" failures="0" skipped="0" time="7.625" errors="0">
+<testcase name="Create action and transition state A to B" classname="actions.spec.ts" time="7.625">
 <properties>
-<property name="feature" value="List search">
+<property name="feature" value="State transition Go to B and Back to A">
 </property>
 </properties>
 </testcase>
