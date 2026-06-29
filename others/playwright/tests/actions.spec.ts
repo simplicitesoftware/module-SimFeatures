@@ -74,9 +74,7 @@ async function openActionsShowAll(page: Page) {
 }
 
 async function openAskFieldsOnFirstRow(page: Page) {
-  const row = page.locator(`${LIST_SELECTOR} tbody tr`).first();
-  await expect(row).toBeVisible();
-  await row.locator('[data-action="ActAskFields"]').click();
+  await page.locator('[data-action="ActAskFields"]').click();
   const dialog = getAskFieldsDialog(page);
   await expect(dialog).toBeVisible();
   await expect(dialog.locator('[data-field="ftActDate2"]')).toBeVisible();
@@ -96,7 +94,9 @@ async function createCustomUserInDialog(
   const createDialog = page.locator('#dlgmodal_create_FtCustomUser_the_ajax_FtCustomUser');
   await expect(createDialog).toBeVisible();
   const userForm = createDialog.locator('#form_FtCustomUser_the_ajax_FtCustomUser_0');
+  await userForm.locator('#field_usr_login').click();
   await userForm.locator('#field_usr_login').fill(login);
+  await userForm.locator('#field_usr_email').click();
   await userForm.locator('#field_usr_email').fill(`${login}@test.com`);
   await userForm.locator('[data-action="saveclose"]').click();
   await loaded(page);
@@ -226,7 +226,7 @@ function todayIsoDate() {
   return `${year}-${month}-${day}`;
 }
 
-test('Ask fields action', {
+test('FT_0125', {
   annotation: { type: 'feature', description: 'Ask fields custom action' },
 }, async ({ page }) => {
   await openActionsShowAll(page);
@@ -250,7 +250,7 @@ test('Ask fields action', {
   await expect(page.locator('#dlgmodal.dlg-alert')).not.toBeVisible();
 });
 
-test('Create action and transition state A to B', {
+test('FT_0182', {
   annotation: { type: 'feature', description: 'State transition Go to B and Back to A' },
 }, async ({ page }) => {
   await openActionsShowAll(page);

@@ -40,7 +40,7 @@ async function deletePublicationFromList(page: Page, code: string) {
   await skeletonDismissed(page);
 }
 
-test('Publications HTML to PDF', {
+test('FT_0186', {
   annotation: { type: 'feature', description: 'Generates PDF document from HTML on save' },
 }, async ({ page }) => {
   await openPublicationsList(page);

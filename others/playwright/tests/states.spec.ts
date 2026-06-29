@@ -237,7 +237,7 @@ async function createStateItemForTray(page: Page) {
   return code;
 }
 
-test('State transitions with navbar and historic panel', {
+test('FT_0185', {
   annotation: {
     type: 'feature',
     description: 'Creates a state item, transitions through the workflow, and verifies navbar and historic panel',
@@ -285,7 +285,7 @@ test('State transitions with navbar and historic panel', {
   await expect(page.locator(`${LIST_SELECTOR} tr`).filter({ hasText: code })).not.toBeVisible();
 });
 
-test('Optional and exception state branches', {
+test('FT_0184', {
   annotation: {
     type: 'feature',
     description: 'Transitions through optional and exception states and verifies navbar updates',
@@ -322,7 +322,7 @@ test('Optional and exception state branches', {
   await expect(panel.locator('[data-field="ftStState"]').last()).toContainText('State B');
 });
 
-test('States trays drag and drop transitions', {
+test('FT_0183', {
   annotation: {
     type: 'feature',
     description: 'Uses the States trays view and drag-and-drop to transition items between columns',
