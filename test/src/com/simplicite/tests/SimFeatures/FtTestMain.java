@@ -1,9 +1,9 @@
 package com.simplicite.tests.SimFeatures;
 
 import java.util.*;
-import org.junit.Test;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 import com.simplicite.util.*;
 
 /**
@@ -31,7 +31,7 @@ public class FtTestMain implements java.io.Serializable {
 				.filters(Map.of("ftAttrCode", "Dataset_01"))
 				.getCount();
 			
-			assertEquals(1,countAttr1);
+			assertEquals(1, countAttr1);
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

@@ -1,8 +1,8 @@
 package com.simplicite.tests.SimFeatures;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.simplicite.objects.SimFeatures.FtAttributes;
 import com.simplicite.util.Grant;
@@ -24,7 +24,7 @@ import com.simplicite.util.Grant;
         FtAttributes attributes = (FtAttributes) getGrant().getTmpObject("FtAttributes");
         attributes.setFieldValue("ftAttrLongTextGrid", "test");
         attributes.initUpdate();
-        assertEquals("ftAttrLongTextGridSource should be set to ftAttrLongTextGrid", "test", attributes.getFieldValue("ftAttrLongTextGridSource"));
+        assertEquals( "test", attributes.getFieldValue("ftAttrLongTextGridSource"), "ftAttrLongTextGridSource should be set to ftAttrLongTextGrid");
     }
 
     @Test
@@ -32,6 +32,6 @@ import com.simplicite.util.Grant;
         FtAttributes attributes = (FtAttributes) getGrant().getTmpObject("FtAttributes");
         attributes.setFieldValue("ftAttrHtml", "test");
         attributes.preSave();
-        assertEquals("ftAttrHtmlReadOnly should be set to ftAttrHtml", "test", attributes.getFieldValue("ftAttrHtmlReadOnly"));
+        assertEquals("test", attributes.getFieldValue("ftAttrHtmlReadOnly"), "ftAttrHtmlReadOnly should be set to ftAttrHtml");
     }
 }

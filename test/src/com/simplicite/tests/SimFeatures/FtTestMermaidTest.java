@@ -1,9 +1,9 @@
 package com.simplicite.tests.SimFeatures;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.simplicite.util.Grant;
 import com.simplicite.util.tools.Parameters;
@@ -24,12 +24,12 @@ public class FtTestMermaidTest {
 		Parameters params = new Parameters();
 		mermaidExternalObject.init(params);
 		String mermaidChartSpec = mermaidExternalObject.getMermaidChartSpec(params);
-		assertNotNull("Mermaid chart spec should not be null", mermaidChartSpec);
+		assertNotNull(mermaidChartSpec, "Mermaid chart spec should not be null");
 		
 		params.setParameter("object", "FtAttributes");
 		params.setParameter("inst", "tmp_FtAttributes");
 		mermaidChartSpec = mermaidExternalObject.getMermaidChartSpec(params);
-		assertTrue("Mermaid chart should contain object display", mermaidChartSpec.contains("Attributes"));
+		assertTrue(mermaidChartSpec.contains("Attributes"), "Mermaid chart should contain object display");
 		
 	}
 }

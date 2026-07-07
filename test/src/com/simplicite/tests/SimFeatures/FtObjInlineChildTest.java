@@ -1,10 +1,10 @@
 package com.simplicite.tests.SimFeatures;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.simplicite.util.AppLog;
 import com.simplicite.util.BusinessObject;
@@ -41,7 +41,7 @@ public class FtObjInlineChildTest {
 				"select row_id from ft_obj_inline_parent where ft_objinline_parent_name='" + parentName + "'");
 			String parentId = (parentRow != null && parentRow.length > 0) ? parentRow[0] : null;
 			AppLog.info(parentId);
-			assertNotNull("Parent should be created", parentId);
+			assertNotNull(parentId, "Parent should be created");
 
 			// Create child - postCreate should update parent description
 			try (BusinessObject child = new BusinessObject(getGrant(), "FtObjInlineChild")) {
@@ -58,8 +58,8 @@ public class FtObjInlineChildTest {
 			String[] row = getGrant().queryFirstColumn(
 				"select ft_obj_inline_parent_description from ft_obj_inline_parent where row_id=" + parentId);
 			String desc = (row != null && row.length > 0) ? row[0] : null;
-			assertEquals("Parent description should be updated by child postCreate",
-				"Updated by child postCreate", desc);
+			assertEquals("Updated by child postCreate", desc,
+				"Parent description should be updated by child postCreate");
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -103,8 +103,8 @@ public class FtObjInlineChildTest {
 			String[] row = getGrant().queryFirstColumn(
 				"select ft_obj_inline_parent_description from ft_obj_inline_parent where row_id=" + parentId);
 			String desc = (row != null && row.length > 0) ? row[0] : null;
-			assertEquals("Parent description should be updated by child postUpdate",
-				"Updated by child postUpdate", desc);
+			assertEquals("Updated by child postUpdate", desc,
+				"Parent description should be updated by child postUpdate");
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

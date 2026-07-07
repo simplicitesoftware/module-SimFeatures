@@ -1,8 +1,8 @@
 package com.simplicite.tests.SimFeatures;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.simplicite.objects.SimFeatures.FtTgoTag;
 import com.simplicite.util.Grant;
@@ -26,7 +26,7 @@ public class FtTgoTagTest {
         FtTgoTag tgoTag = (FtTgoTag) getGrant().getTmpObject("FtTgoTag");
         parent.setFieldValue("ftTgoStatus", "DRAFT");
         tgoTag.setParentObject(parent);
-        assertTrue("IsCreateEnable should return true for DRAFT status", tgoTag.isCreateEnable());
+        assertTrue(tgoTag.isCreateEnable(), "IsCreateEnable should return true for DRAFT status");
     }
 
 }

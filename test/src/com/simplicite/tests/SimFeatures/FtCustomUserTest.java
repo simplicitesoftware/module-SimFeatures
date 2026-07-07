@@ -1,12 +1,12 @@
 package com.simplicite.tests.SimFeatures;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.simplicite.objects.SimFeatures.FtCustomUser;
 import com.simplicite.util.Globals;
@@ -39,8 +39,8 @@ public class FtCustomUserTest {
 			String searchSpec = user.getDefaultSearchSpec();
 			assertNotNull(searchSpec);
 			// Assert that searchSpec contains ft_usr_type and "is not null"
-			assertTrue("Default search spec should filter by ft_usr_type",
-				searchSpec.contains("ft_usr_type") && searchSpec.contains("is not null"));
+			assertTrue(
+				searchSpec.contains("ft_usr_type") && searchSpec.contains("is not null"),"Default search spec should filter by ft_usr_type");
 
 			// List of fields that should be hidden after postLoad
 			String[] hiddenFields = {
@@ -49,8 +49,8 @@ public class FtCustomUserTest {
 			};
 			// Assert that each field's visibility is set to HIDDEN
 			for (String fieldName : hiddenFields) {
-				assertEquals("Field " + fieldName + " should be hidden",
-					ObjectField.VIS_HIDDEN, user.getField(fieldName).getVisibility());
+				assertEquals(
+					ObjectField.VIS_HIDDEN, user.getField(fieldName).getVisibility(), "Field " + fieldName + " should be hidden");
 			}
 		} catch (Exception e) {
 			fail(e.getMessage());
@@ -70,13 +70,13 @@ public class FtCustomUserTest {
 			user.preValidate();
 
 			String usrActive = user.getFieldValue("usr_active");
-			assertNotNull("usr_active should be set", usrActive);
-			assertEquals("usr_active should be USER_ACTIVE",
-				GrantCore.USER_ACTIVE, usrActive);
+			assertNotNull(usrActive, "usr_active should be set");
+			assertEquals(
+				GrantCore.USER_ACTIVE, usrActive, "usr_active should be USER_ACTIVE");
 			// Check that row_module_id is not null or empty
 			String rowModuleId = user.getFieldValue("row_module_id");
-			assertNotNull("row_module_id should be set", rowModuleId);
-			assertFalse("row_module_id should not be empty", rowModuleId.isEmpty());
+			assertNotNull(rowModuleId, "row_module_id should be set");
+			assertFalse(rowModuleId.isEmpty(), "row_module_id should not be empty");
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}
@@ -102,7 +102,7 @@ public class FtCustomUserTest {
 			Grant g = new Grant();
 			g.init(login, "testSessionId", Globals.ENDPOINT_UI, null, null);
 			// User should have FT_READ responsibility
-			assertTrue("Grant should have FT_READ responsibility", g.hasResponsibility("FT_READ"));
+			assertTrue(g.hasResponsibility("FT_READ"), "Grant should have FT_READ responsibility");
 
 			// Change ftUsrType to FT_ADMIN and update; postSave should update responsibilities
 			user.setFieldValue("ftUsrType", "FT_ADMIN");
@@ -110,8 +110,8 @@ public class FtCustomUserTest {
 			// Refresh the grant context
 			g.reinit();
 			// User should now have FT_ADMIN but not FT_READ
-			assertTrue("Grant should have FT_ADMIN responsibility", g.hasResponsibility("FT_ADMIN"));
-			assertFalse("Grant should not have FT_READ responsibility", g.hasResponsibility("FT_READ"));
+			assertTrue(g.hasResponsibility("FT_ADMIN"), "Grant should have FT_ADMIN responsibility");
+			assertFalse(g.hasResponsibility("FT_READ"), "Grant should not have FT_READ responsibility");
 		} catch (Exception e) {
 			fail(e.getMessage());
 		}

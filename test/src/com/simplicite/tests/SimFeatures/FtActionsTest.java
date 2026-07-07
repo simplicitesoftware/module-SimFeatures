@@ -1,13 +1,13 @@
 package com.simplicite.tests.SimFeatures;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.simplicite.objects.SimFeatures.FtActions;
 import com.simplicite.util.Action;
@@ -34,15 +34,15 @@ public class FtActionsTest {
 		actionDB.initAction(action);
 		// Ensure ftActDate2 is reset if ftActDate is empty and test expected outcome
 		ObjectField date2 = action.getConfirmField("ftActDate2");
-		assertEquals("Date2 should be empty when ftActDate is empty", "", date2.getDefaultValue());
-		assertTrue("Date2 should be required when ftActDate is empty", date2.isRequired());
+		assertEquals( "", date2.getDefaultValue(), "Date2 should be empty when ftActDate is empty");
+		assertTrue(date2.isRequired(), "Date2 should be required when ftActDate is empty");
 
 		actionDB.setFieldValue("ftActDate", "2026-01-01");
 		actionDB.initAction(action);
 		
 		date2 = action.getConfirmField("ftActDate2");
-		assertEquals("Date2 should be 2026-01-08", "2026-01-08", date2.getDefaultValue());
-		assertFalse("Date2 should not be required", date2.isRequired());
+		assertEquals( "2026-01-08", date2.getDefaultValue(), "Date2 should be 2026-01-08");
+		assertFalse(date2.isRequired(), "Date2 should not be required");
 
 		Action action2 = actionDB.getAction("ActConfirmFields");
 		actionDB.initAction(action2);
@@ -53,7 +53,7 @@ public class FtActionsTest {
 	public void testConfirmAction() {
 		FtActions actionDB = (FtActions) getGrant().getTmpObject("FtActions");
 		String msg = actionDB.confirmAction(null);
-		assertTrue("Result should contain 'confirmAction is done'", msg.contains("confirmAction is done"));
+		assertTrue(msg.contains("confirmAction is done"), "Result should contain 'confirmAction is done'");
 	}
 	
 	@Test
@@ -72,11 +72,11 @@ public class FtActionsTest {
 			// Actually create the dummy file (it will be empty)
 			if (!dummyFile.exists()) {
 				boolean created = dummyFile.createNewFile();
-				assertTrue("Dummy file should be created", created || dummyFile.exists());
+				assertTrue(created || dummyFile.exists(), "Dummy file should be created");
 			}
 			if (!dummyImage.exists()) {
 				boolean created = dummyImage.createNewFile();
-				assertTrue("Dummy image should be created", created || dummyImage.exists());
+				assertTrue(created || dummyImage.exists(), "Dummy image should be created");
 			}
 			ObjectField docField = action.getConfirmField("ftActDocument2");
 			DocumentDB document = new DocumentDB(false);
@@ -94,14 +94,14 @@ public class FtActionsTest {
 			String result = actionDB.askAction(action);
 			assertNotNull(result);
 
-			assertTrue("Result should contain 'askAction is done with confirmed values'", result.contains("askAction is done with confirmed values"));
-			assertTrue("Result should contain 'date = 2026-02-16'", result.contains("date = 2026-02-16"));
-			assertTrue("Result should contain 'user id = 1'", result.contains("user id = 1"));
-			assertTrue("Result should contain 'last name = Doe'", result.contains("last name = Doe"));
-			assertTrue("Result should contain 'doc name = test.txt'", result.contains("doc name = test.txt"));
-			assertTrue("Result should contain 'file size = 0'", result.contains("file size = 0"));
-			assertTrue("Result should contain 'img name = test.jpg'", result.contains("img name = test.jpg"));
-			assertTrue("Result should contain 'data size = 0'", result.contains("data size = 0"));
+			assertTrue(result.contains("askAction is done with confirmed values"), "Result should contain 'askAction is done with confirmed values'");
+			assertTrue(result.contains("date = 2026-02-16"), "Result should contain 'date = 2026-02-16'");
+			assertTrue(result.contains("user id = 1"), "Result should contain 'user id = 1'");
+			assertTrue(result.contains("last name = Doe"), "Result should contain 'last name = Doe'");
+			assertTrue(result.contains("doc name = test.txt"), "Result should contain 'doc name = test.txt'");
+			assertTrue(result.contains("file size = 0"), "Result should contain 'file size = 0'");
+			assertTrue(result.contains("img name = test.jpg"), "Result should contain 'img name = test.jpg'");
+			assertTrue(result.contains("data size = 0"), "Result should contain 'data size = 0'");
 		} finally {
 			// Clean up: delete the dummy file after the test if it still exists
 			if (dummyFile.exists()) {
