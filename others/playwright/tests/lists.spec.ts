@@ -58,9 +58,9 @@ async function createSearchItemRow(page: Page, code: string, refCode: string, da
   await page.locator("button[data-action='addlist']").click();
   await skeletonDismissed(page);
   const row = page.locator(`tr[data-rowid='0']`);
-  await row.locator("#ftSchCode").fill(code);
+  await row.locator("#field_ftSchCode_id0").fill(code);
   await row.locator("#field_ftSchDate_id0").fill(date);
-  await row.locator("#ftSchCoordinates").fill(coordinates);
+  await row.locator("#field_ftSchCoordinates_id0").fill(coordinates);
 
   await row.locator("[data-field='ftSchSrfId__ftSrfCode'] button.dropdown-toggle").click();
   await row.locator("[data-field='ftSchSrfId__ftSrfCode'] ul a[data-name='refnew_field_ftSchSrfId__ftSrfCode_id0']").click();
