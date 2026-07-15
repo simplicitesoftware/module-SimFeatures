@@ -30,13 +30,17 @@ export async function instanceReady(page: Page) {
  */
 export async function login(page: Page) {
   await page.goto('/');
-  // Wait for page to be fully loaded before interacting
   await page.waitForLoadState();
-  await page.getByRole('textbox', { name: 'Login' }).fill(process.env.USER_NAME || '');
-  await page.getByRole('textbox', { name: 'Password' }).fill(process.env.PASSWORD || '');
-  await page.getByRole('button', { name: 'Connection' }).click();
-  // Wait for login to complete and page to load
+
+  const loginField = page.getByRole('textbox', { name: 'Login' });
+  if (await loginField.isVisible()) {
+    await loginField.fill(process.env.USER_NAME || '');
+    await page.getByRole('textbox', { name: 'Password' }).fill(process.env.PASSWORD || '');
+    await page.getByRole('button', { name: 'Connection' }).click();
+  }
+
   await instanceReady(page);
+  await expect(page.locator('ul.main-menu')).toBeVisible({ timeout: 60000 });
 }
 
 /**
