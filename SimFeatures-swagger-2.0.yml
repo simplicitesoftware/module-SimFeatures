@@ -1994,6 +1994,125 @@ paths:
         required: false
       tags:
       - FtRxmLink
+  /rest/FtHistoryHistoric:
+    get:
+      summary: Search FtHistoryHistoric business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistoryhistoric-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtHistoryHistoric'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: row_idx
+        description: Search filter for Version
+        type: integer
+        required: false
+      - in: query
+        name: created_by_hist
+        description: Search filter for User
+        type: string
+        required: false
+      - in: query
+        name: created_dt_hist
+        description: Search filter for Date
+        type: string
+        required: false
+      - in: query
+        name: row_diff
+        description: Search filter for Summary of updates
+        type: string
+        required: false
+      - in: query
+        name: row_ref_id
+        description: Search filter for Reference
+        type: string
+        required: false
+      - in: query
+        name: row_ref_id__ftHistCode
+        description: Search filter for Reference Code
+        type: string
+        required: false
+      - in: query
+        name: ftHistCode
+        description: Search filter for Code
+        type: string
+        required: false
+      - in: query
+        name: ftHistDecimal
+        description: Search filter for Decimal
+        type: number
+        required: false
+      - in: query
+        name: ftHistDateAndTime
+        description: Search filter for Date and time
+        type: string
+        required: false
+      - in: query
+        name: ftHistEnumeration
+        description: Search filter for Enumeration
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftHistMultipleEnumeration
+        description: Search filter for Multiple enumeration
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftHistBoolean
+        description: Search filter for Boolean
+        type: boolean
+        required: false
+      - in: query
+        name: ftHistDocument
+        description: Search filter for Document
+        type: string
+        required: false
+      - in: query
+        name: ftHistMultiDoc
+        description: Search filter for Multi-doc
+        type: string
+        required: false
+      tags:
+      - FtHistoryHistoric
   /rest/FtAttributes/{row_id}:
     post:
       summary: Create a new FtAttributes business object record
@@ -4610,6 +4729,168 @@ paths:
         required: false
       tags:
       - FtRelationshipO2m
+  /rest/FtHistoryHistoric/{row_id}:
+    post:
+      summary: Create a new FtHistoryHistoric business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistoryhistoric-create
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtHistoryHistoric'
+          description: Success in creating a new business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtHistoryHistoric'
+        in: body
+        name: body
+      tags:
+      - FtHistoryHistoric
+      consumes:
+      - application/json
+    get:
+      summary: Get a FtHistoryHistoric business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistoryhistoric-get
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtHistoryHistoric'
+          description: Success in getting a single business object record
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - in: query
+        name: _inline_documents
+        description: Inline documents?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_objects
+        description: Inline objects?
+        type: boolean
+        required: false
+      tags:
+      - FtHistoryHistoric
+    delete:
+      summary: Delete a FtHistoryHistoric business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistoryhistoric-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      tags:
+      - FtHistoryHistoric
+    put:
+      summary: Update a FtHistoryHistoric business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistoryhistoric-update
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtHistoryHistoric'
+          description: Success in updating a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtHistoryHistoric'
+        in: body
+        name: body
+      tags:
+      - FtHistoryHistoric
+      consumes:
+      - application/json
   /rest/FtObjInlineParent:
     get:
       summary: Search FtObjInlineParent business object records or get contextualized
@@ -4707,6 +4988,168 @@ paths:
         required: false
       tags:
       - FtRelationshipM2m
+  /rest/FtHistory/{row_id}:
+    post:
+      summary: Create a new FtHistory business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistory-create
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtHistory'
+          description: Success in creating a new business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtHistory'
+        in: body
+        name: body
+      tags:
+      - FtHistory
+      consumes:
+      - application/json
+    get:
+      summary: Get a FtHistory business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistory-get
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtHistory'
+          description: Success in getting a single business object record
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - in: query
+        name: _inline_documents
+        description: Inline documents?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        type: boolean
+        required: false
+      - in: query
+        name: _inline_objects
+        description: Inline objects?
+        type: boolean
+        required: false
+      tags:
+      - FtHistory
+    delete:
+      summary: Delete a FtHistory business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistory-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      tags:
+      - FtHistory
+    put:
+      summary: Update a FtHistory business object record
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistory-update
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/FtHistory'
+          description: Success in updating a business object record
+        '400':
+          schema:
+            $ref: '#/definitions/Error400'
+          description: Bad request
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+        '404':
+          schema:
+            $ref: '#/definitions/Error404'
+          description: Not found
+      parameters:
+      - in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        type: string
+        required: true
+      - schema:
+          $ref: '#/definitions/FtHistory'
+        in: body
+        name: body
+      tags:
+      - FtHistory
+      consumes:
+      - application/json
   /rest/FtListOrdering:
     get:
       summary: Search FtListOrdering business object records or get contextualized
@@ -4920,6 +5363,94 @@ paths:
       - FtObjInlineParent
       consumes:
       - application/json
+  /rest/FtHistory:
+    get:
+      summary: Search FtHistory business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-fthistory-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtHistory'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: ftHistCode
+        description: Search filter for Code
+        type: string
+        required: false
+      - in: query
+        name: ftHistDecimal
+        description: Search filter for Decimal
+        type: number
+        required: false
+      - in: query
+        name: ftHistDateAndTime
+        description: Search filter for Date and time
+        type: string
+        required: false
+      - in: query
+        name: ftHistEnumeration
+        description: Search filter for Enumeration
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftHistMultipleEnumeration
+        description: Search filter for Multiple enumeration
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+        - C
+      - in: query
+        name: ftHistBoolean
+        description: Search filter for Boolean
+        type: boolean
+        required: false
+      - in: query
+        name: ftHistDocument
+        description: Search filter for Document
+        type: string
+        required: false
+      - in: query
+        name: ftHistMultiDoc
+        description: Search filter for Multi-doc
+        type: string
+        required: false
+      tags:
+      - FtHistory
   /rest/FtTaggedObject/{row_id}:
     post:
       summary: Create a new FtTaggedObject business object record
@@ -6323,6 +6854,76 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/FtRxmLink'
+  FtHistoryHistoric:
+    description: Historic
+    type: object
+    properties:
+      ftHistEnumeration:
+        description: Enumeration
+        type: string
+        maxLength: 100
+        enum:
+        - A
+        - B
+        - C
+      ftHistMultipleEnumeration:
+        description: Multiple enumeration
+        type: array
+        items:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+      ftHistBoolean:
+        description: Boolean
+        type: boolean
+      ftHistDateAndTime:
+        description: Date and time
+        type: string
+        maxLength: 19
+        example: yyyy-MM-dd HH:mm:ss
+      created_dt_hist:
+        description: Date
+        type: string
+        maxLength: 19
+        example: yyyy-MM-dd HH:mm:ss
+      row_ref_id:
+        description: Reference
+        type: string
+        maxLength: 11
+      ftHistDecimal:
+        description: Decimal
+        type: number
+      row_idx:
+        description: Version
+        type: integer
+      ftHistDocument:
+        description: Document
+        type: object
+      ftHistCode:
+        description: Code
+        type: string
+        maxLength: 100
+      row_ref_id__ftHistCode:
+        description: Reference Code
+        type: string
+        maxLength: 100
+      row_id:
+        description: ID
+        type: string
+        maxLength: 11
+      ftHistMultiDoc:
+        description: Multi-doc
+        type: object
+      created_by_hist:
+        description: User
+        type: string
+        maxLength: 100
+      row_diff:
+        description: Summary of updates
+        type: string
+        maxLength: 2000000
   FtNotification:
     description: Notification Tester
     type: object
@@ -6420,6 +7021,11 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/FtStates'
+  ArrayOfFtHistoryHistoric:
+    description: List of Historic
+    type: array
+    items:
+      $ref: '#/definitions/FtHistoryHistoric'
   ArrayOfFtM2m:
     description: List of N/N
     type: array
@@ -7163,6 +7769,55 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/FtSearchReference'
+  FtHistory:
+    description: |-
+      History:
+
+      History object
+    type: object
+    properties:
+      ftHistDecimal:
+        description: Decimal
+        type: number
+      ftHistEnumeration:
+        description: Enumeration
+        type: string
+        maxLength: 100
+        enum:
+        - A
+        - B
+        - C
+      ftHistDocument:
+        description: Document
+        type: object
+      ftHistCode:
+        description: Code
+        type: string
+        maxLength: 100
+      ftHistMultipleEnumeration:
+        description: Multiple enumeration
+        type: array
+        items:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+      ftHistBoolean:
+        description: Boolean
+        type: boolean
+      ftHistDateAndTime:
+        description: Date and time
+        type: string
+        maxLength: 19
+        example: yyyy-MM-dd HH:mm:ss
+      row_id:
+        description: ID
+        type: string
+        maxLength: 11
+      ftHistMultiDoc:
+        description: Multi-doc
+        type: object
   FtSearch:
     description: Search
     type: object
@@ -7234,6 +7889,11 @@ definitions:
     type: array
     items:
       $ref: '#/definitions/FtNotification'
+  ArrayOfFtHistory:
+    description: List of History
+    type: array
+    items:
+      $ref: '#/definitions/FtHistory'
   FtRelationshipM2m:
     description: Relationship (many to many)
     type: object
@@ -7313,6 +7973,10 @@ tags:
   description: Custom User
 - name: FtGuidedObject
   description: Guided object
+- name: FtHistory
+  description: History
+- name: FtHistoryHistoric
+  description: Historic
 - name: FtListItem
   description: Lists
 - name: FtListOrdering

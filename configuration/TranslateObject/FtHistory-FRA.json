@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtHistory",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtHistory"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Historique",
+ "tsl_plural_value": "Historiques",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}
