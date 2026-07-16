@@ -227,21 +227,15 @@ async function openStatesTrays(page: Page) {
 }
 
 async function dismissSidebarOverlay(page: Page) {
-  await page.evaluate(() => {
-    const menu = document.querySelector('#menu');
-    if (menu instanceof HTMLElement) {
-      menu.style.pointerEvents = 'none';
-    }
+  await page.locator('#menu').evaluate((menu) => {
+    menu.style.pointerEvents = 'none';
   });
 }
 
 async function restoreSidebar(page: Page) {
-  await page.evaluate(() => {
-    const menu = document.querySelector('#menu');
-    if (menu instanceof HTMLElement) {
-      menu.style.pointerEvents = '';
-      menu.style.visibility = '';
-    }
+  await page.locator('#menu').evaluate((menu) => {
+    menu.style.pointerEvents = '';
+    menu.style.visibility = '';
   });
 }
 

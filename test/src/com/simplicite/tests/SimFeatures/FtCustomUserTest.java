@@ -88,6 +88,7 @@ public class FtCustomUserTest {
 	 */
 	@Test
 	public void testPostSave() {
+		Grant g = null;
 		try {
 			FtCustomUser user = (FtCustomUser) getGrant().getTmpObject("FtCustomUser");
 			String login = "testuser_" + System.currentTimeMillis();
@@ -96,17 +97,17 @@ public class FtCustomUserTest {
 			user.setFieldValue("ftUsrType", "FT_READ");
 
 			// Create user and validate; postSave should apply responsibility
-			user.getTool().validateAndCreate();
+			user.validateAndCreate();
 
 			// Initialize a Grant for the new user
-			Grant g = new Grant();
+			g = new Grant();
 			g.init(login, "testSessionId", Globals.ENDPOINT_UI, null, null);
 			// User should have FT_READ responsibility
 			assertTrue(g.hasResponsibility("FT_READ"), "Grant should have FT_READ responsibility");
 
 			// Change ftUsrType to FT_ADMIN and update; postSave should update responsibilities
 			user.setFieldValue("ftUsrType", "FT_ADMIN");
-			user.getTool().validateAndUpdate();
+			user.validateAndSave();
 			// Refresh the grant context
 			g.reinit();
 			// User should now have FT_ADMIN but not FT_READ
@@ -114,6 +115,8 @@ public class FtCustomUserTest {
 			assertFalse(g.hasResponsibility("FT_READ"), "Grant should not have FT_READ responsibility");
 		} catch (Exception e) {
 			fail(e.getMessage());
+		} finally {
+			g.destroy();
 		}
 	}
 }

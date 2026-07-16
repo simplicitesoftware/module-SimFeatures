@@ -268,7 +268,7 @@ test('FT_0111', {
   const coordinates = "48.8753213,2.3455624";
   await createSearchItemRow(page, code, refCode, date, coordinates);
 
-  await page.locator('[data-action="search"]').click();
+  await page.locator('.list-filters [data-action="search"]').click();
   const searchDialog = page.locator("#dlgmodal_search");
   await expect(searchDialog).toBeVisible();
   const searchForm = page.locator("#search_FtSearch_the_ajax_FtSearch");
@@ -276,7 +276,7 @@ test('FT_0111', {
   await searchForm.locator("#ftSchDate").fill(date);
   await searchForm.locator("input[name='ftSchCoordinates']").fill(coordinates);
   await searchForm.locator("input[name='ftSchSrfId__ftSrfCode']").fill(refCode);
-  await page.locator(".modal-content button[data-action='search']").click();
+  await page.locator(".modal-footer button[data-action='search']").click();
   await expect(page.locator("#list_FtSearch_the_ajax_FtSearch")).toBeVisible();
   await expect(page.locator("tbody tr[data-target-inst='the_ajax_FtSearch']")).toHaveCount(1);
   await expect(page.locator("td[data-field='ftSchCode']")).toContainText(code);

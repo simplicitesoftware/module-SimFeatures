@@ -23,3 +23,5 @@ truncate table ft_tag;
 truncate table ft_tagged_object;
 truncate table ft_tgo_tag;
 delete from m_user where usr_login like 'pwuser_%';
+truncate table ft_history;
+truncate table ft_history_hist;
