@@ -15,9 +15,21 @@ jobs:
       - name: Deploy test stack
         run: |
           chmod +x ./others/cicd/simci
+          # Portainer uses a self-signed / private CA cert from GitHub runners
+          printf 'insecure\n' >> ~/.curlrc
+          export PORTAINER_INSECURE_SSL=1
           export PORTAINER_API_TOKEN="${{ secrets.PORTAINER_API_TOKEN }}"
           export IO_PASSWORD="${{ secrets.IO_PASSWORD }}"
-          export REGISTRY_AUTH="${{ secrets.REGISTRY_AUTH }}"
+          export REGISTRY_ID="${{ vars.REGISTRY_ID }}"
+          if [[ -z "$REGISTRY_ID" ]]; then
+            export REGISTRY_ID="${{ secrets.REGISTRY_ID }}"
+          fi
+          if [[ -z "$REGISTRY_ID" ]]; then
+            echo "::error::REGISTRY_ID is empty. Set Actions variable REGISTRY_ID=1 (Portainer Registries → simplicite → Id)."
+            echo "GitHub → Settings → Secrets and variables → Actions → Variables → New repository variable"
+            exit 1
+          fi
+          echo "Using REGISTRY_ID=$REGISTRY_ID"
           ./others/cicd/simci portainer-stack-delete gitlab-simfeatures "${{ secrets.PORTAINER_URL }}"
           ./others/cicd/simci portainer-stack-deploy -f ./others/cicd/portainer-stack.yml gitlab-simfeatures "${{ secrets.PORTAINER_URL }}"
 
@@ -31,6 +43,8 @@ jobs:
       - name: Run unit tests
         run: |
           chmod +x ./others/cicd/simci
+          printf 'insecure\n' >> ~/.curlrc
+          export PORTAINER_INSECURE_SSL=1
           export PORTAINER_API_TOKEN="${{ secrets.PORTAINER_API_TOKEN }}"
           export IO_PASSWORD="${{ secrets.IO_PASSWORD }}"
           ./others/cicd/simci simplicite-run-unit-tests SimFeatures gitlab-simfeatures "${{ secrets.PORTAINER_URL }}"

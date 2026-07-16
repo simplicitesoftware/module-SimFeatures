@@ -595,37 +595,40 @@ inspect_args() {
 simci_portainer_stack_deploy_command() {
 
   # src/portainer_stack_deploy_command.sh
-  portainer_server=${args[portainer_server]}
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   portainer_url="portainer.$portainer_server"
   stack=${args[stack]}
   compose_file=${args[--file]}
   env_id=${args[--environment]}
 
   echo "[sim-cicd] === DEPLOY PORTAINER STACK"
-  # Pull images before deploying (only when REGISTRY_AUTH is set)
-  if [[ -n "${REGISTRY_AUTH:-}" ]]; then
-    local images
-    images=$(grep -E '^\s+image:' "$compose_file" 2>/dev/null | sed -E 's/^[[:space:]]*image:[[:space:]]*//;s/^["'\'']//;s/["'\'']$//' | sort -u || true)
-    if [[ -n "$images" ]]; then
-      while IFS= read -r img; do
-        [[ -z "$img" ]] && continue
-        echo "[sim-cicd] Pulling image $img..."
-        curl -s -X POST "https://$portainer_url/api/endpoints/$env_id/docker/images/create?fromImage=$img" \
-          -H "X-API-Key:$PORTAINER_API_TOKEN" \
-          -H "X-Registry-Auth:$REGISTRY_AUTH" \
-          -o /dev/null -w "%{http_code}" | grep -qE '^(200|201|304)' || true
-      done <<< "$images"
+  echo "[sim-cicd] Portainer API host: $portainer_url (endpoint $env_id)"
+  if ! _sim_cicd_pull_compose_images "$portainer_url" "$env_id" "$compose_file"; then
+    exit 1
+  fi
+
+  local stack_id
+  stack_id=$("$0" portainer-stack-get-id --environment "$env_id" "$stack" "$portainer_server" 2>/dev/null || true)
+
+  if [[ -z "$stack_id" || "$stack_id" == "null" ]]; then
+    echo "[sim-cicd] Creating stack '$stack' on $portainer_url (endpoint $env_id) from $compose_file..."
+    curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpointId=$env_id" \
+        -H "X-API-Key:$PORTAINER_API_TOKEN" \
+        -F "Name=$stack" \
+        -F "Env=[{\"name\":\"IO_PASSWORD\",\"value\":\"$IO_PASSWORD\"}]" \
+        -F "file=@$compose_file"
+
+    stack_id=$("$0" portainer-stack-get-id --environment "$env_id" "$stack" "$portainer_server" 2>/dev/null || true)
+    if [[ -z "$stack_id" || "$stack_id" == "null" ]]; then
+      echo "[sim-cicd] Failed to create stack '$stack'" >&2
+      exit 1
+    fi
+  else
+    echo "[sim-cicd] Updating stack '$stack' (ID $stack_id)..."
+    if ! _sim_cicd_portainer_stack_update "$portainer_url" "$env_id" "$stack_id" "$compose_file"; then
+      exit 1
     fi
   fi
-  # Create stack
-  echo "[sim-cicd] Creating stack '$stack' on $portainer_url (endpoint $env_id) from $compose_file..."
-  curl -s -X POST "https://$portainer_url/api/stacks/create/standalone/file?endpointId=$env_id" \
-      -H "X-API-Key:$PORTAINER_API_TOKEN" \
-      -F "Name=$stack" \
-      -F "Env=[{\"name\":\"IO_PASSWORD\",\"value\":\"$IO_PASSWORD\"}]" \
-      -F "file=@$compose_file"
-
-  # Get container ID
   local container_id
   container_id=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=1" \
       -H "X-API-Key:$PORTAINER_API_TOKEN" \
@@ -1856,6 +1859,392 @@ before_hook() {
     done
 
     return 0
+  }
+
+  _sim_cicd_b64() {
+    echo -n "$1" | base64 | tr -d '\n'
+  }
+
+  # Set PORTAINER_INSECURE_SSL=1 when Portainer uses a self-signed / private CA cert.
+  _sim_cicd_curl_docker() {
+    local curl_opts=(--connect-timeout 30 --max-time 900 -sS)
+    case "${PORTAINER_INSECURE_SSL:-}" in
+      1|true|TRUE|yes|YES) curl_opts+=(-k) ;;
+    esac
+    curl "${curl_opts[@]}" "$@"
+  }
+
+  _sim_cicd_normalize_portainer_base() {
+    local s="$1"
+    s="${s#"${s%%[![:space:]]*}"}"
+    s="${s%"${s##*[![:space:]]}"}"
+    s="${s#https://}"
+    s="${s#http://}"
+    s="${s%/}"
+    # Allow either "sca.example.io" or "portainer.sca.example.io"
+    s="${s#portainer.}"
+    printf '%s' "$s"
+  }
+
+  _sim_cicd_compose_images() {
+    local compose_file="$1"
+    grep -E '^\s+image:' "$compose_file" 2>/dev/null \
+      | sed -E 's/^[[:space:]]*image:[[:space:]]*//;s/^["'\'']//;s/["'\'']$//' \
+      | sort -u || true
+  }
+
+  _sim_cicd_image_registry() {
+    local img="$1"
+    local ref="${img%%/*}"
+
+    if [[ "$img" == */* ]] && [[ "$ref" == *.* || "$ref" == *:* ]]; then
+      echo "$ref"
+    fi
+  }
+
+  _sim_cicd_portainer_registries_for_endpoint() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local response=""
+
+    if [[ -n "${_sim_cicd_portainer_registries_cache:-}" && "${_sim_cicd_portainer_registries_cache_env_id:-}" == "$env_id" ]]; then
+      echo "$_sim_cicd_portainer_registries_cache"
+      return 0
+    fi
+
+    response=$(curl -s "https://$portainer_url/api/endpoints/${env_id}/registries" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN")
+    if jq -e 'type == "array" and length > 0' <<< "$response" >/dev/null 2>&1; then
+      _sim_cicd_portainer_registries_cache="$response"
+      _sim_cicd_portainer_registries_cache_env_id="$env_id"
+      echo "$response"
+      return 0
+    fi
+
+    response=$(curl -s "https://$portainer_url/api/registries" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN")
+    if jq -e 'type == "array"' <<< "$response" >/dev/null 2>&1; then
+      _sim_cicd_portainer_registries_cache="$response"
+      _sim_cicd_portainer_registries_cache_env_id="$env_id"
+      echo "$response"
+      return 0
+    fi
+
+    _sim_cicd_portainer_registries_cache="[]"
+    _sim_cicd_portainer_registries_cache_env_id="$env_id"
+    echo "[]"
+  }
+
+  _sim_cicd_registry_id_for_host() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local registry_host="$3"
+    local registries registry_id registry_name lookup_name count
+
+    if [[ -n "${REGISTRY_ID:-}" ]]; then
+      REGISTRY_ID="${REGISTRY_ID//$'\r'/}"
+      REGISTRY_ID="${REGISTRY_ID//$'\n'/}"
+      REGISTRY_ID="${REGISTRY_ID#"${REGISTRY_ID%%[![:space:]]*}"}"
+      REGISTRY_ID="${REGISTRY_ID%"${REGISTRY_ID##*[![:space:]]}"}"
+      if [[ ! "$REGISTRY_ID" =~ ^[0-9]+$ ]]; then
+        echo "[sim-cicd] REGISTRY_ID must be numeric (got '${REGISTRY_ID}')" >&2
+        return 1
+      fi
+      echo "[sim-cicd] Using Portainer registry ID ${REGISTRY_ID} for $registry_host" >&2
+      echo "$REGISTRY_ID"
+      return 0
+    fi
+
+    lookup_name="${REGISTRY_NAME:-}"
+    if [[ -z "$lookup_name" && "$registry_host" == *simplicite.io* ]]; then
+      lookup_name="simplicite"
+    fi
+
+    registries=$(_sim_cicd_portainer_registries_for_endpoint "$portainer_url" "$env_id")
+    count=$(jq -r 'if type == "array" then length else 0 end' <<< "$registries")
+    registry_id=$(jq -r --arg registry "$registry_host" --arg registry_name "$lookup_name" '
+      def registry_url_host:
+        sub("^https?://"; "") | split("/")[0] | ascii_downcase;
+      def name_matches($name):
+        ($name | ascii_downcase) as $n
+        | $n != "" and (
+            ($registry | ascii_downcase | contains($n))
+            or ($registry_name != "" and $n == ($registry_name | ascii_downcase))
+          );
+      if type != "array" then empty
+      else .[]
+        | select(
+            ((.URL // "") | registry_url_host) == ($registry | ascii_downcase)
+            or name_matches(.Name // "")
+          )
+        | .Id
+      end
+    ' <<< "$registries" | head -n 1)
+
+    if [[ -n "$registry_id" && "$registry_id" != "null" ]]; then
+      registry_name=$(jq -r --argjson id "$registry_id" '
+        if type != "array" then empty
+        else .[] | select(.Id == $id) | .Name // empty
+        end
+      ' <<< "$registries")
+      echo "[sim-cicd] Matched Portainer registry '${registry_name:-$registry_id}' for $registry_host" >&2
+      echo "$registry_id"
+      return 0
+    fi
+
+    echo "[sim-cicd] No Portainer registry found for $registry_host ($count registries visible to CI user)" >&2
+    if [[ -n "$lookup_name" ]]; then
+      echo "[sim-cicd] Looked for registry URL '$registry_host' or name '$lookup_name'" >&2
+    fi
+    echo "[sim-cicd] Set REGISTRY_ID to the numeric ID from Portainer → Registries → simplicite" >&2
+    echo "[sim-cicd] Or grant registry access: Environment → Host → Registries → Manage access" >&2
+    return 1
+  }
+
+  _sim_cicd_registry_auth_header() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local registry_host="$3"
+    local registry_id
+
+    if [[ -n "${REGISTRY_USERNAME:-}" && -n "${REGISTRY_PASSWORD:-}" ]]; then
+      echo "[sim-cicd] Using REGISTRY_USERNAME/PASSWORD for $registry_host" >&2
+      _sim_cicd_b64 "$(jq -nc \
+        --arg username "$REGISTRY_USERNAME" \
+        --arg password "$REGISTRY_PASSWORD" \
+        --arg serveraddress "$registry_host" \
+        '{username: $username, password: $password, serveraddress: $serveraddress}')"
+      return 0
+    fi
+
+    registry_id=$(_sim_cicd_registry_id_for_host "$portainer_url" "$env_id" "$registry_host") || return 1
+    if [[ -z "$registry_id" || "$registry_id" == "null" ]]; then
+      return 1
+    fi
+
+    _sim_cicd_b64 "$(jq -nc --argjson id "$registry_id" '{registryId: $id}')"
+  }
+
+  _sim_cicd_docker_pull_stream_error() {
+    local response_file="$1"
+    # Docker images/create streams NDJSON; HTTP 200 can still contain a final error object.
+    jq -rs '
+      map(select(type == "object" and ((.error // .message // "") != "")))
+      | if length == 0 then empty
+        else .[-1].error // .[-1].message
+        end
+    ' "$response_file" 2>/dev/null || true
+  }
+
+  _sim_cicd_remove_local_image() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local img="$3"
+    local encoded http_code curl_err
+
+    encoded=$(jq -nr --arg s "$img" '$s|@uri')
+    echo "[sim-cicd] Removing local image $img (force fresh pull)..."
+    curl_err=$(mktemp)
+    http_code=$(_sim_cicd_curl_docker -X DELETE \
+      "https://$portainer_url/api/endpoints/$env_id/docker/images/${encoded}?force=true" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      -o /dev/null \
+      -w "%{http_code}" \
+      2>"$curl_err" || true)
+
+    # 200/204 = removed, 404 = not present locally yet — both fine before pull
+    if [[ "$http_code" =~ ^(200|204|404)$ ]]; then
+      rm -f "$curl_err"
+      return 0
+    fi
+
+    echo "[sim-cicd] Warning: could not remove local image $img (HTTP ${http_code:-000}); continuing with pull" >&2
+    if [[ -s "$curl_err" ]]; then
+      echo "[sim-cicd] curl: $(tr '\n' ' ' <"$curl_err")" >&2
+    fi
+    rm -f "$curl_err"
+    return 0
+  }
+
+  _sim_cicd_docker_proxy_preflight() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local response http_code curl_err endpoint_name url
+
+    response=$(mktemp)
+    curl_err=$(mktemp)
+
+    # 1) Confirm the Portainer environment exists (non-docker API)
+    url="https://$portainer_url/api/endpoints/$env_id"
+    http_code=$(_sim_cicd_curl_docker "$url" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      -o "$response" \
+      -w "%{http_code}" \
+      2>"$curl_err" || true)
+    if [[ ! "$http_code" =~ ^2 ]]; then
+      echo "[sim-cicd] Portainer environment $env_id not reachable (HTTP ${http_code:-000})" >&2
+      echo "[sim-cicd] GET $url" >&2
+      if [[ -s "$curl_err" ]]; then
+        echo "[sim-cicd] curl: $(tr '\n' ' ' <"$curl_err")" >&2
+      fi
+      if [[ -s "$response" ]]; then
+        head -c 500 "$response" >&2
+        echo >&2
+      fi
+      rm -f "$response" "$curl_err"
+      return 1
+    fi
+    endpoint_name=$(jq -r '.Name // "?"' "$response" 2>/dev/null || echo "?")
+    echo "[sim-cicd] Portainer environment $env_id OK ($endpoint_name)"
+
+    # 2) Confirm Docker proxy (same path family used elsewhere in simci)
+    url="https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=true&limit=1"
+    : >"$curl_err"
+    http_code=$(_sim_cicd_curl_docker "$url" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      -o "$response" \
+      -w "%{http_code}" \
+      2>"$curl_err" || true)
+
+    if [[ "$http_code" =~ ^2 ]]; then
+      echo "[sim-cicd] Docker proxy OK (endpoint $env_id)"
+      rm -f "$response" "$curl_err"
+      return 0
+    fi
+
+    echo "[sim-cicd] Docker proxy preflight failed (HTTP ${http_code:-000})" >&2
+    echo "[sim-cicd] GET $url" >&2
+    if [[ -s "$curl_err" ]]; then
+      echo "[sim-cicd] curl: $(tr '\n' ' ' <"$curl_err")" >&2
+    fi
+    if [[ -s "$response" ]]; then
+      head -c 500 "$response" >&2
+      echo >&2
+    fi
+    rm -f "$response" "$curl_err"
+    return 1
+  }
+
+  _sim_cicd_pull_image_via_portainer() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local img="$3"
+    local registry_host registry_auth from_image tag
+    local response http_code error_msg curl_err
+
+    registry_host=$(_sim_cicd_image_registry "$img")
+    if [[ -z "$registry_host" ]]; then
+      echo "[sim-cicd] Skipping pre-pull for public image $img"
+      return 0
+    fi
+
+    registry_auth=$(_sim_cicd_registry_auth_header "$portainer_url" "$env_id" "$registry_host") || return 1
+
+    from_image="${img%:*}"
+    tag="${img##*:}"
+    if [[ "$from_image" == "$tag" ]]; then
+      tag="latest"
+    fi
+
+    if ! _sim_cicd_docker_proxy_preflight "$portainer_url" "$env_id"; then
+      return 1
+    fi
+
+    _sim_cicd_remove_local_image "$portainer_url" "$env_id" "$img"
+
+    echo "[sim-cicd] Pulling image $img..."
+    response=$(mktemp)
+    curl_err=$(mktemp)
+    http_code=$(_sim_cicd_curl_docker -G -X POST \
+      "https://$portainer_url/api/endpoints/$env_id/docker/images/create" \
+      --data-urlencode "fromImage=$from_image" \
+      --data-urlencode "tag=$tag" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      -H "X-Registry-Auth:$registry_auth" \
+      -o "$response" \
+      -w "%{http_code}" \
+      2>"$curl_err" || true)
+
+    if [[ "$http_code" =~ ^(200|201|304)$ ]]; then
+      error_msg=$(_sim_cicd_docker_pull_stream_error "$response")
+      if [[ -n "$error_msg" ]]; then
+        echo "[sim-cicd] Failed to pull image $img (HTTP $http_code)" >&2
+        echo "[sim-cicd] Docker error: $error_msg" >&2
+        rm -f "$response" "$curl_err"
+        return 1
+      fi
+      echo "[sim-cicd] Pulled image $img (HTTP $http_code)"
+      rm -f "$response" "$curl_err"
+      return 0
+    fi
+
+    echo "[sim-cicd] Failed to pull image $img (HTTP ${http_code:-000})" >&2
+    if [[ -s "$curl_err" ]]; then
+      echo "[sim-cicd] curl: $(tr '\n' ' ' <"$curl_err")" >&2
+    fi
+    error_msg=$(_sim_cicd_docker_pull_stream_error "$response")
+    if [[ -z "$error_msg" ]]; then
+      error_msg=$(jq -r '.message // .error // empty' "$response" 2>/dev/null || true)
+    fi
+    if [[ -n "$error_msg" ]]; then
+      echo "[sim-cicd] Docker error: $error_msg" >&2
+    elif [[ -s "$response" ]]; then
+      head -c 1000 "$response" >&2
+      echo >&2
+    fi
+    rm -f "$response" "$curl_err"
+    return 1
+  }
+
+  _sim_cicd_pull_compose_images() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local compose_file="$3"
+    local images img
+
+    images=$(_sim_cicd_compose_images "$compose_file")
+    [[ -z "$images" ]] && return 0
+
+    echo "[sim-cicd] Pulling compose images before deploy..."
+    while IFS= read -r img; do
+      [[ -z "$img" ]] && continue
+      _sim_cicd_pull_image_via_portainer "$portainer_url" "$env_id" "$img" || return 1
+    done <<< "$images"
+  }
+
+  _sim_cicd_portainer_stack_update() {
+    local portainer_url="$1"
+    local env_id="$2"
+    local stack_id="$3"
+    local compose_file="$4"
+    local response http_code error_msg
+
+    response=$(mktemp)
+    http_code=$(curl -s -X PUT "https://$portainer_url/api/stacks/${stack_id}?endpointId=$env_id" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      -H "Content-Type: application/json" \
+      -o "$response" \
+      -w "%{http_code}" \
+      -d "$(jq -nc \
+        --rawfile content "$compose_file" \
+        --arg io_password "$IO_PASSWORD" \
+        '{StackFileContent: $content, Env: [{name: "IO_PASSWORD", value: $io_password}]}')")
+
+    if [[ "$http_code" =~ ^2 ]]; then
+      echo "[sim-cicd] Stack updated (HTTP $http_code)"
+      rm -f "$response"
+      return 0
+    fi
+
+    echo "[sim-cicd] Stack update failed (HTTP $http_code)" >&2
+    error_msg=$(jq -r '.message // .error // empty' "$response" 2>/dev/null || true)
+    if [[ -n "$error_msg" ]]; then
+      echo "[sim-cicd] Portainer error: $error_msg" >&2
+    elif [[ -s "$response" ]]; then
+      cat "$response" >&2
+    fi
+    rm -f "$response"
+    return 1
   }
 
   # Wait for container to be healthy
