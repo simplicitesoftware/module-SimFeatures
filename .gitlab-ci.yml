@@ -6,9 +6,12 @@ stages:
   - test
   - code-quality
 
+# Recreate Portainer test stack (pre-pulls private platform image via REGISTRY_ID).
+# Requires CI variables: PORTAINER_API_TOKEN, IO_PASSWORD, PORTAINER_URL, REGISTRY_ID.
 deploy-test:
   stage: build
   variables:
+    # Skip TLS verify for Portainer (self-signed / private CA from runners).
     PORTAINER_INSECURE_SSL: "1"
   script:
     - ./others/cicd/simci portainer-stack-delete gitlab-simfeatures $PORTAINER_URL
@@ -26,6 +29,7 @@ playwright-tests:
     - cd others/playwright
     - npm ci
   script:
+    # Wait for the deployed app to answer before running browser tests.
     - |
       for i in $(seq 1 30); do
         if curl -sf -o /dev/null "$BASE_URL"; then
@@ -43,6 +47,7 @@ playwright-tests:
       - others/playwright/playwright-report/
     expire_in: 7 days
 
+# Run module unit tests on the deployed stack and publish jacoco.xml.
 unit-tests:
   stage: test
   variables:

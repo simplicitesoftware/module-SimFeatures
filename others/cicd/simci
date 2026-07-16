@@ -595,6 +595,13 @@ inspect_args() {
 simci_portainer_stack_deploy_command() {
 
   # src/portainer_stack_deploy_command.sh
+  #
+  # Deploy flow for Portainer CE:
+  #   1) Pre-pull compose images (mutable tags like 7-alpha stay stale otherwise)
+  #   2) Create stack if missing, else update compose file
+  #   3) Wait until the stack container is healthy
+  #
+  # PORTAINER_SERVER may be "example.io" or "portainer.example.io" (or a full URL).
   portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   portainer_url="portainer.$portainer_server"
   stack=${args[stack]}
@@ -602,6 +609,8 @@ simci_portainer_stack_deploy_command() {
   env_id=${args[--environment]}
 
   echo "[sim-cicd] === DEPLOY PORTAINER STACK"
+
+  # Portainer CE stack create does not re-pull private images; do it explicitly first.
   if ! _sim_cicd_pull_compose_images "$portainer_url" "$env_id" "$compose_file"; then
     exit 1
   fi
@@ -623,11 +632,13 @@ simci_portainer_stack_deploy_command() {
       exit 1
     fi
   else
+    # Update without PullImage: compose pull lacks registry creds for the CI user.
     echo "[sim-cicd] Updating stack '$stack' (ID $stack_id)..."
     if ! _sim_cicd_portainer_stack_update "$portainer_url" "$env_id" "$stack_id" "$compose_file"; then
       exit 1
     fi
   fi
+
   local container_id
   container_id=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=1" \
       -H "X-API-Key:$PORTAINER_API_TOKEN" \
@@ -638,7 +649,6 @@ simci_portainer_stack_deploy_command() {
       exit 1
   fi
 
-  # Wait for container to be healthy
   if ! _sim_cicd_wait_for_container_health "$portainer_url" "$env_id" "$container_id"; then
       exit 1
   fi
@@ -648,7 +658,7 @@ simci_portainer_stack_deploy_command() {
 simci_portainer_stack_delete_command() {
 
   # src/portainer_stack_delete_command.sh
-  portainer_server=${args[portainer_server]}
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   portainer_url="portainer.$portainer_server"
   stack=${args[stack]}
   env_id=${args[--environment]}
@@ -670,7 +680,7 @@ simci_portainer_stack_delete_command() {
 simci_portainer_stack_stop_command() {
 
   # src/portainer_stack_stop_command.sh
-  portainer_server=${args[portainer_server]}
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   portainer_url="portainer.$portainer_server"
   stack=${args[stack]}
   env_id=${args[--environment]}
@@ -704,7 +714,7 @@ simci_portainer_stack_stop_command() {
 simci_portainer_stack_start_command() {
 
   # src/portainer_stack_start_command.sh
-  portainer_server=${args[portainer_server]}
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   portainer_url="portainer.$portainer_server"
   stack=${args[stack]}
   env_id=${args[--environment]}
@@ -753,7 +763,7 @@ simci_portainer_stack_start_command() {
 simci_portainer_stack_get_id_command() {
 
   # src/portainer_stack_get_id_command.sh
-  portainer_server=${args[portainer_server]}
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   portainer_url="portainer.$portainer_server"
   stack=${args[stack]}
   env_id=${args[--environment]}
@@ -787,7 +797,7 @@ simci_portainer_stack_get_id_command() {
 simci_portainer_stack_get_file_command() {
 
   # src/portainer_stack_get_file_command.sh
-  portainer_server=${args[portainer_server]}
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   stack=${args[stack]}
   env_id=${args[--environment]}
 
@@ -832,59 +842,84 @@ simci_portainer_stack_get_file_command() {
 simci_portainer_stack_get_coverage_command() {
 
   # src/portainer_stack_get_coverage_command.sh
-  portainer_server=${args[portainer_server]}
+  # Restart the app container so jacoco writes the report, then download jacoco.xml.
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   stack=${args[stack]}
   env_id=${args[--environment]}
 
   portainer_url="portainer.$portainer_server"
+  # Must match Traefik Host in portainer-stack.yml: ${COMPOSE_PROJECT_NAME}.<base>
   instance="$stack.$portainer_server"
 
   echo "[sim-cicd] === GET COVERAGE FROM PORTAINER STACK"
 
-  # Get the main container ID from the stack
-  CONTAINER_ID=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=1" \
+  CONTAINER_ID=$(_sim_cicd_curl_portainer \
+      "https://$portainer_url/api/endpoints/$env_id/docker/containers/json?all=1" \
       -H "X-API-Key:$PORTAINER_API_TOKEN" \
       | jq -r ".[] | select(.Labels[\"com.docker.compose.project\"]==\"$stack\") | .Id" | head -n 1)
 
-  if [ -z "$CONTAINER_ID" ]; then
-      echo "[sim-cicd] No container found for stack '$stack'" >&2
+  if [ -z "$CONTAINER_ID" ] || [ "$CONTAINER_ID" = "null" ]; then
+      echo "[sim-cicd] No container found for stack '$stack' on $portainer_url (endpoint $env_id)" >&2
       exit 1
   fi
 
-  # Restart container
-  curl -s -X POST "https://$portainer_url/api/endpoints/$env_id/docker/containers/$CONTAINER_ID/restart" \
-      -H "X-API-Key:$PORTAINER_API_TOKEN"
+  _sim_cicd_curl_portainer -X POST \
+      "https://$portainer_url/api/endpoints/$env_id/docker/containers/$CONTAINER_ID/restart" \
+      -H "X-API-Key:$PORTAINER_API_TOKEN" \
+      -o /dev/null
 
-  # Wait for container to be healthy
   if ! _sim_cicd_wait_for_container_health "$portainer_url" "$env_id" "$CONTAINER_ID"; then
       exit 1
   fi
 
-  curl https://$instance/content/jacoco/jacoco.xml > jacoco.xml
+  # App TLS may also be self-signed from CI runners
+  _sim_cicd_curl_portainer "https://$instance/content/jacoco/jacoco.xml" -o jacoco.xml
+  if [[ ! -s jacoco.xml ]] || ! grep -q '<report\|<?xml' jacoco.xml 2>/dev/null; then
+      echo "[sim-cicd] Failed to download jacoco.xml from https://$instance/content/jacoco/jacoco.xml" >&2
+      head -c 200 jacoco.xml 2>/dev/null >&2 || true
+      echo >&2
+      exit 1
+  fi
 }
 
 # :command.function
 simci_simplicite_run_unit_tests_command() {
 
   # src/simplicite_run_unit_tests_command.sh
-  portainer_server=${args[portainer_server]}
+  # Calls Simplicité IO unittests on the deployed stack host.
+  local response http_code
+  portainer_server=$(_sim_cicd_normalize_portainer_base "${args[portainer_server]}")
   stack=${args[stack]}
+  # Must match Traefik Host in portainer-stack.yml: ${COMPOSE_PROJECT_NAME}.<base>
   instance="$stack.$portainer_server"
   module=${args[module]}
 
   echo "[sim-cicd] === RUN UNIT TESTS"
+  echo "[sim-cicd] POST https://$instance/io (module=$module)"
 
-  # Run unit tests and capture output
-  response=$(curl -s -u designer:$IO_PASSWORD --form service=unittests --form module=$module https://$instance/io)
+  response=$(mktemp)
+  http_code=$(_sim_cicd_curl_portainer -u "designer:$IO_PASSWORD" \
+      --form "service=unittests" \
+      --form "module=$module" \
+      "https://$instance/io" \
+      -o "$response" \
+      -w "%{http_code}" || true)
 
-  # Print the response
-  echo "$response"
+  cat "$response"
+  echo
 
-  # If the response contains "ERROR", fail with exit code 1 so the pipeline fails
-  if echo "$response" | grep -q "ERROR"; then
-    exit 1
+  if [[ ! "$http_code" =~ ^2 ]]; then
+      echo "[sim-cicd] Unit tests HTTP call failed (HTTP ${http_code:-000}) against https://$instance/io" >&2
+      echo "[sim-cicd] Check PORTAINER_URL matches the Traefik host base in portainer-stack.yml" >&2
+      rm -f "$response"
+      exit 1
   fi
 
+  if grep -q "ERROR" "$response"; then
+      rm -f "$response"
+      exit 1
+  fi
+  rm -f "$response"
 }
 
 # :command.parse_requirements
@@ -1860,10 +1895,16 @@ before_hook() {
     return 0
   }
 
+  # ---------------------------------------------------------------------------
+  # Shared helpers (image pull / registry auth for Portainer CE)
+  # ---------------------------------------------------------------------------
+
+  # Base64 without newlines (Docker X-Registry-Auth header).
   _sim_cicd_b64() {
     echo -n "$1" | base64 | tr -d '\n'
   }
 
+  # Strip CR/LF/surrounding whitespace from CI variables.
   _sim_cicd_trim() {
     local s="$1"
     s="${s//$'\r'/}"
@@ -1873,7 +1914,8 @@ before_hook() {
     printf '%s' "$s"
   }
 
-  # PORTAINER_INSECURE_SSL=1 for self-signed / private CA (also applies to plain curl via ~/.curlrc).
+  # When PORTAINER_INSECURE_SSL=1, skip TLS verify for Portainer (self-signed / private CA).
+  # Writes ~/.curlrc so plain `curl` calls elsewhere in this script also skip verify.
   _sim_cicd_init_tls() {
     case "${PORTAINER_INSECURE_SSL:-}" in
       1|true|TRUE|yes|YES)
@@ -1884,6 +1926,7 @@ before_hook() {
     esac
   }
 
+  # curl wrapper for Portainer API: long timeout (image pulls) + optional -k.
   _sim_cicd_curl_portainer() {
     local curl_opts=(--connect-timeout 30 --max-time 900 -sS)
     case "${PORTAINER_INSECURE_SSL:-}" in
@@ -1892,6 +1935,7 @@ before_hook() {
     curl "${curl_opts[@]}" "$@"
   }
 
+  # Normalize PORTAINER_URL / CLI arg to a bare domain (strip scheme, trailing slash, portainer. prefix).
   _sim_cicd_normalize_portainer_base() {
     local s
     s=$(_sim_cicd_trim "$1")
@@ -1904,6 +1948,7 @@ before_hook() {
 
   _sim_cicd_init_tls
 
+  # Unique `image:` values from a compose file.
   _sim_cicd_compose_images() {
     local compose_file="$1"
     grep -E '^\s+image:' "$compose_file" 2>/dev/null \
@@ -1911,6 +1956,8 @@ before_hook() {
       | sort -u || true
   }
 
+  # Registry host from an image ref (e.g. registry.simplicite.io/platform:7-alpha → registry.simplicite.io).
+  # Empty for Docker Hub short names (no private-registry pre-pull).
   _sim_cicd_image_registry() {
     local img="$1"
     local ref="${img%%/*}"
@@ -1920,6 +1967,8 @@ before_hook() {
     fi
   }
 
+  # List registries visible to the API user. Prefer endpoint-scoped list; fall back to global
+  # /api/registries (endpoint list is often [] when the CI user lacks env registry access).
   _sim_cicd_portainer_registries_for_endpoint() {
     local portainer_url="$1"
     local env_id="$2"
@@ -1953,6 +2002,9 @@ before_hook() {
     echo "[]"
   }
 
+  # Resolve Portainer registry Id for a registry host.
+  # Prefer REGISTRY_ID (required in CI when the user cannot list registries).
+  # Else match by URL or name (REGISTRY_NAME, or "simplicite" for *.simplicite.io).
   _sim_cicd_registry_id_for_host() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2012,6 +2064,8 @@ before_hook() {
     return 1
   }
 
+  # Build X-Registry-Auth value for Docker images/create.
+  # Prefer REGISTRY_USERNAME/PASSWORD; else Portainer {"registryId":N} (server injects stored creds).
   _sim_cicd_registry_auth_header() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2036,9 +2090,9 @@ before_hook() {
     _sim_cicd_b64 "$(jq -nc --argjson id "$registry_id" '{registryId: $id}')"
   }
 
+  # Docker images/create returns NDJSON; HTTP 200 can still end with an error object.
   _sim_cicd_docker_pull_stream_error() {
     local response_file="$1"
-    # Docker images/create streams NDJSON; HTTP 200 can still contain a final error object.
     jq -rs '
       map(select(type == "object" and ((.error // .message // "") != "")))
       | if length == 0 then empty
@@ -2047,6 +2101,7 @@ before_hook() {
     ' "$response_file" 2>/dev/null || true
   }
 
+  # Untag/remove local image so the next pull cannot reuse a stale mutable tag.
   _sim_cicd_remove_local_image() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2068,6 +2123,7 @@ before_hook() {
     return 0
   }
 
+  # Smoke-test Portainer's Docker API proxy before attempting image pulls.
   _sim_cicd_docker_proxy_preflight() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2095,6 +2151,7 @@ before_hook() {
     return 1
   }
 
+  # Pull one private image through Portainer → Docker Engine (uses registry auth above).
   _sim_cicd_pull_image_via_portainer() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2121,6 +2178,7 @@ before_hook() {
     echo "[sim-cicd] Pulling image $img..."
     response=$(mktemp)
     curl_err=$(mktemp)
+    # -G + -X POST: Docker API expects fromImage/tag as query params on POST /images/create
     http_code=$(_sim_cicd_curl_portainer -G -X POST \
       "https://$portainer_url/api/endpoints/$env_id/docker/images/create" \
       --data-urlencode "fromImage=$from_image" \
@@ -2156,6 +2214,7 @@ before_hook() {
     return 1
   }
 
+  # Pre-pull every private image referenced by the compose file (once per deploy).
   _sim_cicd_pull_compose_images() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2175,6 +2234,7 @@ before_hook() {
     done <<< "$images"
   }
 
+  # PUT stack file content only (no PullImage — registry auth is handled by pre-pull above).
   _sim_cicd_portainer_stack_update() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2210,7 +2270,7 @@ before_hook() {
     return 1
   }
 
-  # Wait for container to be healthy
+  # Poll container health via Portainer Docker proxy until healthy/unhealthy/timeout.
   _sim_cicd_wait_for_container_health() {
     local portainer_url="$1"
     local env_id="$2"
@@ -2221,7 +2281,8 @@ before_hook() {
     local elapsed=0
     while [ $elapsed -lt $max_wait ]; do
       local status
-      status=$(curl -s "https://$portainer_url/api/endpoints/$env_id/docker/containers/$container_id/json" \
+      status=$(_sim_cicd_curl_portainer \
+          "https://$portainer_url/api/endpoints/$env_id/docker/containers/$container_id/json" \
           -H "X-API-Key:$PORTAINER_API_TOKEN" \
           | jq -r ".State | .Health | .Status" 2>/dev/null)
 

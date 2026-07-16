@@ -12,6 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Recreate the Portainer test stack with a fresh platform image, then wait for health.
+      # REGISTRY_ID: Portainer registry numeric Id (Registries → simplicite) — needed for private pulls.
+      # PORTAINER_INSECURE_SSL: skip TLS verify (Portainer often uses a self-signed cert from runners).
       - name: Deploy test stack
         env:
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
@@ -25,6 +28,7 @@ jobs:
             echo "::error::Set Actions variable REGISTRY_ID to the Portainer registry Id (Registries → simplicite)."
             exit 1
           fi
+          # Delete + deploy ensures a clean stack; deploy pre-pulls registry.simplicite.io/platform:7-alpha.
           ./others/cicd/simci portainer-stack-delete gitlab-simfeatures "$PORTAINER_URL"
           ./others/cicd/simci portainer-stack-deploy -f ./others/cicd/portainer-stack.yml gitlab-simfeatures "$PORTAINER_URL"
 
@@ -35,6 +39,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Run module unit tests on the deployed stack and fetch jacoco.xml from the volume.
       - name: Run unit tests
         env:
           PORTAINER_API_TOKEN: ${{ secrets.PORTAINER_API_TOKEN }}
