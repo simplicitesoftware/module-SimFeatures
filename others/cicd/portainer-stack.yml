@@ -23,7 +23,7 @@ services:
       - proxy
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-app.rule=Host(`${COMPOSE_PROJECT_NAME}.sca.simplicite.io`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-app.rule=Host(`${COMPOSE_PROJECT_NAME}.awh.simplicite.io`)"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-app.entrypoints=websecure"
       - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-app.tls.certresolver=leresolver"
       - "traefik.http.services.${COMPOSE_PROJECT_NAME}-app.loadbalancer.server.port=8443"
