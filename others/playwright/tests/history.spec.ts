@@ -1,4 +1,5 @@
 import { test, expect, Page, Locator } from '@playwright/test';
+import { join } from 'path';
 import {
   login,
   logout,
@@ -14,6 +15,12 @@ const HISTORIC_TAB = '#linktab_FtHistoryHistoric_row_ref_id';
 const CHANGE_LOG_TAB = '#linktab_RedoLog_rlg_object';
 const HISTORIC_LIST = '#list_FtHistoryHistoric_panel_ajax_FtHistoryHistoric_row_ref_id';
 const CHANGE_LOG_LIST = '#list_RedoLog_panel_ajax_RedoLog_rlg_object';
+const FIXTURES_DIR = join(__dirname, '..', 'fixtures');
+const TEST_DOCUMENT = join(FIXTURES_DIR, 'test-document.pdf');
+const INITIAL_DOCUMENT = 'test-document.pdf';
+const REPLACED_DOCUMENT = 'hist-doc-replace.txt';
+const INITIAL_MULTI_DOC = 'hist-multi-a.txt';
+const ADDED_MULTI_DOC = 'hist-multi-b.txt';
 
 test.describe.configure({ mode: 'serial' });
 
@@ -71,7 +78,9 @@ async function openCreateForm(page: Page) {
 }
 
 async function saveForm(page: Page) {
-  await page.locator(`${FORM_SELECTOR} [data-action="save"]`).click();
+  const saveButton = page.locator(`${FORM_SELECTOR} [data-action="save"]`);
+  await saveButton.scrollIntoViewIfNeeded();
+  await saveButton.click();
   await expect(page.locator('.alert-danger')).not.toBeVisible();
   await waitForFormSettled(page);
 }
@@ -137,6 +146,32 @@ async function setMultipleEnumeration(page: Page, values: string[]) {
   }
 }
 
+function getTextFile(name: string) {
+  return {
+    name: `${name}.txt`,
+    mimeType: 'text/plain',
+    buffer: Buffer.from('this is test'),
+  };
+}
+
+async function uploadDocument(page: Page, file: string | ReturnType<typeof getTextFile>) {
+  const docField = page.locator(`${FORM_SELECTOR} .field-document[data-group='ftHistDocument']`);
+  await docField.scrollIntoViewIfNeeded();
+  const editButton = docField.locator('.bedit_field_ftHistDocument');
+  if (await editButton.isVisible()) {
+    await editButton.click();
+  }
+  await page.locator('#file_field_ftHistDocument').setInputFiles(file);
+  const expectedName = typeof file === 'string' ? file.split('/').pop()! : file.name;
+  await expect(page.locator('#doc_field_ftHistDocument')).toHaveValue(expectedName);
+}
+
+async function uploadMultiDoc(page: Page, files: ReturnType<typeof getTextFile>[]) {
+  const field = page.locator(`${FORM_SELECTOR} .field-document[data-group='ftHistMultiDoc']`);
+  await field.scrollIntoViewIfNeeded();
+  await page.locator('#files_field_ftHistMultiDoc').setInputFiles(files);
+}
+
 async function createHistoryItem(page: Page, decimal: string) {
   await openHistoryList(page);
   await openCreateForm(page);
@@ -180,7 +215,7 @@ async function deleteHistoryItem(page: Page, code: string) {
 test('FT_0187', {
   annotation: {
     type: 'feature',
-    description: 'Creates a History item and verifies Historic and Change log panels after create and field updates',
+    description: 'Creates a History item and verifies Historic and Change log panels after create, field updates, and document file changes',
   },
 }, async ({ page }) => {
   const initialDecimal = '12.50';
@@ -236,6 +271,51 @@ test('FT_0187', {
   await expect(changeLogRow(page, 0).locator('[data-field="rlg_action"]')).toContainText('Update');
   await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText('Enumeration');
   await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText('Boolean');
+
+  await uploadDocument(page, TEST_DOCUMENT);
+  await uploadMultiDoc(page, [getTextFile('hist-multi-a')]);
+  await saveForm(page);
+
+  await expectHistoricRowCount(page, 4);
+  await openHistoricTab(page);
+  await expect(historicRow(page, 0).locator('td[data-field="ftHistDocument"] i')).toHaveAttribute(
+    'title',
+    new RegExp(INITIAL_DOCUMENT),
+  );
+  await expect(historicRow(page, 0).locator('[data-field="row_diff"]')).toContainText('Document');
+  await expect(historicRow(page, 0).locator('[data-field="row_diff"]')).toContainText(INITIAL_DOCUMENT);
+
+  await expectChangeLogRowCount(page, 4);
+  await openChangeLogTab(page);
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_action"]')).toContainText('Update');
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_origin"]')).toContainText('UI:Update');
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText('Document');
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText(INITIAL_DOCUMENT);
+
+  await uploadDocument(page, getTextFile('hist-doc-replace'));
+  await uploadMultiDoc(page, [getTextFile('hist-multi-a'), getTextFile('hist-multi-b')]);
+  await saveForm(page);
+
+  await expectHistoricRowCount(page, 5);
+  await openHistoricTab(page);
+  await expect(historicRow(page, 0).locator('td[data-field="ftHistDocument"] i')).toHaveAttribute(
+    'title',
+    new RegExp(REPLACED_DOCUMENT),
+  );
+  await expect(historicRow(page, 0).locator('[data-field="row_diff"]')).toContainText('Document');
+  await expect(historicRow(page, 0).locator('[data-field="row_diff"]')).toContainText(INITIAL_DOCUMENT);
+  await expect(historicRow(page, 0).locator('[data-field="row_diff"]')).toContainText(REPLACED_DOCUMENT);
+
+  await expectChangeLogRowCount(page, 5);
+  await openChangeLogTab(page);
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_action"]')).toContainText('Update');
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_origin"]')).toContainText('UI:Update');
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText('Document');
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText(INITIAL_DOCUMENT);
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText(REPLACED_DOCUMENT);
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText('Multi-doc');
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText(INITIAL_MULTI_DOC);
+  await expect(changeLogRow(page, 0).locator('[data-field="rlg_html"]')).toContainText(ADDED_MULTI_DOC);
 
   await deleteHistoryItem(page, code);
   await openHistoryList(page);
