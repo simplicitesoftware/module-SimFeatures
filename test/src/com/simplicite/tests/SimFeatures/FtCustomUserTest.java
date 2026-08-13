@@ -98,6 +98,7 @@ public class FtCustomUserTest {
 
 			// Create user and validate; postSave should apply responsibility
 			user.validateAndCreate();
+			user.postSave();
 
 			// Initialize a Grant for the new user
 			g = new Grant();
@@ -108,6 +109,8 @@ public class FtCustomUserTest {
 			// Change ftUsrType to FT_ADMIN and update; postSave should update responsibilities
 			user.setFieldValue("ftUsrType", "FT_ADMIN");
 			user.validateAndSave();
+			user.postSave();
+			
 			// Refresh the grant context
 			g.reinit();
 			// User should now have FT_ADMIN but not FT_READ
