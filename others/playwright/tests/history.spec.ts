@@ -141,8 +141,9 @@ async function selectEnumeration(page: Page, value: string) {
 async function setMultipleEnumeration(page: Page, values: string[]) {
   const group = page.locator("[data-field='ftHistMultipleEnumeration']");
   for (const value of values) {
-    const label = value === 'A' ? 'Multiple enumeration A' : value;
-    await group.getByRole('checkbox', { name: label, exact: true }).check();
+    //const label = value === 'A' ? 'Multiple enumeration' : value;
+    await group.locator(`[value='${value}']`).check();
+    //await group.getByRole('checkbox', { name: label, exact: true }).check();
   }
 }
 
@@ -278,7 +279,8 @@ test('FT_0187', {
 
   await expectHistoricRowCount(page, 4);
   await openHistoricTab(page);
-  await expect(historicRow(page, 0).locator('td[data-field="ftHistDocument"] i')).toHaveAttribute(
+  // Document filename is on the <a title="Open …">, not the inner <i>
+  await expect(historicRow(page, 0).locator('td[data-field="ftHistDocument"] a')).toHaveAttribute(
     'title',
     new RegExp(INITIAL_DOCUMENT),
   );
@@ -298,7 +300,7 @@ test('FT_0187', {
 
   await expectHistoricRowCount(page, 5);
   await openHistoricTab(page);
-  await expect(historicRow(page, 0).locator('td[data-field="ftHistDocument"] i')).toHaveAttribute(
+  await expect(historicRow(page, 0).locator('td[data-field="ftHistDocument"] a')).toHaveAttribute(
     'title',
     new RegExp(REPLACED_DOCUMENT),
   );
