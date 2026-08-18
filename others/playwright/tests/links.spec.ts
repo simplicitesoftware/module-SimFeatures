@@ -83,6 +83,7 @@ test('FT_0107', {
   await expect(page.locator(M2M_CHILD_FORM)).toBeVisible();
   await page.locator('#field_ftM2mcCode').fill(randomString(10));
   await page.locator("[data-action='saveclose']").click();
+  await loaded(page);
 
   await openList(page, DOMAIN, M2M_OBJECT);
   await page.locator("[data-action='create']").click();
