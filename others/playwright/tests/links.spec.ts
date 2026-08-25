@@ -120,8 +120,10 @@ test('FT_0103', {
   await page.locator("#field_ftObjInlineName").fill(randomString(10));
 
   await page.locator("[data-action='save']").click();
+  await skeletonDismissed(page);
   await expect(page.locator("#field_ftObjInlineParentDescription")).toHaveValue("Updated by child postCreate");
 
   await page.locator("[data-action='save']").click();
+  await skeletonDismissed(page);
   await expect(page.locator("#field_ftObjInlineParentDescription")).toHaveValue("Updated by child postUpdate");
 });
