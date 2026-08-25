@@ -135,6 +135,7 @@ test('FT_0022', {
   await expect(page.locator("[data-field='ftLoLabel']").first()).toContainText('C');
 
   await page.locator('.btn-selrows').click();
+  await expect(page.locator('tr.selected')).toHaveCount(3);
   await page.locator('.list-actionbar div.dropdown').click();
   await page.locator("[data-action='delall']").click();
   await page.locator('#dlgmodal .btn-OK').click();

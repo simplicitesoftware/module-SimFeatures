@@ -31,7 +31,7 @@ async function ensureNotificationShortcutPinned(page: Page) {
 
   const shortcutsMenu = page.locator('.dropdown-menu.shortcuts');
   if (!(await shortcutsMenu.isVisible())) {
-    await page.locator('.header a.btn-header.btn-shortcut').click();
+    await page.locator('.header .btn-header.btn-shortcut').click();
   }
   await expect(shortcutsMenu).toBeVisible();
 
