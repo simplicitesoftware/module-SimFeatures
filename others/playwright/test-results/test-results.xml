@@ -1,10 +1,267 @@
-<testsuites id="" name="" tests="1" failures="0" skipped="0" errors="0" time="15.410161000000313">
-<testsuite name="links.spec.ts" timestamp="2026-08-25T12:07:43.039Z" hostname="chromium" tests="1" failures="0" skipped="0" time="14.598" errors="0">
-<testcase name="FT_0103" classname="links.spec.ts" time="14.598">
+<testsuites id="" name="" tests="27" failures="1" skipped="23" errors="0" time="15.074059000000002">
+<testsuite name="auth.setup.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="setup" tests="1" failures="0" skipped="0" time="0.877" errors="0">
+<testcase name="authenticate" classname="auth.setup.ts" time="0.877">
+</testcase>
+</testsuite>
+<testsuite name="actions.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="2" failures="1" skipped="0" time="6.413" errors="0">
+<testcase name="FT_0125" classname="actions.spec.ts" time="1.394">
+<properties>
+<property name="feature" value="Ask fields custom action">
+</property>
+</properties>
+<failure message="actions.spec.ts:227:5 FT_0125" type="FAILURE">
+<![CDATA[  [firefox] › actions.spec.ts:227:5 › FT_0125 ──────────────────────────────────────────────────────
+
+    Error: locator.click: Error: strict mode violation: locator('[data-action="ActAskFields"]') resolved to 2 elements:
+        1) <button type="button" class="btn btn-action" data-action="ActAskFields">…</button> aka locator('button').filter({ hasText: 'Ask fields' })
+        2) <button type="button" data-rowid="2" title="Ask fields" class="btn btn-action" data-action="ActAskFields">…</button> aka getByTitle('Ask fields')
+
+    Call log:
+      - waiting for locator('[data-action="ActAskFields"]')
+
+
+      73 |
+      74 | async function openAskFieldsOnFirstRow(page: Page) {
+    > 75 |   await page.locator('[data-action="ActAskFields"]').click();
+         |                                                      ^
+      76 |   const dialog = getAskFieldsDialog(page);
+      77 |   await expect(dialog).toBeVisible();
+      78 |   await expect(dialog.locator('[data-field="ftActDate2"]')).toBeVisible();
+        at openAskFieldsOnFirstRow (/Users/alistairwheeler/git/module-SimFeatures/others/playwright/tests/actions.spec.ts:75:54)
+        at /Users/alistairwheeler/git/module-SimFeatures/others/playwright/tests/actions.spec.ts:232:24
+
+    Error Context: ../test-results/actions-FT-0125-firefox/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../test-results/actions-FT-0125-firefox/trace.zip
+    Usage:
+
+        npx playwright show-trace ../test-results/actions-FT-0125-firefox/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+]]>
+</failure>
+<system-out>
+<![CDATA[
+[[ATTACHMENT|actions-FT-0125-firefox/error-context.md]]
+
+[[ATTACHMENT|actions-FT-0125-firefox/trace.zip]]
+]]>
+</system-out>
+</testcase>
+<testcase name="FT_0182" classname="actions.spec.ts" time="5.019">
+<properties>
+<property name="feature" value="State transition Go to B and Back to A">
+</property>
+</properties>
+</testcase>
+</testsuite>
+<testsuite name="forms.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="6" failures="0" skipped="5" time="5.306" errors="0">
+<testcase name="FT_0097" classname="forms.spec.ts" time="3.882">
+<properties>
+<property name="feature" value="Text fields">
+</property>
+</properties>
+</testcase>
+<testcase name="FT_0098" classname="forms.spec.ts" time="1.424">
+<properties>
+<property name="feature" value="Number fields">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0099" classname="forms.spec.ts" time="0">
+<properties>
+<property name="feature" value="Date/Time fields">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0100" classname="forms.spec.ts" time="0">
+<properties>
+<property name="feature" value="Enum fields">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0101" classname="forms.spec.ts" time="0">
+<properties>
+<property name="feature" value="File fields">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0102" classname="forms.spec.ts" time="0">
+<properties>
+<property name="feature" value="Special fields">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="history.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="FT_0187" classname="history.spec.ts" time="0">
+<properties>
+<property name="feature" value="Creates a History item and verifies Historic and Change log panels after create, field updates, and document file changes">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="links.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="3" failures="0" skipped="3" time="0" errors="0">
+<testcase name="FT_0104" classname="links.spec.ts" time="0">
+<properties>
+<property name="feature" value="Panel links: creates a parent form, saves it, then adds a child to the linked panel and verifies the child row appears.">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0107" classname="links.spec.ts" time="0">
+<properties>
+<property name="feature" value="M2M Association: creates two child items, then a parent item, associates the children via the association panel, and verifies both rows appear in the panel.">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0103" classname="links.spec.ts" time="0">
 <properties>
 <property name="feature" value="Creates a parent with an inlined child object, fills parent and child fields, saves, and verifies parent description is updated by child hooks.">
 </property>
 </properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="lists.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="8" failures="0" skipped="8" time="0" errors="0">
+<testcase name="FT_0022" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="Multi-column ordering">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0025" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="List preferences">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="CHG_00092" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="Context menu on lists">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="CHG_00074" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="Quick list ordering">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0095" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="Create on list">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0096" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="Update on list">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0111" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="Search dialog">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0024" classname="lists.spec.ts" time="0">
+<properties>
+<property name="feature" value="List search">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="misc.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="CHG_00075" classname="misc.spec.ts" time="0">
+<properties>
+<property name="feature" value="User onboarding">
+</property>
+<property name="skip" value="">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="notifications.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="FT_0053" classname="notifications.spec.ts" time="0">
+<properties>
+<property name="feature" value="Internal notification">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="publications.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="1" failures="0" skipped="1" time="0" errors="0">
+<testcase name="FT_0186" classname="publications.spec.ts" time="0">
+<properties>
+<property name="feature" value="Generates PDF document from HTML on save">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+</testsuite>
+<testsuite name="states.spec.ts" timestamp="2026-09-03T05:22:32.338Z" hostname="firefox" tests="3" failures="0" skipped="3" time="0" errors="0">
+<testcase name="FT_0185" classname="states.spec.ts" time="0">
+<properties>
+<property name="feature" value="Creates a state item, transitions through the workflow, and verifies navbar and historic panel">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0184" classname="states.spec.ts" time="0">
+<properties>
+<property name="feature" value="Transitions through optional and exception states and verifies navbar updates">
+</property>
+</properties>
+<skipped>
+</skipped>
+</testcase>
+<testcase name="FT_0183" classname="states.spec.ts" time="0">
+<properties>
+<property name="feature" value="Uses the States trays view and drag-and-drop to transition items between columns">
+</property>
+</properties>
+<skipped>
+</skipped>
 </testcase>
 </testsuite>
 </testsuites>

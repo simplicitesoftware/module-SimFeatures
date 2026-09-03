@@ -1,7 +1,6 @@
 import { test, expect, Page, Locator } from '@playwright/test';
 import {
-  login,
-  logout,
+  goHome,
   skeletonDismissed,
   loaded,
 } from '../tools/helpers';
@@ -67,7 +66,7 @@ test.afterEach(async ({ page }) => {
 });
 
 async function openStatesShowAll(page: Page) {
-  await expect(page.locator('ul.main-menu')).toBeVisible();
+  await expect(page.locator('#menu')).toBeVisible();
   const showAll = page.locator(
     `[data-obj="${OBJECT}"][data-path="FtDomain.${OBJECT}.all"]`,
   );
@@ -212,7 +211,7 @@ async function deleteStateItem(page: Page, code: string) {
 }
 
 async function openStatesTrays(page: Page) {
-  await expect(page.locator('ul.main-menu')).toBeVisible();
+  await expect(page.locator('#menu')).toBeVisible();
   const traysLink = page.locator(`[data-path="FtDomain.${OBJECT}.tray"]`);
   const menuToggle = page.locator(
     `[data-obj="${OBJECT}"][data-path="FtDomain.${OBJECT}"].js-sub-menu-toggle`,

@@ -1,7 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import {
-  login,
-  logout,
+  goHome,
   openList,
   skeletonDismissed,
   loaded,
@@ -14,11 +13,7 @@ const FORM_SELECTOR = '.objform.object-FtPublications';
 const PUBLICATION_HTML = '<h1>Hello, World!</h1>';
 
 test.beforeEach(async ({ page }) => {
-  await login(page);
-});
-
-test.afterEach(async ({ page }) => {
-  await logout(page);
+  await goHome(page);
 });
 
 async function openPublicationsList(page: Page) {

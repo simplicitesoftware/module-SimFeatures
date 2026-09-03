@@ -1,13 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import dotenv from 'dotenv';
 import path from 'path';
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -16,10 +9,12 @@ import path from 'path';
 // Read from ".env" file.
 dotenv.config({ path: path.resolve(__dirname, '.env') });
 
+const authFile = path.join(__dirname, '.auth/user.json');
+
 export default defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
+  fullyParallel: false,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
   forbidOnly: !!process.env.CI,
   /* Retry on CI only (1 retry = 2 attempts max) */
@@ -39,7 +34,7 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'retain-on-failure',
-    
+
     /* Timeouts for web instances */
     actionTimeout: 15000, // 15 seconds for actions
     navigationTimeout: 15000, // 15 seconds for navigation
@@ -55,14 +50,24 @@ export default defineConfig({
 
   /* Configure projects for major browsers */
   projects: [
+    { name: 'setup', testMatch: /.*\.setup\.ts/ },
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: authFile,
+      },
+      dependencies: ['setup'],
+      testIgnore: /.*\.setup\.ts/,
     },
-
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
+      use: {
+        ...devices['Desktop Firefox'],
+        storageState: authFile,
+      },
+      dependencies: ['setup'],
+      testIgnore: /.*\.setup\.ts/,
     },
   ],
 });

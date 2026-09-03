@@ -1,8 +1,7 @@
 import { test, expect, Page, Locator } from '@playwright/test';
 import { join } from 'path';
 import {
-  login,
-  logout,
+  goHome,
   skeletonDismissed,
   loaded,
 } from '../tools/helpers';
@@ -47,7 +46,7 @@ async function dismissQuitDialog(page: Page) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 900 });
-  await login(page);
+  await goHome(page);
 });
 
 test.afterEach(async ({ page }) => {
@@ -61,11 +60,10 @@ test.afterEach(async ({ page }) => {
   if (await contentDialog.isVisible()) {
     await page.keyboard.press('Escape');
   }
-  await logout(page);
 });
 
 async function openHistoryList(page: Page) {
-  await expect(page.locator('ul.main-menu')).toBeVisible();
+  await expect(page.locator('#menu')).toBeVisible();
   await page.locator(`[data-obj="${OBJECT}"]`).click();
   await skeletonDismissed(page);
   await expect(page.locator(LIST_SELECTOR)).toBeVisible();

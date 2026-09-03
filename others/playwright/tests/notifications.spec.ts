@@ -1,7 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import {
-  login,
-  logout,
+  goHome,
   openList,
   saveList,
   skeletonDismissed,
@@ -14,11 +13,7 @@ const NOTIFICATION_SHORTCUT = 'Notifications';
 const LIST_SELECTOR = `#list_${NOTIFICATION_OBJECT}_the_ajax_${NOTIFICATION_OBJECT}`;
 
 test.beforeEach(async ({ page }) => {
-  await login(page);
-});
-
-test.afterEach(async ({ page }) => {
-  await logout(page);
+  await goHome(page);
 });
 
 async function ensureNotificationShortcutPinned(page: Page) {

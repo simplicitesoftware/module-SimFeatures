@@ -1,7 +1,6 @@
 import { test, expect } from '@playwright/test';
 import {
-  login,
-  logout,
+  goHome,
   openList,
   randomString,
   skeletonDismissed,
@@ -26,11 +25,7 @@ const M2M_CHILD_REF_LIST = '#list_FtM2mChild_ref_ajax_FtM2mChild';
 const M2M_PANEL_LIST_DATA = 'list_FtM2m_panel_ajax_FtM2m_ftM2mId';
 
 test.beforeEach(async ({ page }) => {
-  await login(page);
-});
-
-test.afterEach(async ({ page }) => {
-  await logout(page);
+  await goHome(page);
 });
 
 test('FT_0104', {

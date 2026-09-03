@@ -2,8 +2,8 @@ import { test, expect, Page } from '@playwright/test';
 import {
   skeletonDismissed,
   loaded,
-  login,
-  logout,
+  openList,
+  goHome,
   saveForm,
   randomString,
 } from '../tools/helpers';
@@ -13,11 +13,7 @@ const LIST_SELECTOR = `#list_${OBJECT}_the_ajax_${OBJECT}`;
 const LIST_DATA = `list_${OBJECT}_the_ajax_${OBJECT}`;
 
 test.beforeEach(async ({ page }) => {
-  await login(page);
-});
-
-test.afterEach(async ({ page }) => {
-  await logout(page);
+  await goHome(page);
 });
 
 // --- Form helpers ---
@@ -42,8 +38,7 @@ async function openTestRow(page: Page, field: string, key: string) {
 }
 
 async function createTestRow(page: Page, code: string) {
-  await page.locator(`[data-obj='${OBJECT}']`).click();
-  await skeletonDismissed(page);
+  await openList(page, 'FtDomain', OBJECT);
   await page.locator('.btn-create').click();
   await skeletonDismissed(page);
   await page.locator('#field_ftAttrCode').fill(code);
@@ -53,7 +48,7 @@ async function createTestRow(page: Page, code: string) {
 }
 
 async function deleteRow(page: Page, code: string) {
-  await page.locator(`[data-obj='${OBJECT}']`).click();
+  await openList(page, 'FtDomain', OBJECT);
   await skeletonDismissed(page);
   const row = page.locator('tr').filter({ hasText: code });
   await row.locator('.actions .dropdown').click();

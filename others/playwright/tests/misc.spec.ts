@@ -1,15 +1,11 @@
 import { test, expect } from '@playwright/test';
-import { login, logout, openList } from '../tools/helpers';
+import { goHome, openList } from '../tools/helpers';
 
 const DOMAIN = 'FtDomain';
 const GUIDED_OBJECT = 'FtGuidedObject';
 
 test.beforeEach(async ({ page }) => {
-  await login(page);
-});
-
-test.afterEach(async ({ page }) => {
-  await logout(page);
+  await goHome(page);
 });
 
 // User onboarding test – uncomment to run

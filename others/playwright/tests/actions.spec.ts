@@ -1,8 +1,7 @@
 import { test, expect, Page, Locator } from '@playwright/test';
 import { join } from 'path';
 import {
-  login,
-  logout,
+  goHome,
   skeletonDismissed,
   loaded,
   saveForm,
@@ -19,7 +18,7 @@ const TEST_IMAGE = join(FIXTURES_DIR, 'test-image.png');
 const TEST_DOCUMENT = join(FIXTURES_DIR, 'test-document.pdf');
 
 test.beforeEach(async ({ page }) => {
-  await login(page);
+  await goHome(page);
 });
 
 test.afterEach(async ({ page }) => {
@@ -35,7 +34,6 @@ test.afterEach(async ({ page }) => {
   if (await confirmDialog.isVisible()) {
     await confirmDialog.locator('[data-action="cancel"]').click();
   }
-  await logout(page);
 });
 
 function getTextFile(name: string) {
@@ -59,7 +57,7 @@ function getAskFieldsDialog(page: Page) {
 }
 
 async function openActionsShowAll(page: Page) {
-  await expect(page.locator('ul.main-menu')).toBeVisible();
+  await expect(page.locator('#menu')).toBeVisible();
   const showAll = page.locator(
     '[data-obj="FtActions"][data-path="FtDomain.FtActions.all"]',
   );

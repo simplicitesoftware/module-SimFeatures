@@ -1,7 +1,6 @@
 import { test, expect, Page } from '@playwright/test';
 import {
-  login,
-  logout,
+  goHome,
   openList,
   randomString,
   skeletonDismissed,
@@ -15,11 +14,7 @@ const LIST_ITEM = 'FtListItem';
 const SEARCH_ITEM = 'FtSearch';
 
 test.beforeEach(async ({ page }) => {
-  await login(page);
-});
-
-test.afterEach(async ({ page }) => {
-  await logout(page);
+  await goHome(page);
 });
 
 // --- List helpers (FtListOrdering) ---

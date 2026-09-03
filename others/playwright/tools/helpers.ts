@@ -25,32 +25,14 @@ export async function instanceReady(page: Page) {
 }
 
 /**
- * Logs in to the application
- * @param page Playwright page object
+ * Opens the app home using the reused authenticated storage state.
+ * Prefer this in tests; login once via auth.setup.ts instead.
  */
-export async function login(page: Page) {
+export async function goHome(page: Page) {
   await page.goto('/');
   await page.waitForLoadState();
-
-  const loginField = page.getByRole('textbox', { name: 'Login' });
-  if (await loginField.isVisible()) {
-    await loginField.fill(process.env.USER_NAME || '');
-    await page.getByRole('textbox', { name: 'Password' }).fill(process.env.PASSWORD || '');
-    await page.getByRole('button', { name: 'Connection' }).click();
-  }
-
   await instanceReady(page);
-  await expect(page.locator('ul.main-menu')).toBeVisible({ timeout: 60000 });
-}
-
-/**
- * Logs out of the application
- * @param page Playwright page object
- */
-export async function logout(page: Page) {
-  await page.locator(".header .logged-user").click();
-  await page.locator("li.user-logout").click();
-  await page.locator("#dlgmodal_CONFIRM_LOGOUT .btn-OK").click();
+  await expect(page.locator('#menu')).toBeVisible({ timeout: 60000 });
 }
 
 /**
@@ -85,11 +67,12 @@ export function randomString(length: number) {
 }
 
 export async function openList(page: Page, domain: string, object: string, path?: string) {
-  await expect(page.locator("ul.main-menu")).toBeVisible();
+  await expect(page.locator("#menu")).toBeVisible();
   const objVisible = await page.locator(`[data-obj='${object}']`).isVisible();
   if (!objVisible) {
       await page.locator(`[data-domain='${domain}']`).click();
   }
   await expect(page.locator(`[data-obj='${object}']`)).toBeVisible();
   await page.locator(`[data-obj='${object}']`).click();
+  await expect(page.locator(`#list_${object}_the_ajax_${object}`)).toBeVisible();
 }
