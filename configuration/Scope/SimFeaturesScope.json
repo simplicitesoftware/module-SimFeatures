@@ -6,6 +6,8 @@
  "sco_icon": "img/color/test_tube",
  "sco_permalink": null,
  "sco_disp_id__dis_code": null,
+ "sco_workarea": "1",
  "sco_home_id__viw_name": "SimFeaturesScope",
- "row_module_id__mdl_name": "SimFeatures"
+ "row_module_id__mdl_name": "SimFeatures",
+ "sco_comment": null
 }

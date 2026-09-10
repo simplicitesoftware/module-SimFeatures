@@ -1,11 +1,5 @@
 {
- "obo_name": {
-  "value": "FtObjInlineChild",
-  "oldvalue": "FtObjInlinedChild",
-  "oldvalue1": "FtObjInline",
-  "oldvalue2": "DemoFtObjInline",
-  "oldvalue3": "FtObjInline"
- },
+ "obo_name": "FtObjInlineChild",
  "obo_dbtable": "ft_obj_inline_child",
  "obo_role": "OBJ",
  "obo_class": null,

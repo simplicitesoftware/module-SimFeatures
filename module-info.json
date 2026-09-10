@@ -1,9 +1,10 @@
 {
-    "date": "2026-07-15 15:17:27",
+    "date": "2026-09-10 17:11:11",
     "name": "SimFeatures",
     "format": "json",
     "files": ["configuration/**.json"],
     "repository": {"origin": {"uri": "https://github.com/simplicitesoftware/module-SimFeatures.git"}},
     "version": "0.1",
+    "branch": "7.0",
     "platform": "7.0.0-alpha"
 }

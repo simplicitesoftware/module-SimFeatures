@@ -14,5 +14,6 @@
  "tsl_placeholder": "autoincrement",
  "tsl_listhelp": null,
  "tsl_tooltip": null,
+ "tsl_compliance": null,
  "row_module_id__mdl_name": "SimFeatures"
 }

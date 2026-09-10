@@ -103,9 +103,9 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `askAction`
 * `confirmAction`
 * `initAction`
+* `askAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -263,20 +263,20 @@ _No description._
 
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| **`usr_home_id`** link to **`ViewHome`**                     | id                                       | usr_home_id                    |          | yes       |          | -                                                                                |
+| **`usr_home_id`** link to **`ViewHome`**                     | id                                       | usr_home_id                    |          | yes       |          | Deprecated / use usr_scope_id.viw_home_id                                        |
 | **`usr_scope_id`** link to **`Scope`**                       | id                                       | usr_scope_id                   |          | yes       |          | -                                                                                |
 | _`viw_name`_                                                 | _char(100)_                              | _viw_name_                     |          |           |          | _-_                                                                              |
 | _`sco_name`_                                                 | _char(100)_                              | _sco_name_                     |          |           |          | _-_                                                                              |
 | _`sco_home_id`_                                              | _id_                                     | _sco_home_id_                  |          |           |          | _-_                                                                              |
 | _`viw_name`_                                                 | _char(100)_                              | _viw_name_                     |          |           |          | _-_                                                                              |
-| _`mdl_name`_                                                 | _regexp(100)_                            | _mdl_name_                     |          |           |          | _-_                                                                              |
-| `usr_image_id`                                               | image                                    | usr_image_id                   |          | yes       | yes      | -                                                                                |
-| `usr_login`                                                  | regexp(100)                              | usr_login                      | yes*     | yes       | yes      | -                                                                                |
-| `usr_first_name`                                             | char(50)                                 | usr_first_name                 |          | yes       | yes      | -                                                                                |
-| `usr_last_name`                                              | char(50)                                 | usr_last_name                  |          | yes       | yes      | -                                                                                |
-| `usr_lang`                                                   | enum(3) using LANG list                  | usr_lang                       | yes      | yes       | yes      | -                                                                                |
-| `usr_email`                                                  | email(100)                               | usr_email                      |          | yes       | yes      | -                                                                                |
-| `usr_cell_num`                                               | phone(20)                                | usr_cell_num                   |          | yes       | yes      | -                                                                                |
+| _`mdl_name`_                                                 | _regexp(100)_                            | _mdl_name_                     |          |           |          | _Module name_                                                                    |
+| `usr_image_id`                                               | image                                    | usr_image_id                   |          | yes       | yes      | Picture                                                                          |
+| `usr_login`                                                  | regexp(100)                              | usr_login                      | yes*     | yes       | yes      | Login                                                                            |
+| `usr_first_name`                                             | char(50)                                 | usr_first_name                 |          | yes       | yes      | First name                                                                       |
+| `usr_last_name`                                              | char(50)                                 | usr_last_name                  |          | yes       | yes      | Last name                                                                        |
+| `usr_lang`                                                   | enum(3) using LANG list                  | usr_lang                       | yes      | yes       | yes      | Language                                                                         |
+| `usr_email`                                                  | email(100)                               | usr_email                      |          | yes       | yes      | Email address                                                                    |
+| `usr_cell_num`                                               | phone(20)                                | usr_cell_num                   |          | yes       | yes      | Mobile/cellular phone number                                                     |
 | `usr_active`                                                 | enum(1) using USER_STATUS list           | usr_active                     |          | yes       |          | -                                                                                |
 | `ftUsrType`                                                  | enum(10) using FTUSRTYPE list            | ft_usr_type                    | yes      | yes       |          | -                                                                                |
 
@@ -286,8 +286,8 @@ _No description._
     - `ENU` English language
     - `FRA` French language
 * `USER_STATUS`
-    - `0` Disabled
-    - `1` Enabled
+    - `0` Inactive
+    - `1` Active
     - `2` Pending
     - `3` Web services only
 * `FTUSRTYPE`
@@ -298,8 +298,8 @@ _No description._
 
 ```mermaid
 stateDiagram-v2
-    state "Disabled" as 0
-    state "Enabled" as 1
+    state "Inactive" as 0
+    state "Active" as 1
     state "Pending" as 2
     state "Web services only" as 3
     0 --> 1
@@ -319,36 +319,36 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `postLoad`
 * `preValidate`
+* `postLoad`
 * `postSave`
-* `getUserKeyLabel`
-* `initCreate`
-* `initCopy`
-* `initUpdate`
-* `postValidate`
+* `anonymize`
+* `totpQRCode`
 * `initUpdateAll`
-* `postCreate`
-* `preDelete`
+* `isActionEnable`
 * `isDeleteEnable`
 * `isCopyEnable`
-* `isActionEnable`
+* `getUserKeyLabel`
+* `postValidate`
 * `getMappedFilePath`
 * `deletePrefs`
-* `totpQRCode`
-* `anonymize`
-* `createUserToken`
 * `resetPassword`
+* `createUserToken`
+* `initUpdate`
+* `initCreate`
+* `initCopy`
+* `preDelete`
+* `postCreate`
 * `postDelete`
+* `isUpdateEnable`
+* `canReference`
+* `getMappedExportPath`
+* `postSearch`
+* `preSearch`
 * `postSelect`
+* `postUpdate`
 * `preCreate`
 * `preUpdate`
-* `postUpdate`
-* `canReference`
-* `isUpdateEnable`
-* `preSearch`
-* `postSearch`
-* `getMappedExportPath`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -413,9 +413,9 @@ _No description._
 
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| **`row_ref_id`** link to **`FtHistory`**                     | id                                       | row_ref_id                     | yes*     |           |          | -                                                                                |
+| **`row_ref_id`** link to **`FtHistory`**                     | id                                       | row_ref_id                     | yes*     |           |          | Record row ID                                                                    |
 | _`ftHistCode`_                                               | _char(100)_                              | _ft_hist_code_                 |          |           |          | _-_                                                                              |
-| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | -                                                                                |
+| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | Calculated difference between two sibling rows of historic object                |
 | `ftHistCode`                                                 | char(100)                                | ft_hist_code                   | yes*     |           |          | -                                                                                |
 | `ftHistDecimal`                                              | float(100, 2)                            | ft_hist_decimal                |          | yes       |          | -                                                                                |
 | `ftHistDateAndTime`                                          | datetime                                 | ft_hist_date_and_time          |          | yes       |          | -                                                                                |
@@ -526,8 +526,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postLoad`
 * `initRefSelect`
+* `postLoad`
 
 `FtNotification` (Notification Tester) business object definition
 -----------------------------------------------------------------
@@ -846,9 +846,9 @@ _No description._
 
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
-| **`row_ref_id`** link to **`FtStates`**                      | id                                       | row_ref_id                     | yes*     |           |          | -                                                                                |
+| **`row_ref_id`** link to **`FtStates`**                      | id                                       | row_ref_id                     | yes*     |           |          | Record row ID                                                                    |
 | _`ftStCode`_                                                 | _char(100)_                              | _ft_st_code_                   |          |           |          | _-_                                                                              |
-| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | -                                                                                |
+| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | Calculated difference between two sibling rows of historic object                |
 | `ftStCode`                                                   | char(100)                                | ft_st_code                     | yes*     |           |          | -                                                                                |
 | `ftStState`                                                  | enum(10) using FT_ST_STATE list          | ft_st_state                    | yes      | yes       |          | -                                                                                |
 

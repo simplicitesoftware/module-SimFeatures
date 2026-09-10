@@ -2035,27 +2035,28 @@ paths:
         required: false
       - in: query
         name: row_idx
-        description: Search filter for Version
+        description: Search filter for History record index
         type: integer
         required: false
       - in: query
         name: created_by_hist
-        description: Search filter for User
+        description: Search filter for Created by
         type: string
         required: false
       - in: query
         name: created_dt_hist
-        description: Search filter for Date
+        description: Search filter for Created date
         type: string
         required: false
       - in: query
         name: row_diff
-        description: Search filter for Summary of updates
+        description: Search filter for Calculated difference between two sibling rows
+          of historic object
         type: string
         required: false
       - in: query
         name: row_ref_id
-        description: Search filter for Reference
+        description: Search filter for Record row ID
         type: string
         required: false
       - in: query
@@ -6884,19 +6885,19 @@ definitions:
         maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       created_dt_hist:
-        description: Date
+        description: Created date
         type: string
         maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       row_ref_id:
-        description: Reference
+        description: Record row ID
         type: string
         maxLength: 11
       ftHistDecimal:
         description: Decimal
         type: number
       row_idx:
-        description: Version
+        description: History record index
         type: integer
       ftHistDocument:
         description: Document
@@ -6910,18 +6911,18 @@ definitions:
         type: string
         maxLength: 100
       row_id:
-        description: ID
+        description: Unique technical row ID
         type: string
         maxLength: 11
       ftHistMultiDoc:
         description: Multi-doc
         type: object
       created_by_hist:
-        description: User
+        description: Created by
         type: string
         maxLength: 100
       row_diff:
-        description: Summary of updates
+        description: Calculated difference between two sibling rows of historic object
         type: string
         maxLength: 2000000
   FtNotification:
@@ -7812,7 +7813,7 @@ definitions:
         maxLength: 19
         example: yyyy-MM-dd HH:mm:ss
       row_id:
-        description: ID
+        description: Unique technical row ID
         type: string
         maxLength: 11
       ftHistMultiDoc:

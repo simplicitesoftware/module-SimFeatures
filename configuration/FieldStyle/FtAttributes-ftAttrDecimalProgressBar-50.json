@@ -1,0 +1,10 @@
+{
+ "sty_object": "FtAttributes",
+ "sty_field": "ftAttrDecimalProgressBar",
+ "sty_value": "50",
+ "sty_vmin": 0.5,
+ "sty_vmax": 0.95,
+ "sty_style": "orangebg",
+ "sty_image": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

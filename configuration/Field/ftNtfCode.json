@@ -8,6 +8,7 @@
  "fld_research": "1",
  "fld_researchreq": "0",
  "fld_sort": "C",
+ "fld_sort_nulls": null,
  "fld_more": false,
  "fld_listmore": false,
  "fld_listsum": null,
@@ -39,5 +40,6 @@
  "fld_anon": null,
  "row_module_id__mdl_name": "SimFeatures",
  "fld_incrementsyntax": "Notif tester <000>",
- "fld_deprecated": null
+ "fld_deprecated": null,
+ "fld_compliance": "NE"
 }

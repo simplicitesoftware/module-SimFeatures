@@ -3,5 +3,6 @@
  "lov_navbar": "METRO",
  "lov_navbar_opt": ["DATE"],
  "row_module_id__mdl_name": "SimFeatures",
- "lov_model_id__mod_name": null
+ "lov_model_id__mod_name": null,
+ "lov_selectall_opt": null
 }

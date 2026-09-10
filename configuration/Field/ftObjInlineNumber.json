@@ -1,9 +1,5 @@
 {
- "fld_name": {
-  "value": "ftObjInlineNumber",
-  "oldvalue": "ftFtObjInlineNumber",
-  "oldvalue1": "ftFtobjinlineNumber"
- },
+ "fld_name": "ftObjInlineNumber",
  "fld_dbname": "ft_objinline_number",
  "fld_visible": "3",
  "fld_updatable": [
@@ -15,6 +11,7 @@
  "fld_research": "1",
  "fld_researchreq": "0",
  "fld_sort": "C",
+ "fld_sort_nulls": null,
  "fld_more": false,
  "fld_listmore": false,
  "fld_listsum": null,
@@ -46,5 +43,6 @@
  "fld_anon": null,
  "row_module_id__mdl_name": "SimFeatures",
  "fld_incrementsyntax": null,
- "fld_deprecated": null
+ "fld_deprecated": null,
+ "fld_compliance": "NE"
 }

@@ -10,10 +10,12 @@
  "obe_script_id": {
   "path": "src/com/simplicite/extobjects/SimFeatures/FtTestMermaid.java",
   "mime": "text/plain",
-  "name": "AppTestMermaid.java"
+  "name": "FtTestMermaid.java"
  },
  "obe_icon": "fas/project-diagram",
  "obe_permalink": null,
  "obe_widget": true,
- "row_module_id__mdl_name": "SimFeatures"
+ "row_module_id__mdl_name": "SimFeatures",
+ "obe_width": null,
+ "obe_height": null
 }

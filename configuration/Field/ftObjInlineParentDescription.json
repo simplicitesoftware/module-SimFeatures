@@ -1,10 +1,5 @@
 {
- "fld_name": {
-  "value": "ftObjInlineParentDescription",
-  "oldvalue": "ftObjInlineParentDescription",
-  "oldvalue1": "ftFtobjinlineparentDescription",
-  "oldvalue2": "ftFtobjinlineparentDescription"
- },
+ "fld_name": "ftObjInlineParentDescription",
  "fld_dbname": "ft_obj_inline_parent_description",
  "fld_visible": "3",
  "fld_updatable": [
@@ -16,6 +11,7 @@
  "fld_research": "1",
  "fld_researchreq": "0",
  "fld_sort": "C",
+ "fld_sort_nulls": null,
  "fld_more": false,
  "fld_listmore": false,
  "fld_listsum": null,
@@ -47,5 +43,6 @@
  "fld_anon": null,
  "row_module_id__mdl_name": "SimFeatures",
  "fld_incrementsyntax": null,
- "fld_deprecated": null
+ "fld_deprecated": null,
+ "fld_compliance": "NE"
 }
