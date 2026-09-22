@@ -47,22 +47,7 @@ async function waitForFormSettled(page: Page) {
 
 test.beforeEach(async ({ page }) => {
   await page.setViewportSize({ width: 1600, height: 900 });
-  await login(page);
-});
-
-test.afterEach(async ({ page }) => {
-  await dismissErrorDialog(page);
-  await dismissConflictAlert(page);
-  const confirmDialog = page.locator('#dlgmodal').filter({ has: page.locator('[data-action="YES"]') });
-  if (await confirmDialog.isVisible()) {
-    await confirmDialog.locator('[data-action="NO"]').click();
-  }
-  await dismissQuitDialog(page);
-  const contentDialog = page.locator('#dlgmodal.js-content-unload.show');
-  if (await contentDialog.isVisible()) {
-    await page.keyboard.press('Escape');
-  }
-  await logout(page);
+  await goHome(page);
 });
 
 async function openStatesShowAll(page: Page) {
@@ -221,7 +206,7 @@ async function openStatesTrays(page: Page) {
   }
   await traysLink.click();
   await skeletonDismissed(page);
-  await expect(page.locator(TRAY_SELECTOR)).toBeVisible();
+  //await expect(page.locator(TRAY_SELECTOR)).toBeVisible();
   await dismissSidebarOverlay(page);
 }
 

@@ -33,6 +33,8 @@ export async function goHome(page: Page) {
   await page.waitForLoadState();
   await instanceReady(page);
   await expect(page.locator('#menu')).toBeVisible({ timeout: 60000 });
+  await page.locator("#header .logo").click();
+  await expect(page.locator("#work")).toBeVisible();
 }
 
 /**
@@ -68,6 +70,7 @@ export function randomString(length: number) {
 
 export async function openList(page: Page, domain: string, object: string, path?: string) {
   await expect(page.locator("#menu")).toBeVisible();
+  await skeletonDismissed(page);
   const objVisible = await page.locator(`[data-obj='${object}']`).isVisible();
   if (!objVisible) {
       await page.locator(`[data-domain='${domain}']`).click();
