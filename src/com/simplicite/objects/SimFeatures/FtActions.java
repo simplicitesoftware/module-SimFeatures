@@ -9,9 +9,6 @@ import com.simplicite.util.JobQueue;
 import com.simplicite.util.engine.Platform;
 import java.io.File;
 
-/**
- * Business object FtActions
- */
 public class FtActions extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +27,7 @@ public class FtActions extends ObjectDB {
 	}
 
 	public String confirmAction(Action a) {
-		return Message.formatSimpleInfo("confirmAction is done");
+		return Message.formatSimpleInfo("confirmAction for action " + a.getName() + " is done");
 	}
 	
 	public String askAction(Action a) {

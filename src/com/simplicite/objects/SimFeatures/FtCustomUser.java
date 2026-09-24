@@ -6,9 +6,6 @@ import com.simplicite.util.*;
 import com.simplicite.util.exceptions.*;
 import com.simplicite.util.tools.*;
 
-/**
- * Business object FtCustomUser
- */
 public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
     private static final long serialVersionUID = 1L;
     
@@ -58,7 +55,7 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
      * customise depending on specific business rules, 
      */
     private static void autoRespAttribution(String userId, String userType){
-    	List<String> groups = new ArrayList();
+    	List<String> groups = new ArrayList<>();
         switch(userType){
             case "FT_ADMIN": groups.add("FT_ADMIN"); break;
             case "FT_READ": groups.add("FT_READ"); break;
@@ -83,6 +80,6 @@ public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
             return null;
         Grant g = Grant.getSystemAdmin();
         String[] groups = g.queryFirstColumn("select distinct g.grp_name from m_resp r inner join m_group as g on r.rsp_group_id=g.row_id where r.rsp_login_id="+userId);
-        return groups!=null && groups.length>0 ? Arrays.asList(groups) : new ArrayList<String>();
+        return groups!=null && groups.length>0 ? Arrays.asList(groups) : new ArrayList<>();
     }
 }
