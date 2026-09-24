@@ -12,9 +12,6 @@ import com.simplicite.util.ObjectField;
 import com.simplicite.util.Tool;
 import com.simplicite.util.annotations.BusinessObjectAction;
 
-/**
- * Business object FtActions
- */
 public class FtActions extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 
@@ -36,7 +33,7 @@ public class FtActions extends ObjectDB {
 
 	@BusinessObjectAction
 	public String confirmAction(Action a) {
-		return Message.formatSimpleInfo("confirmAction is done");
+		return Message.formatSimpleInfo("confirmAction for action " + a.getName() + " is done");
 	}
 	
 	@BusinessObjectAction

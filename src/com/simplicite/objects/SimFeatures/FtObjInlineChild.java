@@ -6,9 +6,6 @@ import com.simplicite.util.ObjectDB;
 import com.simplicite.util.exceptions.SaveException;
 import com.simplicite.util.exceptions.ValidateException;
 
-/**
- * Business object FtObjInlineChild
- */
 public class FtObjInlineChild extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 

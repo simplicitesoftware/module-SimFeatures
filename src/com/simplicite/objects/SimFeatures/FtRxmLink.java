@@ -4,9 +4,6 @@ import java.util.List;
 
 import com.simplicite.util.ObjectDB;
 
-/**
- * Business object FtRxmLink
- */
 public class FtRxmLink extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 	

@@ -4,9 +4,6 @@ import com.simplicite.util.AppLog;
 import com.simplicite.util.ObjectDB;
 import com.simplicite.util.tools.HTMLToPDFTool;
 
-/**
- * Business object FtPublications
- */
 public class FtPublications extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 	
