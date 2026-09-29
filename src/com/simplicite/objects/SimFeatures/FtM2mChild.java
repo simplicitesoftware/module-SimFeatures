@@ -4,9 +4,6 @@ import com.simplicite.util.AppLog;
 import com.simplicite.util.Grant;
 import com.simplicite.util.ObjectDB;
 
-/**
- * Business object FtM2mChild
- */
 public class FtM2mChild extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 	

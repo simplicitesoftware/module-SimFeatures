@@ -10,9 +10,6 @@ import com.simplicite.util.ModuleDB;
 import com.simplicite.util.ObjectField;
 import com.simplicite.util.Tool;
 
-/**
- * Business object FtCustomUser
- */
 public class FtCustomUser extends com.simplicite.objects.System.SimpleUser {
     private static final long serialVersionUID = 1L;
     

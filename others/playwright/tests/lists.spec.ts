@@ -286,6 +286,9 @@ test('FT_0024', {
   annotation: { type: 'feature', description: 'List search' },
 }, async ({ page }) => {
   await openList(page, DOMAIN, SEARCH_ITEM);
+  await page.locator(".list-search-index [data-action='search']").click();
+  await page.locator(".search-footer [data-action='reset']").click();
+  await page.locator(".search-footer [data-action='search']").click();
   const code = randomString(10);
   const refCode = randomString(10);
   const date = "01/01/2026";

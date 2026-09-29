@@ -4,9 +4,6 @@ import com.simplicite.util.AppLog;
 import com.simplicite.util.ObjectDB;
 import com.simplicite.util.ObjectField;
 
-/**
- * Business object FtSelectObject
- */
 public class FtSelectObject extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 	
