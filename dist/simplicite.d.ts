@@ -6548,10 +6548,11 @@ declare class UIFieldDateTime extends UIField {
      */
     static datePickerParam(type: number, lang: string, dateformat: string, rdg?: string, autoopen?: string | boolean): Options;
     /**
-     * Human-readable input format hint for typed date entry
+     * Human-readable input format hint for typed date entry:
+     * a fixed sample formatted with the field's own display formatter (same as draw()),
+     * so the hint always matches the user date format and the field rendering (Y|M|D|H|I|S)
      */
     private formatHint;
-    private timeHint;
 }
 /**
  * Add action buttons to flatpickr

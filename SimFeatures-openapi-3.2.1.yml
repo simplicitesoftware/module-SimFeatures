@@ -3796,166 +3796,6 @@ paths:
         required: false
       tags:
       - FtHistoryHistoric
-  /rest/FtCustomUser:
-    get:
-      summary: Search FtCustomUser business object records or get contextualized metadata
-      security:
-      - bearerAuth: []
-      operationId: obj-ftcustomuser-search
-      responses:
-        '200':
-          description: Success in searching business object records (or in getting
-            contextualized business object metadata, documentation, ...)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArrayOfFtCustomUser'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: boolean
-        in: query
-        name: _metadata
-        description: Metadata?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _count
-        description: Count?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _doc
-        description: Documentation?
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_image_id
-        description: Search filter for Picture
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_login
-        description: Search filter for Login
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_first_name
-        description: Search filter for First name
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_last_name
-        description: Search filter for Last name
-        required: false
-      - schema:
-          type: string
-          enum:
-          - ENU
-          - FRA
-        in: query
-        name: usr_lang
-        description: Search filter for Language
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_email
-        description: Search filter for Email address
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_cell_num
-        description: Search filter for Mobile/cellular phone number
-        required: false
-      - schema:
-          type: string
-          enum:
-          - '0'
-          - '1'
-          - '2'
-          - '3'
-        in: query
-        name: usr_active
-        description: Search filter for Active
-        required: false
-      - schema:
-          type: string
-          enum:
-          - FT_ADMIN
-          - FT_READ
-        in: query
-        name: ftUsrType
-        description: Search filter for Type
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_home_id
-        description: Search filter for Deprecated / use usr_scope_id.viw_home_id
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_home_id__viw_name
-        description: Search filter for Home page Name
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id
-        description: Search filter for Scope
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id__sco_name
-        description: Search filter for Scope
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id__sco_home_id
-        description: Search filter for Scope Home page
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id__sco_home_id__viw_name
-        description: Search filter for Scope home
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: row_module_id
-        description: Search filter for Module
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: row_module_id__mdl_name
-        description: Search filter for Module name
-        required: false
-      tags:
-      - FtCustomUser
   /rest/FtAttributes/{row_id}:
     post:
       summary: Create a new FtAttributes business object record
@@ -4151,6 +3991,166 @@ paths:
         required: true
       tags:
       - FtAttributes
+  /rest/FtCustomUser:
+    get:
+      summary: Search FtCustomUser business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftcustomuser-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtCustomUser'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_image_id
+        description: Search filter for Picture
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_login
+        description: Search filter for Login
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_first_name
+        description: Search filter for First name
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_last_name
+        description: Search filter for Last name
+        required: false
+      - schema:
+          type: string
+          enum:
+          - ENU
+          - FRA
+        in: query
+        name: usr_lang
+        description: Search filter for Language
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_email
+        description: Search filter for Email address
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_cell_num
+        description: Search filter for Mobile/cellular phone number
+        required: false
+      - schema:
+          type: string
+          enum:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+        in: query
+        name: usr_active
+        description: Search filter for Active
+        required: false
+      - schema:
+          type: string
+          enum:
+          - FT_ADMIN
+          - FT_READ
+        in: query
+        name: ftUsrType
+        description: Search filter for Type
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_home_id
+        description: Search filter for Deprecated / use usr_scope_id.viw_home_id
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_home_id__viw_name
+        description: Search filter for Home page Name
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id
+        description: Search filter for Scope
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id__sco_name
+        description: Search filter for Scope
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id__sco_home_id
+        description: Search filter for Scope Home page
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id__sco_home_id__viw_name
+        description: Search filter for Scope home
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: row_module_id
+        description: Search filter for Module
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: row_module_id__mdl_name
+        description: Search filter for Module name
+        required: false
+      tags:
+      - FtCustomUser
   /rest/FtSelectObject/{row_id}:
     get:
       summary: Get a FtSelectObject business object record
@@ -8829,20 +8829,20 @@ info:
   title: SimFeatures
   version: '0.1'
 tags:
-- name: FtHistoryHistoric
-  description: Historic
-- name: FtHistory
-  description: History
-- name: FtActions
-  description: Action
-- name: FtCustomUser
-  description: Custom User
 - name: FtAttributes
   description: Attributes
-- name: FtListItem
-  description: Lists
+- name: FtHistory
+  description: History
+- name: FtHistoryHistoric
+  description: Historic
+- name: FtCustomUser
+  description: Custom User
 - name: FtGuidedObject
   description: Guided object
+- name: FtActions
+  description: Action
+- name: FtListItem
+  description: Lists
 - name: FtListOrdering
   description: List ordering
 - name: FtNotification
@@ -8853,18 +8853,18 @@ tags:
   description: Child (many to many)
 - name: FtM2m
   description: N/N
-- name: FtObjInlineChild
-  description: Inlined object
 - name: FtRelationshipM2m
   description: Relationship (many to many)
+- name: FtObjInlineChild
+  description: Inlined object
 - name: FtRelationshipO2m
   description: Relationship (one to many)
-- name: FtObjInlineParent
-  description: Parent of inlined object
-- name: FtReflexiveMany
-  description: Reflexive item (many)
 - name: FtPublications
   description: Publication
+- name: FtReflexiveMany
+  description: Reflexive item (many)
+- name: FtObjInlineParent
+  description: Parent of inlined object
 - name: FtSearch
   description: Search
 - name: FtRxmLink

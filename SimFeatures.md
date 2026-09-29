@@ -99,9 +99,9 @@ stateDiagram-v2
 
 ### Implemented hooks
 
+* `initAction`
 * `confirmAction`
 * `askAction`
-* `initAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -308,35 +308,35 @@ stateDiagram-v2
 ### Implemented hooks
 
 * `preValidate`
-* `postSave`
 * `postLoad`
-* `resetPassword`
-* `createUserToken`
-* `deletePrefs`
-* `getUserKeyLabel`
-* `anonymize`
+* `postSave`
 * `totpQRCode`
+* `anonymize`
 * `getMappedFilePath`
+* `getUserKeyLabel`
 * `initUpdateAll`
 * `isDeleteEnable`
 * `isCopyEnable`
-* `postValidate`
 * `isActionEnable`
+* `postValidate`
 * `initCreate`
 * `initUpdate`
 * `initCopy`
 * `preDelete`
 * `postCreate`
+* `resetPassword`
+* `createUserToken`
+* `deletePrefs`
 * `postDelete`
 * `canReference`
 * `isUpdateEnable`
-* `getMappedExportPath`
-* `preSearch`
 * `postSearch`
-* `preCreate`
-* `preUpdate`
+* `preSearch`
 * `postSelect`
 * `postUpdate`
+* `preCreate`
+* `preUpdate`
+* `getMappedExportPath`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -568,8 +568,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postCreate`
 * `postUpdate`
+* `postCreate`
 
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------
