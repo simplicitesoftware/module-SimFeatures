@@ -97,15 +97,11 @@ stateDiagram-v2
 * `ActAsync`: 
 * `ActConfirmFields`: 
 
-### Description (from code)
-
-> Business object FtActions
-
 ### Implemented hooks
 
 * `confirmAction`
-* `initAction`
 * `askAction`
+* `initAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -238,10 +234,6 @@ Object showcasing all the possible attributes
     - `B` code B
     - `C` code C
 
-### Description (from code)
-
-> Business object FtAttributes
-
 ### Implemented hooks
 
 * `initUpdate`
@@ -313,42 +305,38 @@ stateDiagram-v2
     3 --> 1
 ```
 
-### Description (from code)
-
-> Business object FtCustomUser
-
 ### Implemented hooks
 
 * `preValidate`
-* `postLoad`
 * `postSave`
-* `anonymize`
-* `totpQRCode`
-* `initUpdateAll`
-* `isActionEnable`
-* `isDeleteEnable`
-* `isCopyEnable`
-* `getUserKeyLabel`
-* `postValidate`
-* `getMappedFilePath`
-* `deletePrefs`
+* `postLoad`
 * `resetPassword`
 * `createUserToken`
-* `initUpdate`
+* `deletePrefs`
+* `getUserKeyLabel`
+* `anonymize`
+* `totpQRCode`
+* `getMappedFilePath`
+* `initUpdateAll`
+* `isDeleteEnable`
+* `isCopyEnable`
+* `postValidate`
+* `isActionEnable`
 * `initCreate`
+* `initUpdate`
 * `initCopy`
 * `preDelete`
 * `postCreate`
 * `postDelete`
-* `isUpdateEnable`
 * `canReference`
+* `isUpdateEnable`
 * `getMappedExportPath`
-* `postSearch`
 * `preSearch`
-* `postSelect`
-* `postUpdate`
+* `postSearch`
 * `preCreate`
 * `preUpdate`
+* `postSelect`
+* `postUpdate`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -415,7 +403,7 @@ _No description._
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | **`row_ref_id`** link to **`FtHistory`**                     | id                                       | row_ref_id                     | yes*     |           |          | Record row ID                                                                    |
 | _`ftHistCode`_                                               | _char(100)_                              | _ft_hist_code_                 |          |           |          | _-_                                                                              |
-| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | Calculated difference between two sibling rows of historic object                |
+| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | Computed differences between a row and its previous sibling row of the same object.<br/><br/>To enable it:<br/>- add the `row_diff` field to the object<br/>- call `setRowDiff(true)` in `postLoad`<br/><br/>It is enabled by default on the history panel of the parent object. |
 | `ftHistCode`                                                 | char(100)                                | ft_hist_code                   | yes*     |           |          | -                                                                                |
 | `ftHistDecimal`                                              | float(100, 2)                            | ft_hist_decimal                |          | yes       |          | -                                                                                |
 | `ftHistDateAndTime`                                          | datetime                                 | ft_hist_date_and_time          |          | yes       |          | -                                                                                |
@@ -495,10 +483,6 @@ _No description._
 | _`ftM2mCode`_                                                | _char(100)_                              | _ft_m2m_code_                  |          |           |          | _-_                                                                              |
 | _`ftM2mcCode`_                                               | _char(100)_                              | _ft_m2mc_code_                 |          |           |          | _-_                                                                              |
 
-### Description (from code)
-
-> Business object FtM2m
-
 ### Implemented hooks
 
 * `postCreate`
@@ -519,10 +503,6 @@ _No description._
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftM2mcCode`                                                 | char(100)                                | ft_m2mc_code                   | yes*     | yes       |          | -                                                                                |
-
-### Description (from code)
-
-> Business object FtM2mChild
 
 ### Implemented hooks
 
@@ -586,10 +566,6 @@ _No description._
 | `ftObjInlineDocMulti`                                        | document                                 | ft_objinline_doc_multi         |          | yes       |          | -                                                                                |
 | `ftObjInlineImage`                                           | image                                    | ft_objinline_image             |          | yes       |          | -                                                                                |
 
-### Description (from code)
-
-> Business object FtObjInlineChild
-
 ### Implemented hooks
 
 * `postCreate`
@@ -627,10 +603,6 @@ _No description._
 | `ftPubCode`                                                  | char(100)                                | ft_pub_code                    | *        |           |          | -                                                                                |
 | `ftPubHtml`                                                  | text(4000)                               | ft_pub_html                    |          | yes       |          | -                                                                                |
 | `ftPubFile`                                                  | document                                 | ft_pub_file                    |          | yes       |          | -                                                                                |
-
-### Description (from code)
-
-> Business object FtPublications
 
 ### Implemented hooks
 
@@ -711,10 +683,6 @@ _No description._
 | _`ftRxmCode`_                                                | _char(100)_                              | _ft_rxm_code_                  |          |           |          | _-_                                                                              |
 | _`ftRxmCode`_                                                | _char(100)_                              | _ft_rxm_code_                  |          |           |          | _-_                                                                              |
 
-### Description (from code)
-
-> Business object FtRxmLink
-
 ### Implemented hooks
 
 * `preValidate`
@@ -772,10 +740,6 @@ _No description._
 | `ftSlcField1`                                                | char(255)                                | field1                         | yes      | yes       |          | -                                                                                |
 | `ftSlcField2`                                                | char(255)                                | field2                         |          | yes       |          | -                                                                                |
 | `ftSlcFieldDt`                                               | date                                     |                                |          | yes       |          | -                                                                                |
-
-### Description (from code)
-
-> Business object FtSelectObject
 
 ### Implemented hooks
 
@@ -848,7 +812,7 @@ _No description._
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | **`row_ref_id`** link to **`FtStates`**                      | id                                       | row_ref_id                     | yes*     |           |          | Record row ID                                                                    |
 | _`ftStCode`_                                                 | _char(100)_                              | _ft_st_code_                   |          |           |          | _-_                                                                              |
-| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | Calculated difference between two sibling rows of historic object                |
+| `row_diff`                                                   | html(2000000)                            |                                |          |           |          | Computed differences between a row and its previous sibling row of the same object.<br/><br/>To enable it:<br/>- add the `row_diff` field to the object<br/>- call `setRowDiff(true)` in `postLoad`<br/><br/>It is enabled by default on the history panel of the parent object. |
 | `ftStCode`                                                   | char(100)                                | ft_st_code                     | yes*     |           |          | -                                                                                |
 | `ftStState`                                                  | enum(10) using FT_ST_STATE list          | ft_st_state                    | yes      | yes       |          | -                                                                                |
 
@@ -878,10 +842,6 @@ _No description._
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftTagName`                                                  | char(50)                                 | ft_tag_name                    | yes*     | yes       |          | -                                                                                |
-
-### Description (from code)
-
-> Business object FtTag
 
 `FtTaggedObject` (Tagged object) business object definition
 -----------------------------------------------------------
@@ -921,10 +881,6 @@ _No description._
 | **`ftTgotagTagId`** link to **`FtTag`**                      | id                                       | ft_tgotag_tag_id               | yes*     | yes       |          | -                                                                                |
 | _`ftTgoCode`_                                                | _char(100)_                              | _ft_tgo_code_                  |          |           |          | _-_                                                                              |
 | _`ftTagName`_                                                | _char(50)_                               | _ft_tag_name_                  |          |           |          | _-_                                                                              |
-
-### Description (from code)
-
-> Business object FtTgoTag
 
 ### Implemented hooks
 

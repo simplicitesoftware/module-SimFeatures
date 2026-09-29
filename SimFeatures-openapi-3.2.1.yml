@@ -2,7 +2,7 @@
 # / __(_)_ __  _ __| (_)__(_) |_ /_/
 # \__ \ | '  \| '_ \ | / _| |  _/ -_)
 # |___/_|_|_|_| .__/_|_\__|_|\__\___|
-#             |_| Module: SimFeatures 0.1
+#             |_| SimFeatures
 components:
   schemas:
     FtGuidedObject:
@@ -88,45 +88,11 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/FtPublications'
-    PlaceData:
-      description: Place data
-      type: object
-      properties:
-        coord:
-          description: Geographical coordinates
-          type: string
-        address:
-          description: Address
-          type: string
-        row_id:
-          description: Row ID
-          type: string
-        label1:
-          description: 'Label #1'
-          type: string
-        label2:
-          description: 'Label #2'
-          type: string
-        label3:
-          description: 'Label #3'
-          type: string
     ArrayOfFtM2mChild:
       description: List of Child (many to many)
       type: array
       items:
         $ref: '#/components/schemas/FtM2mChild'
-    PlaceMapData:
-      description: Places map data
-      type: object
-      properties:
-        places:
-          description: Places
-          type: array
-          items:
-            $ref: '#/components/schemas/PlaceData'
-        name:
-          description: Name
-          type: string
     ArrayOfFtReflexiveMany:
       description: List of Reflexive item (many)
       type: array
@@ -256,8 +222,14 @@ components:
           type: string
           maxLength: 100
         row_diff:
-          description: Calculated difference between two sibling rows of historic
-            object
+          description: |-
+            Computed differences between a row and its previous sibling row of the same object.
+
+            To enable it:
+            - add the `row_diff` field to the object
+            - call `setRowDiff(true)` in `postLoad`
+
+            It is enabled by default on the history panel of the parent object.
           type: string
           maxLength: 2000000
     FtNotification:
@@ -384,16 +356,6 @@ components:
           description: Code
           type: string
           maxLength: 100
-    PublicationResult:
-      description: Publication result
-      type: object
-      properties:
-        mime:
-          description: MIME type
-          type: string
-        content:
-          description: Content (plain text or base64 encoded)
-          type: string
     FtM2m:
       description: N/N
       type: object
@@ -936,8 +898,14 @@ components:
           type: string
           maxLength: 100
         row_diff:
-          description: Calculated difference between two sibling rows of historic
-            object
+          description: |-
+            Computed differences between a row and its previous sibling row of the same object.
+
+            To enable it:
+            - add the `row_diff` field to the object
+            - call `setRowDiff(true)` in `postLoad`
+
+            It is enabled by default on the history panel of the parent object.
           type: string
           maxLength: 2000000
         row_ref_id:
@@ -1299,7 +1267,7 @@ components:
       type: http
 servers:
 - url: /api
-openapi: 3.2.0
+openapi: 3.2.1
 paths:
   /rest/FtSearchReference/{row_id}:
     post:
@@ -3753,8 +3721,10 @@ paths:
           type: string
         in: query
         name: row_diff
-        description: Search filter for Calculated difference between two sibling rows
-          of historic object
+        description: 'Search filter for Computed differences between a row and its
+          previous sibling row of the same object. To enable it: - add the `row_diff`
+          field to the object - call `setRowDiff(true)` in `postLoad` It is enabled
+          by default on the history panel of the parent object.'
         required: false
       - schema:
           type: string
@@ -3826,6 +3796,166 @@ paths:
         required: false
       tags:
       - FtHistoryHistoric
+  /rest/FtCustomUser:
+    get:
+      summary: Search FtCustomUser business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftcustomuser-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtCustomUser'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_image_id
+        description: Search filter for Picture
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_login
+        description: Search filter for Login
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_first_name
+        description: Search filter for First name
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_last_name
+        description: Search filter for Last name
+        required: false
+      - schema:
+          type: string
+          enum:
+          - ENU
+          - FRA
+        in: query
+        name: usr_lang
+        description: Search filter for Language
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_email
+        description: Search filter for Email address
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_cell_num
+        description: Search filter for Mobile/cellular phone number
+        required: false
+      - schema:
+          type: string
+          enum:
+          - '0'
+          - '1'
+          - '2'
+          - '3'
+        in: query
+        name: usr_active
+        description: Search filter for Active
+        required: false
+      - schema:
+          type: string
+          enum:
+          - FT_ADMIN
+          - FT_READ
+        in: query
+        name: ftUsrType
+        description: Search filter for Type
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_home_id
+        description: Search filter for Deprecated / use usr_scope_id.viw_home_id
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_home_id__viw_name
+        description: Search filter for Home page Name
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id
+        description: Search filter for Scope
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id__sco_name
+        description: Search filter for Scope
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id__sco_home_id
+        description: Search filter for Scope Home page
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: usr_scope_id__sco_home_id__viw_name
+        description: Search filter for Scope home
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: row_module_id
+        description: Search filter for Module
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: row_module_id__mdl_name
+        description: Search filter for Module name
+        required: false
+      tags:
+      - FtCustomUser
   /rest/FtAttributes/{row_id}:
     post:
       summary: Create a new FtAttributes business object record
@@ -4021,211 +4151,7 @@ paths:
         required: true
       tags:
       - FtAttributes
-  /rest/FtCustomUser:
-    get:
-      summary: Search FtCustomUser business object records or get contextualized metadata
-      security:
-      - bearerAuth: []
-      operationId: obj-ftcustomuser-search
-      responses:
-        '200':
-          description: Success in searching business object records (or in getting
-            contextualized business object metadata, documentation, ...)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArrayOfFtCustomUser'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: boolean
-        in: query
-        name: _metadata
-        description: Metadata?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _count
-        description: Count?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _doc
-        description: Documentation?
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_image_id
-        description: Search filter for Picture
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_login
-        description: Search filter for Login
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_first_name
-        description: Search filter for First name
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_last_name
-        description: Search filter for Last name
-        required: false
-      - schema:
-          type: string
-          enum:
-          - ENU
-          - FRA
-        in: query
-        name: usr_lang
-        description: Search filter for Language
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_email
-        description: Search filter for Email address
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_cell_num
-        description: Search filter for Mobile/cellular phone number
-        required: false
-      - schema:
-          type: string
-          enum:
-          - '0'
-          - '1'
-          - '2'
-          - '3'
-        in: query
-        name: usr_active
-        description: Search filter for Active
-        required: false
-      - schema:
-          type: string
-          enum:
-          - FT_ADMIN
-          - FT_READ
-        in: query
-        name: ftUsrType
-        description: Search filter for Type
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_home_id
-        description: Search filter for Deprecated / use usr_scope_id.viw_home_id
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_home_id__viw_name
-        description: Search filter for Home page Name
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id
-        description: Search filter for Scope
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id__sco_name
-        description: Search filter for Scope
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id__sco_home_id
-        description: Search filter for Scope Home page
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: usr_scope_id__sco_home_id__viw_name
-        description: Search filter for Scope home
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: row_module_id
-        description: Search filter for Module
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: row_module_id__mdl_name
-        description: Search filter for Module name
-        required: false
-      tags:
-      - FtCustomUser
   /rest/FtSelectObject/{row_id}:
-    post:
-      summary: Create a new FtSelectObject business object record
-      security:
-      - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FtSelectObject'
-      operationId: obj-ftselectobject-create
-      responses:
-        '200':
-          description: Success in creating a new business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtSelectObject'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtSelectObject
     get:
       summary: Get a FtSelectObject business object record
       security:
@@ -4281,99 +4207,6 @@ paths:
         name: _inline_objects
         description: Inline objects?
         required: false
-      tags:
-      - FtSelectObject
-    delete:
-      summary: Delete a FtSelectObject business object record
-      security:
-      - bearerAuth: []
-      operationId: obj-ftselectobject-delete
-      responses:
-        '200':
-          description: Success in deleting a business object record
-          content:
-            application/json: {}
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtSelectObject
-    put:
-      summary: Update a FtSelectObject business object record
-      security:
-      - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FtSelectObject'
-      operationId: obj-ftselectobject-update
-      responses:
-        '200':
-          description: Success in updating a business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtSelectObject'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
       tags:
       - FtSelectObject
   /:
@@ -5120,8 +4953,10 @@ paths:
           type: string
         in: query
         name: row_diff
-        description: Search filter for Calculated difference between two sibling rows
-          of historic object
+        description: 'Search filter for Computed differences between a row and its
+          previous sibling row of the same object. To enable it: - add the `row_diff`
+          field to the object - call `setRowDiff(true)` in `postLoad` It is enabled
+          by default on the history panel of the parent object.'
         required: false
       - schema:
           type: string
@@ -6943,50 +6778,6 @@ paths:
       tags:
       - FtRelationshipO2m
   /rest/FtHistoryHistoric/{row_id}:
-    post:
-      summary: Create a new FtHistoryHistoric business object record
-      security:
-      - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FtHistoryHistoric'
-      operationId: obj-fthistoryhistoric-create
-      responses:
-        '200':
-          description: Success in creating a new business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtHistoryHistoric'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtHistoryHistoric
     get:
       summary: Get a FtHistoryHistoric business object record
       security:
@@ -7042,99 +6833,6 @@ paths:
         name: _inline_objects
         description: Inline objects?
         required: false
-      tags:
-      - FtHistoryHistoric
-    delete:
-      summary: Delete a FtHistoryHistoric business object record
-      security:
-      - bearerAuth: []
-      operationId: obj-fthistoryhistoric-delete
-      responses:
-        '200':
-          description: Success in deleting a business object record
-          content:
-            application/json: {}
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtHistoryHistoric
-    put:
-      summary: Update a FtHistoryHistoric business object record
-      security:
-      - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FtHistoryHistoric'
-      operationId: obj-fthistoryhistoric-update
-      responses:
-        '200':
-          description: Success in updating a business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtHistoryHistoric'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
       tags:
       - FtHistoryHistoric
   /rest/FtObjInlineParent:
@@ -8397,50 +8095,6 @@ paths:
       tags:
       - FtTaggedObject
   /rest/FtStatesHistoric/{row_id}:
-    post:
-      summary: Create a new FtStatesHistoric business object record
-      security:
-      - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FtStatesHistoric'
-      operationId: obj-ftstateshistoric-create
-      responses:
-        '200':
-          description: Success in creating a new business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtStatesHistoric'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtStatesHistoric
     get:
       summary: Get a FtStatesHistoric business object record
       security:
@@ -8496,99 +8150,6 @@ paths:
         name: _inline_objects
         description: Inline objects?
         required: false
-      tags:
-      - FtStatesHistoric
-    delete:
-      summary: Delete a FtStatesHistoric business object record
-      security:
-      - bearerAuth: []
-      operationId: obj-ftstateshistoric-delete
-      responses:
-        '200':
-          description: Success in deleting a business object record
-          content:
-            application/json: {}
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      tags:
-      - FtStatesHistoric
-    put:
-      summary: Update a FtStatesHistoric business object record
-      security:
-      - bearerAuth: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/FtStatesHistoric'
-      operationId: obj-ftstateshistoric-update
-      responses:
-        '200':
-          description: Success in updating a business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtStatesHistoric'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error400'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
       tags:
       - FtStatesHistoric
   /rest/FtGuidedObject/{row_id}:
@@ -9268,57 +8829,57 @@ info:
   title: SimFeatures
   version: '0.1'
 tags:
-- name: FtActions
-  description: Action
-- name: FtAttributes
-  description: Attributes
-- name: FtCustomUser
-  description: Custom User
-- name: FtGuidedObject
-  description: Guided object
-- name: FtHistory
-  description: History
 - name: FtHistoryHistoric
   description: Historic
+- name: FtHistory
+  description: History
+- name: FtActions
+  description: Action
+- name: FtCustomUser
+  description: Custom User
+- name: FtAttributes
+  description: Attributes
 - name: FtListItem
   description: Lists
+- name: FtGuidedObject
+  description: Guided object
 - name: FtListOrdering
   description: List ordering
-- name: FtM2m
-  description: N/N
-- name: FtM2mChild
-  description: Child (many to many)
 - name: FtNotification
   description: Notification Tester
 - name: FtO2mChild
   description: Child object
+- name: FtM2mChild
+  description: Child (many to many)
+- name: FtM2m
+  description: N/N
 - name: FtObjInlineChild
   description: Inlined object
-- name: FtObjInlineParent
-  description: Parent of inlined object
-- name: FtPublications
-  description: Publication
-- name: FtReflexiveMany
-  description: Reflexive item (many)
 - name: FtRelationshipM2m
   description: Relationship (many to many)
 - name: FtRelationshipO2m
   description: Relationship (one to many)
-- name: FtRxmLink
-  description: Associated items
+- name: FtObjInlineParent
+  description: Parent of inlined object
+- name: FtReflexiveMany
+  description: Reflexive item (many)
+- name: FtPublications
+  description: Publication
 - name: FtSearch
   description: Search
-- name: FtSearchReference
-  description: Reference
+- name: FtRxmLink
+  description: Associated items
 - name: FtSelectObject
   description: Select object
 - name: FtStates
   description: States
+- name: FtSearchReference
+  description: Reference
 - name: FtStatesHistoric
   description: Ft states historic
-- name: FtTag
-  description: Tag
 - name: FtTaggedObject
   description: Tagged object
+- name: FtTag
+  description: Tag
 - name: FtTgoTag
   description: FtTgoTag

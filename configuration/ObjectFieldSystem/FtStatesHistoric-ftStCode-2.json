@@ -24,6 +24,7 @@
  "obf_fld_researchreq": null,
  "obf_fld_dfault": null,
  "obf_fld_exportable": null,
+ "obf_fld_compliance": null,
  "obf_area_id__ofa_name": "zFtStates-1",
  "row_module_id__mdl_name": "SimFeatures",
  "obf_joined_id__obf_object_id__obo_name": "FtStatesHistoric",
