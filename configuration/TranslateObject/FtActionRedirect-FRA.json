@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtActionRedirect",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtActionRedirect"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Redirection d'action",
+ "tsl_plural_value": "Redirections d'action",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

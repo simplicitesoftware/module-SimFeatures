@@ -16,6 +16,26 @@ public class FtActions extends ObjectDB {
 	private static final long serialVersionUID = 1L;
 
 	private static final int SEVEN_DAYS = 7;
+
+	/**	
+	 * Redirect hook to FtActionRedirect inherited object 
+	 * to test the redirect feature of actions
+	 * and bulk update/reorder on a list of objects
+	 */
+	@Override
+	public String[] getTargetObject(String rowId, String[] row) {
+		if (editTemplateUsage() || isBatchInstance())
+			return null;
+		if (isCopied())
+			rowId = getCopyId();
+		else if (ObjectField.DEFAULT_ROW_ID.equals(rowId))
+			return null;
+		return new String[] {
+			"FtActionRedirect",
+			MAIN_AJAX_INSTANCE_PREFIX + "FtActionRedirect",
+			rowId
+		};
+	}
 	
 	@Override
 	public void initAction(Action action) {
