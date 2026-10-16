@@ -4,9 +4,7 @@ on:
   push:
     branches:
       - "7.0"
-  schedule:
-    # Run at 5am every weekday
-    - cron: "0 5 * * 1-5"
+
     
 jobs:
   deploy-test:
