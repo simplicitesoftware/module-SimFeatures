@@ -58,6 +58,40 @@ System parameters
 |---|---|---|---|
 | `WEBPUSH` | `yes` |  |  |
 
+`FtActionRedirect` (Action redirect) business object definition
+---------------------------------------------------------------
+
+_No description._
+
+**Physical table**: `ft_actions`
+
+### Fields
+
+| Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftActCode`                                                  | char(100)                                | ft_act_code                    | yes*     |           |          | -                                                                                |
+| `ftActDate`                                                  | date                                     | ft_act_date                    |          | yes       |          | -                                                                                |
+| `ftActDocument`                                              | document                                 | ft_act_document                |          | yes       |          | -                                                                                |
+| `ftActImage`                                                 | image                                    | ft_act_image                   |          | yes       |          | -                                                                                |
+| `ftActState`                                                 | enum(1) using FT_ACT_STATE list          | ft_act_state                   | yes      | yes       |          | -                                                                                |
+| `ftActMultiDocs`                                             | document                                 | ft_act_multi_docs              |          | yes       |          | -                                                                                |
+
+### Enumerations
+
+* `FT_ACT_STATE`
+    - `A` Step A
+    - `B` Step B
+
+### State transitions (`ftActState`)
+
+```mermaid
+stateDiagram-v2
+    state "Step A" as A
+    state "Step B" as B
+    A --> B
+    B --> A
+```
+
 `FtActions` (Action) business object definition
 -----------------------------------------------
 
@@ -74,6 +108,7 @@ _No description._
 | `ftActDocument`                                              | document                                 | ft_act_document                |          | yes       |          | -                                                                                |
 | `ftActImage`                                                 | image                                    | ft_act_image                   |          | yes       |          | -                                                                                |
 | `ftActState`                                                 | enum(1) using FT_ACT_STATE list          | ft_act_state                   | yes      | yes       |          | -                                                                                |
+| `ftActMultiDocs`                                             | document                                 | ft_act_multi_docs              |          | yes       |          | -                                                                                |
 
 ### Enumerations
 
@@ -99,9 +134,13 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `initAction`
 * `confirmAction`
+* `initAction`
 * `askAction`
+* `getTargetObject`:
+  Redirect hook to FtActionRedirect inherited object 
+  to test the redirect feature of actions
+  and bulk update/reorder on a list of objects
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -307,35 +346,35 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `preValidate`
 * `postLoad`
 * `postSave`
+* `preValidate`
 * `totpQRCode`
 * `anonymize`
-* `getMappedFilePath`
-* `getUserKeyLabel`
+* `deletePrefs`
+* `createUserToken`
+* `resetPassword`
+* `initUpdate`
+* `initCopy`
+* `initCreate`
+* `postCreate`
+* `preDelete`
 * `initUpdateAll`
 * `isDeleteEnable`
 * `isCopyEnable`
-* `isActionEnable`
 * `postValidate`
-* `initCreate`
-* `initUpdate`
-* `initCopy`
-* `preDelete`
-* `postCreate`
-* `resetPassword`
-* `createUserToken`
-* `deletePrefs`
+* `isActionEnable`
+* `getMappedFilePath`
+* `getUserKeyLabel`
 * `postDelete`
-* `canReference`
-* `isUpdateEnable`
-* `postSearch`
 * `preSearch`
+* `postSearch`
 * `postSelect`
 * `postUpdate`
 * `preCreate`
 * `preUpdate`
+* `canReference`
+* `isUpdateEnable`
 * `getMappedExportPath`
 
 `FtGuidedObject` (Guided object) business object definition
@@ -506,8 +545,8 @@ _No description._
 
 ### Implemented hooks
 
-* `initRefSelect`
 * `postLoad`
+* `initRefSelect`
 
 `FtNotification` (Notification Tester) business object definition
 -----------------------------------------------------------------
@@ -568,8 +607,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postUpdate`
 * `postCreate`
+* `postUpdate`
 
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------

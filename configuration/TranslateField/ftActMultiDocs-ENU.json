@@ -1,0 +1,19 @@
+{
+ "tsl_object": {
+  "object": "Field",
+  "label": "Field",
+  "userkeylabel": "ftActMultiDocs",
+  "icon": "img/system/field",
+  "item": {"fld_name": "ftActMultiDocs"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Multi docs",
+ "tsl_simplehelp": null,
+ "tsl_plural_value": null,
+ "tsl_short_value": null,
+ "tsl_placeholder": null,
+ "tsl_listhelp": null,
+ "tsl_tooltip": null,
+ "tsl_compliance": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}
