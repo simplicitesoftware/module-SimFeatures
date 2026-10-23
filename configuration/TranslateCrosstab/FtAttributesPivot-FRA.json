@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "Crosstab",
+  "label": "Pivot table",
+  "userkeylabel": "FtAttributesPivot",
+  "icon": "img/system/pivot_table",
+  "item": {"ctb_name": "FtAttributesPivot"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Attributes pivot",
+ "row_module_id__mdl_name": "SimFeatures"
+}

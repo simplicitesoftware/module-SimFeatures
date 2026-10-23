@@ -1,0 +1,12 @@
+{
+ "ctb_name": "FtAttributesPivot",
+ "ctb_object_id__obo_name": "FtAttributes",
+ "ctb_function": "S",
+ "ctb_visible": "1",
+ "ctb_fixedcolors": true,
+ "ctb_precision": null,
+ "ctb_subtotal": false,
+ "ctb_totalcolor": null,
+ "ctb_caption": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

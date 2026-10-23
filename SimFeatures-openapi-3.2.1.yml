@@ -5610,6 +5610,20 @@ paths:
         required: false
       - schema:
           type: string
+          enum:
+          - FtAttributesPivot
+        in: query
+        name: _crosstab
+        description: Apply pivot table
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _crosstabcubes
+        description: Pivot table data as cubes?
+        required: false
+      - schema:
+          type: string
         in: query
         name: ftAttrCode
         description: Search filter for Code

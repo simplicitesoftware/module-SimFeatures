@@ -1,6 +1,6 @@
 {
  "usp_user_id__usr_login": "user",
  "usp_param_id__sys_code": "CLIENT_ID",
- "usp_value": "[\n {\n  \"dt\": \"2026-10-20 22:07:26\",\n  \"ag\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36\",\n  \"id\": \"qgacynf3hul0mbfuti92kic1w1fh0c1ckybgek545bde09md4c6p0zlpxyiddzkt1792526561841\"\n },\n {\n  \"dt\": \"2026-10-20 22:16:58\",\n  \"ag\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36\",\n  \"id\": \"pksoq7sz2ixebzuy80tc40ym1sfwy3moots65piri7vl23c4xh5obbjwct9veljb1792527364055\"\n }\n]",
+ "usp_value": "[\n {\n  \"dt\": \"2026-10-20 22:07:26\",\n  \"ag\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36\",\n  \"id\": \"qgacynf3hul0mbfuti92kic1w1fh0c1ckybgek545bde09md4c6p0zlpxyiddzkt1792526561841\"\n },\n {\n  \"dt\": \"2026-10-20 22:16:58\",\n  \"ag\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36\",\n  \"id\": \"pksoq7sz2ixebzuy80tc40ym1sfwy3moots65piri7vl23c4xh5obbjwct9veljb1792527364055\"\n },\n {\n  \"dt\": \"2026-10-23 14:00:19\",\n  \"ag\": \"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36\",\n  \"id\": \"rtcpdgtu08b01l4m4tn3c4dksqvetupog9gzebtftmb8kpyodj0h33xol6165gl31792756569200\"\n }\n]",
  "row_module_id__mdl_name": "SimFeatures"
 }

@@ -134,13 +134,13 @@ stateDiagram-v2
 
 ### Implemented hooks
 
+* `confirmAction`
 * `initAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
 * `askAction`
-* `confirmAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -275,8 +275,8 @@ Object showcasing all the possible attributes
 
 ### Implemented hooks
 
-* `preSave`
 * `initUpdate`
+* `preSave`
 
 `FtCustomUser` (Custom User) business object definition
 -------------------------------------------------------
@@ -350,32 +350,32 @@ stateDiagram-v2
 * `postSave`
 * `preValidate`
 * `initCreate`
-* `postCreate`
 * `initUpdate`
 * `initCopy`
 * `preDelete`
-* `createUserToken`
-* `deletePrefs`
-* `resetPassword`
+* `postCreate`
 * `getUserKeyLabel`
-* `postValidate`
-* `initUpdateAll`
-* `isDeleteEnable`
-* `isActionEnable`
 * `isCopyEnable`
+* `isDeleteEnable`
+* `postValidate`
+* `isActionEnable`
+* `initUpdateAll`
 * `getMappedFilePath`
 * `totpQRCode`
 * `anonymize`
+* `createUserToken`
+* `deletePrefs`
+* `resetPassword`
 * `postDelete`
+* `getMappedExportPath`
+* `preSearch`
+* `postSearch`
 * `postSelect`
 * `preCreate`
 * `preUpdate`
 * `postUpdate`
-* `postSearch`
-* `preSearch`
-* `canReference`
 * `isUpdateEnable`
-* `getMappedExportPath`
+* `canReference`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -616,8 +616,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postCreate`
 * `postUpdate`
+* `postCreate`
 
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------
