@@ -134,11 +134,11 @@ stateDiagram-v2
 
 ### Implemented hooks
 
+* `initAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
-* `initAction`
 * `askAction`
 * `confirmAction`
 
@@ -275,8 +275,8 @@ Object showcasing all the possible attributes
 
 ### Implemented hooks
 
-* `initUpdate`
 * `preSave`
+* `initUpdate`
 
 `FtCustomUser` (Custom User) business object definition
 -------------------------------------------------------
@@ -349,33 +349,33 @@ stateDiagram-v2
 * `postLoad`
 * `postSave`
 * `preValidate`
-* `resetPassword`
-* `deletePrefs`
-* `createUserToken`
+* `initCreate`
+* `postCreate`
 * `initUpdate`
 * `initCopy`
-* `initCreate`
-* `getMappedFilePath`
-* `isDeleteEnable`
-* `isActionEnable`
-* `isCopyEnable`
 * `preDelete`
-* `postCreate`
+* `createUserToken`
+* `deletePrefs`
+* `resetPassword`
 * `getUserKeyLabel`
 * `postValidate`
 * `initUpdateAll`
-* `anonymize`
+* `isDeleteEnable`
+* `isActionEnable`
+* `isCopyEnable`
+* `getMappedFilePath`
 * `totpQRCode`
+* `anonymize`
 * `postDelete`
-* `postSearch`
-* `preSearch`
 * `postSelect`
-* `isUpdateEnable`
-* `canReference`
-* `getMappedExportPath`
+* `preCreate`
 * `preUpdate`
 * `postUpdate`
-* `preCreate`
+* `postSearch`
+* `preSearch`
+* `canReference`
+* `isUpdateEnable`
+* `getMappedExportPath`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
