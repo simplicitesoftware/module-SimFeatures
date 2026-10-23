@@ -3,7 +3,7 @@
  "obf_field_id__fld_name": "ftLstOrder",
  "obf_order": 15,
  "obf_group_by": null,
- "obf_dfault_order": null,
+ "obf_dfault_order": 1,
  "obf_reorder": [
   "R",
   "B",

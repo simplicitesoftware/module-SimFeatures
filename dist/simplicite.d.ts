@@ -1502,7 +1502,7 @@ declare class List {
  */
 type NavAction = null | "add" | "new" | "del" | "none" | "first" | "prev" | "next" | "last";
 /** Type of a navigation item */
-type NavType = "form" | "list" | "view" | "extern" | "url" | "index" | "placemap" | "crosstab" | "agenda" | "updateAll" | "statusMetrics" | "tray" | "timesheet" | "gantt" | "dashboard" | "editTemplate" | "codeEditor" | "other";
+type NavType = "form" | "list" | "view" | "extern" | "url" | "index" | "placemap" | "crosstab" | "agenda" | "updateAll" | "statusMetrics" | "tray" | "timesheet" | "gantt" | "dashboard" | "editTemplate" | "codeEditor" | "logViewer" | "other";
 /** Navigation parameters */
 interface NavParam {
     /** to 'add' or start a 'new' nav */
@@ -3279,6 +3279,12 @@ declare class Bootstrap5 {
      */
     image(src?: string, onload?: JQueryHandler, onerror?: JQueryHandler): JQuery<HTMLImageElement>;
     /**
+     * Long description of an image (displayed in a11y mode only, see a11y.less)
+     * @param text optional description
+     * @param id optional id (to be referenced by the image aria-describedby)
+     */
+    imageLongDesc(text?: string, id?: string): JQuery;
+    /**
      * Link search rendering (for N,N pillbox)
      * @param ctn Search container
      * @param o Business object
@@ -4352,6 +4358,7 @@ declare class Widget {
      * @param p
      * @param p.url image url
      * @param p.alt optional image alt
+     * @param p.longDesc optional image long description
      * @param p.name optional image name
      * @param p.zoom percent or 'fit", fitWidth' or 'fitHeight' to screen
      * @param p.onload optional onload callback
@@ -4359,6 +4366,7 @@ declare class Widget {
     previewImage(p: {
         url: string;
         alt?: string;
+        longDesc?: string;
         name?: string;
         zoom?: string | number;
         onload?: (img: JQuery) => void;
@@ -11241,6 +11249,13 @@ declare class CodeEditor {
     private getActiveTab;
     private title;
     private clickTab;
+    /**
+     * Observe the head to move the overflowing actions of the bar into the "plus" dropdown
+     * @param head editor head
+     * @param bar actions bar (takes the width left by the title)
+     * @param plus "plus" dropdown, last but the close button
+     */
+    private observeBar;
     private toggleEmpty;
     /**
      * Display the editor form
@@ -11802,6 +11817,21 @@ declare const Git: (params?: KeyObject) => UIGit;
 type TemplateEntity = "ObjectInternal" | "View";
 /** Target of a template editor */
 type TemplateTarget = TemplateEntity | "ObjectInternalRow" | "ObjectInternalSearch";
+/** Log viewer parameters (see `$ui.displayLogViewer`) */
+interface LogViewerParam extends NavParam {
+    /** Log source: empty for the system log, `cron`, `session`, `redo` for the cron/sessions/redo logs, `tomcat` for the Tomcat logs */
+    log?: string;
+    /** Tomcat log type (`catalina` by default, `localhost`, `localhost_access_log`...) */
+    type?: string;
+    /** Optional filter (regexp or text) */
+    filter?: string;
+    /** Maximum number of lines to read (default 1000, changed by clicking on the max in the toolbar) */
+    max?: number;
+    /** Display order: `asc` last line at the bottom (default), `desc` last line on top */
+    order?: "asc" | "desc";
+    /** HTTP polling interval in seconds (default 30s) */
+    refresh?: number;
+}
 /**
  * UI rendering, part of the UI engine `$ui` (see UIEngine): tools dedicated to the makers (code editor, audit, modules,
  * logs, system info, monitoring, ZIP editor, modeler, feedback, template and theme editors, color picker)
@@ -11839,6 +11869,21 @@ declare class UIRenderMaker {
      * $ui.displayModuleDelete(null, moduleId);
      */
     displayModuleDelete(ctn: AnyContainer, moduleId: string): void;
+    /**
+     * Log viewer (Maker bundle) of a server log file: system, cron, sessions, redo or Tomcat logs,
+     * with source/type selectors, text and level filters, live updates (polling + websocket events),
+     * lock, download, adjustable number of lines and detach in a popup.
+     * Data are served by the `/ui/logs` service (LogsServlet, `LogsAccess` or `CronLogsAccess` for the cron logs).
+     * @param ctn Container (the content of the container is rendered, not the whole work area)
+     * @param p Optional parameters <code>\{ log, type, filter, max, order, refresh, nav, showNav \}</code> (see LogViewerParam),
+     * the navigation bar is refreshed unless <code>showNav: false</code>
+     * @example
+     * // Cron logs in the menu tab (ctn = tab content of a menu javascript URL)
+     * $ui.displayLogViewer(ctn, { log: "cron", nav: "new" });
+     * // Last 5000 lines of the Tomcat localhost log with errors only
+     * $ui.displayLogViewer(null, { log: "tomcat", type: "localhost", filter: "SEVERE", max: 5000, nav: "add" });
+     */
+    displayLogViewer(ctn: AnyContainer, p?: LogViewerParam): Promise<void>;
     /**
      * Show server logs thru web-socket. Useful when UI has no console
      * @param ctn Optional container to split (default is #work)
@@ -12240,6 +12285,210 @@ declare class UIViewEditor {
     addArea(e: KeyObject): void;
 }
 
+/**
+ * Log viewer of a server log file (system, cron, sessions, redo or Tomcat logs, see `LogViewer.SOURCES`):
+ * - last lines in ascending (last line at the bottom) or descending order, stack traces kept under their line,
+ *   fields separated with pipes colorized
+ * - text filter (regexp) and level toggles applied on server side before the lines limit, Tomcat log type selector
+ * - live updates: HTTP polling, plus UI websocket `log` events to refresh sooner (at most every 2s);
+ *   the view follows the last line unless locked
+ * - adjustable maximum number of lines (click on the max), download, detach in a popup
+ *
+ * Rendered by `$ui.displayLogViewer`, data served by the `/ui/logs` service (see LogsServlet).
+ */
+declare class LogViewer {
+    /** Labels of the log sources (the available sources are returned by the service) */
+    static readonly SOURCES: Record<string, string>;
+    /**
+     * Primary log lines start with a date digit (year for system/cron logs, day for Tomcat logs),
+     * continuation lines (stack traces...) do not
+     */
+    private static readonly PRIMARY_LINE;
+    private ctn;
+    private params;
+    private elFilter;
+    private elSource;
+    private elType;
+    private elView;
+    private elTransport;
+    private elStatus;
+    private elCount;
+    private elTotal;
+    private elPause;
+    private elOrder;
+    /** Descending order: last line on top */
+    private desc;
+    private elRefresh;
+    private elDownload;
+    private paused;
+    private httpTimer?;
+    private pullDebounce?;
+    /** A pull is in progress */
+    private pulling;
+    /** The wait spinner is displayed (until the requested load ends) */
+    private waiting;
+    /** Viewer root (container of the wait spinner) */
+    private elViewer;
+    /** Pull again when the current one ends (source or filter changed meanwhile) */
+    private pullAgain;
+    /** End time of the last pull (ms) */
+    private lastPull;
+    /** Signature of the rendered lines, to skip identical renders */
+    private lastSig;
+    /** Maximum number of lines to read (as applied by the service) */
+    private max;
+    /** Upper bound of the maximum number of lines (see LogsServlet.MAX_LOGS) */
+    private maxLimit;
+    private elMax;
+    private lastRaw;
+    /** Name of the log file being displayed */
+    private file;
+    private mask;
+    private readonly onLog;
+    /**
+     * Log viewer
+     * @param ctn Container
+     * @param params Parameters
+     */
+    constructor(ctn: Container, params?: LogViewerParam);
+    /**
+     * Render the log viewer in a container
+     * @param ctn Container
+     * @param params Parameters
+     * @returns The log viewer
+     */
+    static render(ctn: Container, params?: LogViewerParam): Promise<LogViewer>;
+    /** User system parameter of the viewer preferences */
+    private static readonly PREFS;
+    /** Tomcat log type of the preferences (kept while another source is displayed) */
+    private prefType;
+    /** Previous filters (most recent first) proposed in the filter input */
+    private filters;
+    /** Maximum number of previous filters kept in the preferences */
+    private static readonly MAX_FILTERS;
+    /** Datalist of the previous filters */
+    private elFilters;
+    /** Sequence of the viewers in page (unique datalist ids) */
+    private static seq;
+    /**
+     * Load the user preferences (order, max lines, levels, Tomcat log type, previous filters),
+     * the explicit parameters win over the preferences
+     */
+    private loadPrefs;
+    /** Add the current filter on top of the previous filters (saved in the preferences) */
+    private addFilter;
+    /** Propose the previous filters in the filter input */
+    private syncFilters;
+    /** Save the user preferences in the user system parameters */
+    private savePrefs;
+    /** Service URL */
+    private static url;
+    /** Display the viewer and start the live updates */
+    display(): void;
+    /** Window name of the detached viewers */
+    private static readonly DETACHED_NAME;
+    /** Is the viewer in a detached window? */
+    private static isDetached;
+    /** Open the viewer with the current source, type and filter in a new window (one window per source and type) */
+    private detach;
+    /** Apply the source and filter, then restart the live updates */
+    private go;
+    /** Option of a log source */
+    private static option;
+    /** Current log source */
+    private source;
+    /** Tomcat log source */
+    private static readonly SOURCE_TOMCAT;
+    /** Default Tomcat log type */
+    private static readonly TOMCAT_DEFAULT_TYPE;
+    /** Current Tomcat log type (empty for other sources) */
+    private type;
+    /**
+     * Service parameters of the current source and type
+     * @param more Additional parameters
+     * @returns URL query string
+     */
+    private query;
+    /** Fill the Tomcat log types returned by the service, keep the current one */
+    private syncTypes;
+    /**
+     * Fill the selector with the sources available on server side only (granted, accessible log file)
+     * @param sources Available sources returned by the service
+     * @returns `true` when the current source is not available: switched and reloaded with the first available one
+     */
+    private syncSources;
+    /**
+     * Start the live updates: HTTP polling, plus websocket log events to refresh sooner
+     * (events are pushed only when USE_WEBSOCKET_LOGS is enabled, polling remains the fallback)
+     */
+    private start;
+    /** Stop the live updates */
+    stop(): void;
+    /** Pause/resume the live updates */
+    private togglePause;
+    /** Sync the lock button with the paused state */
+    private syncPause;
+    /**
+     * Coalesce log events into one pull, at most every 2s:
+     * each pull may produce server logs, so pushed events must not trigger pulls in a tight loop
+     */
+    private debPull;
+    /** Minimum delay between 2 pulls triggered by log events (ms) */
+    private static readonly MIN_PULL_DELAY;
+    /**
+     * Get the last log lines (one call at a time)
+     * @param wait Show the wait spinner until loaded (loads requested by the user, not the background refreshes)
+     */
+    private pull;
+    /**
+     * Show the live updates transport
+     * @param mode `ws` websocket events + polling, `http` polling only, `off` paused
+     */
+    private setTransport;
+    /** Level toggle of a log level (fatal is grouped under errors) */
+    private static maskKey;
+    /**
+     * Toggle a level filter (at least one level remains visible)
+     * @param k `all` or a level toggle
+     */
+    private toggleLevel;
+    /** Enabled level toggles for the service, empty for all levels */
+    private levels;
+    /** Sync the level buttons with the level toggles */
+    private syncLevels;
+    /**
+     * Log row: one element per line, the level icon is rendered by CSS
+     * @param entry Log entry
+     * @param cont Continuation line (stack trace...) of the previous primary line
+     * @returns Row element
+     */
+    private static row;
+    /** Level tokens of a log line */
+    private static readonly LEVELS;
+    /**
+     * Colorize the fields of a log line separated with pipes (date|marker|level|...|message):
+     * one span per field and the pipes as text nodes (kept when copying), colors by position,
+     * level token by level, the last field (message) with the level color
+     * @param row Row element
+     * @param text Log line
+     */
+    private static fields;
+    /**
+     * Render the entries with their continuation lines, in file order (last line at the bottom) or descending order
+     * @param entries Log entries in file order
+     * @param forceScroll Focus the last line even when locked (ex: order changed)
+     */
+    private render;
+    /** Sync the order button with the display order */
+    private syncOrder;
+    /** Change the maximum number of lines to read */
+    private promptMax;
+    /** Set the maximum number of lines (as applied by the service) */
+    private setMax;
+    /** Minimum number of lines (see LogsServlet.MIN_LOGS) */
+    private static readonly MIN_LINES;
+}
+
 declare module "simplicite/namespaces" {
     interface AjaxNamespace {
         /** `Simplicite.Ajax.APITester`: API tester (Maker) @hidden */
@@ -12284,6 +12533,7 @@ interface MakerInterface extends SimpliciteInterface {
     UIViewItemEditor: typeof UIViewItemEditor;
     MonitorClient: typeof MonitorClient;
     MonitorServer: typeof MonitorServer;
+    LogViewer: typeof LogViewer;
 }
 /** Simplicite namespace extended with the maker tools (diagram, code editor, git, theme editor...) */
 declare const SimpliciteMaker: MakerInterface;
@@ -13977,6 +14227,15 @@ declare class UISplitter {
      * @param checkCanClose check can close the tab content? default true. false = only destroy the content
      */
     remove(el: AnyContainer, checkCanClose?: boolean): void;
+    /**
+     * Close a content: back to the previous page of its navigation if any,
+     * otherwise remove its tab when it is in a work tab, otherwise only close the content
+     * @param el content element (inside a .work-tab-pane or not)
+     * @example
+     * // Close the current content, ex: after detaching it in a popup
+     * $view.splitter.close(ctn);
+     */
+    close(el: AnyContainer): void;
     /**
      * Close all tabs if can close
      * @param checkCanClose check can close the tab contents?
@@ -16079,6 +16338,10 @@ interface DocumentDB {
     alt?: string;
     /** Alt to update */
     newAlt?: string;
+    /** Long description from DB */
+    longDesc?: string;
+    /** Long description to update */
+    newLongDesc?: string;
     /** Base64 thumbnail of an image */
     thumbnail?: string;
 }
@@ -20808,6 +21071,7 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
         docId?: string;
         imageId?: string;
         imageAlt?: string;
+        imageLongDesc?: string;
         preview?: boolean;
     }): void;
     /**
@@ -20899,6 +21163,7 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      * @param doc.id (docId alias)
      * @param doc.name Optional image name
      * @param doc.alt Optional image alt
+     * @param doc.longDesc Optional image long description
      * @param onload optional callback when loaded
      * @example
      * $ui.clickImage(obj.getFieldValue("myObjPhoto") as DocumentDB, (img: JQuery) => img.addClass("rounded"));
@@ -21689,4 +21954,4 @@ declare function displaySitemap(ctn?: AnyContainer): void;
 var Simplicite$1 = Simplicite;
 
 export { $app, $console, $factory, $grant, $nav, $tools, $ui, $view, A11y, AddonBar, Ajax, AppConstants, AsyncFunction, Bam, Board, Bootstrap5, BusinessObject, BusinessProcess, CSSCOLORS, Charts, ColorPicker, Context, Crosstab, ErrorLevel, EventWebSocket, External, ExternalObject, Factory, Feedback, FieldType, FieldTypeLabels, Firebase, Form, Gateway, Globals, Grant, GridEditor, Guide, Import, IndexSearch, JQueryExtension, Legacy, List, MediaSize, Menu, Merge, MessageLevel, OCR, ObjectField, Prefs, Rendering, Search, SearchMode, Session, SimpliciteColors, Social, Speech, StatusMetrics, StringExtension, SyncQueue, Timesheet, Tray, Tree, TreeView, UI, UIAction, UIArea, UIBusinessObject, UIBusinessProcess, UICalendar, UIColor, UIComponent, UIEngine, UIExternalObject, UIField, UIFieldBigDecimal, UIFieldBoolean, UIFieldColor, UIFieldDate, UIFieldDateTime, UIFieldDocument, UIFieldEmail, UIFieldEnum, UIFieldEnumMulti, UIFieldFloat, UIFieldGeoCoords, UIFieldHtml, UIFieldId, UIFieldImage, UIFieldInt, UIFieldLongString, UIFieldNotepad, UIFieldObject, UIFieldPhoneNum, UIFieldRegexp, UIFieldTime, UIFieldUrl, UILoader, UIMap, UINavigator, UIRenderDialog, UIRenderForm, UIRenderList, UIRenderMaker, UIRenderReference, UIRenderUser, UIRenderView, UISplitter, UITray, UIUtil, UIView, UIViewer, UIWorkflow, Updatable, Update, View, ViewClasses, ViewType, Visibility, WebNews, WebPush, Widget, Workflow, ZIP, buildSitemap, Simplicite$1 as default, displaySitemap };
-export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };
+export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };

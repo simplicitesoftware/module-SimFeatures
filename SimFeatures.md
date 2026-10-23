@@ -134,13 +134,13 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `confirmAction`
-* `initAction`
-* `askAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
+* `initAction`
+* `askAction`
+* `confirmAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -349,33 +349,33 @@ stateDiagram-v2
 * `postLoad`
 * `postSave`
 * `preValidate`
-* `totpQRCode`
-* `anonymize`
+* `resetPassword`
 * `deletePrefs`
 * `createUserToken`
-* `resetPassword`
 * `initUpdate`
 * `initCopy`
 * `initCreate`
-* `postCreate`
-* `preDelete`
-* `initUpdateAll`
-* `isDeleteEnable`
-* `isCopyEnable`
-* `postValidate`
-* `isActionEnable`
 * `getMappedFilePath`
+* `isDeleteEnable`
+* `isActionEnable`
+* `isCopyEnable`
+* `preDelete`
+* `postCreate`
 * `getUserKeyLabel`
+* `postValidate`
+* `initUpdateAll`
+* `anonymize`
+* `totpQRCode`
 * `postDelete`
-* `preSearch`
 * `postSearch`
+* `preSearch`
 * `postSelect`
+* `isUpdateEnable`
+* `canReference`
+* `getMappedExportPath`
+* `preUpdate`
 * `postUpdate`
 * `preCreate`
-* `preUpdate`
-* `canReference`
-* `isUpdateEnable`
-* `getMappedExportPath`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -486,6 +486,15 @@ _No description._
     - `A` code A
     - `B` code B
     - `C` code C
+
+### Description (from code)
+
+> Business object FtListItem
+
+### Implemented hooks
+
+* `preReorder`
+* `postReorder`
 
 `FtListOrdering` (List ordering) business object definition
 -----------------------------------------------------------
