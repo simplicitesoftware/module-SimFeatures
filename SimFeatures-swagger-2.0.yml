@@ -6343,6 +6343,79 @@ paths:
       - FtO2mChild
       consumes:
       - application/json
+  /rest/FtActions:
+    get:
+      summary: Search FtActions business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      produces:
+      - application/json
+      operationId: obj-ftactions-search
+      responses:
+        '200':
+          schema:
+            $ref: '#/definitions/ArrayOfFtActions'
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+        '401':
+          schema:
+            $ref: '#/definitions/Error401'
+          description: Unauthorized
+        '500':
+          schema:
+            $ref: '#/definitions/Error500'
+          description: Internal server error
+      parameters:
+      - in: query
+        name: _metadata
+        description: Metadata?
+        type: boolean
+        required: false
+      - in: query
+        name: _count
+        description: Count?
+        type: boolean
+        required: false
+      - in: query
+        name: _doc
+        description: Documentation?
+        type: boolean
+        required: false
+      - in: query
+        name: ftActCode
+        description: Search filter for Code
+        type: string
+        required: false
+      - in: query
+        name: ftActDate
+        description: Search filter for Ft act date
+        type: string
+        required: false
+      - in: query
+        name: ftActDocument
+        description: Search filter for Ft act document
+        type: string
+        required: false
+      - in: query
+        name: ftActImage
+        description: Search filter for Ft act image
+        type: string
+        required: false
+      - in: query
+        name: ftActState
+        description: Search filter for Ft act state
+        type: string
+        required: false
+        enum:
+        - A
+        - B
+      - in: query
+        name: ftActMultiDocs
+        description: Search filter for Multi docs
+        type: string
+        required: false
+      tags:
+      - FtActions
   /rest/FtSearch/{row_id}:
     post:
       summary: Create a new FtSearch business object record
@@ -6505,79 +6578,6 @@ paths:
       - FtSearch
       consumes:
       - application/json
-  /rest/FtActions:
-    get:
-      summary: Search FtActions business object records or get contextualized metadata
-      security:
-      - bearerAuth: []
-      produces:
-      - application/json
-      operationId: obj-ftactions-search
-      responses:
-        '200':
-          schema:
-            $ref: '#/definitions/ArrayOfFtActions'
-          description: Success in searching business object records (or in getting
-            contextualized business object metadata, documentation, ...)
-        '401':
-          schema:
-            $ref: '#/definitions/Error401'
-          description: Unauthorized
-        '500':
-          schema:
-            $ref: '#/definitions/Error500'
-          description: Internal server error
-      parameters:
-      - in: query
-        name: _metadata
-        description: Metadata?
-        type: boolean
-        required: false
-      - in: query
-        name: _count
-        description: Count?
-        type: boolean
-        required: false
-      - in: query
-        name: _doc
-        description: Documentation?
-        type: boolean
-        required: false
-      - in: query
-        name: ftActCode
-        description: Search filter for Code
-        type: string
-        required: false
-      - in: query
-        name: ftActDate
-        description: Search filter for Ft act date
-        type: string
-        required: false
-      - in: query
-        name: ftActDocument
-        description: Search filter for Ft act document
-        type: string
-        required: false
-      - in: query
-        name: ftActImage
-        description: Search filter for Ft act image
-        type: string
-        required: false
-      - in: query
-        name: ftActState
-        description: Search filter for Ft act state
-        type: string
-        required: false
-        enum:
-        - A
-        - B
-      - in: query
-        name: ftActMultiDocs
-        description: Search filter for Multi docs
-        type: string
-        required: false
-      tags:
-      - FtActions
 securityDefinitions:
   basicAuth:
     type: basic
@@ -7745,6 +7745,11 @@ definitions:
       ftHistMultiDoc:
         description: Multi-doc
         type: object
+  ArrayOfFtTag:
+    description: List of Tags
+    type: array
+    items:
+      $ref: '#/definitions/FtTag'
   FtSearch:
     description: Search
     type: object
@@ -7779,11 +7784,6 @@ definitions:
         description: Code
         type: string
         maxLength: 20
-  ArrayOfFtTag:
-    description: List of Tags
-    type: array
-    items:
-      $ref: '#/definitions/FtTag'
   TreeviewData:
     type: object
     properties:
@@ -7924,8 +7924,6 @@ tags:
   description: Relationship (one to many)
 - name: FtRxmLink
   description: Associated items
-- name: FtSearch
-  description: Search
 - name: FtSearchReference
   description: Reference
 - name: FtListItem
@@ -7948,3 +7946,5 @@ tags:
   description: Attributes
 - name: FtActionRedirect
   description: Action redirect
+- name: FtSearch
+  description: Search

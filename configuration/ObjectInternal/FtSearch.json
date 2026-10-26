@@ -12,7 +12,7 @@
  "obo_exportorder": null,
  "obo_distinct": false,
  "obo_indexable": true,
- "obo_groupby": false,
+ "obo_groupby": true,
  "obo_dfltref": null,
  "obo_template_id__tpl_name": "FtSearch",
  "obo_tpl_list_id__tpl_name": null,

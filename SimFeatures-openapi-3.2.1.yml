@@ -1164,6 +1164,11 @@ components:
         ftHistMultiDoc:
           description: Multi-doc
           type: object
+    ArrayOfFtTag:
+      description: List of Tags
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTag'
     FtSearch:
       description: Search
       type: object
@@ -1198,11 +1203,6 @@ components:
           description: Code
           type: string
           maxLength: 20
-    ArrayOfFtTag:
-      description: List of Tags
-      type: array
-      items:
-        $ref: '#/components/schemas/FtTag'
     TreeviewData:
       type: object
       properties:
@@ -8879,6 +8879,92 @@ paths:
         required: true
       tags:
       - FtO2mChild
+  /rest/FtActions:
+    get:
+      summary: Search FtActions business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftactions-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtActions'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActCode
+        description: Search filter for Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActDate
+        description: Search filter for Ft act date
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActDocument
+        description: Search filter for Ft act document
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActImage
+        description: Search filter for Ft act image
+        required: false
+      - schema:
+          type: string
+          enum:
+          - A
+          - B
+        in: query
+        name: ftActState
+        description: Search filter for Ft act state
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActMultiDocs
+        description: Search filter for Multi docs
+        required: false
+      tags:
+      - FtActions
   /rest/FtSearch/{row_id}:
     post:
       summary: Create a new FtSearch business object record
@@ -9074,92 +9160,6 @@ paths:
         required: true
       tags:
       - FtSearch
-  /rest/FtActions:
-    get:
-      summary: Search FtActions business object records or get contextualized metadata
-      security:
-      - bearerAuth: []
-      operationId: obj-ftactions-search
-      responses:
-        '200':
-          description: Success in searching business object records (or in getting
-            contextualized business object metadata, documentation, ...)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArrayOfFtActions'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: boolean
-        in: query
-        name: _metadata
-        description: Metadata?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _count
-        description: Count?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _doc
-        description: Documentation?
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActCode
-        description: Search filter for Code
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActDate
-        description: Search filter for Ft act date
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActDocument
-        description: Search filter for Ft act document
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActImage
-        description: Search filter for Ft act image
-        required: false
-      - schema:
-          type: string
-          enum:
-          - A
-          - B
-        in: query
-        name: ftActState
-        description: Search filter for Ft act state
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActMultiDocs
-        description: Search filter for Multi docs
-        required: false
-      tags:
-      - FtActions
 info:
   license:
     name: Simplicite license
@@ -9204,8 +9204,6 @@ tags:
   description: Relationship (one to many)
 - name: FtRxmLink
   description: Associated items
-- name: FtSearch
-  description: Search
 - name: FtSearchReference
   description: Reference
 - name: FtListItem
@@ -9228,3 +9226,5 @@ tags:
   description: Attributes
 - name: FtActionRedirect
   description: Action redirect
+- name: FtSearch
+  description: Search

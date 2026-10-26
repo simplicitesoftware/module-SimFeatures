@@ -1,11 +1,9 @@
-import * as BootstrapLib from 'bootstrap';
-import { Html5Qrcode } from 'html5-qrcode';
 import { EventClickArg, DateSelectArg, EventDropArg, Calendar } from '@fullcalendar/core';
 import { EventResizeDoneArg } from '@fullcalendar/interaction';
 import L$1, { LatLngTuple } from 'leaflet';
 import Chart from 'chart.js/auto';
 import { ChartConfiguration, InteractionItem, TitleOptions, ChartType } from 'chart.js';
-import { GridStackOptions, GridStack } from 'gridstack';
+import * as BootstrapLib from 'bootstrap';
 import flatpickr from 'flatpickr';
 import { Options } from 'flatpickr/dist/types/options';
 import { Instance } from 'flatpickr/dist/types/instance';
@@ -14,7 +12,9 @@ import hljs from 'highlight.js';
 import { marked } from 'marked';
 import { Calendar as Calendar$1 } from '@fullcalendar/core/index.js';
 import Quill, { QuillOptions } from 'quill';
+import { Html5Qrcode } from 'html5-qrcode';
 import SignaturePad from 'signature_pad';
+import { GridStackOptions, GridStack } from 'gridstack';
 import js_beautify from 'js-beautify';
 import JSZip from 'jszip';
 import JSZipUtils from 'jszip-utils';
@@ -999,11 +999,12 @@ declare class UIRenderDialog {
      * @param obj Object
      * @param rowId Optional row ID
      * @param cbk Optional callback
+     * @param label Optional label, used as title of the frame when displayed in a container
      * @example
      * // Open the publication "MyObjPrint" of the record in a new window
      * $ui.displayPrint(null, "MyObjPrint", "MyObject", rowId);
      */
-    displayPrint(ctn: AnyContainer, name: string, obj: string | BusinessObject, rowId?: string | null, cbk?: Callback): Promise<void>;
+    displayPrint(ctn: AnyContainer, name: string, obj: string | BusinessObject, rowId?: string | null, cbk?: Callback, label?: string): Promise<void>;
     /**
      * Manage import XML thru UI
      * @param ctn Optional container
@@ -1361,8 +1362,9 @@ declare class List {
      * @param ctn Parent container
      * @param o Business object with the loaded list
      * @param p List parameters
+     * @returns the displayed list
      */
-    display(ctn: Container, o: UIBusinessObject, p: ListParam): Promise<void>;
+    display(ctn: Container, o: UIBusinessObject, p: ListParam): Promise<JQuery>;
     private linkPillboxOrder;
     /**
      * Bind the scroll events to keep the table header visible (sticky header).
@@ -1980,9 +1982,10 @@ declare class Form {
      * @param ctn parent container
      * @param o object
      * @param p optional parameters
-     * @param cbk optional callback
+     * @param cbk optional callback with the displayed form
+     * @returns the displayed form
      */
-    display(ctn: Container, o: UIBusinessObject, p: FormParam, cbk?: Callback): void;
+    display(ctn: Container, o: UIBusinessObject, p: FormParam, cbk?: (div?: JQuery) => void): JQuery<HTMLElement>;
     /**
      * Display a state-model navbar
      * @param ctn container
@@ -2214,9 +2217,9 @@ declare class UIBusinessObject extends BusinessObject {
      * @param ctn Form container
      * @param obj Object (same as this)
      * @param p Form parameters
-     * @param cbk callback when rendered
+     * @param cbk callback when rendered (with the displayed form)
      */
-    displayForm(ctn: Container, obj: UIBusinessObject, p: FormParam, cbk: Callback): void;
+    displayForm(ctn: Container, obj: UIBusinessObject, p: FormParam, cbk: (div?: JQuery) => void): void;
     /**
      * Front hook when object form is loaded
      * @param _ctn Form container
@@ -2274,9 +2277,9 @@ declare class UIBusinessObject extends BusinessObject {
      * @param ctn List container
      * @param obj Object (same as this)
      * @param p List parameters
-     * @param cbk callback when rendered
+     * @param cbk callback when rendered (with the displayed list)
      */
-    displayList(ctn: Container, obj: UIBusinessObject, p: ListParam, cbk: Callback): void;
+    displayList(ctn: Container, obj: UIBusinessObject, p: ListParam, cbk: (div?: JQuery) => void): void;
     /**
      * Front hook to display one list record
      * @param ctn List container
@@ -2541,6 +2544,3435 @@ declare class Prefs {
      * @param p options show=top|bottom
      */
     bookmarks(ctn: AnyContainer, bm: Bookmarks, p: BookmarkParam): void;
+}
+
+/**
+ * `Simplicite.UI.View` namespace: viewers, renderers and components.
+ * Other bundles can add their classes by module augmentation (see the Maker).
+ */
+interface UIViewNamespace extends Readonly<typeof ViewClasses> {
+}
+/**
+ * Extensions of the `Simplicite.Ajax` namespace (the Session class with the legacy constants).
+ * Other bundles can add their classes by module augmentation (see the Maker).
+ */
+interface AjaxNamespace {
+}
+
+/** Job executed in a Promise: calls `resolve` with its result or `reject` on error */
+type JobFunction = (resolve: (value?: unknown) => void, reject?: (reason?: unknown) => void) => void;
+/** Queued job with its Promise handlers */
+interface Job {
+    /** Promise of the job result */
+    promise: Promise<KeyObject | void>;
+    /** Resolve the job with its result */
+    resolve: (result: KeyObject | void) => void;
+    /** Reject the job */
+    reject: (reason?: unknown) => void;
+}
+/**
+ * Queue to synchronize executions
+ */
+declare class SyncQueue {
+    private queue?;
+    private working;
+    /** Constructor */
+    constructor();
+    /**
+     * Await ordered functions
+     * @param list Array of function(resolve, reject) to execute asynchronously
+     * @param stopOnError Stop on first error (default true)?
+     * @returns Promise with ordered result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
+     */
+    static all(list: JobFunction[], stopOnError?: boolean): Promise<KeyObject>;
+    /**
+     * Ordered functions
+     * @param list Array of function(resolve, reject) to execute asynchronously within Promises
+     * @returns Promise with result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
+     */
+    static allSettled(list: JobFunction[]): Promise<KeyObject>;
+    /**
+     * Enqueue a Promise and starts dequeue
+     * @param promise Promise
+     * @returns Promise
+     */
+    enqueue(promise: Promise<KeyObject | void>): Promise<KeyObject | void>;
+    /**
+     * Ask to stop next queued jobs
+     */
+    stop(): void;
+    /**
+     * Dequeue while not empty
+     */
+    dequeue(): void;
+}
+
+/** Activity of a business process */
+interface ActivityMetadata {
+    /** Activity row ID */
+    id?: string;
+    /** Activity name */
+    name: string;
+    /** Step code */
+    step: string;
+    /** Activity type */
+    type: string;
+    /** Translated label */
+    label: string;
+    /** Help */
+    help?: AnyContent;
+    /** Tip */
+    tip?: AnyContent;
+    /** HTML template */
+    template?: string;
+    /** Write access */
+    write?: boolean;
+}
+/** Activity status: `R` read, `W` write */
+type ActivityStatus = "R" | "W";
+/** Activity file: current state of an activity in a running process */
+interface ActivityFile {
+    /** Process ID */
+    pid: string;
+    /** Activity file ID */
+    aid: string;
+    /** Step code */
+    step: string;
+    /** Activity metadata */
+    metadata?: ActivityMetadata;
+    /** Read only */
+    readonly?: boolean;
+    /** Status */
+    status: ActivityStatus;
+    /** Owner row ID */
+    ownerId: string;
+    /** HTML template */
+    template?: string;
+    /** URL */
+    url?: string;
+    /** Content */
+    content?: AnyContent;
+    /** Road info */
+    info?: string;
+    /** Data by group > field > values */
+    data?: {
+        [dataGroupName: string]: {
+            [fielName: string]: {
+                /** Field definition */
+                field: ObjectField;
+                /** One value or many in case of step loop */
+                values: string[];
+            };
+        };
+    };
+    /** Validate, back, cancel, abort... */
+    actions: ProcessAction[];
+    /** Business object of the activity */
+    object?: BusinessObject & {
+        /** Object metadata */
+        meta?: ObjectMetadata;
+        /** Object instance name */
+        inst?: string;
+    };
+    /** Process is terminated */
+    terminated?: boolean;
+    /** Where to go at the end of the process */
+    forward?: {
+        /** Object name to open */
+        object?: string;
+        /** Row ID to open */
+        row_id?: string;
+        /** URL to open */
+        url?: string;
+    };
+}
+/** Road rendering: `V`ertical or `H`orizontal, `C`omplete or `M`inimal */
+type RoadRender = "VC" | "VM" | "HC" | "HM";
+/** Business process metadata */
+interface ProcessMetadata {
+    /** Process row ID */
+    id: string;
+    /** Process name */
+    name: string;
+    /** Translated label */
+    label: string;
+    /** Activities by step */
+    steps: {
+        [step: string]: ActivityMetadata;
+    };
+    /** Resources */
+    resources?: KeyObject[];
+    /** Screenflow process */
+    screenflow?: boolean;
+    /** Road rendering (default `VC`) */
+    roadRender?: RoadRender;
+    /** Static road: shows all the ordered steps (else the visited steps) */
+    roadStatic?: boolean;
+    /** Ordered step codes */
+    orderedSteps?: string[];
+}
+/** Action of an activity */
+interface ProcessAction {
+    /** Action ID */
+    id: string;
+    /** Action type */
+    action: ProcessActionType;
+    /** Translated label */
+    label: string;
+    /** Primary button */
+    primary?: boolean;
+}
+/** Process actions (`start`, `abort`), activity actions and select activity actions */
+type ProcessActionType = "start" | "abort" | "lock" | "unlock" | "validate" | "cancel" | "back" | "open" | "read" | "close" | "list" | "gotopage" | "searchpage";
+/** Parameters of a process activity */
+interface ProcessParam {
+    /** Step code */
+    step?: string;
+    /** Activity file ID */
+    aid?: string;
+    /** Object name */
+    object?: string;
+    /** Row ID */
+    rowId?: string;
+    /** Action */
+    action?: ProcessActionType;
+    /** Show the road */
+    showRoad?: boolean;
+    /** Messages */
+    msg?: MessageAny[];
+    /** Road rendering */
+    roadRender?: RoadRender;
+    /** Static road */
+    roadStatic?: boolean;
+    /** In a workflow (forced by the activity display) */
+    workflow?: boolean;
+    /** Before loading the activity */
+    beforeload?: (ctn: Container, wkf: BusinessProcess, act?: ActivityFile) => void;
+    /** When the activity is loaded */
+    onload?: (ctn: Container, wkf: BusinessProcess, act?: ActivityFile) => void;
+    /** When the activity is unloaded */
+    onunload?: (ctn: Container, wkf: BusinessProcess, act?: ActivityFile) => void;
+}
+/**
+ * Simplicit&eacute; business process.
+ * <br/>Getting a new business process should use the <code>Simplicite.Ajax.getBusinessProcess()</code> function instead of this constructor
+ */
+declare class BusinessProcess {
+    private _app;
+    /** Process metadata */
+    metadata: ProcessMetadata;
+    /** Process ID */
+    pid?: string | null;
+    /** Local data */
+    locals: KeyObject;
+    /** Current activity file */
+    activity?: ActivityFile;
+    /** Road of the visited activities */
+    processRoad?: ActivityFile[];
+    /** History */
+    historic?: object;
+    /** UI engine */
+    ui?: UIEngine;
+    /**
+     * Constructor
+     * @param app Application Simplicite.Ajax instance
+     * @param name Business process name
+     */
+    constructor(app: Session, name: string);
+    /**
+     * Loads meta data.
+     */
+    getMetaData(): Promise<ProcessMetadata>;
+    /**
+     * Are metadata loaded ?
+     */
+    isLoaded(): string;
+    /**
+     * Gets name from meta data.
+     */
+    getName(): string;
+    /**
+     * Gets label name from meta data.
+     */
+    getLabel(): string;
+    /**
+     * Local parameter in instance
+     * @param name Parameter key name
+     * @param value Optional value (to get or set)
+     */
+    localParameter(name: string, value?: unknown): unknown;
+    /**
+     * Initialize the local parameters hasChanged and hasChangedFields
+     */
+    initChangedFields(): void;
+    /**
+     * Add a field when has changed
+     * @param f field or name
+     * @param id optional id (edit list)
+     */
+    addChangedField(f: string | ObjectField, id?: string): void;
+    /**
+     * Remove a field when has not changed
+     * @param f field or name
+     * @param id optional id (edit list)
+     */
+    removeChangedField(f: string | ObjectField, id?: string): void;
+    /**
+     * Trigger the has changed flag
+     * @param v optional to set the hasChanged value (true when the array of hasChangedFields is not empty)
+     * @returns the local parameter hasChanged
+     */
+    hasChanged(v?: unknown): unknown;
+    /**
+     * Start a new process (or continue the screenflow)
+     * @param params Optional parameters
+     * @param params.road true to get the full navigation array, false to get the current activity
+     * @param params.object launcher object name
+     * @param params.rowId launcher object row Id
+     */
+    start(params?: {
+        road?: boolean;
+        object?: string;
+        rowId?: string;
+    }): Promise<ActivityFile | undefined>;
+    /**
+     * Abort the process
+     */
+    abort(): Promise<ActivityFile>;
+    /**
+     * Process road
+     */
+    road(): Promise<object | undefined>;
+    /**
+     * Set data values in the current activity
+     */
+    setActivityData(group: string, name: string, values: string[]): void;
+    /**
+     * Get data values of the current activity
+     */
+    getActivityData(group: string, name: string): string[] | null;
+    /**
+     * Get data values of a road step
+     */
+    getData(step: string, group: string, name: string): string[] | null | undefined;
+    /**
+     * Activity common action
+     * @param action lock, unlock, validate, back, cancel, read, open, firstpage, lastpage, nextpage, backpage, gotopage
+     * @param activity Activity data
+     * @param params Optional parameters
+     * @param params.road true to get the full navigation array, false to get the current activity
+     */
+    action(action: string, activity: ActivityFile, params?: {
+        road?: boolean;
+    }): Promise<ActivityFile | undefined>;
+    /**
+     * Read the activity with <code>\{ step, aid \}</code>
+     */
+    read(activity: ActivityFile, params?: {
+        road?: boolean;
+    }): Promise<ActivityFile | undefined>;
+    /**
+     * Read and lock the activity <code>\{ step, aid \}</code>
+     */
+    lock(activity: ActivityFile, params?: {
+        road?: boolean;
+    }): Promise<ActivityFile | undefined>;
+    /**
+     * Read and unlock the activity <code>\{ step, aid \}</code>
+     */
+    unlock(activity: ActivityFile, params?: {
+        road?: boolean;
+    }): Promise<ActivityFile | undefined>;
+    /**
+     * Cancel the activity, returns the next activity or the forward parameters
+     */
+    cancel(activity: ActivityFile, params?: {
+        road?: boolean;
+    }): Promise<ActivityFile | undefined>;
+    /**
+     * Validate the activity with data, returns errors, the next activity or the forward parameters
+     */
+    validate(activity: ActivityFile, params?: {
+        road?: boolean;
+    }): Promise<ActivityFile | undefined>;
+    /**
+     * Next activity = alias of validate
+     */
+    next: (activity: ActivityFile, params?: {
+        road?: boolean;
+    }) => Promise<ActivityFile | undefined>;
+    /**
+     * Unlock the activity and read/lock the previous one
+     */
+    back(activity: ActivityFile, params?: {
+        road?: boolean;
+    }): Promise<ActivityFile | undefined>;
+}
+
+/**
+ * Extends Simplicite.Ajax.BusinessProcess with front hooks.
+ */
+declare class UIBusinessProcess extends BusinessProcess {
+}
+
+/** Guide (interactive tour) */
+interface GuideMetadata {
+    /** Guide name */
+    name: string;
+    /** Translated label */
+    label: string;
+    /** Guide type */
+    type: string;
+    /** Object name */
+    object: string;
+    /** Launcher button */
+    launcher?: JQuery;
+    /** Launch on display */
+    launch?: boolean;
+    /** Tour definition */
+    tour: {
+        /** Condition to play the tour */
+        condition: KeyObject;
+        /** Tour options */
+        options: KeyObject;
+        /** Steps */
+        steps: KeyObject[];
+        /** Styles */
+        styles?: KeyObject;
+        /** Scroll options of the steps */
+        scrollIntoView?: KeyObject;
+        /** Tooltip element */
+        tooltip: JQuery;
+        /** Overlay element */
+        overlay?: SVGSVGElement;
+        /** Toast when leaving the tour */
+        exitToast: KeyObject;
+    };
+    /** Track the usage of a step */
+    usage: (name: string, step: string) => void;
+}
+/**
+ * Guide rendering
+ */
+declare class Guide {
+    private CLASS_IGNORE;
+    /**
+     * Helper to generate element selector
+     */
+    selector(el: HTMLElement): string;
+    /**
+     * Helper to build a tour
+     * @param onsave service to save the tour in DB
+     */
+    recorder(onsave?: (p: {
+        name: string;
+        context: string;
+        steps: KeyObject[];
+    }, cbk: (id: string) => void) => void): void;
+    /**
+     * Simple step editor
+     * @param el selected element
+     * @param ok callback to confirm the new step or 'stop' recording
+     * @param cbk callback on editor unload
+     */
+    edit(el: JQuery, ok: (r: any) => void, cbk: JQueryHandler): void;
+    /**
+     * Player of guides from the target object
+     * @param ctn container
+     * @param list list of guides
+     */
+    player(ctn: Container, list: GuideMetadata[]): void;
+    /**
+     * Play the guide
+     */
+    play(ctn: Container, def: GuideMetadata): void;
+}
+
+/** Data given to an external object from a view item or a parent external object */
+interface ExternalData {
+    /** External object fields and values */
+    fields: KeyObject;
+    /** Label from the item label/translation */
+    label?: string;
+    /** Help from the item translation */
+    help?: string;
+}
+/** External object metadata */
+interface ExternalMetadata {
+    /** Object name (`ObjectExternal`) */
+    object?: string;
+    /** External object row ID */
+    id?: string;
+    /** External object name */
+    name: string;
+    /** Icon name */
+    icon?: string;
+    /** Translated label */
+    label?: string;
+    /** Translated help */
+    help?: string;
+    /** URL of the external object */
+    url?: string;
+    /** Fields of the external object */
+    fields?: ObjectField[];
+    /** Displayed without decoration (no panel) */
+    embedded?: boolean;
+    /** Guides to play on display */
+    guides?: GuideMetadata[];
+    /** ViewItem boosted instance for External object on View editor */
+    meta?: ObjectMetadata;
+}
+/**
+ * Simplicit&eacute; external object.
+ */
+declare class ExternalObject {
+    private _app;
+    /** External object metadata */
+    metadata: ExternalMetadata;
+    /**
+     * Constructor
+     * @param app Application Simplicite.Ajax instance
+     * @param name External object name
+     */
+    constructor(app: Session, name: string);
+    /**
+     * Get meta data
+     * @returns Promise of meta data
+     */
+    getMetaData(): Promise<ExternalMetadata>;
+    /**
+     * Get name
+     * @returns Name
+     */
+    getName(): string;
+    /**
+     * Get label (is undefined as long as meta data are not loaded using <code>getMetaData</code>)
+     * @returns Label
+     */
+    getLabel(): string | undefined;
+    /**
+     * Get help (is undefined as long as meta data are not loaded using <code>getMetaData</code>)
+     * @returns Help
+     */
+    getHelp(): string | undefined;
+    /**
+     * Are metadata loaded ?
+     */
+    isLoaded(): string | undefined;
+}
+
+/** Render method of an external object */
+type RenderFunction = (params?: KeyObject, data?: KeyObject) => Promise<void>;
+/**
+ * Extends Simplicite.Ajax.ExternalObject with front hooks.
+ */
+declare class UIExternalObject extends ExternalObject {
+    /** External object container (`.objext`) */
+    ctn: Container;
+    /** Same as ctn */
+    container: Container;
+    /** Optional parent object */
+    obj?: BusinessObject;
+    /** Optional parent object row ID */
+    rowid?: string;
+    /** Optional data from view item or external object */
+    data?: ExternalData;
+    /**
+     * Constructor with UI context from $ui.loadURL
+     * @param ctn external object container (.objext)
+     * @param obj optional parent object
+     * @param rowid optional parent object rowId
+     * @param data optional data from view item or external object
+     * @param data.fields optional external object fields and values
+     * @param data.label optional label from item label/translate
+     * @param data.help optional item help from item translate
+     */
+    constructor(ctn: Container, obj?: BusinessObject, rowid?: string, data?: ExternalData);
+    /**
+     * Render in container
+     * @param _params Optional parameters
+     * @param _data Optional data
+     */
+    render(_params: KeyObject, _data: KeyObject): Promise<void>;
+    /**
+     * Call service
+     * @param data Optional data
+     * @param options can be a content type string, e.g. 'application/json' (or its shorthand 'json')
+     *                                  which implies the data will be sent as the body,
+     *                                  otherwise may contain custom jQuery.ajax options, e.g. { contentType: '...', ... }
+     */
+    service(data: KeyObject | string, options: string | KeyObject): Promise<void>;
+    /**
+     * Get resource URL
+     * @param name Resource name
+     * @param type Resource type
+     */
+    getResourceURL(name: string, type: string): string;
+    /**
+     * Static wrapper to exec render function asynchronously with parameters (thru the $ui.loadURL of external object)
+     * @param conf wrapper config from ResponsiveExternalObject
+     * @param conf.name External object name
+     * @param conf.id External object ID
+     * @param conf.params render parameters
+     * @param conf.data optional render data
+     * @param conf.render optional specific render method (from server-side hook getRenderFunction)
+     * @param ctn container of external object
+     * @param object optional context business object
+     * @param rowId optional context business row ID
+     * @param options options with data.fields
+     */
+    static exec(conf: {
+        name: string;
+        id: string;
+        url: string;
+        params: KeyObject;
+        data?: KeyObject;
+        render?: string;
+    }, ctn: Container, object?: BusinessObject, rowId?: string, options?: {
+        data: ExternalData;
+    }): Promise<void>;
+}
+
+type DiagramContainerTitleAnchor = "start" | "middle" | "end";
+type DiagramContainerStyle = {
+    radius?: number;
+    color?: string;
+    shadow?: boolean;
+    vertical?: boolean;
+    anchor?: DiagramContainerTitleAnchor;
+};
+type DiagramContainerTemplate = {
+    name?: string;
+    object?: string;
+    display?: string;
+    icon?: string;
+    contents?: DiagramNodeTemplate[];
+} & DiagramContainerStyle;
+type DiagramContainerDef = {
+    template?: string;
+    object?: string;
+    id?: string;
+    keys?: string;
+    x?: number;
+    y?: number;
+    w?: number;
+    h?: number;
+    type?: number;
+    title?: string;
+    label?: string;
+    pool?: number;
+    vertical?: boolean;
+    shadow?: boolean;
+    color?: string;
+    radius?: number;
+};
+/**
+ * Container constructor
+ * @param {Simplicite.Diagram.Desktop} desktop desk manager
+ * @param {Object} data Container data { title, type, template, x, y, w, h... }
+ * @param {$} [elt] optional DOM object to synchronize
+ * @class
+ */
+declare class DiagramContainer extends DiagramElement {
+    container?: DiagramContainer;
+    containers: DiagramContainer[];
+    nodes: DiagramNode[];
+    object: string;
+    id: string;
+    keys: KeyString;
+    TYPE: KeyNumber;
+    data?: KeyObject;
+    olddata?: KeyObject;
+    contents?: KeyObject[];
+    template: DiagramContainerTemplate;
+    type: number;
+    icon?: string;
+    label: string;
+    title: string;
+    radius: number;
+    shadow?: boolean;
+    color?: string;
+    vertical?: boolean;
+    anchor?: string;
+    border?: JSVG;
+    head?: JSVG;
+    t?: JSVG;
+    sep?: JSVG;
+    pool: number;
+    poolMin: number;
+    padding: number;
+    margin: number;
+    canUseShadow: boolean;
+    canUseVertical: boolean;
+    constructor(desktop: DiagramDesktop, data: DiagramContainerDef | DiagramContainer, elt?: JQuery | JSVG);
+    /**
+     * Load
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    load(data: DiagramContainer | null, cbk?: Callback): void;
+    /**
+     * Draw
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    draw(): void;
+    /**
+     * Set/Get size of container
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    size(w?: number, h?: number): Size;
+    /**
+     * Size border
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    sizeBorder(w: number, h: number): void;
+    /**
+     * Change the pool position if > 0
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    setPool(pos: number, silent?: boolean): void;
+    /**
+     * Re-align all pools
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    resizePool(): void;
+    /**
+     * Bind
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    bind(el: JSVG): void;
+    /**
+     * Toggle menu
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    toggleMenu(): void;
+    /**
+     * Style
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    style(props?: DiagramContainerStyle, silent?: boolean): {
+        color: string | undefined;
+        radius: number;
+        shadow: boolean | undefined;
+        vertical: boolean | undefined;
+    };
+    /**
+     * Remove
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    remove(cascad?: boolean): void;
+    /**
+     * Bounded rectangle of all contents
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    contentBound(): {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    } | null;
+    /**
+     * Set/get position of container
+     * @param {number} x Horizontal coordinate
+     * @param {number} y Vertical coordinate
+     * @param {boolean} rel Relative?
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    position(x?: number, y?: number, rel?: boolean, cascad?: boolean): Point;
+    /**
+     * Is container inside this container?
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    contains(cont: DiagramContainer): boolean;
+    /**
+     * Attach
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    attach(x?: DiagramNode | DiagramContainer | null, silent?: boolean, noResize?: boolean): void;
+    /**
+     * Detach
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    detach(x?: DiagramNode | DiagramContainer, silent?: boolean): void;
+}
+
+type DiagramSpringsParam = {
+    stiffness: number;
+    repulsion: number;
+    damping: number;
+    remoteness: number;
+    gravity: number;
+    maxDuration: number;
+    callback?: Callback;
+    enabled: boolean;
+};
+/**
+ * Springs layout: a force directed graph algorithm
+ * @constructor
+ */
+declare class DiagramSprings {
+    model: DiagramModeler;
+    desktop?: DiagramDesktop;
+    box?: Rect;
+    margin: number;
+    graph?: Graph;
+    layout?: Layout;
+    renderer?: Renderer;
+    stiffness: number;
+    repulsion: number;
+    damping: number;
+    remoteness: number;
+    gravity: number;
+    enabled?: boolean;
+    constructor(model: DiagramModeler);
+    /**
+     * Spring stiffness constant F = k * dx
+     * @function
+     */
+    setStiffness(k: number): void;
+    setRepulsion(r: number): void;
+    setDamping(d: number): void;
+    setRemoteness(r: number): void;
+    setGravity(g: number): void;
+    getData(): {
+        "data-layout": string;
+        "data-stiffness": number;
+        "data-repulsion": number;
+        "data-damping": number;
+        "data-remoteness": number;
+        "data-gravity": number;
+        "data-enabled": boolean | undefined;
+    };
+    readData(svg: JSVG): this;
+    /**
+     * Prepare the nodes springs
+     * @param {(Object|$)} data
+     * @param {number} data.stiffness k = Spring stiffness
+     * @param {number} data.repulsion Nodes repulsion
+     * @param {number} data.damping Spring damping
+     * @param {number} data.remoteness Nodes remoteness (zoom)
+     * @param {number} data.gravity attraction factor
+     * @param {number} data.maxDuration optional max time to execute the placement (in milliseconds)
+     * @param {function} data.callback optional callback when all positions are fixed
+     * @param {boolean} data.enabled true by default
+     * @function
+     */
+    load(data: DiagramSpringsParam | JSVG): this;
+    disable(): this;
+    /**
+     * Start the nodes placement
+     * @function
+     */
+    start(): this;
+    /**
+     * Stop the nodes placement
+     * @function
+     */
+    stop(): this;
+    /**
+     * add node
+     * @function
+     */
+    addNode(node: HTMLElement): SpringNode | undefined;
+    /**
+     * add nodes
+     * @function
+     */
+    addNodes(nodes?: JQuery): void;
+    /**
+     * Remove nodes
+     * @function
+     */
+    removeNodes(selectorNodes: string): void;
+    /**
+     * Add a link between 2 spring nodes
+     * @function
+     */
+    addLink(link: JSVG): SpringEdge | undefined;
+    /**
+     * Move nodes
+     * @function
+     */
+    move(nodes: JSVG[]): void;
+}
+declare type SpringNodeData = {
+    label?: string;
+    mass?: number;
+    node?: DiagramNode;
+};
+declare class SpringNode implements SpringNode {
+    id: string;
+    data: SpringNodeData;
+    point?: Point$1;
+    constructor(id: string, data?: SpringNodeData);
+}
+declare type SpringEdgeData = {
+    type?: string;
+    length?: number;
+};
+declare class SpringEdge {
+    id: string;
+    source: SpringNode;
+    target: SpringNode;
+    data: SpringEdgeData;
+    from?: number;
+    to?: number;
+    type?: string;
+    directed?: boolean;
+    spring?: Spring;
+    constructor(id: string, source: SpringNode, target: SpringNode, data?: SpringEdgeData);
+}
+declare class Graph {
+    model: DiagramModeler;
+    nodes: SpringNode[];
+    edges: SpringEdge[];
+    nodeSet: {
+        [id: string]: SpringNode;
+    };
+    adjacency: {
+        [id1: string]: {
+            [id2: string]: SpringEdge[];
+        };
+    };
+    nextNodeId: number;
+    nextEdgeId: number;
+    eventListeners: Renderer[];
+    constructor(model: DiagramModeler);
+    addNode(node: SpringNode): SpringNode;
+    addNodes(list: string[]): void;
+    addEdge(edge: SpringEdge): SpringEdge;
+    addEdges(list: string[][]): void;
+    newNode(data: SpringNodeData): SpringNode;
+    newEdge(source: SpringNode, target: SpringNode, data: SpringEdgeData): SpringEdge;
+    loadJSON(json: string | KeyObject): void;
+    getEdges(node1: SpringNode, node2: SpringNode): SpringEdge[];
+    removeNode(node: SpringNode): void;
+    detachNode(node: SpringNode): void;
+    removeEdge(edge: SpringEdge): void;
+    merge(data: Graph): void;
+    filterNodes(fn: (node: SpringNode) => boolean): void;
+    filterEdges(fn: (node: SpringEdge) => boolean): void;
+    addGraphListener(obj: Renderer): void;
+    notify(): void;
+}
+declare class Point$1 {
+    p: Vector;
+    m: number;
+    v: Vector;
+    a: Vector;
+    constructor(position: Vector, mass: number);
+    applyForce(force: Vector): void;
+}
+declare class Spring {
+    point1: Point$1;
+    point2: Point$1;
+    length: number;
+    k: number;
+    constructor(point1: Point$1, point2: Point$1, length: number, k: number);
+    distanceToPoint(point: Point$1): number;
+}
+declare class ForceDirected {
+    graph: Graph;
+    stiffness: number;
+    repulsion: number;
+    damping: number;
+    remoteness: number;
+    gravity: number;
+    static Point: typeof Point$1;
+    static Spring: typeof Spring;
+    constructor(graph: Graph, stiffness: number, repulsion: number, damping: number, remoteness: number, gravity: number);
+    point(node: SpringNode): Point$1;
+    spring(edge: SpringEdge): Spring;
+    eachNode(cbk: (n: SpringNode, p: Point$1) => void): void;
+    eachEdge(cbk: (e: SpringEdge, s: Spring) => void): void;
+    eachSpring(cbk: (s: Spring) => void): void;
+    applyCoulombsLaw(): void;
+    applyHookesLaw(): void;
+    attractToCentre(p: Point$1): void;
+    updatePoint(p: Point$1, dt: number): void;
+    totalEnergy(): number;
+    _started?: boolean;
+    _stop?: boolean;
+    _energy: number;
+    _count: number;
+    _time0: number;
+    /**
+     * Start simulation if it's not running already.
+     * In case it's running then the call is ignored, and none of the callbacks passed is ever executed.
+     */
+    start(render: Callback, onRenderStart?: Callback, onRenderStop?: Callback): void;
+    stop(): void;
+    tick(dt: number): void;
+    getBound(): Rect;
+}
+declare class Layout extends ForceDirected {
+    static ForceDirected: typeof ForceDirected;
+}
+declare class Vector {
+    x: number;
+    y: number;
+    constructor(x: number, y: number);
+    static random(): Vector;
+    add(v: Vector): Vector;
+    subtract(v: Vector): Vector;
+    multiply(n: number): Vector;
+    divide(n: number): Vector;
+    magnitude(): number;
+    normal(): Vector;
+    normalise(): Vector;
+}
+/**
+ * Renderer handles the layout rendering loop
+ * @param onRenderStart optional callback function that gets executed whenever rendering starts.
+ * @param onRenderStop optional callback function that gets executed whenever rendering stops.
+ * @param onRenderFrame optional callback function that gets executed after each frame is rendered.
+ */
+declare class Renderer {
+    layout: Layout;
+    clear?: Callback;
+    drawNode?: (n: SpringNode, p: Vector) => void;
+    drawEdge?: (e: SpringEdge, p1: Vector, p2: Vector) => void;
+    onRenderStart?: Callback;
+    onRenderStop?: Callback;
+    onRenderFrame?: Callback;
+    constructor(layout: Layout, clear?: Callback, drawEdge?: Callback, drawNode?: (n: SpringNode, p: Vector) => void, onRenderStart?: Callback, onRenderStop?: Callback, onRenderFrame?: Callback);
+    graphChanged(): void;
+    /**
+     * Starts the simulation of the layout in use.
+     *
+     * Note that in case the algorithm is still or already running then the layout that's in use
+     * might silently ignore the call, and your optional <code>done</code> callback is never executed.
+     * At least the built-in ForceDirected layout behaves in this way.
+     */
+    start(): void;
+    stop(): void;
+}
+
+type DiagramTreeParam = {
+    vertical?: boolean;
+    openClose?: boolean;
+    rootPosition?: number;
+    gapBetweenNodes?: number;
+    gapBetweenLevels?: number;
+    inspect?: number;
+    reverse?: boolean;
+};
+type DiagramTreeMode = "simple" | "assign" | "release";
+type DiagramTreeBound = {
+    xmin: number;
+    ymin: number;
+    xmax: number;
+    ymax: number;
+};
+/**
+ * Tree singleton
+ * @class
+ */
+declare class DiagramTree {
+    DEFAULT_DISTANCE: number;
+    ROOT: KeyNumber;
+    INSPECT: KeyNumber;
+    constructor();
+    private static singleton;
+    static get(): DiagramTree;
+    /**
+     * Tree placement from a node
+     * @param {Simplicite.Diagram.Node} node node
+     * @param {Object} params layout options
+     * @param {boolean} params.vertical vertical direction
+     * @param {boolean} params.openClose add collapse buttons
+     * @param {Object}  params.rootPosition root absolute position {x,y}
+     * @param {number}  params.gapBetweenNodes distance between nodes (px)
+     * @param {number}  params.gapBetweenLevels distance between tree levels (px)
+     * @param {number}  params.inspect links inspection (Simplicite.Diagram.Tree.INSPECT)
+     * @param {boolean} params.reverse reverse tree?
+     * @param {string} mode 'simple' placement | 'assign' to tree | 'release' from tree
+     * @param {boolean} selected select the node
+     * @function
+     */
+    layoutNode(node: DiagramNode, params: DiagramTreeParam, mode: DiagramTreeMode, selected: boolean): void;
+    /**
+     * Menu
+     * @function
+     */
+    menu(desktop: DiagramDesktop): void;
+}
+/**
+ * TreeLayout
+ * @param {Simplicite.Diagram.Desktop} desktop desktop
+ * @param {Object} params layout options
+ * @class
+ */
+declare class DiagramTreeLayout {
+    DEFAULT_DISTANCE: number;
+    tree: DiagramTree;
+    desktop: DiagramDesktop;
+    root?: DiagramTreeNode;
+    levelSizes?: number[];
+    bound?: DiagramTreeBound;
+    rootPosition: number;
+    gapBetweenNodes: number;
+    gapBetweenLevels: number;
+    inspect: number;
+    openClose: boolean;
+    vertical: boolean;
+    reverse: boolean;
+    constructor(desktop: DiagramDesktop, params: DiagramTreeParam);
+    /**
+     * Set orientation
+     * @function
+     */
+    setOrientation(vertical: boolean): void;
+    /**
+     * Set root position
+     * @function
+     */
+    setRootPosition(pos: number): void;
+    /**
+     * Set gap between nodes
+     * @function
+     */
+    setGapBetweenNodes(d: number): void;
+    /**
+     * Set gap between levels
+     * @function
+     */
+    setGapBetweenLevels(d: number): void;
+    /**
+     * Set open/close
+     * @function
+     */
+    setOpenClose(b: boolean): void;
+    /**
+     * Revalidate
+     * @function
+     */
+    revalidate(): void;
+    /**
+     * Add node
+     * @function
+     */
+    addNode(node: DiagramNode): DiagramTreeNode;
+    /**
+     * Remove node
+     * @function
+     */
+    removeNode(node: DiagramNode): void;
+    /**
+     * Remove all
+     * @function
+     */
+    removeAll(): void;
+    /**
+     * Set root
+     * @function
+     */
+    setRoot(node: DiagramNode, mode: DiagramTreeMode): void;
+    /**
+     * Open
+     * @function
+     */
+    open(node: DiagramNode, open: boolean): void;
+    /**
+     * Is open?
+     * @function
+     */
+    isOpen(node: DiagramNode): boolean;
+    /**
+     * Switch open/close
+     * @function
+     */
+    switchOpenClose(node: DiagramNode): void;
+    /**
+     * Set parent
+     * @function
+     */
+    setParent(node: DiagramNode, parent: DiagramNode | null, redraw: boolean, root: DiagramNode, assign?: boolean): void;
+    /**
+     * Get size
+     * @function
+     */
+    getSize(): Size;
+    /**
+     * Do layout
+     * @function
+     */
+    doLayout(selected?: boolean): void;
+    /**
+     * Global size
+     * @function
+     */
+    globalSize(node: DiagramNode): void;
+    /**
+     * Get tree level sizes
+     * @function
+     */
+    getTreeLevelSizes(): number[] | undefined;
+    /**
+     * Get tree level size
+     * @function
+     */
+    getTreeLevelSize(level: number): number;
+    /**
+     * Set tree level sizes
+     * @function
+     */
+    setLevelSizes(tn: DiagramTreeNode, level: number): void;
+    /**
+     * Generate the tree form the parent thru links
+     * @function
+     */
+    layoutNodeBuildTree(parent: DiagramNode, mode: DiagramTreeMode): void;
+    /**
+     * Insert node
+     * @function
+     */
+    insertNode(child: DiagramNode, parent: DiagramNode, mode: DiagramTreeMode, link: DiagramLink): void;
+}
+/**
+ * TreeNode assigned to node
+ * @class
+ */
+declare class DiagramTreeNode {
+    root?: DiagramNode;
+    node: DiagramNode;
+    key: string;
+    children: DiagramTreeNode[];
+    parent: DiagramTreeNode | null;
+    layout: DiagramTreeLayout;
+    assign?: boolean;
+    constructor(node: DiagramNode, parent: DiagramTreeNode | null, layout: DiagramTreeLayout);
+    /**
+     * Is leaf?
+     * @function
+     */
+    isLeaf(): boolean;
+    /**
+     * Has child?
+     * @function
+     */
+    hasChild(tn: DiagramTreeNode): boolean;
+    /**
+     * Get tree size
+     * @function
+     */
+    getTreeSize(level: number, subTreeOnly: boolean): Size;
+    /**
+     * Get angle in [0..2PI[
+     * @function
+     */
+    getAngle(): number;
+    /**
+     * Add child
+     * @function
+     */
+    addChild(child: DiagramTreeNode): void;
+    /**
+     * Remove child
+     * @function
+     */
+    removeChild(child: DiagramTreeNode): void;
+    /**
+     * Open
+     * @function
+     */
+    open(visible: boolean): void;
+    /**
+     * Is open?
+     * @function
+     */
+    isOpen(): boolean;
+    /**
+     * Do layout
+     * @function
+     */
+    doLayout(selected: boolean): void;
+    /**
+     * Do layout hierarchy (recursive)
+     * @function
+     */
+    doLayoutHierarchy(x: number, y: number, level: number, selected?: boolean): void;
+    /**
+     * Do layout radial (recursive)
+     * @function
+     */
+    doLayoutRadial(cx: number, cy: number, r: number, a1: number, a2: number, selected?: boolean): void;
+    /**
+     * Move node
+     * @function
+     */
+    moveNode(x: number, y: number): void;
+    /**
+     * Translate
+     * @function
+     */
+    translate(dx: number, dy: number): void;
+    /**
+     * Draw button
+     * @function
+     */
+    /**
+     * Move
+     * @function
+     */
+    move(): void;
+}
+
+/**
+ * Nodus = linkable element (node or note)
+ * @param {Simplicite.Diagram.Desktop} desktop desk manager
+ * @class
+ */
+declare class DiagramNodus extends DiagramElement {
+    object: string;
+    id: string;
+    links?: DiagramLink[];
+    springNode?: SpringNode;
+    treeNode?: DiagramTreeNode;
+    constructor(desktop: DiagramDesktop);
+    /**
+     * Add link
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    addLink(link: DiagramLink): void;
+    /**
+     * Remove link
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    removeLink(link: DiagramLink): void;
+    /**
+     * Move link
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    moveLinks(dx: number, dy: number): void;
+    /**
+     * Move pointer during add link
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    moveAddLink(al: DeskElementPos): void;
+    /**
+     * Create link
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    createLink(al: DeskElementPos): void;
+}
+
+type DiagramLinkTemplate = {
+    name?: string;
+    render?: number;
+    type?: number;
+    fromObject?: string;
+    fromField?: string;
+    fromRequired?: boolean;
+    fromTemplate?: string;
+    fromDisplay?: string;
+    toObject?: string;
+    toField?: string;
+    toTemplate?: string;
+    toDisplay?: string;
+    link?: string;
+    linkFromField?: string;
+    linkToField?: string;
+    linkRowIdField?: string;
+    canChangeShowLabel?: boolean;
+    canChangeRender?: boolean;
+    canChangeType?: boolean;
+    canChangeColor?: boolean;
+    canChangeCurved?: boolean;
+    canChangeBridge?: boolean;
+    canChangeThickness?: boolean;
+} & DiagramLinkStyle & DiagramLinkLabel;
+type DiagramLinkLabel = {
+    label?: string;
+    showLabel?: boolean;
+};
+type DiagramLinkStyle = {
+    color?: string;
+    thickness?: number;
+    curved?: boolean;
+    bridge?: boolean;
+    dashed?: boolean;
+};
+type DiagramLinkDef = {
+    fromObject?: string;
+    fromId?: string;
+    toObject?: string;
+    toId?: string;
+    object?: string;
+    id?: string;
+    keys?: string | KeyString;
+    template?: string | DiagramLinkTemplate;
+    from?: DiagramNode;
+    to?: DiagramNode;
+    RENDER?: KeyObject;
+    LINK?: KeyObject;
+};
+/**
+ * Link constructor
+ * @param {Simplicite.Diagram.Desktop} desktop Desk manager
+ * @param {Object} data Link data <code>\{ object, id, template, points... \}</code>
+ * @param {$} [elt] Optional DOM object to synchronize
+ * @class
+ */
+declare class DiagramLink extends DiagramElement {
+    RENDER: KeyNumber;
+    LINK: KeyNumber;
+    object: string;
+    id: string;
+    keys: KeyString;
+    data?: KeyObject;
+    from: DiagramNodus;
+    fromType?: number;
+    fromObject: string;
+    fromId: string;
+    to: DiagramNodus;
+    toType?: number;
+    toObject: string;
+    toId: string;
+    label: string;
+    template: DiagramLinkTemplate;
+    innerLink: boolean;
+    points: Point[];
+    masterLine: Line;
+    road?: JSVG;
+    border?: JSVG;
+    border2?: JSVG;
+    offset: number;
+    offsetMax: number;
+    render?: number;
+    thickness?: number;
+    color?: string;
+    curved?: boolean;
+    bridge?: boolean;
+    dashed?: boolean;
+    showLabel?: boolean;
+    cls?: string;
+    pointer?: JSVG;
+    constructor(desktop: DiagramDesktop, data: DiagramLinkDef, elt?: JSVG);
+    /**
+     * Remove a link
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    remove(): void;
+    /**
+     * Compare links
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    equals(link: DiagramLink): boolean;
+    /**
+     * Override position to move points
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    positionPoints(dx: number, dy: number, nb: number | null, from: boolean): Point;
+    /**
+     * Change link rendering
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    rendering(render?: number, silent?: boolean): number | undefined;
+    /**
+     * Change extremity
+     * @param {boolean} from From direction ?
+     * @param {number} type Type of LINK, accept marker syntax
+     * @param {boolean} silent no redraw/has changed
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    extremity(from: boolean, type: number | string, silent?: boolean): number | undefined;
+    /**
+     * Style
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    style(props?: DiagramLinkStyle, silent?: boolean): {
+        color: string | undefined;
+        thickness: number | undefined;
+        curved: boolean | undefined;
+        bridge: boolean | undefined;
+        dashed: boolean | undefined;
+    };
+    /**
+     * Text
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    text(props?: DiagramLinkLabel, silent?: boolean): {
+        showLabel: boolean | undefined;
+        label: string;
+    };
+    /**
+     * Draw
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    draw(): void;
+    /**
+     * Redraw
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    redraw(): void;
+    /**
+     * Draw label
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    drawLabel(label: string): void;
+    /**
+     * Path
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    path(lines?: Line[], curved?: boolean, bridge?: boolean): string;
+    /**
+     * Draw bridge path
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    drawBridge(l: DiagramLink, line: Line, inters: DiagramLink[]): string;
+    /**
+     * Draw path
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    drawPath(lines: Line[] | undefined): void;
+    /**
+     * Toggle menu
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    toggleMenu(pos: Point): void;
+    /**
+     * Update path
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    updatePath(): void;
+    /**
+     * Leave
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    leave(): void;
+    /**
+     * Add point
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    addPoint(idx: number, p: Point): void;
+    /**
+     * Remove added point at index or position
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    removePoint(index: number | null, pos?: Point): void;
+    /**
+     * Move point
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    movePoint(pt: DeskElementPos, drop?: boolean): void;
+    /**
+     * Get starting point in node "from"
+     * @param {Point} p optional x,y in percent to change relative position into node
+     * @param {boolean} prct true to return percents or absolute position
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    pointFrom(p?: Point, prct?: boolean): Point;
+    /**
+     * Get ending point in node "to"
+     * @param {Point} p optional x,y in percent to change relative position into node
+     * @param {boolean} prct true to return percents or absolute position
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    pointTo(p?: Point, prct?: boolean): Point;
+    /**
+     * Broken lines
+     * @param {boolean} full true: get lines from internal nodes, false: outgoing points from nodes
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    getLines(full?: boolean): Line[] | undefined;
+    /** Build a line between 2 points */
+    toLine(a: Point, b: Point): Line;
+    /** Build a line between 2 points */
+    toLine2(x1: number, y1: number, x2: number, y2: number): Line;
+    /** Generate simple free line between 2 vectors */
+    getFreeLines(u1: Line, u2: Line): Line[];
+    /** Generate broken lines between 2 vectors */
+    getAutoLines(u1: Line, u2: Line): Line[];
+    /** Top to Bottom lines between 2 nodes */
+    getTopBottomLines(n1: DiagramNodus, n2: DiagramNodus): Line[];
+    /** Left to Right lines between 2 nodes */
+    getLeftRightLines(n1: DiagramNodus, n2: DiagramNodus): Line[];
+    /** Vertical to Horizontal lines between 2 nodes */
+    getVertHorizLines(n1: DiagramElement, n2: DiagramElement): Line[];
+    /** Horizontal to Vertical lines between 2 nodes */
+    getHorizVertLines(n1: DiagramElement, n2: DiagramElement): Line[];
+    /** Reflexive inner lines */
+    getInnerLines(n: DiagramElement): Line[];
+    /**
+     * Normal Vector from node
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    getOutgoingPoint(n1: DiagramElement, _n2: DiagramElement, direction: number): Line;
+    /**
+     * Interpolation nearest point to path
+     * @function
+     * @memberof Simplicite.Diagram.Link
+     */
+    closestPoint(pathNode: SVGPathElement, point: Point): {
+        x: number;
+        y: number;
+        d: number;
+    };
+    /** line (p1, p2) => ax + by + c = 0 */
+    getStraightLine(l: Line): StraightLine;
+    /** Intersection in segments ? */
+    getIntersection(line1: Line, line2: Line, d1: StraightLine, d2: StraightLine): Point | undefined;
+}
+
+type DiagramNodeStyle = {
+    radius?: number;
+    color?: string;
+    shadow?: boolean;
+    shape?: string;
+    titlePos?: string;
+};
+type DiagramNodeContentTemplate = {
+    name: string;
+    object: string;
+    display?: string;
+    relParentField?: string;
+    refField?: string;
+    refRequired?: boolean;
+    relation?: string;
+    relationRowIdField?: string;
+    relContentField?: string;
+};
+type DiagramNodeTemplate = {
+    name?: string;
+    object?: string;
+    relation?: string;
+    refField?: string;
+    display?: string;
+    icon?: string;
+    contents?: {
+        [key: string]: DiagramNodeContentTemplate;
+    };
+    showContent?: boolean;
+    collapseContent?: boolean;
+    showField?: number;
+    collapseField?: boolean;
+    resizable?: boolean;
+} & DiagramNodeStyle;
+type DiagramNodeContentItem = {
+    index: number;
+    text: string;
+    object: string;
+    field?: string;
+    id: string;
+    relId?: string;
+    pre?: JSVG[];
+    post?: JSVG[];
+    cls: string;
+};
+type DiagramNodeContent = {
+    object: string;
+    template: string;
+    relField?: string;
+    relation?: string;
+    relParentField?: string;
+    items: DiagramNodeContentItem[];
+};
+type DiagramNodeDef = {
+    template: string | DiagramNodeTemplate;
+    object: string;
+    id: string;
+    x: number;
+    y: number;
+    links?: DiagramLinkDef[];
+};
+type TitlePosition = "top" | "center" | "bottom";
+/**
+ * Node constructor
+ * @param {Simplicite.Diagram.Desktop} desktop desk manager
+ * @param {Object} data Node data { object, id, template, contents... }
+ * @param {$} [elt] optional DOM object to synchronize
+ * @class
+ */
+declare class DiagramNode extends DiagramNodus {
+    keys: KeyString;
+    label: string;
+    titlePos?: TitlePosition;
+    icon?: string;
+    data?: KeyObject;
+    olddata?: KeyObject;
+    links: DiagramLink[];
+    contents: DiagramNodeContent[];
+    container?: DiagramContainer;
+    border?: JSVG;
+    template: DiagramNodeTemplate;
+    padding: number;
+    radius?: number;
+    color?: string;
+    shadow?: boolean;
+    shape?: string;
+    collapseContent?: boolean;
+    collapseField?: boolean;
+    canAttach?: boolean;
+    layout?: DiagramTreeLayout;
+    visible?: boolean;
+    constructor(desktop: DiagramDesktop, data: Partial<DiagramNodeDef>, elt?: JQuery | JSVG);
+    /**
+     * Load node with data
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    load(data: DiagramNode, cbk?: (data?: DiagramNode | DiagramContainer) => void): void;
+    /**
+     * Draw
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    draw(): void;
+    /**
+     * Set/Get size of node
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    size(w?: number, h?: number): Size;
+    /**
+     * Redraw
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    redraw(): void;
+    /**
+     * Is content visible?
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    isContentVisible(i: number, _content: DiagramNodeContent): boolean | undefined;
+    /**
+     * Is item visible?
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    isItemVisible(_i: number, _j: number, _content: DiagramNodeContent, _item: DiagramNodeContentItem): boolean;
+    /**
+     * Draw item
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    drawItem(data: {
+        item: DiagramNodeContentItem;
+        content: DiagramNodeContent;
+        indexContent: number;
+        indexItem: number;
+        height: number;
+        group: JSVG;
+    }): any;
+    /**
+     * Bind
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    bind(r: JSVG, g?: JSVG, data?: KeyObject): void;
+    /**
+     * Toggle menu
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    toggleMenu(item: DiagramNodeContentItem, pos: Point): void;
+    /**
+     * Collapse fields
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    collapseFields(b?: boolean, silent?: boolean): boolean | undefined;
+    /**
+     * Collapse contents
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    collapseContents(b?: boolean, silent?: boolean): boolean | undefined;
+    /**
+     * Style
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    style(props?: DiagramNodeStyle, silent?: boolean): {
+        color: string | undefined;
+        radius: number | undefined;
+        shadow: boolean | undefined;
+        shape: string | undefined;
+        titlePos: TitlePosition | undefined;
+    };
+    /**
+     * Remove
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    remove(): void;
+    /**
+     * Set/get position of element
+     * @param {number} x Horizontal coordinate
+     * @param {number} y Vertical coordinate
+     * @param {boolean} rel Relative?
+     * @param {boolean} attach Attach to parent container?
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    position(x?: number, y?: number, rel?: boolean | 0, attach?: boolean): Point;
+    /**
+     * Attach node to a container
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    attach(silent?: boolean, resize?: boolean): void;
+    /**
+     * Detach from container
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    detach(silent?: boolean): void;
+    /**
+     * Set label
+     * @param {string} label Label
+     * @function
+     * @memberof Simplicite.Diagram.Node
+     */
+    setLabel(label: string): void;
+}
+
+type ShapeParam = {
+    name: string;
+    w?: number;
+    h?: number;
+    wmin?: number;
+    hmin?: number;
+    position?: TitlePosition;
+    ar?: boolean;
+    title?: string;
+};
+type Shape = {
+    w: number;
+    h: number;
+    ar?: boolean;
+    elt: () => JSVG;
+    size: (e: JSVG, w: number, h: number) => Size;
+    intersect?: () => Point | undefined;
+};
+type ShapeGroup = {
+    name: string;
+    list: string[];
+};
+type ShapeDefs = {
+    [shape: string]: Shape;
+};
+/**
+ * Node shape
+ * @class
+ */
+declare class DiagramShape {
+    name: string;
+    elt: JSVG;
+    title?: string;
+    position?: TitlePosition;
+    text?: JSVG;
+    wmin: number;
+    hmin: number;
+    ar: boolean;
+    static defs: ShapeDefs;
+    MIN_SIZE: number;
+    /**
+     * New shape { name, w, h, wmin, hmin, title, position, ar }
+     * @constructor
+     */
+    constructor(p: ShapeParam);
+    /** Group of shapes */
+    static getGroups(): ShapeGroup[];
+    /**
+     * Get shape
+     * @function
+     * @memberof Simplicite.Diagram.Shape
+     */
+    getShape(): JSVG;
+    /**
+     * Get title
+     * @function
+     * @memberof Simplicite.Diagram.Shape
+     */
+    getTitle(): JSVG | undefined;
+    /**
+     * Resize shape to fit centered text
+     * @function
+     * @memberof Simplicite.Diagram.Shape
+     */
+    fitText(): void;
+    /**
+     * Set/Get size of element
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberof Simplicite.Diagram.Shape
+     */
+    size(w: number, h: number): {
+        w: number;
+        h: number;
+    };
+    /**
+     * To line
+     * @function
+     * @memberof Simplicite.Diagram.Shape
+     */
+    private toLine;
+    private btwn;
+    private line_line_intersect;
+    private line_circle_intersect;
+    private line_ellipse_intersect;
+    private line_path_intersect;
+    private line_rect_intersect;
+    intersect(n: Point, line: Line): Point | undefined;
+    /** Predefined Shapes definition */
+    private initShapes;
+}
+
+/** Line between 2 points */
+type Line = {
+    p1: Point;
+    p2: Point;
+};
+/** Line ax + by + c = 0 */
+type StraightLine = {
+    a: number;
+    b: number;
+    c: number;
+};
+type Bound = Rect & {
+    x2: number;
+    y2: number;
+    xc: number;
+    yc: number;
+};
+type Direction = "nw" | "sw" | "se" | "ne" | "n" | "s" | "w" | "e";
+/**
+ * Default element of diagram
+ * @param {Simplicite.Diagram.Desktop} desktop desk manager
+ * @class
+ */
+declare class DiagramElement {
+    desktop: DiagramDesktop;
+    elt: JQuery<SVGGraphicsElement>;
+    elt2?: JQuery<SVGGraphicsElement>;
+    x: number;
+    y: number;
+    w: number;
+    h: number;
+    resizable: boolean;
+    wmin: number;
+    hmin: number;
+    s?: DiagramShape;
+    constructor(desktop: DiagramDesktop);
+    /**
+     * Mark changed
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    changed(): void;
+    /**
+     * Draw element
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    draw(): void;
+    /**
+     * Redraw element
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    redraw(): void;
+    /**
+     * Set/get position of element
+     * @param {number} x Horizontal coordinate
+     * @param {number} y Vertical coordinate
+     * @param {boolean} rel Relative?
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    position(x?: number, y?: number, rel?: boolean | 0): Point;
+    /**
+     * Set/Get size of element
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    size(w?: number, h?: number): Size;
+    /**
+     * Get bounds
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    bound(): Bound;
+    /**
+     * Remove element
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    remove(): void;
+    /**
+     * Select
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    select(sel?: boolean): boolean;
+    /**
+     * Menu
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    menu(sections: DesktopMenuItem[][], pos?: Point | null, cbk?: (menu: JQuery) => void): void;
+    /**
+     * Color picker
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    colorPicker(inp: JQuery, menu: JQuery, cbk?: (color: string) => void): void;
+    /**
+     * Is inside?
+     * @param {number} x Horizontal coordinate
+     * @param {number} y Vertical coordinate
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    isInside(x: number, y: number): boolean;
+    /**
+     * Bind resize
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    bindResize(): void;
+    /**
+     * Resize in direction
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    resize(rn: DeskElementPos, drop?: boolean): void;
+    /**
+     * Text size
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    textSize(text: string, cls?: string): {
+        w: number;
+        h: number;
+    };
+    /**
+     * Wrap text
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    wrapText(text: string, width: number, padding: number, el?: JSVG): JSVG;
+    /**
+     * Get wrapped back as string
+     * @function
+     * @memberof Simplicite.Diagram.Element
+     */
+    unwrapText(el: JQuery): string;
+}
+
+/**
+ * Caption constructor
+ * @param {Simplicite.Diagram.Desktop} desktop desk manager
+ * @param {Object} data Model data and { x, y }
+ * @class
+ */
+declare class DiagramCaption extends DiagramElement {
+    padding: number;
+    border?: JSVG;
+    t?: JSVG;
+    data: KeyObject;
+    constructor(desktop: DiagramDesktop, data: KeyObject);
+    /**
+     * Draw caption within hook onDrawCaption(caption, display)
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
+     */
+    draw(): void;
+    /**
+     * Display the default caption with model data
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
+     */
+    display(): void;
+    /**
+     * Set/Get size of caption
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
+     */
+    size(w?: number, h?: number): Size;
+    /**
+     * Bind caption
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
+     */
+    bind(el: JSVG): void;
+}
+
+type DiagramNoteData = {
+    id?: string;
+    x?: number;
+    y?: number;
+    w?: number;
+    h?: number;
+    text?: string;
+};
+type DiagramNoteStyle = {
+    color?: string;
+};
+/**
+ * Note constructor
+ * @param {Simplicite.Diagram.Desktop} desktop desk manager
+ * @param {Object} data optional { text, x, y, w, h, id }
+ * @param {$} [elt] optional DOM object to synchronize
+ * @class
+ */
+declare class DiagramNote extends DiagramNodus {
+    id: string;
+    color: string;
+    text: string;
+    padding: number;
+    border?: JSVG;
+    t?: JSVG;
+    constructor(desktop: DiagramDesktop, data: DiagramNoteData, elt?: JQuery | JSVG);
+    /**
+     * Draw
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    draw(): void;
+    /**
+     * Set/Get size of note
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    size(w?: number, h?: number): Size;
+    /**
+     * Redraw
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    redraw(): void;
+    /**
+     * Bind
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    bind(r: JSVG, _g?: unknown, _data?: unknown): void;
+    /**
+     * Toggle menu
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    toggleMenu(): void;
+    /**
+     * Edit note
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    edit(): void;
+    /**
+     * Style
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    style(props?: DiagramNoteStyle, silent?: boolean): {
+        color: string;
+    };
+    /**
+     * Remove
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    remove(): void;
+    /**
+     * Set/get position of element
+     * @param {number} x Horizontal coordinate
+     * @param {number} y Vertical coordinate
+     * @param {boolean} rel Relative?
+     * @function
+     * @memberof Simplicite.Diagram.Note
+     */
+    position(x?: number, y?: number, rel?: boolean): Point;
+}
+
+type DesktopMenuItem = {
+    text: string | JQuery;
+    icon?: string;
+    cbk?: JQueryHandler;
+};
+type DeskElementPos = {
+    origin: Point;
+    pos: Point;
+    pointer?: JSVG;
+    caption?: boolean;
+    container?: boolean;
+    elt?: DiagramElement;
+    dir?: Direction;
+    bound?: Bound;
+    moved?: boolean;
+    link?: DiagramLink;
+    from?: DiagramNode | DiagramNote;
+    to?: JQuery;
+    index?: number;
+    points?: Point[];
+    pointFrom?: Point;
+    pointTo?: Point;
+    line?: JSVG;
+    valid?: boolean;
+};
+type DiagramDesktopParam = {
+    svg?: string;
+    x?: number;
+    y?: number;
+    zoom?: number;
+    grid?: number;
+    color?: string;
+};
+/**
+ * Desktop with SVG
+ * @param {Object} p options
+ * @param {number} p.x Origin position x
+ * @param {number} p.y Origin position y
+ * @param {number} p.zoom Zoom factor
+ * @param {string} p.color Background color
+ * @param {number} p.grid Grid size or 0 to hide
+ * @class
+ */
+declare class DiagramDesktop {
+    ctn: Container;
+    data: Required<DiagramDesktopParam>;
+    margin: number;
+    model: DiagramModeler;
+    options: KeyObject;
+    undoRedo: KeyObject;
+    pointerMode: number;
+    _poolLock?: boolean;
+    _move_links?: DiagramLink[];
+    changed: boolean;
+    isPopup: boolean;
+    desktop?: JQuery;
+    desk?: JQuery;
+    svg?: JQuery<SVGSVGElement>;
+    viewport?: JSVG;
+    background?: JSVG;
+    body?: JSVG;
+    containers?: JSVG;
+    links?: JSVG;
+    nodes?: JSVG;
+    foreground?: JSVG;
+    palZoom?: JQuery;
+    palLayout?: JQuery;
+    palModel?: JQuery;
+    palDesk?: JQuery;
+    palAdd?: JQuery;
+    constructor(ctn: Container, model: DiagramModeler, p: DiagramDesktopParam);
+    /**
+     * Init the desktop with contents, palettes...
+     * @param {boolean} sync true to synchronize nodes with DB
+     * @param {function} cbk optional callback
+     * @function
+     */
+    init(sync: boolean, cbk?: Callback): void;
+    /**
+     * Content has changed ?
+     * @param {boolean} b optional flag
+     * @function
+     */
+    hasChanged(b?: boolean): boolean;
+    /**
+     * Get the SVG content as text
+     * @param {Object} options
+     * @param {boolean} options.clear true to clear dimension, unused image...
+     * @param {number}  options.zoom optional scale 1=100%
+     * @param {number}  options.grid 0=none
+     * @param {boolean} options.xlink false to remove all use[xlink] of SVG 1.2
+     * @param {function} cbk callback(svg content)
+     * @function
+     */
+    getContent(options?: {
+        clear?: boolean;
+        zoom?: number;
+        grid?: number;
+        xlink?: boolean;
+    }, cbk?: (svg: string) => void): void;
+    /**
+     * Convert to image
+     * @param {string} format optional format (png...), default return SVG image
+     * @param {number} zoom optional scale
+     * @param {function} cbk callback to return the formatted image
+     * @function
+     */
+    getImage(format: string | null, zoom: number, cbk: (img: JQuery<HTMLImageElement> | null) => void): void;
+    /**
+     * Load image and convert to data URL
+     * @param {string} src image source URL
+     * @param {string} format base64 format (default png)
+     * @param {number} w width:  null=preserve original size | 0=maintain aspect ratio | specified size
+     * @param {number} h height: null=preserve original size | 0=maintain aspect ratio | specified size
+     * @param {function} cbk callback(dataURL, width, height)
+     * @function
+     */
+    img2base64(src: string, format: string, w: number | null, h: number | null, cbk?: (dataURL: string, width: number, height: number) => void): void;
+    getContainers(): JQuery;
+    getSelectedContainers(): JQuery;
+    /**
+     * Search a container in diagram if exists
+     * @param {Object} item filter { object, id }
+     * @function
+     */
+    getContainer(item: {
+        object?: string;
+        id?: string;
+    }): JQuery;
+    getContainerAt(pos: Point): DiagramContainer | undefined;
+    /**
+     * Search a node in diagram if exists
+     * @param {Object} item filter { object, id }
+     * @function
+     */
+    getNode(item: {
+        object?: string;
+        id?: string;
+    }): JQuery;
+    /**
+     * Search a note in diagram if exists
+     * @param {string} id note id
+     * @function
+     */
+    getNote(id: string): JQuery;
+    /**
+     * Search a content item in diagram if exists
+     * @param {Object} item content { object, id }
+     * @function
+     */
+    getNodeContent(item: {
+        object: string;
+        id: string;
+    }): JQuery;
+    /**
+     * Search a node with content in diagram if exists
+     * @param {Object} item content { object, id }
+     * @function
+     */
+    getNodeWithContent(item: {
+        object: string;
+        id: string;
+    }): JQuery;
+    /**
+     * Get all nodes in diagram
+     * @param {string} selector optional selector
+     * @function
+     */
+    getNodes(selector?: string): JQuery;
+    /**
+     * Get selected nodes in diagram
+     * @param {boolean} notes include notes ?
+     * @function
+     */
+    getSelectedNodes(notes?: boolean): JQuery<HTMLElement> | undefined;
+    /**
+     * Add a node in diagram
+     * @param {Object} data node data
+     * @function
+     */
+    addNode(data: DiagramNodeDef, cbk?: (node: DiagramNode) => void): void;
+    /**
+     * Apply a function on (selected) nodes
+     * @function
+     */
+    applyToNodes(node?: JQuery | DiagramNode | null, fn?: (node: DiagramNode) => void): void;
+    /**
+     * Remove node from diagram
+     * @param {Object} node Simplicite.Diagram.Node
+     * @function
+     */
+    removeNode(node?: JQuery | DiagramNode): void;
+    /**
+     * Remove nodes from diagram
+     * @param {jQuery} list nodes
+     * @function
+     */
+    removeNodes(list?: JSVG | JQuery): void;
+    /**
+     * Remove container from diagram
+     * @param {Object} ct Simplicite.Diagram.Container
+     * @param {boolean} cascad true to remove contents from diagram
+     * @function
+     */
+    removeContainer(ct: DiagramContainer | JQuery, cascad?: boolean): void;
+    /**
+     * Get all links on desktop
+     * @function
+     */
+    getLinks(): JSVG;
+    /**
+     * Search a link on desktop
+     * @param {Object} data filters { fromObject, fromId, toObject, toId, object, id, keys }
+     * @function
+     */
+    getLink(data?: DiagramLinkDef | DiagramLink): JSVG;
+    /**
+     * Add a link on desktop
+     * @param {Object} data { fromObject, fromId, toObject, toId, object, id }
+     * @function
+     */
+    addLink(data: DiagramLinkDef | DiagramLink): JSVG | undefined;
+    /**
+     * Remove a link on desktop
+     * @function
+     */
+    removeLink(link: DiagramLink | JSVG): void;
+    unselectAll(): void;
+    selectAllNodes(b?: boolean): void;
+    /**
+     * Select a node or a note
+     * @param {$} el element
+     * @param {boolean} sel true to select
+     * @param {boolean} add add to selection or reset
+     * @function
+     */
+    selectNode(el?: JQuery | JSVG, sel?: boolean, add?: boolean): void;
+    selectItem(el?: JSVG): void;
+    /**
+     * Select a container
+     * @param {$} el element
+     * @param {boolean} sel true to select
+     * @param {boolean} add add to selection or reset
+     * @function
+     */
+    selectContainer(el?: JSVG, sel?: boolean, add?: boolean): void;
+    /**
+     * Brings element to front/back of its layer
+     * @param {Object} x Node/Container
+     * @param {boolean} front true to bring to front, false to back
+     * @function
+     */
+    bringToLayer(x: DiagramNode | DiagramContainer, front: boolean): void;
+    /** Mouse position in desktop (or absolute position) */
+    mouseDeskPos(e: JQuery.Event, abs?: boolean): Point;
+    /** Mouse position in SVG scale */
+    mousePos(e: JQuery.Event): Point;
+    /** Convert desk point to SVG scale */
+    point2svg(pos: Point): Point;
+    /** Convert desk rect to SVG scale */
+    rect2svg(rect: Rect): Rect;
+    /** Convert SVG point to desk */
+    svg2point(pos: Point): Point;
+    /** Convert SVG point to desk */
+    svg2rect(rect: Rect): Rect;
+    private mouseWheel;
+    dragPos?: MousePos;
+    dragMovePos?: Point;
+    lasso?: JSVG;
+    movePointPos?: DeskElementPos;
+    moveElementPos?: DeskElementPos;
+    resizeElementPos?: DeskElementPos;
+    addLinkPos?: DeskElementPos;
+    private mouseDown;
+    private mouseMove;
+    private mouseUp;
+    private dblClick;
+    private drawLasso;
+    moveElements(el: DiagramElement | JQuery, x: number, y: number, rel?: boolean): void;
+    moveSelectedContainers(x: number, y: number, rel?: boolean): void;
+    moveSelectedNodes(x: number, y: number, rel?: boolean): void;
+    moveNodes(nodes: DiagramNode | JQuery, x: number, y: number, rel?: boolean): void;
+    /**
+     * Node/Container magnetism when grid is active
+     * @function
+     */
+    magnetism(node?: JQuery): void;
+    private keydown;
+    /**
+     * Change desktop zoom
+     * @param {number} zoom zoom factor
+     * @param {number} tx optional translated x origin
+     * @param {number} ty optional translated y origin
+     * @function
+     */
+    setZoom(zoom?: number | null, tx?: number, ty?: number): void;
+    /**
+     * Zoom at position (default center of desk)
+     * @function
+     */
+    zoom(z: number, pos?: Point): void;
+    /**
+     * Zoom IN
+     * @param factor factor in percent (default +5%)
+     * @function
+     */
+    zoomIn(factor?: number): void;
+    /**
+     * Zoom OUT
+     * @param factor factor in percent (default 5%)
+     * @function
+     */
+    zoomOut(factor?: number): void;
+    /**
+     * Reset zoom to scale 1
+     * @function
+     */
+    zoomReset(): void;
+    /**
+     * Adjust scale to see all content in x>0 and y>0
+     * @param {boolean} origin true to zoom and return to origin
+     * @function
+     */
+    zoomFit(origin?: boolean): void;
+    /**
+     * Search elements in model
+     * @function
+     */
+    search(): void;
+    /**
+     * scroll element to view center
+     * @param el element to show
+     * @param slide true to add a transition effect
+     * @function
+     */
+    scrollIntoView(el: HTMLElement, slide?: boolean): void;
+    /**
+     * Full size with body elements
+     * @function
+     */
+    getBound(): {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    };
+    private buildDef;
+    /**
+     * Add definition to SVG
+     * @function
+     */
+    addDef(def: JSVG, replace?: boolean): void;
+    /**
+     * Add base64 icon to defs: inlined image for standalone usage (export to image, svg+xml...)
+     * @function
+     */
+    addDefIcon(icon: string, w: number, h: number, cbk?: (img: JSVG) => void): void;
+    /**
+     * Remove icon definition
+     * @function
+     */
+    removeDefIcon(icon: string, w: number, h: number): void;
+    /**
+     * Get defined icon
+     * @function
+     */
+    getDefIcon(icon: string, w: number, h: number): JSVG;
+    /**
+     * Add base64 image to defs: inlined image for standalone usage (export to image, svg+xml...)
+     * @function
+     */
+    addDefImage(name: string, url: string, w: number, h: number, cls: string, cbk?: (img: JSVG) => void): void;
+    /**
+     * Convert font icon to PNG definition
+     * @function
+     */
+    addDefImageFont(name: string, icon: string, w: number, h: number, cls: string, cbk?: (img: JSVG) => void): void;
+    /**
+     * Remove image definition
+     * @function
+     */
+    removeDefImage(name: string, w: number, h: number): void;
+    /**
+     * Get defined image
+     * @function
+     */
+    getDefImage(name: string, w: number, h: number): JSVG;
+    /**
+     * Display the grid
+     * @param {number} size Grid size (0 or false = hide)
+     * @function
+     */
+    showGrid(size?: number | false): void;
+    /**
+     * Change background color
+     * @function
+     */
+    setBackgroundColor(c: string): void;
+    private chooseBckColor;
+    private btn;
+    searchButton?: JQuery;
+    private palettes;
+    editContainer(cont: DiagramContainer | null, pos?: Point): void;
+    updateContainer(cont: DiagramContainer | null, data: DiagramContainerDef): DiagramContainer | null;
+    addContainer(data: DiagramContainer, cbk?: (cont: DiagramContainer) => void): void;
+    /**
+     * Add a note in diagram
+     * @param {Object} data note data { x,y,w,h,text }
+     * @function
+     */
+    addNote(data: DiagramNoteData): void;
+    getCaption(): JQuery<HTMLElement>;
+    addCaption(item: DiagramCaption): void;
+    removeCaption(): void;
+    toggleCaption(x?: number, y?: number): void;
+    moveCaption(x: number, y: number, rel?: boolean): void;
+    syncCaption(): void;
+    getLinkIconName(type: number, useCrowsFeet?: boolean): string;
+    /**
+     * Popup to ask user to select a link template between nodes
+     * @function
+     */
+    linkTemplatePicker(list: DiagramLinkTemplate[], from: DiagramNode, to: DiagramNode, pos: Point, cbk: (selected: DiagramLinkTemplate, inverse?: boolean) => void): void;
+    /**
+     * Shape selection
+     * @function
+     */
+    shapePicker(node: DiagramNode, cbk: (title: string | undefined, position?: TitlePosition) => void): void;
+    /**
+     * Ensure absolute div to be visible on desk
+     * @function
+     */
+    ensureVisible(d: JQuery): void;
+    closeMenu(): void;
+    moveMenu(): void;
+    private deskmenu;
+    private palObj;
+    private addContainerPos;
+    private addNotePos;
+    palTree(node: DiagramNode): void;
+    private palSprings;
+}
+
+/**
+ * Print preview / split large images
+ * @class
+ */
+declare class DiagramPrint {
+    desktop: DiagramDesktop;
+    image?: JQuery<HTMLImageElement>;
+    previewPart?: JQuery;
+    previewCanvas?: JQuery<HTMLCanvasElement>;
+    canvas?: HTMLCanvasElement;
+    popup?: JQuery;
+    selFormat?: JQuery;
+    selOrient?: JQuery;
+    inpZoom?: JQuery;
+    inpSlider?: JQuery;
+    zoom: number;
+    format: string;
+    landscape: boolean;
+    wPage?: number;
+    hPage?: number;
+    cols: number;
+    rows: number;
+    FORMAT: KeyObject;
+    MARGIN: number;
+    DPI: number;
+    WIDTH: number;
+    HEIGHT: number;
+    constructor(desktop: DiagramDesktop);
+    /**
+     * Open print dialog
+     * @funtion
+     */
+    open(): void;
+    private bar;
+    private readInput;
+    private setZoom;
+    private onePage;
+    private fitPage;
+    private doPreview;
+    private toPixels;
+    private pageSize;
+    private preview;
+    private doPrint;
+}
+
+type DiagramModelerTemplate = {
+    id?: string;
+    name?: string;
+    nodes?: {
+        [name: string]: DiagramNodeTemplate;
+    };
+    containers?: {
+        [name: string]: DiagramContainerTemplate;
+    };
+    links?: {
+        [name: string]: DiagramLinkTemplate;
+    };
+    canUseGrid?: boolean;
+    canUseTitle?: boolean;
+    canReverseLink?: boolean;
+    canUseContainer?: boolean;
+    canUseFreeContainer?: boolean;
+    canUseNote?: boolean;
+    canUseSprings?: boolean;
+    canAttachContainer?: boolean;
+    canUseTree?: boolean;
+    canUseShape?: boolean;
+    script?: string;
+    canInsertNode?: (template: DiagramNodeTemplate) => boolean;
+    canCreateNode?: (template: DiagramNodeTemplate) => boolean;
+    canRemoveNode?: (template: DiagramNodeTemplate) => boolean;
+    canDeleteNode?: (template: DiagramNodeTemplate) => boolean;
+    canFetchNode?: (template: DiagramNodeTemplate) => boolean;
+    canInsertContent?: (template: DiagramNodeContentTemplate) => boolean;
+    canCreateContent?: (template: DiagramNodeContentTemplate) => boolean;
+    canRemoveContainer?: (template: DiagramContainerTemplate) => boolean;
+    canDeleteLink?: (template: DiagramLinkTemplate) => boolean;
+    canAddLink?: (template: DiagramLinkTemplate) => boolean;
+    customDesktopMenu?: () => DesktopMenuItem[];
+    customNodeMenu?: (node: DiagramNode, item: DiagramNodeContentItem, pos: Point) => DesktopMenuItem[];
+    customLinkMenuAdd?: (from: DiagramNode, to: DiagramNode, palette: JQuery) => void;
+};
+/**
+ *
+ * Model controller between Model servlet and desktop/palette/events
+ * @class
+ */
+declare class DiagramModeler {
+    modelId: string;
+    template: DiagramModelerTemplate;
+    root: string;
+    baseURL: string;
+    hidden?: boolean;
+    topui: UIEngine;
+    engine: DiagramEngine;
+    container?: Container;
+    desktop?: DiagramDesktop;
+    springs?: DiagramSprings;
+    printer?: DiagramPrint;
+    saving: boolean;
+    constructor(modelId: string, engine: DiagramEngine);
+    private getObject;
+    /**
+     * Open a model
+     * @param {Object} ctn container
+     * @param {function} cbk optional callback(diagram)
+     * @param {Object} p options
+     * @param {boolean} p.sync synchronize all nodes with DB?
+     * @function
+     */
+    open(ctn: Container, cbk?: (diagram: DiagramModeler) => void, p?: ModelParam): void;
+    listener(): void;
+    onMessage(_: KeyObject): void;
+    /**
+     * Generic hook call if exists in template
+     * @param {string} hook hook name defined as a function in template
+     * @param {function} cbk optional callback (to be called at the end of hook)
+     * @param {Array} params optional parameters
+     * @function
+     */
+    hook(hook: string, cbk?: any, params?: any): any;
+    /**
+     * Save the model
+     * @param {function} cbk optional callback
+     * @param {boolean} silent no alert?
+     * @function
+     */
+    save(cbk?: (err?: string) => void, silent?: boolean): void;
+    /**
+     * Detach diagram from Parent/Popup window
+     * @param {boolean} dock true to dock on parent window
+     * @function
+     */
+    detach(dock: boolean): void;
+    /**
+     * Close the diagram
+     * @param {boolean} confirm confirm save when has changed, auto-save if false
+     * @function
+     */
+    close(confirm: boolean): void;
+    bindSaveAndQuit(ctn: JQuery): void;
+    /**
+     * Can close the modeler
+     * @param {boolean} confirm confirm save when has changed, auto-save if false
+     * @param {function} cbk callback if closeable
+     * @function
+     */
+    canClose(confirm?: boolean, cbk?: Callback): void;
+    /**
+     * Content has changed ?
+     * @param {boolean} b optional flag to set the value
+     * @function
+     */
+    hasChanged(b?: boolean): boolean;
+    /**
+     * Image dialog with SVG source
+     * @function
+     */
+    imageSVG(): void;
+    /**
+     * Print preview
+     * @function
+     */
+    print(): void;
+    /**
+     * Ajax call to retrieve node data
+     * @param {Object} n { object, id, template, keys }
+     * @param {function} cbk
+     * @function
+     */
+    getNodeData(n: {
+        object: string;
+        id: string;
+        template: string | KeyObject;
+        keys?: string | object;
+    }, cbk: (node?: DiagramNode | DiagramContainer) => void): void;
+    /**
+     * Insert nodes
+     * @param {Object} list Array of { object, id, template, x, y }
+     * @param {function} cbk Optional callback(nodes)
+     * @function
+     */
+    insertNodes(list: KeyObject, cbk?: (nodes: DiagramNode[]) => void): void;
+    /**
+     * Insert one node or a container
+     * @param {Object} item { object, id, template, x, y, keys, container? }
+     * @param {function} cbk Optional callback(node)
+     * @function
+     */
+    insertNode(item: {
+        object: string;
+        id: string;
+        template: string | DiagramNodeTemplate;
+        x: number;
+        y: number;
+        keys?: string | object;
+        container?: boolean;
+    }, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
+    /**
+     * Reload element from DB
+     * @param {Simplicite.Diagram.Element} node node (or jquery node)
+     * @param {function} cbk optional callback
+     * @param {boolean} partial only get data without loading UI node
+     * @function
+     */
+    reloadNode(node: DiagramElement | JQuery, cbk?: (data?: DiagramNode | DiagramContainer) => void, partial?: boolean): void;
+    /**
+     * Reload a container from DB
+     * @param {Simplicite.Diagram.Container} ct container (or jquery node)
+     * @param {function} cbk optional callback
+     * @function
+     */
+    reloadContainer(ct: DiagramContainer | JQuery, cbk?: Callback): void;
+    /**
+     * Reload all elements from DB
+     * @param {function} cbk optional callback
+     * @function
+     */
+    reload(cbk?: Callback): void;
+    /**
+     * Select objects and insert them on desktop
+     * @param {string} tpl node/container template
+     * @param {Point} pos position {x,y}
+     * @param {boolean} cont container ? or node
+     * @function
+     */
+    selectObjects(tpl: DiagramNodeTemplate | DiagramContainerTemplate, pos?: Point, cont?: boolean): void;
+    /**
+     * Launch a node/container creation in UI
+     * @param {string} tpl node template
+     * @param {Poisition} pos position {x,y}
+     * @param {boolean} cont container ? or node
+     * @function
+     */
+    createNode(tpl: DiagramNodeTemplate, pos: Point, cont?: boolean): void;
+    /**
+     * Delete node from DB + UI
+     * @function
+     */
+    deleteNode(node: DiagramNode, silent?: boolean): void;
+    /**
+     * Delete link from DB + UI
+     * @function
+     */
+    deleteLink(link: DiagramLink, silent?: boolean): void;
+    /**
+     * Update fields thru Ajax
+     * @function
+     */
+    upd(obj: string, id: string, fields: {
+        field: string;
+        value: any;
+    }[], cbk?: Callback): void;
+    /**
+     * Delete object thru Ajax
+     * @function
+     */
+    del(obj: string, id: string, cbk?: Callback): void;
+    /**
+     * Call action on object form
+     * @function
+     */
+    forceUIAction(obj: string, id: string, action: string): void;
+    /**
+     * Select content to add in node
+     */
+    selectNodeContent(node: DiagramNode, c: DiagramNodeContentTemplate): void;
+    insertNodeContents(node: DiagramNode, items?: KeyObject[]): void;
+    insertNodeContent(node: DiagramNode, item: KeyObject, cbk?: Callback): void;
+    createContentLink(n: DiagramNode, t: DiagramNodeContentTemplate, id: string, cbk?: Callback): void;
+    addNodeContent(n: DiagramNode, c: DiagramNodeContentTemplate): void;
+    /**
+     * Fetch related nodes
+     * @param {Array} nodes arrays of nodes or data
+     * @param {function} cbk Optional callback(nodes)
+     * @function
+     */
+    fetchRelatedNodes(nodes?: DiagramNode[] | JQuery, cbk?: (inserted?: DiagramNode[]) => void): void;
+    /**
+     * Create a link between 2 nodes (or note to node)
+     * @function
+     */
+    createLink(from: DiagramNodus, to: DiagramNode, t?: DiagramLinkTemplate): JSVG | undefined;
+    /**
+     * Create a N,N link between 2 internal objects
+     * @function
+     */
+    createLinkMany2Many(from: DiagramNode, to: DiagramNode, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
+    /**
+     * Bind events to element
+     */
+    bind(el: any, b: {
+        mouseWheel?: JQueryHandler;
+        mouseDown?: JQueryHandler;
+        mouseMove?: JQueryHandler;
+        mouseUp?: JQueryHandler;
+        mouseOut?: JQueryHandler;
+        mouseOver?: JQueryHandler;
+        mouseLeave?: JQueryHandler;
+        contextMenu?: JQueryHandler;
+        click?: JQueryHandler;
+        dblClick?: JQueryHandler;
+    }): void;
+    /**
+     * Open target or related model form
+     * @param {Object} target optional <code>{ object, id }</code>
+     * @function
+     */
+    openForm(target?: {
+        object: string;
+        id: string;
+    } | JSVG): void;
+    /**
+     * Open workflow on top window
+     * @param {string} name workflow name
+     * @function
+     */
+    openWorkflow(name: string): void;
+    /**
+     * Load the template definition
+     * @function
+     */
+    loadTemplate(cbk?: Callback): void;
+    /**
+     * Load model
+     * @param {function} cbk post load function
+     * @function
+     */
+    loadModel(cbk: (model: string) => void): void;
+    /**
+     * Get SVG inlined styles
+     * @function
+     */
+    getStyles(): string | undefined;
+    /**
+     * Get model data
+     * @function
+     */
+    info(cbk: (data: DiagramCaption) => void): void;
+    /**
+     * Nodes self-placement with Springs layout
+     * @param {Object} data false to disable, or the $(svg) or the springs properties
+     * @function
+     */
+    layoutSprings(data: boolean | DiagramSpringsParam | JSVG): void;
+}
+
+type DiagramModelers = {
+    [modeId: string]: DiagramModeler;
+};
+type DiagramWindows = {
+    [modeId: string]: Window;
+};
+type ModelParam = {
+    docked?: boolean;
+    popup?: boolean;
+    hidden?: boolean;
+    sync?: boolean;
+    fetch?: boolean;
+    module?: string;
+    nodes?: DiagramNode[];
+};
+/**
+ * Diagrams controller
+ * @class
+ */
+declare class DiagramEngine {
+    readonly models: DiagramModelers;
+    readonly windows: DiagramWindows;
+    /** SVG styles */
+    styles?: string;
+    constructor();
+    /**
+     * Open a SVG diagram
+     * @function
+     */
+    private openSVG;
+    /**
+     * Open a diagram
+     * @param {string} modelId model row ID
+     * @param {Object} options <code>\{ name, docked, hidden, sync \}</code>
+     * @param {function} cbk optional callback(model)
+     * @function
+     */
+    open(modelId: string, options?: ModelParam, cbk?: (model: DiagramModeler) => void): void;
+    /**
+     * Detach diagram from Parent/Popup window
+     * @param {string} modelId model row ID
+     * @param {boolean} dock true to dock diagram on parent window, false to open a new window
+     * @function
+     */
+    detach(modelId: string, dock: boolean): void;
+    /**
+     * Save a diagram
+     * @param {string} modelId model row ID
+     * @param {function} cbk optional callback
+     * @function
+     */
+    save(modelId: string, cbk?: Callback): void;
+    /**
+     * Close a diagram
+     * @param {string} modelId model row ID
+     * @param {boolean} confirm false to auto-save
+     * @function
+     */
+    close(modelId: string, confirm?: boolean): void;
+    /**
+     * Update models with incoming object
+     * @function
+     */
+    update(obj: string | BusinessObject, id: string, action: string): void;
+    /**
+     * Notify UI events (CRUD on objects)
+     * @function
+     */
+    notify(e: NotifyObject): void;
+    /**
+     * Helper to create a new SVG business model, user must have access to ModelTemplate (read) and Model (create).
+     * @param {string} template Model template name
+     * @param {string} name     Model name
+     * @param {Object} options  Model options
+     * @param {boolean} options.docked true to dock the model on the main page (default new window)
+     * @param {boolean} options.hidden true to hide the model in a silent mode
+     * @param {Array}   options.nodes  optional array of nodes to insert <code>\{ object, id, template, x, y \}</code>
+     * @param {boolean} options.fetch  true to fetch related nodes
+     * @param {boolean} options.module Optional module Id or name
+     * @param {function} cbk Callback(diagram)
+     * @function
+     */
+    create(template: string, name: string, options: ModelParam, cbk: (diagram: DiagramModeler) => void): void;
+    /**
+     * Models picker and creation
+     * @param {jQuery} ctn Container
+     * @param {Object} params options { embedded }
+     * @function
+     */
+    picker(ctn: Container, params?: KeyObject): void;
+}
+
+/** Data of the WebPush service */
+interface WebPushData {
+    /** VAPID public key of the server */
+    vapidKey?: string;
+}
+/**
+ * WebPush controller
+ */
+declare class WebPush {
+    /** URL of the service worker */
+    worker: string;
+    constructor();
+    /** WebPush service */
+    service(data?: WebPushData): void;
+    /** Init webpush connection */
+    init(data?: WebPushData): this;
+    /** request permission to use WebPush API */
+    requestPermission(reg: ServiceWorkerRegistration, data: WebPushData): void;
+    private check;
+    private urlB64ToUint8Array;
+}
+
+/** Recipients of a Firebase notification: lists of logins and groups, or 'all' users */
+type FirebaseRecipients = {
+    users?: string[];
+    groups?: string[];
+} | "all";
+/** Firebase message or notification (from FCM, the service worker or the native app) */
+interface FirebaseMessage {
+    /** Optional embedded message */
+    notification?: FirebaseMessage;
+    /** Message body */
+    body?: string;
+    /** Optional title */
+    title?: string;
+    /** Optional priority */
+    priority?: "high" | "normal" | "low";
+    /** Optional icon */
+    icon?: string;
+    /** Optional color */
+    color?: string;
+    /** Optional origin */
+    from?: string;
+    /** Tapped by the user in foreground or background */
+    tap?: "foreground" | "background";
+    /** Background message already displayed in the system tray */
+    _background?: boolean;
+    /** Optional object name to open (or in data) */
+    object?: string;
+    /** Optional object row ID to open (or in data) */
+    rowId?: string;
+    /** Optional pairs of key-value */
+    data?: KeyObject & {
+        /** Optional object name to open */
+        object?: string;
+        /** Optional object row ID to open */
+        rowId?: string;
+    };
+}
+/** Data of the Firebase service */
+type FirebaseServiceData = FirebaseMessage & {
+    /** Config to init the plugin (see FIREBASE_CONFIG) */
+    config?: KeyObject;
+    /** Key needed for the Firebase authentication */
+    vapidKey?: string;
+    /** Device token of the user to refresh */
+    token?: string;
+    /** Message to send */
+    message?: string;
+    /** Message recipients */
+    to?: FirebaseRecipients;
+};
+/**
+ * Firebase controller
+ */
+declare class Firebase {
+    worker: string;
+    messaging?: KeyObject;
+    constructor();
+    /**
+     * Firebase service wrapper
+     * @param data service data, see {@link FirebaseServiceData}
+     */
+    service(data?: FirebaseServiceData): void;
+    /**
+     * Init firebase connection
+     * @param config to init plugin (see FIREBASE_CONFIG)
+     * @param vapidKey needed for firebase authent
+     */
+    init(config: KeyObject, vapidKey?: string): this | undefined;
+    /**
+     * Display a message
+     * @param m message or notification
+     * @param m.notification optional embedded message
+     * @param m.body message body
+     * @param m.title optional title
+     * @param m.priority optional priority 'high' | 'normal' | 'low'
+     * @param m.data optional pairs of key-value
+     */
+    showMessage(m: FirebaseMessage): void;
+    /**
+     * Refresh a device token on server-side
+     * @param token new token for the user
+     */
+    refreshToken(token: string): void;
+    /**
+     * Request user permission to be notified
+     */
+    requestPermission(): void;
+}
+
+/** Options of the speech recognition */
+interface SpeechRecognitionParam {
+    /** Language (ex: FRA, ENU or fr-FR, en-GB...) */
+    lang?: string;
+    /** Continuous speaking (sentence)? */
+    continuous?: boolean;
+    /** Continuous speaking (no timeout after long silence)? */
+    autoRestart?: boolean;
+    /** Get interim results? */
+    interimResults?: boolean;
+    /** Max alternatives search */
+    maxAlternatives?: number;
+    /** First character uppercase in a sentence? */
+    firstCapital?: boolean;
+    /** Accept new line symbol? */
+    newLine?: boolean;
+    /** Optional handler when started */
+    onStart?: () => void;
+    /** Optional handler when ended */
+    onEnd?: () => void;
+    /** Optional handler on error */
+    onError?: (e: Event) => void;
+    /** Optional handler to override change event */
+    onChange?: () => void;
+    /** Optional console info */
+    debug?: boolean;
+}
+/** Options of the speech synthesis */
+interface SpeechSynthesisParam {
+    /** Preferred language FRA, ENU... */
+    lang?: string;
+    /** Optional voice name to force if exists */
+    voice?: string;
+    /** Service URI, default native */
+    uri?: string;
+    /** 0 to 1, default 1 */
+    volume?: number;
+    /** 0.1 to 10, default 1 */
+    rate?: number;
+    /** 0 to 2, default 1 */
+    pitch?: number;
+    /** Optional handler when started */
+    onStart?: () => void;
+    /** Optional handler when ended */
+    onEnd?: () => void;
+    /** Optional console info */
+    debug?: boolean;
+}
+/**
+ * Web Speech API
+ */
+declare class Speech {
+    CMD: KeyObject;
+    SpeechRecognition: any;
+    voice?: SpeechSynthesisVoice;
+    readonly VOICES: KeyObject;
+    constructor();
+    /**
+     * Get language ISO
+     * @param l language FRA, ENU...
+     * @returns ISO code (ex fr-FR)
+     */
+    langISO(l: string): string;
+    /**
+     * New SpeechRecognition if exists
+     */
+    createSpeechRecognition(): any;
+    /**
+     * Speech recognition
+     * @param el Element input or textarea
+     * @param options Options
+     * @param options.lang Language (ex: FRA, ENU or fr-FR, en-GB...)
+     * @param options.continuous Continuous speaking (sentence)?
+     * @param options.autoRestart Continuous speaking (no timeout after long silence)?
+     * @param options.interimResults Get interim results?
+     * @param options.maxAlternatives Max alternatives search
+     * @param options.firstCapital First character uppercase in a sentence?
+     * @param options.newLine Accept new line symbol?
+     * @param options.onStart Optional handler when started
+     * @param options.onEnd Optional handler when ended
+     * @param options.onError Optional handler on error
+     * @param options.onChange Optional handler to override change event
+     * @param options.debug Optional console info
+     */
+    recognition(el: JQuery, options?: SpeechRecognitionParam): void;
+    /**
+     * Get browser voices
+     * @param ss speechSynthesis
+     * @param cbk callback(voices)
+     */
+    getVoices(ss: SpeechSynthesis, cbk: (voices: SpeechSynthesisVoice[]) => void): void;
+    /**
+     * Find a voice matching language
+     * @param voices supported voices
+     * @param lang Language FRA, ENU...
+     * @param use Try to use this voice if supported
+     */
+    getVoice(voices: SpeechSynthesisVoice[], lang: string, use?: string): SpeechSynthesisVoice | undefined;
+    /**
+     * Speech synthesis (experimental)
+     * @param el Text or input or textarea
+     * @param options Options
+     * @param options.lang Preferred language FRA, ENU...
+     * @param options.voice Optional voice name to force if exists
+     * @param options.uri Service URI, default native
+     * @param options.volume 0 to 1, default 1
+     * @param options.rate 0.1 to 10, default 1
+     * @param options.pitch 0 to 2, default 1
+     * @param options.onStart Optional handler when started
+     * @param options.onEnd Optional handler when ended
+     * @param options.debug Optional console info
+     */
+    speak(el: JQuery, options?: SpeechSynthesisParam): void;
+    /**
+     * Start to speech
+     * @param msg - Message to read
+     */
+    speakStart(msg: SpeechSynthesisUtterance): void;
+    /**
+     * Stop current speech
+     */
+    speakStop(): void;
+}
+
+/** Server and client information sent with a feedback */
+interface FeedbackData {
+    /** Browser */
+    browser: {
+        /** User agent */
+        userAgent: string;
+    };
+    /** User */
+    user: {
+        /** Login */
+        login: string;
+        /** Language */
+        lang: string;
+        /** Email */
+        email?: string;
+        /** Responsibilities */
+        resp: string;
+    };
+    /** Application */
+    app: {
+        /** Name */
+        name: string;
+        /** Version */
+        version: string;
+    };
+    /** Platform */
+    platform: {
+        /** Name */
+        name: string;
+        /** Version */
+        version: string;
+        /** Build */
+        build: string;
+        /** Encoding */
+        encoding: string;
+    };
+    /** Server */
+    server: {
+        /** Vendor */
+        vendor: string;
+        /** Version */
+        version: string;
+        /** Database driver */
+        dbdriver: string;
+        /** Date */
+        date: string;
+    };
+    /** Java */
+    java: {
+        /** Vendor */
+        vendor: string;
+        /** Version */
+        version: string;
+    };
+    /** Operating system */
+    os: {
+        /** Name */
+        name: string;
+        /** Version */
+        version: string;
+        /** Architecture */
+        archi: string;
+    };
+}
+/** Feedback to send */
+interface FeedbackParam {
+    /** Email */
+    fbk_email: string;
+    /** Type: `Q` question, `R` change request, `D` defect, `F` fatal */
+    fbk_type: string;
+    /** Description */
+    fbk_desc: string;
+    /** Base64 screen image */
+    screen?: string;
+}
+/** Feedback dialog with an annotated screenshot */
+declare class Feedback {
+    /** Width of the screenshot */
+    readonly WIDTH = 1024;
+    private ctn?;
+    private dlg?;
+    private screen?;
+    /** Open the feedback */
+    open(): this;
+    /** When feedback popup is loaded */
+    ready(): this;
+    /** Close the popup */
+    close(): this;
+    /** Send data and close */
+    send(): this;
+    /** Hide/Show the screenshot */
+    hide(): this;
+    /** Crop a part of screen */
+    crop(): this;
+    /** Highlight a part of screen */
+    light(): this;
+    /** Mask a part of screen */
+    mask(): this;
+    /** Clear canvas */
+    reset(): this;
+    /** Toggle edit buttons */
+    toggle(id?: string): this;
+    /** Edit mode 1=crop, 2=highlight, 3=mask */
+    getMode(): 0 | 1 | 2 | 3;
+    /** Show/Hide edit buttons */
+    showEditButtons(vis: boolean): void;
+    /** Canvas management */
+    drawCanvas(screen?: string): this;
+    /**
+     * Build the content of the dialog.
+     * @returns The dialog content
+     */
+    getContent(): JQuery<HTMLElement>;
 }
 
 /** News item */
@@ -4003,6 +7435,2028 @@ declare class Bootstrap5 {
     hideTooltips(ctn?: AnyContainer): this;
 }
 
+/** Legacy 6.3: 2 parts splitter */
+interface SplitPart {
+    /** Content */
+    content?: Container | string;
+    /** Resizable part */
+    resizable?: boolean;
+    /** Height */
+    height?: string;
+    /** Width */
+    width?: string;
+    /** Collapsible part */
+    collapsible?: boolean;
+    /** Collapsed part */
+    collapsed?: boolean;
+    /** Width of the splitter */
+    splitWidth?: string;
+    /** Height of the splitter */
+    splitHeight?: string;
+}
+/** Target work area to load a content */
+type LoadTargetArea = 'work_tab' | 'work_left' | 'work_right' | 'work_top' | 'work_bottom';
+/** Options of a work area */
+interface WorkAreaOptions {
+    /** Work area ID */
+    id?: number;
+    /** TODO */
+    noSplit?: boolean;
+}
+/** Context menu of a work tab */
+interface WorkTabContextMenu {
+    /** Split to right-side */
+    split?: boolean;
+    /** Close the tab */
+    close?: boolean;
+}
+/** Workarea size when splitted */
+interface WorkAreaSize {
+    /** optional area width in px or rem (only applies on horizontal split) */
+    width?: number | string;
+    /** optional area height in px or rem (only applies on vertical split) */
+    height?: number | string;
+}
+/** Serializable tab infos */
+interface WorkTabInfos {
+    /** required tab label */
+    title: string;
+    /** unique name to find the tab when requested with unique=true */
+    name: string;
+    /** unique tab? default true = if a tab with the same name already exists, activate it instead of creating a new one */
+    unique?: boolean;
+    /** can move the tab, default true */
+    draggable?: boolean;
+    /** add a close button to tab, default true */
+    closeable?: boolean;
+    /** optional context menu to split/close */
+    contextmenu?: WorkTabContextMenu;
+    /** add a .desk with navigation into container */
+    navigation?: true | number;
+    /** specific external URL from loadURL */
+    url?: string;
+}
+/** New tab options */
+type WorkTabOptions = WorkTabInfos & WorkAreaSize & {
+    /** new 'tab' or position: 'left','top','right' or 'bottom' */
+    position?: NewTabPosition;
+    /** open in top-level area (default true, false = open in caller area) */
+    toplevel?: boolean;
+};
+type WorkTab = WorkTabInfos & WorkAreaSize & {
+    id: number;
+    nav?: NavItem[];
+    active?: boolean;
+};
+interface WorkTabs {
+    tabs: WorkTab[];
+}
+interface WorkAreas {
+    vertical?: true;
+    areas: WorkAreaItem[];
+}
+interface WorkAreaItem {
+    content: WorkAreas | WorkTabs;
+    id?: number;
+    width?: string;
+    height?: string;
+}
+type WorkAreaSettings = WorkTabs | WorkAreas;
+/**
+ * Tools to split the work area
+ */
+declare class UISplitter {
+    private worktabId;
+    private navId;
+    private defaultWorkArea;
+    /** Work area min size */
+    readonly MIN_SIZE = 300;
+    private autoSave;
+    private lastSaved;
+    private saveKeyMulti;
+    private saveKeyMono;
+    private restoreKey;
+    /**
+     * Init splitter #work for media desktop only
+     * @param scope current user scope
+     */
+    init(scope?: Scope): void;
+    /**
+     * Allows UI to be splittable. Preserved in localStorage.
+     * @param enable optional to enable/disable
+     * @returns true if the UI is splittable
+     */
+    static enabled(enable?: boolean): boolean;
+    /**
+     * Is splitted mode enabled?
+     * @returns true if user is allowed to split work-areas
+     */
+    isEnabled(): boolean;
+    /**
+     * Build the WORKAREA sysparam save key
+     * - "WORKAREA-SPLIT <scope> <login>" for the multi work-area (splitted) mode
+     * - "WORKAREA-MONO <scope> <login>" for the single work-area mode
+     * so that each scope / user / mode keeps and restores its own saved layout.
+     * @param multi true for the multi work-area
+     * @param login current user login (switched user or current login)
+     * @param scope optional current user scope
+     * @returns the suffixed key, e.g. "WORKAREA-SPLIT myscope johndoe"
+     */
+    private saveKeyName;
+    /**
+     * Build the user preference key to restore the work-areas on the current scope
+     * @param login current user login (switched user or current login)
+     * @param scope optional current user scope
+     * @returns the suffixed key, e.g. "WORKAREA-RESTORE myscope johndoe"
+     */
+    private restoreKeyName;
+    /**
+     * User preference to restore the saved work-areas on the next load (current scope),
+     * preserved in the user's parameter "WORKAREA-RESTORE <scope> <login>" (default true).
+     * When disabled, the saved states are cleared and the home page is always displayed.
+     * @param enable optional to enable/disable
+     * @returns true if the work-areas are restored on the next load
+     */
+    restore(enable?: boolean): boolean;
+    /**
+     * Unset the legacy sysparams saved before
+     * (to be removed in a future beta release)
+     */
+    private static removeLegacyKeys;
+    /**
+     * Scope preference to enable/disable the splitter mode,
+     * preserved in localStorage key <code>splitter_\<scope\></code>
+     * @param enabled true to enable, false to disable or undefined to get the current preference
+     * @returns the current preference or null
+     */
+    static localPreference(scope?: Scope, enabled?: boolean): string | null;
+    /**
+     * Allows user to switch between 2 modes: mono work-area / multi work-areas
+     * @param switchable optional to enable/disable
+     * @returns true if the mode is switchable
+     */
+    static switchable(switchable?: boolean): boolean;
+    /**
+     * Switch button to change the splitter mode
+     */
+    switchButton(): JQuery<HTMLElement>;
+    /**
+     * Button to enable/disable the restore of the work-areas on the next load
+     */
+    restoreButton(): JQuery<HTMLElement>;
+    /**
+     * Switch the splitter mode
+     * @param enabled optional to force/abandon the splitted mode or toggle the mode by default
+     * @param home optional to display the home page after switching mode (default true)
+     */
+    switch(enabled?: boolean, home?: boolean): void;
+    /**
+     * Switch from single work area to multiple work areas (splitter mode).
+     * Creates a first default, non-closeable "home" tab then replaces the legacy #work content.
+     */
+    private singleToMultiple;
+    /**
+     * Switch from multiple work areas back to single (legacy 6.3) mode.
+     * Preserves the first desk and its navigation, resets all id increments,
+     * closes all other tabs, then wraps the result in a legacy .split container.
+     */
+    private multipleToSingle;
+    /**
+     * Load user's parameter WORKAREA and rebuild the UI
+     * @param settings optional settings to load instead of user's parameter
+     * @returns true if the UI has been rebuilt with saved settings
+     */
+    load(settings?: WorkAreaSettings | NavItem[]): boolean;
+    /**
+     * Rebuild the UI with WORKAREA settings
+     */
+    build(settings: WorkAreaSettings): void;
+    /**
+     * Save the current state (nav stack or work-areas tree) into user's parameter
+     * What happens on the next load, per work-area mode x exit type:
+     *
+     *   exit type            | mode arg | single work-area | multi work-area
+     *   ---------------------|----------|------------------|-----------------
+     *   logout (Quit)        | "logout" | home page        | restore
+     *   clear cache          | "logout" | home page        | restore
+     *   change user          | "switch" | home page        | restore
+     *   change scope         | "switch" | home page        | restore
+     *   change language      | "save"   | restore          | restore
+     *   reload / F5          | (none)*  | restore          | restore
+     *
+     *   - "restore"   = the saved state is persisted and rebuilt on next load
+     *   - "home page" = the saved state is cleared ("empty"), the default home is shown
+     *   - multi work-area mode always restores because the key is per scope + login, so a
+     *     user/scope switch finds its own layout again when coming back to it
+     *   - every "restore" case is conditioned by the user preference WORKAREA-RESTORE on the
+     *     current scope (see restore()): when disabled, the state is always cleared ("empty")
+     *   * reload / F5 does not call save() explicitly: it relies on the auto-save
+     *     (saveRequest, on every nav change) having kept the parameter up to date
+     *
+     * @param mode "save" (default, incl. auto-save, page reload and language change) persists
+     *        the current state; "logout" (explicit logout or cache clear) and "switch" (user or
+     *        scope switch) drop it in single work-area mode so the next login lands on the home
+     *        page, but still persist it in multi work-area mode
+     */
+    save(mode?: "save" | "logout" | "switch"): Promise<void>;
+    /**
+     * Auto-save request into user's parameter WORKAREA.
+     */
+    saveRequest(): void;
+    /**
+     * Tree of areas and navigations
+     */
+    jsonTree(): WorkAreaSettings;
+    /**
+     * Simple request for a new tab or a new split area.
+     * @param options Tab options
+     * @param caller The element that triggered the request
+     * @returns the new container to display the content (.content or .work-area-content) or null to use default work-area
+     */
+    request(options: WorkTabOptions, caller?: AnyContainer): JQuery | null;
+    /**
+     * Create a desk with a new navigation including 2 parts: .nav-stack and .content
+     * @param ctn container (specific or .work-tab-content)
+     * @param content optional HTML content to display
+     * @param navId optional restored nav Id (default incremental)
+     * @returns .desk.nav-container
+     */
+    createDeskNavigator(ctn: JQuery, content?: Container | null, navId?: number): JQuery;
+    /**
+     * Create a work-area with a tabs of desks
+     * @param options Work area options
+     * @param tabOptions optional tab options to create a first tab with a desk
+     * @param content optional content to insert in the new area
+     * @returns .work-area
+     */
+    createWorkArea(options?: WorkAreaOptions, tabOptions?: WorkTabOptions, content?: JQuery): JQuery<HTMLElement>;
+    /**
+     * Add a tab to .work-tab
+     * @param worktab Optional existing work tabs (default use the first tabs)
+     * @param options Tab options
+     * @param content optional content to insert
+     */
+    appendTab(worktab: JQuery | null, options?: WorkTabOptions, content?: JQuery): {
+        tab: JQuery<HTMLElement>;
+        tabpane: JQuery<HTMLElement>;
+    };
+    /**
+     * Get the work tab content of a tab
+     * @param tab tab anchor .nav-link or .nav-item
+     * @returns .work-tab-content
+     */
+    getWorkTabContent(tab: JQuery): JQuery | undefined;
+    /**
+     * Get the desk content of a tab
+     * @param el the .nav-link or a container
+     * @returns desk .content for rendering if exists (or directly the .work-tab-content when the tab has no navigation)
+     */
+    getDeskContent(el: JQuery): JQuery<HTMLElement>;
+    /**
+     * Find a tab in all work-areas
+     * @param name Optional tab name to find
+     * @returns .nav-link if found
+     */
+    findTab(name?: string): JQuery | undefined;
+    /**
+     * Get a tab of related element
+     * @param el any content element inside the .work-tab-pane
+     * @returns .nav-link of the related tab if exists
+     */
+    getTabOfElement(el?: AnyContainer): JQuery | undefined;
+    /**
+     * Get the tab container of element
+     * @param el Element inside the .work-tab
+     * @returns .work-tab if exists
+     */
+    getWorkTab(el?: AnyContainer): JQuery | undefined;
+    /**
+     * Get the work-area of element
+     * @param el Element inside the .work-area
+     * @returns .work-area if exists
+     */
+    getWorkArea(el?: AnyContainer): JQuery | undefined;
+    /**
+     * Set the options for a work tab
+     * @param el tab anchor .nav-link or .nav-item
+     * @param options the options to store in a.data("worktab")
+     */
+    setTabOptions(el?: JQuery, options?: WorkTabOptions): void;
+    /**
+     * Update the options for a work tab from navigation data
+     * @param el Element
+     * @param label the label of the navigation item
+     * @param name optional (unique) name of the navigation item
+     * @param url optional URL of the navigation item
+     */
+    updateTabOptions(el?: AnyContainer, label?: string, name?: string, url?: string): void;
+    /**
+     * Update the tab label
+     * @param el any content element inside the .work-tab-pane (or .nav-link or .nav-item)
+     * @param label New label
+     */
+    setTabLabel(el?: AnyContainer, label?: string): void;
+    /**
+     * Activate a tab
+     * @param el any content element inside the .work-tab-pane
+     */
+    activateTab(el: AnyContainer): JQuery | undefined;
+    /**
+     * Activate the first work-area tab
+     */
+    activateFirstTab(): JQuery | undefined;
+    /**
+     * Get the first work-area content: #work0 (or default #work if no enabled)
+     * @param activate activate the first tab to show the content?
+     */
+    getDefaultWorkContent(activate?: boolean): JQuery;
+    /**
+     * Move a tab in a new work-area
+     * @param tab tab .nav-link to move
+     * @param workArea target workarea to split
+     * @param pos position for the tab content top/left/right/bottom
+     */
+    moveTabToWorkArea(tab: JQuery, workArea: JQuery, pos: Position): void;
+    /**
+     * Move a tab in other tab
+     * @param tab tab .nav-link to move
+     * @param targetTab target tab
+     * @param pos place the tab on the 'left' or the 'right' of the target tab
+     */
+    moveTabToTab(tab: JQuery, targetTab: JQuery, pos: 'left' | 'right'): void;
+    /**
+     * Close a tab if can close
+     * @param tab .nav-link to close
+     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
+     * @param activatePrevious activate the previous tab if exists? default true
+     */
+    closeTab(tab: JQuery, checkCanClose?: boolean, activatePrevious?: boolean): Promise<void>;
+    /**
+     * Remove a content and its tab
+     * @param el any content element inside the .work-tab-pane
+     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
+     */
+    remove(el: AnyContainer, checkCanClose?: boolean): void;
+    /**
+     * Close a content: back to the previous page of its navigation if any,
+     * otherwise remove its tab when it is in a work tab, otherwise only close the content
+     * @param el content element (inside a .work-tab-pane or not)
+     * @example
+     * // Close the current content, ex: after detaching it in a popup
+     * $view.splitter.close(ctn);
+     */
+    close(el: AnyContainer): void;
+    /**
+     * Close all tabs if can close
+     * @param checkCanClose check can close the tab contents?
+     */
+    closeAll(checkCanClose?: boolean): Promise<void>;
+    /**
+     * Remove a tab of a work-area
+     * ZZZ not public: use closeTab to destroy the content first
+     * @param tab the .nav-link to remove
+     * @param prev click on previous (or next) tab if exists
+     */
+    private removeTab;
+    /**
+     * Remove a work-area and its children
+     * @param workarea .work-area to remove
+     */
+    removeWorkArea(workarea: JQuery): Promise<void>;
+    private refreshTimer;
+    /**
+     * Refresh container when moved/splitted/resized
+     * @param ctn container with events ui.resize and ui.zoom
+     * @param resize true to force a resizing
+     */
+    refresh(ctn: JQuery, resize?: boolean): void;
+    /**
+     * Create a .work-area and/or assign a split direction
+     * @param workarea optional .work-area to (re)assign (default returns a new one)
+     * @param vertical optional, true to split vertically, false to split horizontally
+     * @param children optional list of .work-area to append
+     */
+    workArea(workarea?: JQuery | null, vertical?: boolean, children?: JQuery[]): JQuery;
+    /**
+     * Split a work-area
+     * @param workarea .work-area to split (default the root one)
+     * @param pos insert at position left/right/top/bottom
+     * @param tabOptions tab options
+     * @param content optional content to insert in the new area
+     * @returns newArea and content
+     */
+    splitWorkArea(workarea: JQuery | null, pos: Position | undefined, tabOptions: WorkTabOptions, content?: JQuery): {
+        /** New work-area */
+        newArea: JQuery;
+        /** Content of the new work-area */
+        content: JQuery;
+    };
+    /**
+     * Convert a CSS size value to pixels.
+     * Supports plain numbers (treated as px), "rem" units (1rem = 16px),
+     * and "%" relative to the total #work width.
+     * @param value Size as a number (px) or a CSS string ("300px", "20rem", "50%")
+     * @returns Equivalent size in pixels
+     */
+    private toPixel;
+    /**
+     * Resize a work area (and its next area) in a horizontal split
+     * @param workarea workarea to resize
+     * @param width width in pixels or in rem (or in % of the #work)
+     */
+    setWidth(workarea: JQuery, width: number | string, store?: boolean): void;
+    /**
+     * Resize a work area (and its next area) in a vertical split
+     * @param workarea workarea to resize
+     * @param height height in pixels or in rem (or in % of the #work)
+     */
+    setHeight(workarea: JQuery, height: number | string, store?: boolean): void;
+    /**
+     * Resize a work area (and its next area) in the split direction
+     * @param workarea workarea to resize
+     * @param horizontal or vertical
+     * @param size new size in pixels (fit to parent size if unset)
+     * @param save save preference?
+     */
+    setSize(workarea: JQuery, horizontal: boolean, size: number, save?: boolean): void;
+    /**
+     * Resize all work areas to fit 100% of the container
+     * @param workarea container
+     */
+    fitSize(workarea: JQuery): void;
+    /**
+     * Create context menu to request for the new tab position
+     * @param el Right clicked element
+     * @param e Context menu event
+     * @param request callback with requested position
+     * @param items optional previous menu items
+     */
+    contextMenu(el: JQuery, e: JQuery.ContextMenuEvent, request?: (pos: NewTabPosition) => void, items?: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
+    /**
+     * Add a context menu on follow link to open the target in a new tab or side
+     * @param title Tab title
+     * @param fl FollowLink definition with object and rowId to open the form
+     * @param el Caller element to bind the context menu
+     */
+    followLinkContextMenu(title: string, fl: FollowLink, el: JQuery): void;
+    /**
+     * Stop event and return mouse position
+     */
+    private xy;
+    /**
+     * Drag & drop separator to resize sibling areas
+     */
+    private dragSeparator;
+    /**
+     * Drag & drop tab
+     */
+    private dragTab;
+    /**
+     * Split the container in 2 parts (any previous split is removed).
+     * @param ctnr container
+     * @param pos position left|right|top|bottom, default 'top'
+     * @param options optional parameters or content
+     * @param options.content content to add at position
+     * @param options.resizable can resize content ?
+     * @param options.height optional content height
+     * @param options.width optional content width (in rem, px, %)
+     * @param options.collapsible can collapse content ?
+     * @param options.collapsed collapsed by default ?
+     * @param options.splitWidth optional split width (default 100%, may be "auto" to let the scroll-x to parent element)
+     * @param options.splitHeight optional split height (default 100%, may be "auto" to let the scroll-y to parent element)
+     */
+    splitPart(ctnr: AnyContainer, pos: Position, options: SplitPart | JQuery): void;
+    /**
+     * Remove the splitted content
+     * @param ctn container with splitted contents
+     */
+    unsplitPart(ctn: string | Container): void;
+}
+
+/** Load URL target = same as lov SHC_TARGET to open a shortcut */
+type LoadTarget = 'frame_work' | '_blank' | '_top' | '_popup' | LoadTargetArea;
+/** LoadURL options */
+type LoadParam = NavParam & {
+    /** Optional target _blank, _top or _popup */
+    target?: LoadTarget;
+    /** Width of the element */
+    width?: string;
+    /** Height of the element */
+    height?: string;
+    /** Optional label to display in nav/dialog/download */
+    label?: string;
+    /** Optional name for the external object */
+    name?: string;
+    /** Optional object of action */
+    object?: string | BusinessObject;
+    /** Optional instance of object */
+    inst?: string;
+    /** Optional object row ID (form/row action) */
+    rowId?: string;
+    /** Optional object item (form/row action) */
+    item?: RowItem | null;
+    /** Optional data of external object (extobject, fields) */
+    data?: KeyObject;
+    /** Optional related action */
+    action?: string | Action;
+    /** Optional flag to inline content */
+    noiframe?: boolean;
+    /** Controller of the download, set by loadURL: call `controller.abort()` to stop the client side call */
+    abortController?: AbortController;
+    /** Optional reader(content-type, attach, filename, blob, defaultReader, cbk, status) to override default download into container */
+    reader?: (contenttype: string, attach: boolean, filename: string, blob: Blob, defaultReader: (ct: string, _att: boolean, filename: string, res: File) => void, cbk?: Callback, status?: number) => void;
+};
+/**
+ * UI Loader tool
+ */
+declare class UILoader extends UIUtil {
+    /**
+     * Common file extension icon
+     */
+    readonly FILE_ICONS: KeyString;
+    /** Feedback instance */
+    feedback?: Feedback;
+    /** Disconnected translation */
+    labelDisconnected?: string;
+    /** Web news (popup and footer ticker) */
+    readonly news: WebNews;
+    /** Main navigator */
+    readonly nav: UINavigator;
+    /**
+     * Mime type to file extension
+     */
+    readonly MIME_EXT: KeyString;
+    constructor();
+    /**
+     * When page is loaded: load user rights, menu, texts and engine.<br />
+     * Then call the main page service.
+     * @param options some globals options to override
+     * @example
+     * // Standalone page: load the rights, texts and engine, then display the home page
+     * $(document).ready(() => $ui.ready($app, "bootstrap5", { useMainParts: true }));
+     */
+    ready(app: Session, engine: string, options?: Partial<typeof Globals>): Promise<void>;
+    private prepareBookmarks;
+    /**
+     * Set the Ajax APIs
+     * @param app Simplicite.Ajax instance
+     */
+    setAjax(app: Session): UIEngine;
+    /**
+     * Returns the local client Id from local storage.
+     * Used to identify the client in session and to change user on server-side in god mode.
+     * @example
+     * const id: string = $ui.clientId();
+     */
+    clientId(): string;
+    /**
+     * Open the user session with authtoken
+     * @param params options
+     * @param params.scope optional user scope or home view
+     * @param params.clientId optional clientId (local storage to change users)
+     * @returns Session infos
+     * @example
+     * const s: KeyObject = await $ui.session({ scope: "MyScope" });
+     */
+    session(params?: {
+        scope?: string;
+        clientId?: string;
+    }): Promise<KeyObject>;
+    /**
+     * Default logout: confirm (with text CONFIRM_LOGOUT) and save session before quit
+     * @param params logout parameters
+     * @param params.confirm true to confirm the logout
+     * @param params.url optional new location URL
+     * @param params.login optional user login to switch session
+     * @param params.token optional user token to switch session
+     * @example
+     * // Ask the confirmation, then logout
+     * $ui.logout({ confirm: true });
+     * // Logout and go to a URL
+     * $ui.logout({ url: "/ext/MyLandingPage" });
+     */
+    logout(params: {
+        confirm?: boolean;
+        url?: string;
+        login?: string;
+        token?: string;
+    }): void;
+    /**
+     * Default quit is a session logout
+     * @param params logout parameters
+     * @param params.url optional new location URL to change scope
+     * @param params.login optional user login to change user
+     * @example
+     * $ui.quit({ url: "https://www.simplicite.io" });
+     */
+    quit(params?: {
+        url?: string;
+        login?: string;
+    }): UIEngine;
+    /**
+     * Save the session
+     * @param mode "save" (default, e.g. language change) keeps the current layout / nav;
+     *        "logout" (explicit logout or cache clear) and "switch" (user or scope switch) drop it
+     *        in single work-area mode so the next login lands on the home page, but keep it per
+     *        scope + login in multi work-area mode, to be restored on return
+     * @example
+     * await $ui.saveSession();
+     */
+    saveSession(mode?: "save" | "logout" | "switch"): Promise<void>;
+    /**
+     * Load the Rendering engine
+     * @param name extended engine name (forced to bootstrap5)
+     */
+    loadEngine(name: string): Promise<void>;
+    /**
+     * Bind server side events.
+     * Custom messages from back-end
+     * <code>ServerSideEvent.notify("myCustomEvent", "message", userId)</code>
+     * Must be binded on "ui.ready"" with
+     * <code>$ui.sse.addEventListener("myCustomEvent", e => e.data ... );</code>
+     * @example
+     * // Bound on ready, then listen custom events sent by ServerSideEvent.notify("myCustomEvent", ...)
+     * $(document).on("ui.ready", () => {
+     * 	$ui.sse?.addEventListener("myCustomEvent", (e: MessageEvent) => $ui.toast(e.data));
+     * });
+     */
+    bindEventSource(): boolean;
+    /**
+     * Websocket handler for partial clear cache
+     * @param d <code>\{ object, name \}</code>
+     * @ignore
+     */
+    private onClearCache;
+    /**
+     * System clear cache
+     * @param action Action <code>cc|dc|gc</code> for server, all sessions or granted user
+     * @example
+     * // Clear the cache of the current user
+     * $ui.clearCache("gc");
+     */
+    clearCache(action: string): Promise<void>;
+    /**
+     * SSE handler for object usage
+     * @param d <code>\{ object, action, emitter \}</code>
+     * @ignore
+     */
+    private onActionObject;
+    /**
+     * SSE handler for internal notification
+     * @param n <code>\{ count, message, incoming, userId \}</code>
+     * @ignore
+     */
+    private onNotif;
+    /**
+     * Default keydown handler
+     * <br>CTRL-S : trigger "ui.key.ctrls" to all "js-ctrl-s" elements
+     * <br>ESCAPE : in order of priority close dialog, blur field (remove focus), or back in navigation
+     * <br>SHIFT-LEFT/RIGHT : navigation between list items
+     * <br>ALT-H : back to the home page
+     * <br>ALT-M : focus last visited menu item
+     * <br>ALT-W : wide screen = toggle menu
+     * <br>ALT-B : open the bookmarks dialog
+     * <br>ALT-F : focus the global searchbox
+     * <br>ALT-L : focus the first list row
+     * <br>ALT-N : focus the next area/panel
+     * @param e Key event
+     */
+    private keydown;
+    /**
+     * Displays all site parts:
+     * <ul>
+     * <li>Create main div</li>
+     * <li>load only options.resources if specified</li>
+     * <li>load part MAIN/HEADER/FOOTER/MENU/WORK when options.useMainParts=true</li>
+     * <li>load STYLES + SCRIPT resources of disposition or object</li>
+     * </ul>
+     */
+    main(cbk: Callback): Promise<void>;
+    /**
+     * Load the FOOTER_ADDON if exists
+     */
+    footerAddon(): void;
+    /**
+     * Load the text and monospace fonts and override the related CSS variables
+     * @param font text font (a plain name = assume a google font), none = default font of the theme CSS
+     * @param mfont monospace font
+     * @example
+     * // Google font for texts, default monospace font
+     * $ui.setFonts("Roboto");
+     */
+    setFonts(font?: Font | string | null, mfont?: Font | string | null): Promise<[void, void]>;
+    /**
+     * Change the current CSS theme
+     * @param base 'light' or 'dark' reboot
+     * @param theme theme name to load (vars + addon styles)
+     * @example
+     * $ui.setTheme("dark");
+     * $ui.setTheme("light", "MyTheme");
+     */
+    setTheme(base?: ThemeBase, theme?: string): Promise<void>;
+    /**
+     * Add keys shortcuts to document
+     * @param keys Pair of ('ctrl' | 'shift' | 'alt') + letter or char-code = callback or shortcut definition
+     * @example
+     * $ui.addShortcuts({
+     * 	"ctrl+shift+h": () => $ui.displayHome(),
+     * 	"alt+d": { name: "MyDoc", label: "Documentation", url: "https://docs.simplicite.io", target: "_blank" }
+     * });
+     */
+    addShortcuts(keys: ShortcutKeys): void;
+    /**
+     * Open the URL in a new window
+     * @param url URL to open
+     * @param target Optional, default <code>'_blank'</code>
+     * @example
+     * $ui.openURL("https://www.simplicite.io");
+     */
+    openURL(url: string, target?: string): void;
+    /**
+     * Open the url in a separate window with the UI engine
+     * @param url URL to load in a new window
+     * @param options Detach options
+     * @param options.name Optional window name (default detachurl)
+     * @param options.width Optional window width in px (default 1200)
+     * @param options.height Optional window height in px (default 700)
+     * @param options.top Optional window top in px (default 0)
+     * @param options.left Optional window left in px (default 0) (default 0)
+     * @param options.full True to load the main parts (menu, header... default load the URL in div.main without parts)
+     * @returns new window
+     * @example
+     * // Open an external object in a new window
+     * $ui.detachURL($app.getExternalObjectURL("MyExternalObject"), { width: 800, height: 600 });
+     */
+    detachURL(url: string, options?: {
+        name?: string;
+        width?: number;
+        height?: number;
+        top?: number;
+        left?: number;
+        full?: boolean;
+    }): Window | null;
+    /**
+     * Call periodically to check if the response is completed
+     * @param ctn Container to load the URL
+     * @param url URL to launch the asynchronous task on server side, and be polled with a check parameter periodically, must respond 202 while the task is not completed
+     * @param params Optional parameters for loadURL
+     * @param pgs Optional progress callback(message)
+     * @returns Promise when loaded, or catch when stopped
+     * @example
+     * // Launch a long task and poll until done
+     * $ui.waitForURL(ctn, myTaskURL, {}, (msg: string | ArrayBuffer | null) => $console.log("progress", msg));
+     */
+    waitForURL(ctn: Container, url: string, params?: LoadParam, pgs?: (msg: string | ArrayBuffer | null) => void): Promise<void>;
+    /**
+     * Load URL in a container: wrap the URL to specific controllers (list, form...) or call the back-end thru ajax
+     * @param ctn Container to load the URL (default is #work)
+     * @param url URL to load
+     * @param options Contextual parameters
+     * @param cbk Optional callback when loaded
+     * @example
+     * // Display an external object in the work area
+     * $ui.loadURL(null, $app.getExternalObjectURL("MyExternalObject"));
+     */
+    loadURL(ctn: AnyContainer, url: string, options?: LoadParam | null, cbk?: Callback): this;
+    getUIObject(obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
+    getUIObject(object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
+    getNavObject(ctn: AnyContainer, obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
+    getNavObject(ctn: AnyContainer, object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
+    /**
+     * Generate the instance name within the component navigator.
+     * Returns the common instance name on main navigation, otherwise add a suffix ex: the_ajax_(name)_nav(id)
+     * @param c Component
+     * @param obj Object name or BusinessObject
+     * @param inst Optional instance name, default = <code>the_ajax_(name)</code>
+     * @example
+     * const inst: string = $ui.getNavInstanceName(ctn, "MyObject"); // the_ajax_MyObject on the main navigation
+     */
+    getNavInstanceName(c: AnyContainer, obj: string | BusinessObject, inst?: string): string;
+    /** Web push service, loaded on demand */
+    _webpush?: WebPush;
+    /**
+     * WebPush service
+     * @example
+     * $ui.webpush();
+     */
+    webpush(data?: WebPushData): WebPush;
+    /** Firebase service, loaded on demand */
+    _firebase?: Firebase;
+    /**
+     * Firebase service wrapper
+     * @param data Service data, with optional keys:
+     * `config` (init web browser to receive notification),
+     * `token` (add the device token to FIREBASE_TOKENS on server side),
+     * `tap` (incoming notification has been tapped by user?),
+     * `body` (optional received message),
+     * `title` (optional message title),
+     * `from` (optional message origin),
+     * `message` (message to send on server-side),
+     * `to` (recipients `{ users:[], groups:[] }` or `'all'` users)
+     * @example
+     * // Send a notification to groups thru the server
+     * $ui.firebase({ message: "New order", to: { users: [], groups: ["MY_SALES"] } });
+     */
+    firebase(data?: FirebaseServiceData): Firebase;
+    /**
+     * Firebase default handler when a message is received thru FCM or worker.
+     * @param m Message or notification, with optional keys:
+     * `notification` (optional embedded message with title and body),
+     * `body` (message body),
+     * `title` (optional title),
+     * `priority` (optional priority `'high'|'normal'|'low'`),
+     * `data` (optional pairs of key-value, may be present on top of message, e.g. `object` and `rowId`),
+     * `tap` (foreground or background),
+     * `icon` (optional icon),
+     * `color` (optional color)
+     */
+    onMessageReceived(m: FirebaseMessage): void;
+    /** Internal: editor options */
+    _editor?: KeyObject;
+    /**
+     * Load local code editor
+     */
+    loadLocalEditor(): Promise<KeyObject>;
+    /**
+     * Load Simplicite standalone client lib
+     * @param cbk optional callback
+     * @example
+     * $ui.loadSimpliciteClient(() => $console.log("client lib loaded"));
+     */
+    loadSimpliciteClient(cbk?: Callback): UIEngine;
+    /**
+     * Load metadata of font icons
+     * @param cbk optional callback(meta)
+     * @example
+     * $ui.loadFontsMeta((meta: IconsMetadata) => $console.log(meta));
+     */
+    loadFontsMeta(cbk?: (meta: IconsMetadata) => void): UIEngine;
+    /**
+     * Load the diagram engine
+     * @example
+     * await $ui.loadDiagramEngine();
+     */
+    loadDiagramEngine(): Promise<DiagramEngine>;
+    private _speech?;
+    /**
+     * Load the speech engine
+     * @example
+     * const speech: Speech = $ui.loadSpeech();
+     */
+    loadSpeech(): Speech;
+    private _ocr?;
+    /**
+     * Load the OCR tools
+     * @example
+     * $ui.loadOCR(() => $console.log("OCR ready"));
+     */
+    loadOCR(cbk?: CallableFunction): void;
+    /**
+     * UI monitoring
+     * @param ctn Container to monitor
+     * @param params Parameters or action
+     * @param params.action Action name (get, meta, search, display...) if unset: save and stop monitoring in the container
+     * @param params.service UI service name (displayForm...)
+     * @param params.target Target name (object, view, process...)
+     * @param params.ui Front or Ajax call
+     * @example
+     * // Start tracing a custom service (a service is required on the first call)
+     * $ui.monitor(ctn, { action: "display", service: "MyService", target: "MyObject", ui: true });
+     * $ui.monitor(ctn, { action: "onload", ui: true });
+     * // No action: save the trace and stop
+     * $ui.monitor(ctn);
+     */
+    monitor(ctn: AnyContainer | null, params?: string | {
+        action: string;
+        service?: string;
+        target?: string;
+        ui?: boolean;
+    }): UIEngine | undefined;
+    /**
+     * Loading page with status
+     */
+    splash(status: boolean | string): void;
+    /**
+     * Top Simplicite window
+     * @example
+     * const topUI: Window = $ui.getTop();
+     */
+    getTop(): Window & typeof globalThis;
+}
+
+/**
+ * Workflow controller
+ * @param ui Main UI controller
+ */
+declare class Workflow {
+    /** Server-side specific instance */
+    readonly bpmActivityObject = "BPMActivityFile";
+    /** Server-side instance of the activity files */
+    readonly bpmActivityInst = "list_ajax_BPMActivityFile";
+    /**
+     * Get a business process with its UI hooks.
+     * @param process Process name or process
+     * @param cbk Optional callback with the process
+     * @returns This controller
+     */
+    getUIProcess(process: string | BusinessProcess, cbk?: (wkf: BusinessProcess) => void): this;
+    /**
+     * Display a process activity.
+     * @param ctn Container
+     * @param process Process name or process (null = current process)
+     * @param action Optional process action
+     * @param options Optional parameters
+     * @param cbk Optional callback when displayed
+     */
+    display(ctn: Container, process: string | BusinessProcess | null, action?: ProcessActionType, options?: ProcessParam, cbk?: Callback): this;
+    /** Service call */
+    service(ctn: Container, wkf: BusinessProcess, action: ProcessActionType, onSuccess: (act?: ActivityFile) => void, onError: (reason: MessageFromBack) => void, params?: {
+        road?: boolean;
+        object?: string;
+        rowId?: string;
+        step?: string;
+    }): void;
+    /** Success : dispatch response */
+    success(ctn: Container, wkf: BusinessProcess, resp?: ActivityFile, p?: ProcessParam, cbk?: Callback): void;
+    /** Error : return to activity with messages */
+    error(ctn: Container, wkf: BusinessProcess, err: MessageFromBack, p?: ProcessParam, cbk?: Callback): void;
+    /** Activities list filtered on process name and step */
+    displayList(ctn: Container, wkf: BusinessProcess, options?: {
+        step?: string;
+    } | null, cbk?: Callback): this;
+    /**
+     * Display the activity
+     * @param ctn Container
+     * @param wkf Business process instance
+     * @param activity Current activity with metadata
+     * @param options Options
+     * <ul>
+     * <li>showRoad: displays the workflow navbar, default true</li>
+     * <li>msg: back-end messages to display</li>
+     * <li>workflow: true</li>
+     * </ul>
+     * @param cbk Optional callback
+     */
+    displayActivity(ctn: Container, wkf: BusinessProcess, activity: ActivityFile | null, options?: ProcessParam, cbk?: (wkf: BusinessProcess, act?: ActivityFile, p?: ProcessParam) => void): Promise<this | undefined>;
+}
+
+/** Agenda of an object */
+interface Agenda {
+    /** Agenda row ID */
+    id: string;
+    /** Agenda name */
+    name: string;
+    /** Agenda is enabled */
+    enabled: boolean;
+    /** Events can be moved or resized */
+    editable?: boolean;
+    /** WEEK */
+    display?: string;
+    /** Default 1=monday */
+    firstDay?: number;
+    /** Hidden days (0 = sunday) */
+    hiddenDays?: number[];
+    /** [1, 2, 3, 4, 5] monday to friday */
+    workingDays?: number[];
+    /** 09:00 */
+    startTime?: string;
+    /** 18:00 */
+    endTime?: string;
+    /** Start date field name */
+    date: string;
+    /** Duration field name */
+    duration?: string;
+    /** End date field name */
+    endDate?: string;
+    /** Calendar height */
+    height?: number;
+    /** First displayed time (ex: `08:00`) */
+    minTime?: string;
+    /** Last displayed time (ex: `20:00`) */
+    maxTime?: string;
+    /** Duration of a time slot */
+    slot?: string;
+    /** Snap duration when moving an event */
+    snap?: string;
+    /** Label field names of an event */
+    labels?: string[];
+    /** Default user login */
+    user?: string;
+    /** User field name */
+    userField?: string;
+    /** Default group name */
+    group?: string;
+    /** Group field name */
+    groupField?: string;
+}
+/** Parameters of a calendar display (see `$ui.displayCalendar`) */
+interface CalendarParam {
+    /** Filter on user login */
+    login?: string;
+    /** Filter on group */
+    group?: string;
+    /** Initial date */
+    date?: Date;
+    /** Locale */
+    locale?: string;
+    /** Renderer: is the event editable? */
+    editable?: (obj: BusinessObject, item: KeyObject) => boolean;
+    /** Handler on event click */
+    click?: (arg: EventClickArg) => void;
+    /** Handler on dates selection */
+    select?: (arg: DateSelectArg) => void;
+    /** Handler on event drop */
+    drop?: (arg: EventDropArg) => void;
+    /** Handler on event resize */
+    resize?: (arg: EventResizeDoneArg) => void;
+    /** Handler on render */
+    render?: (arg: DateSelectArg) => void;
+    /** Renderer: title of the event */
+    title?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: header of a column */
+    column?: (date: string) => void;
+    /** Renderer: background color of the event */
+    color?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: border color of the event */
+    borderColor?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: text color of the event */
+    textColor?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: CSS classes of the event */
+    classNames?: (obj: BusinessObject, item: KeyObject) => string[];
+    /** Renderer: label of the color legend */
+    colorLabel?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Hook before loading */
+    beforeload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
+    /** Hook when displayed */
+    onload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
+    /** Hook when removed */
+    onunload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
+    /** First displayed time */
+    minTime?: string;
+    /** Last displayed time */
+    maxTime?: string;
+    /** Duration of a time slot */
+    slot?: string;
+    /** Snap duration when moving an event */
+    snap?: string;
+    /** Working days (1 = monday) */
+    workingDays?: number[];
+    /** Start time of the working day */
+    startTime?: string;
+    /** End time of the working day */
+    endTime?: string;
+    /** Calendar height */
+    height?: number;
+}
+/**
+ * Calendar controller (based on FullCalendar V5)
+ * @param options <code>\{ locale, version \}</code>
+ */
+declare class UICalendar {
+    /** Date format of the service */
+    readonly dateFormat = "YYYY-MM-DD HH:mm:ss";
+    /** Current date per calendar */
+    currentDate: {
+        [key: string]: Date;
+    };
+    /** Current filter per calendar */
+    currentFilter: {
+        [key: string]: string;
+    };
+    /** FullCalendar instance */
+    cal?: Calendar;
+    /** Options `{ locale, version }` */
+    options: KeyObject;
+    constructor(options: {
+        locale?: string;
+        version?: number;
+    });
+    /**
+     * Set date
+     */
+    setDate(name: string, date?: Date): void;
+    /**
+     * Get date
+     */
+    getDate(name: string): Date;
+    /**
+     * Get filter (user or group field)
+     */
+    setFilter(name: string, filter?: string): void;
+    /**
+     * Get filter (user or group field)
+     */
+    getFilter(name: string): string;
+    /**
+     * Generate a light color
+     */
+    hsl(text: string): string;
+    /**
+     * Display calendar
+     * @param ctn Container
+     * @param obj Business object
+     * @param agd Agenda definition
+     * @param params options
+     * @param params.login optional login filter
+     * @param params.group optional group filter
+     * @param params.date current date to show
+     * @param params.editable editable?
+     * @param params.locale use locale (ex 'fr', 'es')
+     * @param params.click click handler (default open the update form)
+     * @param params.select select date handler (default open the create form)
+     * @param params.drop drop event handler (default update the event start date)
+     * @param params.resize resize event handler (default update the event duration)
+     * @param params.title handler(obj,item) of event title (default based on label fields)
+     * @param params.column handler(date) to override column header (HTML)
+     * @param params.color handler(obj,item) for event background (default grey or hash of selected login|group)
+     * @param params.borderColor handler(obj,item) for border color
+     * @param params.textColor handler(obj,item) for text color
+     * @param params.classNames handler(obj,item) to get an array of CSS classes
+     * @param params.render handler to override the render the event
+     * @param params.minTime default "00:00:00"
+     * @param params.maxTime default "24:00:00"
+     * @param params.slot default "00:30:00"
+     * @param params.snap default "00:05:00"
+     * @param params.workingDays default [1,2,3,4,5] = monday to friday
+     * @param params.startTime default "09:00" for business hours
+     * @param params.endTime default "18:00" for business hours
+     * @param params.height default 800
+     * @param cbk Optional callback
+     */
+    display(ctn: AnyContainer, obj: BusinessObject, agd: Agenda, params?: CalendarParam, cbk?: Callback): Promise<void>;
+}
+
+/** A place of a place map: one record with its coordinates and labels */
+interface Place {
+    /** Coordinates `"lat;lng"` or `"lat,lng"` */
+    coord: string;
+    /** Value of the first label field */
+    label1?: string;
+    /** Value of the second label field */
+    label2?: string;
+    /** Value of the third label field */
+    label3?: string;
+    /** Value of the address field */
+    address?: string;
+}
+/** Place map definition: object fields to locate and describe the places */
+interface Placemap {
+    /** Place map row ID */
+    id: string;
+    /** Place map name */
+    name: string;
+    /** Places to display */
+    places: Place[];
+    /** Name of the first label field */
+    label1?: string;
+    /** Name of the second label field */
+    label2?: string;
+    /** Name of the third label field */
+    label3?: string;
+    /** Name of the address field */
+    address?: string;
+}
+/** Leaflet map settings */
+interface MapSettings {
+    /** Tile layer URL template (ex: `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`) */
+    tileLayer: string;
+    /** Default center latitude */
+    lat?: number;
+    /** Default center longitude */
+    lng?: number;
+    /** Default zoom level (default 13) */
+    zoom?: number;
+    /** Attribution of the tile layer */
+    attribution?: string;
+    /** Maximum zoom level */
+    maxZoom?: number;
+}
+/**
+ * Place Map renderer
+ */
+declare class UIMap {
+    /** Map settings */
+    options: MapSettings;
+    /** Leaflet map, set by `display` */
+    map?: L.Map;
+    /** Markers added with `addMarker` */
+    map_markers?: L.Marker[];
+    /**
+     * @param options Options <code>\{ tileLayer, attribution, maxZoom, lat, lng, zoom \}</code>
+     */
+    constructor(options: MapSettings);
+    /**
+     * Parse coordinates.
+     * @param coord Coordinates `"lat;lng"` or `"lat,lng"`
+     * @returns The `[lat, lng]` tuple, or the default center when invalid
+     */
+    getLatLong(coord: string): LatLngTuple;
+    /**
+     * Init a map in the container
+     * @param ctn Container
+     * @param pm Placemap definition
+     */
+    display(ctn: AnyContainer, pm?: Placemap): string | false | undefined;
+    /**
+     * A map can only have bounds if it contains at least two markers.
+     * @returns true when the map has at least 2 markers
+     */
+    hasBounds(): boolean;
+    /**
+     * Bounds of all the markers.
+     * @returns The bounds, or undefined when there are less than 2 markers
+     */
+    getLatLngBounds(): L.LatLngBounds | undefined;
+    /**
+     * Add a marker on map
+     * @param params Parameters
+     * @param params.coord coma-separated coordinates
+     * @param params.onMove callback function when user moves marker
+     */
+    addSelector(params: {
+        coord: string;
+        onMove?: (lat: string, lng: string) => void;
+    }): boolean;
+    /**
+     * Add a marker on map
+     * @param params Parameters <code>\{ coord, info, center \}</code>
+     * @param params.coord coma-separated coordinates
+     * @param params.info jquery element to show in popup
+     */
+    addMarker(params: {
+        coord: string;
+        info?: JQuery;
+    }): boolean;
+    /**
+     * Build the marker info
+     */
+    getMarkerInfo(o: BusinessObject, pm: Placemap, place: Place, onOpen: (id: string) => void): JQuery<HTMLElement>;
+}
+
+/** HSV color */
+interface HSV {
+    /** 0..360 */
+    h: number;
+    /** 0..100 */
+    s: number;
+    /** 0..100 */
+    v: number;
+}
+/** RGB color */
+interface RGB {
+    /** 0..255 */
+    r: number;
+    /** 0..255 */
+    g: number;
+    /** 0..255 */
+    b: number;
+}
+/** RGB color with alpha */
+type RGBA = RGB & {
+    /** 0..1 */
+    a?: number;
+};
+/** Oklab color */
+interface OKLAB {
+    /** Positive */
+    L: number;
+    /** Signed */
+    a: number;
+    /** Signed */
+    b: number;
+}
+/** Contrast between a text and its background */
+interface Contrast {
+    /** Background color */
+    bgcolor: RGBA;
+    /** Text color */
+    color: RGBA;
+    /** Min 4.5 */
+    ratio: number;
+    /** Error when the contrast is too low */
+    error?: string;
+}
+/** Named CSS colors by group */
+interface CSSColors {
+    /** Group name */
+    name: string;
+    /** Named colors of the group */
+    list: KeyString[];
+}
+/** Named CSS colors by group */
+declare const CSSCOLORS: CSSColors[];
+/**
+ * Color helpers
+ */
+declare class UIColor {
+    /** Type of colors */
+    static readonly TYPES: string[];
+    /** minimal WCAG level AAA is 4.5 */
+    static readonly MIN_CONTRAST = 4.5;
+    /** legacy regex for 'rgb(123, 123, 123)' or 'rgba(123, 123, 123, 0.33)'*/
+    static readonly rgbaRegex: RegExp;
+    /** legacy regex for 'rgb(123, 123, 123)' */
+    static readonly rgbRegex: RegExp;
+    /** regex for 'rgb(123 123 123)' or 'rgb(123 123 123 / 0.5)' */
+    static readonly rgbRegex2: RegExp;
+    /** regex for '#RRGGBB' or '#rrggbb' */
+    static readonly hexRegex: RegExp;
+    /** regex for 'color(srgb 0.17 0.13 0.28 / 0.5)' */
+    static readonly srgbRegex: RegExp;
+    /** oklab(0.28 -0.07 -0.03 / 0.5) */
+    static readonly oklabRegex: RegExp;
+    /**
+     * Convert color string to #rrggbb
+     * @param rgb color
+     * @returns A color <code>#RRGGBB</code>
+     */
+    rgb2hex(rgb: string): string;
+    /**
+     * Convert string color to object
+     * @param color css color
+     * @param alpha optioanl alpha (transparency 0..1)
+     * @returns object <code>\{r,g,b,a\}</code>
+     */
+    css2rgb(color: string, alpha?: number): RGBA;
+    /**
+     * Convert color to hexa format
+     * @param rgb Color
+     * @returns Color <code>#RRGGBB</code> or <code>#RRGGBBAA</code>
+     */
+    rgb2css(rgb?: RGBA | null): string;
+    /**
+     * Convert <code>#RRGGBB</code> to string
+     * @param color Color <code>#RRGGBB</code>
+     * @param alpha Alpha (transparency)
+     * @returns string <code>'rgba(r,g,b,a)'</code>
+     */
+    css2rgba(color: string, alpha?: number): string;
+    /**
+     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
+     * @param color Color <code>\{r,g,b\}</code>
+     * @returns Color <code>\{h,s,v\}</code>
+     */
+    rgb2hsv(color: RGB): HSV;
+    /**
+     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
+     * @param hsv Color <code>\{h,s,v\}</code>
+     * @returns Color <code>\{r,g,b\}</code>
+     */
+    hsv2rgb(hsv: HSV): RGB;
+    /**
+     * Calculate the color luminance 0..1
+     * @param c #RRGGBB or <code>\{r,g,b\}</code>
+     * @returns luminance
+     */
+    luminance(c: string | RGB): number;
+    /**
+     * Calculate the contrast ratio between 2 colors
+     * @param c1 #RRGGBB or <code>\{r,g,b\}</code>
+     * @param c2 #RRGGBB or <code>\{r,g,b\}</code>
+     * @returns minimal ratio recommanded by WCAG is 4.5 (or 3 for larger font-sizes)
+     */
+    contrast(c1: string | RGB, c2: string | RGB): number;
+    /**
+     * Computed text and background colors of an element (transparent colors look at the parents).
+     * @param el Element
+     * @returns The colors
+     */
+    getComputedColors(el: HTMLElement): Partial<Contrast>;
+    /**
+     * Contrast of an element with its background.
+     * @param el Element
+     * @param minRatio Minimum ratio (WCAG)
+     * @returns The contrast with an error when too low, or undefined when not evaluable
+     */
+    elementContrast(el: HTMLElement, minRatio?: number): Contrast | undefined;
+    /**
+     * Black or white color to contrast with a color.
+     * @param color Background color
+     * @returns `black` or `white`
+     */
+    contrastedColor(color: string): "black" | "white";
+    /**
+     * Convert a color to RGB object
+     * @param color supported spaces: #RRGGBB, rgb(), color(srgb r g b / x), oklab(L a b / x)
+     */
+    static convertToRGB(color: string): RGBA | undefined;
+    /**
+     * Gamma 2.2 to linear value.
+     * @param c Value 0..1
+     * @returns Linear value
+     */
+    static gamma2Linear(c: number): number;
+    /**
+     * Linear to gamma 2.2 value.
+     * @param c Value 0..1
+     * @returns Gamma value
+     */
+    static linear2Gamma(c: number): number;
+    /**
+     * Convert a RGB color to Oklab.
+     * @param color RGB color
+     * @param linear true when the RGB is linear (else sRGB)
+     * @returns Oklab color
+     */
+    static sRGB2oklab(color: RGB, linear?: boolean): OKLAB;
+    /**
+     * Round and clamp a value in a range.
+     * @param value Value
+     * @param min Minimum (default 0)
+     * @param max Maximum (default 255)
+     * @returns Clamped value
+     */
+    static clamp(value: number, min?: number, max?: number): number;
+    /**
+     * Convert an Oklab color to RGB.
+     * @param oklab Oklab color
+     * @param linear true to return linear RGB (else sRGB)
+     * @returns RGB color
+     */
+    static oklab2RGB(oklab: OKLAB, linear?: boolean): RGB;
+    /**
+     * Convert a sRGB color (0..1) to RGB (0..255).
+     * @param rgb sRGB color
+     * @param linear true when the color is already linear
+     * @returns RGB color
+     */
+    static sRGB2RGB(rgb: RGB, linear?: boolean): RGB;
+    /** WCAG 2.1 sRGB transfer function (distinct from the 2.2 gamma used by Oklab) */
+    static srgb2Linear(c: number): number;
+}
+
+/** Axis type: `C` column, `L` line, `V` value */
+type CrosstabAxisType = "C" | "L" | "V";
+/** Axis of a crosstab */
+interface CrosstabAxis {
+    /** Field name */
+    field: string;
+    /** Axis name */
+    name: string;
+    /** Translated label */
+    label: string;
+    /** Order of the axis */
+    order: number;
+    /** Caption position */
+    caption?: string;
+    /** TODO "T" | "F"... */
+    method: string;
+    /** Axis type */
+    type: CrosstabAxisType;
+    /** Formula of a calculated value */
+    formula?: string;
+    /** Date grouping (year, month, day...) */
+    dateGroup?: string;
+    /** Index of the Y axis in chart */
+    yaxis?: number;
+    /** Hidden axis */
+    hidden?: boolean;
+    /** Chart type */
+    chart?: string;
+    /** Color palette */
+    palette?: string;
+    /** Field definition */
+    f?: ObjectField;
+}
+/** Crosstab metadata */
+interface CrosstabMetadata {
+    /** Crosstab row ID */
+    id: string;
+    /** Crosstab name */
+    name: string;
+    /** Translated label */
+    label: string;
+    /** Default aggregation method */
+    method?: string;
+    /** Available aggregation methods */
+    methods: EnumItem[];
+    /** Available date groupings */
+    dateGroups: EnumItem[];
+    /** Color of the sub-totals */
+    subcolor?: string;
+    /** Show the control panel */
+    control?: boolean;
+    /** Show the sub-totals */
+    subtotal?: boolean;
+    /** "no" or position */
+    caption?: string;
+    /** Precision of the values */
+    precision?: number;
+    /** Editable axis */
+    editable?: boolean;
+    /** Chart type */
+    chart?: string;
+    /** Chart width */
+    width?: string;
+    /** Chart height */
+    height?: string;
+    /** Color palette */
+    palette?: string;
+    /** Axis in columns */
+    columns?: CrosstabAxis[];
+    /** Axis in lines */
+    lines?: CrosstabAxis[];
+    /** Values */
+    values?: CrosstabAxis[];
+}
+/** Crosstab rendering options (`z` parameters sent to the service) */
+interface CrosstabParam {
+    /** "no" or position */
+    zcaption?: string;
+    /** Show the table */
+    ztable?: boolean;
+    /** Always get lines tree + metadata */
+    ztree?: true;
+    /** Show the sub-totals */
+    zstotal?: boolean;
+    /** Color of the sub-totals */
+    zstcolor?: string | null;
+    /** Axis definitions */
+    zaxis?: KeyObject[];
+    /** Filters */
+    zfilters?: KeyObject;
+    /** Color palette */
+    zpalette?: string;
+    /** Mono chart name */
+    zgraph?: string;
+    /** Chart names of multi charts */
+    [key: `zgraph_${string}`]: string;
+    /** Chart width */
+    zwidth?: string;
+    /** Chart height */
+    zheight?: string;
+    /** Show the control panel */
+    zcontrol?: boolean;
+    /** Selected tab of the control panel */
+    controlTab?: number;
+    /** Search handler */
+    search?: (filters: KeyObject) => void;
+    /** Apply the options */
+    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
+    /** Export the data in a media (CSV, XLSX...) */
+    exportData?: (media: string) => void;
+    /** Reload the crosstab */
+    reload?: Callback;
+    /** Error handler */
+    error?: Callback;
+}
+/** Parameters of a crosstab display (see `$ui.displayCrosstab`) */
+type CrosstabNavParam = NavParam & {
+    /** Optional instance name */
+    inst?: string;
+    /** Optional filters to apply */
+    filters?: KeyObject;
+    /** Optional crosstab options */
+    options?: CrosstabParam;
+    /** Search handler */
+    search?: (filters: KeyObject) => void;
+    /** Apply the options */
+    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
+    /** Export the data in a media (CSV, XLSX...) */
+    exportData?: (media: string) => void;
+    /** Reload the crosstab */
+    reload?: Callback;
+    /** Error handler */
+    error?: Callback;
+};
+/** Crosstab data */
+interface CrosstabData {
+    /** Column nodes */
+    columns: CrosstabNode[];
+    /** Root of the line nodes */
+    lines: CrosstabNode;
+}
+/** Node of a crosstab axis */
+interface CrosstabNode {
+    /** Index */
+    index: number;
+    /** Path in the tree */
+    path: string;
+    /** Name */
+    name: string;
+    /** Text color */
+    color?: string;
+    /** Background color */
+    bgcolor?: string;
+    /** Background colors per value */
+    bgcolors?: (string | null)[];
+    /** Values */
+    values?: any;
+    /** Labels */
+    labels?: string[];
+    /** Row IDs */
+    ids?: string[];
+    /** Child nodes */
+    children?: CrosstabNode[];
+}
+/**
+ * Crosstab rendering
+ */
+declare class Crosstab {
+    private controlTab;
+    /**
+     * Display the cross tab
+     * @param ctn Container
+     * @param obj Object
+     * @param ct Crosstab definition
+     * @param data Crosstab data
+     * @param p options { zstotal, zstcolor, zcaption, ztable, zgraph... }
+     */
+    display(ctn: Container, obj: BusinessObject, ct: CrosstabMetadata, data: CrosstabData, p: CrosstabParam, cbk?: Callback): this;
+    private axisDragDrop;
+}
+
+/** Handler on chart click */
+type ChartClickHandler = (chart: Chart, clickElements: InteractionItem[], dataset: InteractionItem[], elementIndex: number, datasetIndex: number) => void;
+/** Options of the charts (each chart uses its own subset) */
+interface ChartParam {
+    /** Chart type (ex: 'pie', 'doughnut', 'bar', 'line') */
+    type?: ChartType;
+    /** Title */
+    title?: string;
+    /** Display the legend? */
+    legend?: boolean;
+    /** Colors of the values (default palette) */
+    colors?: string[] | null;
+    /** Animate the rotation (pie)? */
+    animate?: boolean;
+    /** Animation? */
+    animation?: boolean;
+    /** Responsive chart? */
+    responsive?: boolean;
+    /** Dark mode? */
+    dark?: boolean;
+    /** Stacked bars or lines? */
+    stacked?: boolean;
+    /** Horizontal bars? */
+    horizontal?: boolean;
+    /** Aspect ratio (default 2) */
+    aspectRatio?: number;
+    /** Logarithmic Y axis? */
+    log?: boolean;
+    /** Values in log10? */
+    log10?: boolean;
+    /** Zoom on X axis by mouse drag? */
+    zoom?: boolean;
+    /** Type of X axis (ex: 'time', 'date') */
+    xType?: string;
+    /** Time format of X axis */
+    timeFormat?: string;
+    /** Minimum of X axis */
+    min?: number | string;
+    /** Maximum of X axis */
+    max?: number | string;
+    /** Unit of Y axis */
+    unit?: string;
+    /** Unit of X axis */
+    xUnit?: string;
+    /** Unit of the second Y axis */
+    y2unit?: string;
+    /** Unit of Y axis (bubble) */
+    yUnit?: string;
+    /** Label of X axis (bubble, default 'x') */
+    xLabel?: string;
+    /** Label of Y axis (bubble, default 'y') */
+    yLabel?: string;
+    /** Line tension (0 = straight lines) */
+    lineTension?: number;
+    /** Width (default 100%) */
+    width?: string;
+    /** Height (default 200px) */
+    height?: string;
+    /** Click handler */
+    onClick?: ChartClickHandler;
+    /** Existing chart to update */
+    chart?: Chart;
+}
+/** Count per status for {@link Charts.chartStatusPie}: list of [status label, count] */
+type StatusPieData = [string, number][];
+/** Count per status and date for {@link Charts.chartStatusCount} */
+interface StatusCountData {
+    /** Date format of the period */
+    format?: string;
+    /** Status labels */
+    series: string[];
+    /** Points [datetime, count] per status */
+    data: [string, number][][];
+}
+/** Duration per status for {@link Charts.chartStatusDuration} */
+interface StatusDurationData {
+    /** Duration unit: seconds, minutes, hours or days */
+    unit: "s" | "m" | "h" | "d";
+    /** Status labels */
+    ticks: string[];
+    /** Durations per status: [averages, maximums, minimums] */
+    data: [number[], number[], number[]];
+}
+/** Terminal status durations for {@link Charts.chartStatusTerminal} */
+interface StatusTerminalData {
+    /** Terminal status labels */
+    series: string[];
+    /** Points [duration in days, count] per terminal status */
+    data: [number, number][][];
+}
+/** Serie of points for {@link Charts.chartTimeSeries} */
+interface PlotSerie {
+    /** Serie label */
+    label: string;
+    /** Points `[x, y]`: x is a date `YYYY-MM-DD HH:mm:ss` or a number */
+    data: [string | number, number][];
+    /** Fill the area under the line */
+    fill?: boolean;
+    /** Display as bars */
+    bar?: boolean;
+    /** Display only the points without line */
+    points?: boolean;
+    /** Use the second Y axis on the right */
+    y2?: boolean;
+    /** Specific color */
+    color?: string;
+}
+/**
+ * ChartJS controller
+ */
+declare class Charts {
+    constructor();
+    /**
+     * Current palette name
+     */
+    PALETTE: string;
+    /**
+     * Predefined palettes <code>\{ name:[colors] \}</code>.
+     */
+    PALETTES: {
+        [key: string]: string[];
+    };
+    /** Bright color of the palette */
+    BRIGHT_COLOR?: string;
+    /** Dark color of the palette */
+    DARK_COLOR?: string;
+    /**
+     * Current palette of colors <br />
+     * default: <code>app.sysparams.CHART_PALETTE</code> or 'Sea'
+     */
+    COLORS: string[];
+    /** Units to format a file size */
+    readonly SIZES: (string | number)[][];
+    /**
+     * Indexed color in palette
+     * @param i Index
+     * @returns color (<code>#RRGGBB</code>)
+     */
+    getColor(i: number): string;
+    /**
+     * All palette colors
+     * @returns array of colors (<code>#RRGGBB</code>)
+     */
+    getColors(): string[];
+    /**
+     * Current palette
+     * @returns palette = list of colors
+     */
+    getPalette(): string;
+    /**
+     * Change the current palette
+     * @param name Palette name ('Sea', 'Base'...)
+     */
+    setPalette(name: string): void;
+    /**
+     * Chart JS
+     * @param ctn Container
+     * @param config From chart.js v3 config with options
+     * @param click Optional handler <code>function(chart, clickElements, dataset, elementIndex, datasetIndex)</code>
+     */
+    chart(ctn: Container, config: ChartConfiguration, click?: ChartClickHandler, ariaLabel?: string): Chart | undefined;
+    /**
+     * Destroy the charts of a container
+     * @param ctn Container
+     */
+    destroy(ctn: Container): void;
+    /**
+     * Enable the zoom on X axis by mouse drag (needs the chartjs-plugin-zoom, reset by double-click)
+     * @param config Chart config
+     */
+    zoom(config: ChartConfiguration): void;
+    /**
+     * Dark theme: black background with light texts and grid
+     * @param config Chart config
+     */
+    dark(config: ChartConfiguration): void;
+    /**
+     * Add a title and legend
+     * @param config Chart config
+     * @param title display+text
+     * @param legend display+position
+     */
+    addTitle(config: ChartConfiguration, title: TitleOptions, legend: TitleOptions): void;
+    /**
+     * Set Stacked option
+     * @param config Chart config
+     * @param stacked true to stack axis
+     */
+    stacked(config: ChartConfiguration, stacked?: boolean): void;
+    /**
+     * Apply the common scale options
+     * @param config Chart config
+     * @param p Options: `log` for a logarithmic Y axis, `zoom` to zoom on X axis by mouse drag
+     */
+    scaleOptions(config: ChartConfiguration, p: ChartParam): void;
+    /**
+     * Set the background color of chart
+     * @param config Chart config
+     * @param color background color of canvas
+     */
+    backgroundColor(config: ChartConfiguration, color: string): void;
+    /**
+     * Status count in a PIE
+     * @param ctn Container
+     * @param data Pie data
+     * @param p Optional chart.js options
+     */
+    chartStatusPie(ctn: Container, data: StatusPieData, p: ChartParam): void;
+    /**
+     * Status count in a chart line per date
+     * @param ctn Container
+     * @param data Line data
+     * @param p Optional chart.js options
+     */
+    chartStatusCount(ctn: Container, data: StatusCountData, p: ChartParam): void;
+    /**
+     * Status duration in a polar/radar/bar charts
+     * @param ctn Container
+     * @param d Duration data
+     * @param p Optional chart.js options
+     */
+    chartStatusDuration(ctn: Container, d: StatusDurationData, p: ChartParam): void;
+    /**
+     * Asysnc queue chart
+     * @param ctn Container
+     * @param hist History data
+     * @param p Options width ans height
+     */
+    chartQueueHistory(ctn: Container, hist: KeyObject, p: ChartParam): void;
+    /**
+     * Process duration in a bar chart
+     * @param ctn Container
+     * @param data Duration data
+     * @param p Optional chart.js options
+     */
+    chartStatusTerminal(ctn: Container, data: StatusTerminalData, p: ChartParam): void;
+    /**
+     * Series on a time or numeric X axis (monitoring, histories...)
+     * @param ctn Container
+     * @param series Series of points
+     * @param p Options:
+     * `title` (chart title),
+     * `xType` (`time` default or `linear`),
+     * `timeFormat` (moment format of the time ticks),
+     * `min`/`max` (X axis range),
+     * `xUnit`/`unit`/`y2unit` (units of the X, Y and second Y axis ticks),
+     * `log` (logarithmic Y axes),
+     * `stacked` (stacked Y values),
+     * `zoom` (zoom by mouse drag, default true),
+     * `legend` (default true),
+     * `dark` (dark theme),
+     * `colors` (default palette)
+     * @returns Chart
+     * @example
+     * await $factory.ChartJS();
+     * $ui.charts?.chartTimeSeries(ctn, [
+     * 	{ label: "Sessions", data: [["2026-09-24 10:00:00", 12], ["2026-09-24 11:00:00", 18]], fill: true },
+     * 	{ label: "Errors", data: [["2026-09-24 10:00:00", 1], ["2026-09-24 11:00:00", 3]], bar: true }
+     * ], { title: "Activity", timeFormat: "HH:mm", log: false });
+     */
+    chartTimeSeries(ctn: Container, series: PlotSerie[], p?: ChartParam): Chart | undefined;
+    /**
+     * Stacked bars per category
+     * @param ctn Container
+     * @param d Data: `series` (labels of series), `ticks` (categories), `data` (values per serie and category)
+     * @param p Options:
+     * `title` (chart title),
+     * `horizontal` (horizontal bars),
+     * `unit` (unit of the values),
+     * `max` (max value),
+     * `legend` (default true),
+     * `dark` (dark theme),
+     * `colors` (default palette)
+     * @returns Chart
+     * @example
+     * await $factory.ChartJS();
+     * $ui.charts?.chartBars(ctn, {
+     * 	series: ["Open", "Closed"],
+     * 	ticks: ["Jan", "Feb", "Mar"],
+     * 	data: [[10, 20, 15], [5, 8, 12]]
+     * }, { title: "Tickets", horizontal: false });
+     */
+    chartBars(ctn: Container, d: {
+        series: string[];
+        ticks: string[];
+        data: number[][];
+    }, p?: ChartParam): Chart | undefined;
+    /**
+     * Bubbles with one dataset per bubble
+     * @param ctn Container
+     * @param points Bubbles `[x, y, count, label]`
+     * @param p Options:
+     * `title` (chart title),
+     * `xUnit`/`yUnit` (units of the axes),
+     * `xLabel`/`yLabel` (labels of the values in tooltip),
+     * `colors` (default palette)
+     * @returns Chart
+     * @example
+     * await $factory.ChartJS();
+     * // [x, y, count, label]
+     * $ui.charts?.chartBubble(ctn, [[2, 5, 10, "Process A"], [4, 1, 3, "Process B"]], {
+     * 	title: "Process times", xUnit: "d", yUnit: "d"
+     * });
+     */
+    chartBubble(ctn: Container, points: [number, number, number, string][], p?: ChartParam): Chart | undefined;
+    /**
+     * Chart for crosstab
+     */
+    chartCrosstab(ctn: Container, ct: CrosstabMetadata, data: KeyObject, p?: ChartParam): void;
+    /**
+     * Format octets size to Kb/Mb/Gb/Tb
+     * @param size Size
+     */
+    size(size: string): string | undefined;
+    /**
+     * Heap chart of browser memory (LOG_UI=yes)
+     * @param ctn Container
+     * @param data Lines data <code>[\{d,u,t\},...]</code>
+     * @param p Optional chart.js options
+     */
+    chartHeapSize(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
+    /**
+     * Steps of front service (LOG_UI=yes)
+     */
+    chartServiceSteps(ctn: Container, data: KeyObject[], p: ChartParam): Chart | undefined;
+    /**
+     * Times of front service (LOG_UI=yes)
+     */
+    chartServiceTimes(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
+    /**
+     * Get the brightest color in the current palette
+     * @param darkest True to get the darkest one
+     * @returns A color <code>#RRGGBB</code>
+     */
+    getBrightColor(darkest?: boolean): string;
+    /**
+     * Get the lighten or darken color
+     * @param color <code>#RRGGBB</code>
+     * @param val -255..255
+     * @returns A color <code>#RRGGBB</code>
+     */
+    lightenDarkenColor(color: string, val: number): string;
+    /**
+     * Convert <code>#RRGGBB</code> to object <code>\{r,g,b,a\}</code>
+     * @param color Color <code>#RRGGBB</code>
+     * @param alpha Alpha (transparency)
+     * @returns object <code>\{r,g,b,a\}</code>
+     */
+    css2rgb(color: string, alpha?: number): RGBA;
+    /**
+     * Convert object <code>\{r,g,b\}</code> to <code>#RRGGBB</code>
+     * @param rgb Color <code>\{r,g,b\}</code>
+     * @returns Color <code>#RRGGBB</code>
+     */
+    rgb2css(rgb: RGB): string;
+    /**
+     * Convert <code>#RRGGBB</code> to string
+     * @param color Color <code>#RRGGBB</code>
+     * @param alpha Alpha (transparency)
+     * @returns string <code>'rgba(r,g,b,a)'</code>
+     */
+    css2rgba(color: string, alpha?: number): string;
+    /**
+     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
+     * @param color Color <code>\{r,g,b\}</code>
+     * @returns Color <code>\{h,s,v\}</code>
+     */
+    rgb2hsv(color: RGB): HSV;
+    /**
+     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
+     * @param hsv Color <code>\{h,s,v\}</code>
+     * @returns Color <code>\{r,g,b\}</code>
+     */
+    hsv2rgb(hsv: HSV): RGB;
+}
+
+/**
+ * OCR tools (using the Tesseract.js lib) **EXPERIMENTAL**
+ */
+declare class OCR {
+    /** URL of the Tesseract library */
+    readonly tessurl: string;
+    /**
+     * Extract the text of an image.
+     * @param img Image
+     * @param lang Language
+     * @returns Promise of the recognized text
+     */
+    doOCR(img: any, lang: string): Promise<any>;
+}
+
 /** Name of a color palette */
 type PaletteName = "Base" | "Pastel" | "Strong" | "Light" | "Bright" | "Mars" | "Sea" | "Berry" | "Fire" | "Choco";
 /** Parameters of a toast (see `$view.widget.toast`) */
@@ -4856,77 +10310,538 @@ declare class Widget {
     contextMenu(_element: JQuery, e: JQuery.ContextMenuEvent, items: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
 }
 
-/** Guide (interactive tour) */
-interface GuideMetadata {
-    /** Guide name */
+/** Item of a view addon bar */
+interface AddonBarItem {
+    /** Unique name within the host bar (data-addon + .addon-<name>) */
+    name: string;
+    /** Accessible name: mandatory, no faked buttons */
+    label: string;
+    /** Icon, see $view.icon */
+    icon?: string;
+    /** Ascending left-to-right order (default 50) */
+    weight?: number;
+    /** Click handler (ignored when 'element' is given) */
+    click?: (e: JQuery.Event) => void;
+    /** Prebuilt element (dropdown, gotoDefinition...) */
+    element?: JQuery;
+}
+/**
+ * Addon bar renderer: collects the floating controls (gotodef, copylink, guides, ...)
+ * of a whole view or a single view item
+ */
+declare class AddonBar {
+    static enabled(): boolean;
+    /**
+     * Closest element that can host a bar
+     */
+    hostOf(el: AnyContainer): JQuery;
+    /**
+     * Get (or create) the bar for a host
+     * @param host Host container (view item, view, external object, list or form)
+     * @param create Create the bar if it does not exist?
+     */
+    bar(host: AnyContainer, create?: boolean): JQuery;
+    /**
+     * Reorder addons by ascending weight
+     */
+    sort(items: JQuery): void;
+    /**
+     * Set the bar title (host type and name)
+     * @param host bar host
+     * @param label host name
+     * @param type optional object type (View, ObjectExternal...)
+     */
+    hostTitle(host: AnyContainer, label: string, type?: string): void;
+    /**
+     * Apply the expanded/collapsed state to a toggle button
+     */
+    static toggleState(tgl: JQuery, open: boolean): void;
+    /**
+     * Add an addon to the bar
+     */
+    add(host: AnyContainer, addon: AddonBarItem): JQuery | undefined;
+    /**
+     * Remove an addon by name
+     */
+    remove(host: AnyContainer, name: string): void;
+    /**
+     * Collapse the bar when empty, bypass the toggle for a single addon
+     */
+    refresh(bar: JQuery): void;
+}
+
+/** Node of a tree view (a record and its linked lists) */
+interface TreeNode {
+    /** Node ID */
+    id?: string;
+    /** Node name */
+    name: string;
+    /** Node type */
+    type: number;
+    /** Icon name */
+    image?: string;
+    /** Class name */
+    style?: string;
+    /** Node layout */
+    layout?: string;
+    /** Html */
+    userkey?: string;
+    /** Path of the node in the tree */
+    path?: string;
+    /** Row ID of the record */
+    row_id?: string;
+    /** Object of the node: name or rights */
+    object?: string | {
+        /** Object name */
+        name: string;
+        /** Open the form */
+        form?: boolean;
+        /** Show the list */
+        list?: boolean;
+        /** Plus menu */
+        plus?: boolean;
+    };
+    /** Record values */
+    item?: RowData;
+    /** Old record values (to compare) */
+    old?: RowData;
+    /** Equ | new | upd | del */
+    diff: 0 | 1 | 2 | 3;
+    /** Linked lists */
+    links?: TreeNodeList[];
+    /** Child nodes */
+    children?: TreeNode[];
+    /** Count of children */
+    count?: number;
+    /** History of the tree */
+    history?: KeyObject[];
+    /** Root: closed paths */
+    closed?: {
+        [path: string]: boolean;
+    };
+    /** Root: objects of the tree */
+    objects?: string[];
+    /** Root: show the lists of nodes */
+    showNodeList?: boolean;
+}
+/** List of child nodes of a link, or a menu entry (process, URL, action or script) */
+interface TreeNodeList {
+    /** Object name */
+    object: string;
+    /** Icon name */
+    icon?: string;
+    /** Translated label */
+    label: string;
+    /** Path of the list in the tree */
+    path?: string;
+    /** Count of records */
+    count: number;
+    /** Page index */
+    page: number;
+    /** Max page index */
+    maxpage: number;
+    /** Nodes of the page */
+    list: TreeNode[];
+    /** Process to start */
+    process?: string;
+    /** External URL to open */
+    exturl?: string;
+    /** Action name */
+    action?: string;
+    /** Action metadata */
+    meta?: Action;
+    /** Fk */
+    field?: string;
+    /** Filters of the list */
+    filters?: KeyObject;
+    /** Script to execute */
+    script?: string;
+    /** Do not show the list of nodes */
+    nolist?: boolean;
+}
+/** Parameters of a tree view rendering */
+interface TreeParam {
+    /** Object instance name */
+    inst?: string;
+    /** Search depth */
+    depth?: number;
+    /** In menu */
+    menu?: boolean;
+    /** Or docked on left */
+    docked?: boolean;
+    /** Opened tree */
+    open?: boolean;
+    /** Distinguishes first open from reload */
+    rendered?: boolean;
+    /** Work area to display the forms */
+    work?: JQuery;
+    /** Display a record in the work area, `cbk` must be called when displayed */
+    display?: (target: Container, obj: BusinessObject, rowId: string, tv: TreeView, p: KeyObject, cbk: Callback) => void;
+    /** Load a node item on open */
+    onOpen?: (node: TreeNode, cbk: (item?: RowItem | null) => void) => void;
+    /** Load a page of a linked list */
+    onPage?: (parent: string, parentId: string, object: string, page: number, cbk: (r: KeyObject) => void) => void;
+    /** Add the tree in menu */
+    addMenu?: Callback;
+    /** Remove the tree from menu */
+    delMenu?: Callback;
+}
+/**
+ * Simplicit&eacute; tree view
+ */
+declare class TreeView {
+    /** Session */
+    app: Session;
+    /** Tree view name */
+    name: string;
+    /** Root node */
+    root?: TreeNode;
+    private _nodes;
+    /**
+     * Constructor
+     * @param app Ajax services
+     * @param tv Treeview metadata { id, name, root... }
+     */
+    constructor(app: Session, tv: object);
+    /**
+     * Get node definition
+     * @param id node id
+     */
+    getDefinition(id: string): TreeNode;
+    /**
+     * Node definition of object
+     * @param obj object name
+     */
+    getNode(obj: string): KeyObject | undefined;
+}
+
+/** Parameters of a menu entry click */
+interface MenuParam {
+    /** Menu item */
+    item: MenuItem;
+    /** Object name */
+    object?: string;
+    /** Workflow name */
+    workflow?: string;
+    /** Process name */
+    process?: string;
+    /** BAM name */
+    bam?: string;
+    /** Process step */
+    step?: string;
+    /** Object name of a tray */
+    tray?: string;
+    /** Field name (tray or list of states) */
+    field?: string;
+    /** Enumeration code */
+    code?: string;
+    /** Domain name */
+    domain?: string;
+    /** View name */
+    view?: string;
+    /** URL */
+    href?: string;
+    /** Target of the URL */
+    target?: LoadTarget;
+    /** Translated label */
+    label?: string;
+    /** Open in a new tab */
+    newtab?: NewTabPosition;
+}
+/** Menu item */
+interface MenuItem {
+    /** Item type */
+    type: "object" | "statusobject" | "external" | "process" | "workflow" | "domain" | "view";
+    /** Item name */
     name: string;
     /** Translated label */
     label: string;
-    /** Guide type */
-    type: string;
-    /** Object name */
-    object: string;
-    /** Launcher button */
-    launcher?: JQuery;
-    /** Launch on display */
-    launch?: boolean;
-    /** Tour definition */
-    tour: {
-        /** Condition to play the tour */
-        condition: KeyObject;
-        /** Tour options */
-        options: KeyObject;
-        /** Steps */
-        steps: KeyObject[];
-        /** Styles */
-        styles?: KeyObject;
-        /** Scroll options of the steps */
-        scrollIntoView?: KeyObject;
-        /** Tooltip element */
-        tooltip: JQuery;
-        /** Overlay element */
-        overlay?: SVGSVGElement;
-        /** Toast when leaving the tour */
-        exitToast: KeyObject;
+    /** Icon name */
+    icon: string;
+    /** Opened */
+    open?: boolean;
+    /** Extendable */
+    ext?: boolean;
+    /** Extended */
+    extended?: boolean;
+    /** Create right */
+    create?: boolean;
+    /** URL */
+    url?: string;
+    /** Link URL */
+    href?: string;
+    /** Target of the link */
+    target?: string;
+    /** Width */
+    width?: number | string;
+    /** Height */
+    height?: number | string;
+    /** Field name */
+    field?: string;
+    /** Has a home page */
+    hasHome?: boolean;
+    /** Home page name */
+    homePage?: string;
+    /** Is a dashboard */
+    dashboard?: boolean;
+    /** Is a widget */
+    widget?: boolean;
+    /** Has a tray */
+    tray?: boolean;
+    /** Sub-items */
+    items?: SubMenu;
+    /** Activities of a process */
+    activities?: ActivityMetadata[];
+    /** States of a status object */
+    states?: EnumItem[];
+    /** Tray fields */
+    trays?: {
+        /** Tray field name */
+        field: string;
+        /** Tray label */
+        label: string;
+    }[];
+    /** Lists of states per field */
+    lists?: {
+        /** Field name */
+        field: string;
+        /** Field label */
+        label: string;
+        /** States of the field */
+        items: EnumItem[];
+    }[];
+    /** Position of the menu (`T` = top, else left) */
+    menu_position?: string;
+}
+/** Main menu */
+type MainMenu = MenuItem[];
+/** Sub menu */
+type SubMenu = MenuItem[];
+/** Menu settings */
+interface MenuSettings {
+    /** Top menu */
+    top: {
+        /** Top menu is active */
+        active: boolean;
     };
-    /** Track the usage of a step */
-    usage: (name: string, step: string) => void;
+    /** Left menu */
+    left: {
+        /** Left menu is active */
+        active: boolean;
+        /** Collapse mode */
+        collapse: "icons-static" | "icons-expand" | "none";
+        /** Search box in menu */
+        searchable: boolean;
+    };
 }
 /**
- * Guide rendering
+ * Main menu rendering
  */
-declare class Guide {
-    private CLASS_IGNORE;
+declare class Menu {
+    /** #menu.left-sidebar */
+    container?: Container;
+    /** .main-nav-toggle */
+    navToggle?: JQuery;
+    /** Ul.main-menu role=menu */
+    menu?: JQuery;
+    /** Last focused item */
+    _focus?: JQuery;
+    /** Timer of the status refresh */
+    statusTimer?: number;
+    /** Default value to default behavior */
+    leftMinified: string;
+    /** Menu settings (default values iso v6.3) */
+    menuSettings: MenuSettings;
     /**
-     * Helper to generate element selector
+     * Main menu
      */
-    selector(el: HTMLElement): string;
+    getMenu(): JQuery<HTMLElement>;
     /**
-     * Helper to build a tour
-     * @param onsave service to save the tour in DB
+     * Menu (left/top) Settings (either from sys_param or default values)
      */
-    recorder(onsave?: (p: {
-        name: string;
-        context: string;
-        steps: KeyObject[];
-    }, cbk: (id: string) => void) => void): void;
+    getMenuSettings(): MenuSettings;
     /**
-     * Simple step editor
-     * @param el selected element
-     * @param ok callback to confirm the new step or 'stop' recording
-     * @param cbk callback on editor unload
+     * Init menus (left,top)
      */
-    edit(el: JQuery, ok: (r: any) => void, cbk: JQueryHandler): void;
+    init(): void;
+    private item;
+    private toggle;
+    private itemTop;
+    /** Element by id, as a JQuery set */
+    private byId;
+    /** Counter of the ids linking toggles to their controlled lists */
+    topMenuId: number;
+    private hasSubMenu;
+    private contextMenu;
+    private click;
     /**
-     * Player of guides from the target object
-     * @param ctn container
-     * @param list list of guides
+     * Init the top menu (horizontal with dropdowns)
+     * - Click to open dropdowns
+     * - Click to open flyout sub-menus (no hover)
+     * - Keyboard navigation support
+     * - Flyouts detached to body to avoid clipping
      */
-    player(ctn: Container, list: GuideMetadata[]): void;
+    initTopMenu(items: MenuItem[], menuSettings: MenuSettings["top"]): void;
     /**
-     * Play the guide
+     * Init the main menu (on left), use the ui.clickMenu handler
      */
-    play(ctn: Container, def: GuideMetadata): void;
+    initLeftMenu(items: MenuItem[], menuSettings: MenuSettings["left"]): void;
+    /**
+     * Select one menu item
+     */
+    selectMenu(a: JQuery, menu?: JQuery | null): JQuery;
+    /**
+     * Focus the last selected item or first item
+     */
+    focus(): void;
+    /**
+     * hover effect when minified
+     * @param b false to remove effect
+     */
+    hover(b: boolean): void;
+    /**
+     * Menu navigation with Arrow keys
+     */
+    keydown(el: HTMLElement, e: JQuery.Event): void;
+    /**
+     * Accordion effect
+     */
+    accordion(el: JQuery): void;
+    /**
+     * Is menu minimized on the left side ?
+     */
+    isMenuMin(): boolean | undefined;
+    /**
+     * Is menu maximized on the left side ?
+     */
+    isMenuMax(): boolean;
+    /**
+     * Minimize the menu on the left side
+     * <ul>
+     * <li>displays only domain icons</li>
+     * <li>popup the sub-menus over the screen</li>
+     * <ul>
+     */
+    menuMin(): void;
+    /**
+     * Maximize the menu on the left side
+     * <ul>
+     * <li>displays domain icons and labels</li>
+     * <li>accordion sub-menus</li>
+     * <ul>
+     */
+    menuMax(): void;
+    /**
+     * Hide a sub-menu
+     * @param m menu item (li element with .sub-menu child)
+     */
+    subMenuMin(m: JQuery): void;
+    /**
+     * Show a sub-menu
+     * @param m menu item (li element with .sub-menu child)
+     */
+    subMenuMax(m: JQuery): void;
+    /**
+     * Toggle the main menu on the left side
+     * @param e optional event
+     * @param sign positive:show, negative:hide
+     */
+    menuToggle(e?: JQuery.Event | KeyboardEvent | null, sign?: number): void;
+    private setToggleState;
+    /**
+     * Start a timer to update enum counters
+     */
+    startRefreshStatus(): void;
+    /** Refresh of status counters has been started */
+    private statusStarted;
+    /**
+     * Pause the timer to update visible status counters (page hidden)
+     */
+    pauseRefreshStatus(): void;
+    /**
+     * Restart and refresh the status counters if they were paused (page restored)
+     */
+    resumeRefreshStatus(): void;
+    /**
+     * Stop the timer to update visible status counters
+     */
+    stopRefreshStatus(): void;
+    /**
+     * Update the visible enum counter
+     * @param object object name or menu item or sub-menu
+     * @param field enum field name
+     * @param code enum code
+     */
+    updateStatusBadge(object: string | JQuery, field?: string, code?: string): false | Promise<boolean | JQuery<HTMLElement>> | undefined;
+    private badge;
+    /**
+     * Update all status and enum counters of a given menu
+     * @param m sub menu
+     */
+    updateStatusBadges(m: JQuery): void;
+    /**
+     * Process incoming data from SSE event enumCounters
+     * @param d data
+     */
+    onEnumCounters(d: KeyObject): void;
+    /**
+     * Display a tree view in the menu.
+     * @param ctn Container
+     * @param o Business object
+     * @param id Root row ID
+     * @param tv Tree definition
+     * @param p Tree parameters
+     * @param cbk Optional callback when displayed
+     */
+    treeview(ctn: Container, o: BusinessObject, id: string, tv: TreeNode, p: TreeParam, cbk?: Callback): Window & typeof globalThis;
+    /**
+     * Update the badge of the notifications shortcut.
+     * @param n Notifications data (`incoming` to shake the bell)
+     */
+    updateNotificationBadge(n: KeyObject): void;
+    /**
+     * Filter menu
+     */
+    filterMenu(): void;
+    /**
+     * Open a top menu dropdown
+     */
+    openTopDropdown(mi: JQuery): void;
+    /**
+     * Close a top menu dropdown
+     */
+    closeTopDropdown(mi: JQuery): void;
+    /**
+     * Expand/collapse an expandable entry (enum group) of a dropdown or flyout
+     * - expanding one collapses its siblings (accordion)
+     */
+    toggleSub(btn: JQuery, open?: boolean): void;
+    /**
+     * Collapse all the expanded entries (enum groups) within a scope
+     */
+    collapseSubs(scope: JQuery): void;
+    /**
+     * Close all top menus
+     */
+    closeAllTopMenus(): void;
+    /**
+     * Open a flyout submenu
+     */
+    openTopFlyout(li: JQuery): void;
+    /**
+     * Close a flyout menu
+     */
+    closeTopFlyout(li: JQuery): void;
+    /**
+     * Keyboard navigation for top menu
+     * - Left/Right: between top entries, open/close flyouts, expand/collapse enum groups
+     * - Up/Down/Home/End: through the visible entries of the current dropdown/flyout
+     */
+    keydownTopMenu(el: HTMLElement, e: JQuery.Event, openFlyout?: (li: JQuery) => void, closeFlyout?: (li: JQuery) => void, getFlyoutForLi?: (li: JQuery) => JQuery | null): void;
+    /**
+     * Append flyout to body & position it (no clipping)
+     */
+    positionFlyout(li: JQuery, fm: JQuery): void;
 }
 
 /**
@@ -5107,2073 +11022,6 @@ declare class View {
      * @returns The item or undefined
      */
     getItem(n: number): ViewItem | undefined;
-}
-
-/** HSV color */
-interface HSV {
-    /** 0..360 */
-    h: number;
-    /** 0..100 */
-    s: number;
-    /** 0..100 */
-    v: number;
-}
-/** RGB color */
-interface RGB {
-    /** 0..255 */
-    r: number;
-    /** 0..255 */
-    g: number;
-    /** 0..255 */
-    b: number;
-}
-/** RGB color with alpha */
-type RGBA = RGB & {
-    /** 0..1 */
-    a?: number;
-};
-/** Oklab color */
-interface OKLAB {
-    /** Positive */
-    L: number;
-    /** Signed */
-    a: number;
-    /** Signed */
-    b: number;
-}
-/** Contrast between a text and its background */
-interface Contrast {
-    /** Background color */
-    bgcolor: RGBA;
-    /** Text color */
-    color: RGBA;
-    /** Min 4.5 */
-    ratio: number;
-    /** Error when the contrast is too low */
-    error?: string;
-}
-/** Named CSS colors by group */
-interface CSSColors {
-    /** Group name */
-    name: string;
-    /** Named colors of the group */
-    list: KeyString[];
-}
-/** Named CSS colors by group */
-declare const CSSCOLORS: CSSColors[];
-/**
- * Color helpers
- */
-declare class UIColor {
-    /** Type of colors */
-    static readonly TYPES: string[];
-    /** minimal WCAG level AAA is 4.5 */
-    static readonly MIN_CONTRAST = 4.5;
-    /** legacy regex for 'rgb(123, 123, 123)' or 'rgba(123, 123, 123, 0.33)'*/
-    static readonly rgbaRegex: RegExp;
-    /** legacy regex for 'rgb(123, 123, 123)' */
-    static readonly rgbRegex: RegExp;
-    /** regex for 'rgb(123 123 123)' or 'rgb(123 123 123 / 0.5)' */
-    static readonly rgbRegex2: RegExp;
-    /** regex for '#RRGGBB' or '#rrggbb' */
-    static readonly hexRegex: RegExp;
-    /** regex for 'color(srgb 0.17 0.13 0.28 / 0.5)' */
-    static readonly srgbRegex: RegExp;
-    /** oklab(0.28 -0.07 -0.03 / 0.5) */
-    static readonly oklabRegex: RegExp;
-    /**
-     * Convert color string to #rrggbb
-     * @param rgb color
-     * @returns A color <code>#RRGGBB</code>
-     */
-    rgb2hex(rgb: string): string;
-    /**
-     * Convert string color to object
-     * @param color css color
-     * @param alpha optioanl alpha (transparency 0..1)
-     * @returns object <code>\{r,g,b,a\}</code>
-     */
-    css2rgb(color: string, alpha?: number): RGBA;
-    /**
-     * Convert color to hexa format
-     * @param rgb Color
-     * @returns Color <code>#RRGGBB</code> or <code>#RRGGBBAA</code>
-     */
-    rgb2css(rgb?: RGBA | null): string;
-    /**
-     * Convert <code>#RRGGBB</code> to string
-     * @param color Color <code>#RRGGBB</code>
-     * @param alpha Alpha (transparency)
-     * @returns string <code>'rgba(r,g,b,a)'</code>
-     */
-    css2rgba(color: string, alpha?: number): string;
-    /**
-     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
-     * @param color Color <code>\{r,g,b\}</code>
-     * @returns Color <code>\{h,s,v\}</code>
-     */
-    rgb2hsv(color: RGB): HSV;
-    /**
-     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
-     * @param hsv Color <code>\{h,s,v\}</code>
-     * @returns Color <code>\{r,g,b\}</code>
-     */
-    hsv2rgb(hsv: HSV): RGB;
-    /**
-     * Calculate the color luminance 0..1
-     * @param c #RRGGBB or <code>\{r,g,b\}</code>
-     * @returns luminance
-     */
-    luminance(c: string | RGB): number;
-    /**
-     * Calculate the contrast ratio between 2 colors
-     * @param c1 #RRGGBB or <code>\{r,g,b\}</code>
-     * @param c2 #RRGGBB or <code>\{r,g,b\}</code>
-     * @returns minimal ratio recommanded by WCAG is 4.5 (or 3 for larger font-sizes)
-     */
-    contrast(c1: string | RGB, c2: string | RGB): number;
-    /**
-     * Computed text and background colors of an element (transparent colors look at the parents).
-     * @param el Element
-     * @returns The colors
-     */
-    getComputedColors(el: HTMLElement): Partial<Contrast>;
-    /**
-     * Contrast of an element with its background.
-     * @param el Element
-     * @param minRatio Minimum ratio (WCAG)
-     * @returns The contrast with an error when too low, or undefined when not evaluable
-     */
-    elementContrast(el: HTMLElement, minRatio?: number): Contrast | undefined;
-    /**
-     * Black or white color to contrast with a color.
-     * @param color Background color
-     * @returns `black` or `white`
-     */
-    contrastedColor(color: string): "black" | "white";
-    /**
-     * Convert a color to RGB object
-     * @param color supported spaces: #RRGGBB, rgb(), color(srgb r g b / x), oklab(L a b / x)
-     */
-    static convertToRGB(color: string): RGBA | undefined;
-    /**
-     * Gamma 2.2 to linear value.
-     * @param c Value 0..1
-     * @returns Linear value
-     */
-    static gamma2Linear(c: number): number;
-    /**
-     * Linear to gamma 2.2 value.
-     * @param c Value 0..1
-     * @returns Gamma value
-     */
-    static linear2Gamma(c: number): number;
-    /**
-     * Convert a RGB color to Oklab.
-     * @param color RGB color
-     * @param linear true when the RGB is linear (else sRGB)
-     * @returns Oklab color
-     */
-    static sRGB2oklab(color: RGB, linear?: boolean): OKLAB;
-    /**
-     * Round and clamp a value in a range.
-     * @param value Value
-     * @param min Minimum (default 0)
-     * @param max Maximum (default 255)
-     * @returns Clamped value
-     */
-    static clamp(value: number, min?: number, max?: number): number;
-    /**
-     * Convert an Oklab color to RGB.
-     * @param oklab Oklab color
-     * @param linear true to return linear RGB (else sRGB)
-     * @returns RGB color
-     */
-    static oklab2RGB(oklab: OKLAB, linear?: boolean): RGB;
-    /**
-     * Convert a sRGB color (0..1) to RGB (0..255).
-     * @param rgb sRGB color
-     * @param linear true when the color is already linear
-     * @returns RGB color
-     */
-    static sRGB2RGB(rgb: RGB, linear?: boolean): RGB;
-    /** WCAG 2.1 sRGB transfer function (distinct from the 2.2 gamma used by Oklab) */
-    static srgb2Linear(c: number): number;
-}
-
-/** Activity of a business process */
-interface ActivityMetadata {
-    /** Activity row ID */
-    id?: string;
-    /** Activity name */
-    name: string;
-    /** Step code */
-    step: string;
-    /** Activity type */
-    type: string;
-    /** Translated label */
-    label: string;
-    /** Help */
-    help?: AnyContent;
-    /** Tip */
-    tip?: AnyContent;
-    /** HTML template */
-    template?: string;
-    /** Write access */
-    write?: boolean;
-}
-/** Activity status: `R` read, `W` write */
-type ActivityStatus = "R" | "W";
-/** Activity file: current state of an activity in a running process */
-interface ActivityFile {
-    /** Process ID */
-    pid: string;
-    /** Activity file ID */
-    aid: string;
-    /** Step code */
-    step: string;
-    /** Activity metadata */
-    metadata?: ActivityMetadata;
-    /** Read only */
-    readonly?: boolean;
-    /** Status */
-    status: ActivityStatus;
-    /** Owner row ID */
-    ownerId: string;
-    /** HTML template */
-    template?: string;
-    /** URL */
-    url?: string;
-    /** Content */
-    content?: AnyContent;
-    /** Road info */
-    info?: string;
-    /** Data by group > field > values */
-    data?: {
-        [dataGroupName: string]: {
-            [fielName: string]: {
-                /** Field definition */
-                field: ObjectField;
-                /** One value or many in case of step loop */
-                values: string[];
-            };
-        };
-    };
-    /** Validate, back, cancel, abort... */
-    actions: ProcessAction[];
-    /** Business object of the activity */
-    object?: BusinessObject & {
-        /** Object metadata */
-        meta?: ObjectMetadata;
-        /** Object instance name */
-        inst?: string;
-    };
-    /** Process is terminated */
-    terminated?: boolean;
-    /** Where to go at the end of the process */
-    forward?: {
-        /** Object name to open */
-        object?: string;
-        /** Row ID to open */
-        row_id?: string;
-        /** URL to open */
-        url?: string;
-    };
-}
-/** Road rendering: `V`ertical or `H`orizontal, `C`omplete or `M`inimal */
-type RoadRender = "VC" | "VM" | "HC" | "HM";
-/** Business process metadata */
-interface ProcessMetadata {
-    /** Process row ID */
-    id: string;
-    /** Process name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Activities by step */
-    steps: {
-        [step: string]: ActivityMetadata;
-    };
-    /** Resources */
-    resources?: KeyObject[];
-    /** Screenflow process */
-    screenflow?: boolean;
-    /** Road rendering (default `VC`) */
-    roadRender?: RoadRender;
-    /** Static road: shows all the ordered steps (else the visited steps) */
-    roadStatic?: boolean;
-    /** Ordered step codes */
-    orderedSteps?: string[];
-}
-/** Action of an activity */
-interface ProcessAction {
-    /** Action ID */
-    id: string;
-    /** Action type */
-    action: ProcessActionType;
-    /** Translated label */
-    label: string;
-    /** Primary button */
-    primary?: boolean;
-}
-/** Process actions (`start`, `abort`), activity actions and select activity actions */
-type ProcessActionType = "start" | "abort" | "lock" | "unlock" | "validate" | "cancel" | "back" | "open" | "read" | "close" | "list" | "gotopage" | "searchpage";
-/** Parameters of a process activity */
-interface ProcessParam {
-    /** Step code */
-    step?: string;
-    /** Activity file ID */
-    aid?: string;
-    /** Object name */
-    object?: string;
-    /** Row ID */
-    rowId?: string;
-    /** Action */
-    action?: ProcessActionType;
-    /** Show the road */
-    showRoad?: boolean;
-    /** Messages */
-    msg?: MessageAny[];
-    /** Road rendering */
-    roadRender?: RoadRender;
-    /** Static road */
-    roadStatic?: boolean;
-    /** In a workflow (forced by the activity display) */
-    workflow?: boolean;
-    /** Before loading the activity */
-    beforeload?: (ctn: Container, wkf: BusinessProcess, act?: ActivityFile) => void;
-    /** When the activity is loaded */
-    onload?: (ctn: Container, wkf: BusinessProcess, act?: ActivityFile) => void;
-    /** When the activity is unloaded */
-    onunload?: (ctn: Container, wkf: BusinessProcess, act?: ActivityFile) => void;
-}
-/**
- * Simplicit&eacute; business process.
- * <br/>Getting a new business process should use the <code>Simplicite.Ajax.getBusinessProcess()</code> function instead of this constructor
- */
-declare class BusinessProcess {
-    private _app;
-    /** Process metadata */
-    metadata: ProcessMetadata;
-    /** Process ID */
-    pid?: string | null;
-    /** Local data */
-    locals: KeyObject;
-    /** Current activity file */
-    activity?: ActivityFile;
-    /** Road of the visited activities */
-    processRoad?: ActivityFile[];
-    /** History */
-    historic?: object;
-    /** UI engine */
-    ui?: UIEngine;
-    /**
-     * Constructor
-     * @param app Application Simplicite.Ajax instance
-     * @param name Business process name
-     */
-    constructor(app: Session, name: string);
-    /**
-     * Loads meta data.
-     */
-    getMetaData(): Promise<ProcessMetadata>;
-    /**
-     * Are metadata loaded ?
-     */
-    isLoaded(): string;
-    /**
-     * Gets name from meta data.
-     */
-    getName(): string;
-    /**
-     * Gets label name from meta data.
-     */
-    getLabel(): string;
-    /**
-     * Local parameter in instance
-     * @param name Parameter key name
-     * @param value Optional value (to get or set)
-     */
-    localParameter(name: string, value?: unknown): unknown;
-    /**
-     * Initialize the local parameters hasChanged and hasChangedFields
-     */
-    initChangedFields(): void;
-    /**
-     * Add a field when has changed
-     * @param f field or name
-     * @param id optional id (edit list)
-     */
-    addChangedField(f: string | ObjectField, id?: string): void;
-    /**
-     * Remove a field when has not changed
-     * @param f field or name
-     * @param id optional id (edit list)
-     */
-    removeChangedField(f: string | ObjectField, id?: string): void;
-    /**
-     * Trigger the has changed flag
-     * @param v optional to set the hasChanged value (true when the array of hasChangedFields is not empty)
-     * @returns the local parameter hasChanged
-     */
-    hasChanged(v?: unknown): unknown;
-    /**
-     * Start a new process (or continue the screenflow)
-     * @param params Optional parameters
-     * @param params.road true to get the full navigation array, false to get the current activity
-     * @param params.object launcher object name
-     * @param params.rowId launcher object row Id
-     */
-    start(params?: {
-        road?: boolean;
-        object?: string;
-        rowId?: string;
-    }): Promise<ActivityFile | undefined>;
-    /**
-     * Abort the process
-     */
-    abort(): Promise<ActivityFile>;
-    /**
-     * Process road
-     */
-    road(): Promise<object | undefined>;
-    /**
-     * Set data values in the current activity
-     */
-    setActivityData(group: string, name: string, values: string[]): void;
-    /**
-     * Get data values of the current activity
-     */
-    getActivityData(group: string, name: string): string[] | null;
-    /**
-     * Get data values of a road step
-     */
-    getData(step: string, group: string, name: string): string[] | null | undefined;
-    /**
-     * Activity common action
-     * @param action lock, unlock, validate, back, cancel, read, open, firstpage, lastpage, nextpage, backpage, gotopage
-     * @param activity Activity data
-     * @param params Optional parameters
-     * @param params.road true to get the full navigation array, false to get the current activity
-     */
-    action(action: string, activity: ActivityFile, params?: {
-        road?: boolean;
-    }): Promise<ActivityFile | undefined>;
-    /**
-     * Read the activity with <code>\{ step, aid \}</code>
-     */
-    read(activity: ActivityFile, params?: {
-        road?: boolean;
-    }): Promise<ActivityFile | undefined>;
-    /**
-     * Read and lock the activity <code>\{ step, aid \}</code>
-     */
-    lock(activity: ActivityFile, params?: {
-        road?: boolean;
-    }): Promise<ActivityFile | undefined>;
-    /**
-     * Read and unlock the activity <code>\{ step, aid \}</code>
-     */
-    unlock(activity: ActivityFile, params?: {
-        road?: boolean;
-    }): Promise<ActivityFile | undefined>;
-    /**
-     * Cancel the activity, returns the next activity or the forward parameters
-     */
-    cancel(activity: ActivityFile, params?: {
-        road?: boolean;
-    }): Promise<ActivityFile | undefined>;
-    /**
-     * Validate the activity with data, returns errors, the next activity or the forward parameters
-     */
-    validate(activity: ActivityFile, params?: {
-        road?: boolean;
-    }): Promise<ActivityFile | undefined>;
-    /**
-     * Next activity = alias of validate
-     */
-    next: (activity: ActivityFile, params?: {
-        road?: boolean;
-    }) => Promise<ActivityFile | undefined>;
-    /**
-     * Unlock the activity and read/lock the previous one
-     */
-    back(activity: ActivityFile, params?: {
-        road?: boolean;
-    }): Promise<ActivityFile | undefined>;
-}
-
-/** Node of a tree view (a record and its linked lists) */
-interface TreeNode {
-    /** Node ID */
-    id?: string;
-    /** Node name */
-    name: string;
-    /** Node type */
-    type: number;
-    /** Icon name */
-    image?: string;
-    /** Class name */
-    style?: string;
-    /** Node layout */
-    layout?: string;
-    /** Html */
-    userkey?: string;
-    /** Path of the node in the tree */
-    path?: string;
-    /** Row ID of the record */
-    row_id?: string;
-    /** Object of the node: name or rights */
-    object?: string | {
-        /** Object name */
-        name: string;
-        /** Open the form */
-        form?: boolean;
-        /** Show the list */
-        list?: boolean;
-        /** Plus menu */
-        plus?: boolean;
-    };
-    /** Record values */
-    item?: RowData;
-    /** Old record values (to compare) */
-    old?: RowData;
-    /** Equ | new | upd | del */
-    diff: 0 | 1 | 2 | 3;
-    /** Linked lists */
-    links?: TreeNodeList[];
-    /** Child nodes */
-    children?: TreeNode[];
-    /** Count of children */
-    count?: number;
-    /** History of the tree */
-    history?: KeyObject[];
-    /** Root: closed paths */
-    closed?: {
-        [path: string]: boolean;
-    };
-    /** Root: objects of the tree */
-    objects?: string[];
-    /** Root: show the lists of nodes */
-    showNodeList?: boolean;
-}
-/** List of child nodes of a link, or a menu entry (process, URL, action or script) */
-interface TreeNodeList {
-    /** Object name */
-    object: string;
-    /** Icon name */
-    icon?: string;
-    /** Translated label */
-    label: string;
-    /** Path of the list in the tree */
-    path?: string;
-    /** Count of records */
-    count: number;
-    /** Page index */
-    page: number;
-    /** Max page index */
-    maxpage: number;
-    /** Nodes of the page */
-    list: TreeNode[];
-    /** Process to start */
-    process?: string;
-    /** External URL to open */
-    exturl?: string;
-    /** Action name */
-    action?: string;
-    /** Action metadata */
-    meta?: Action;
-    /** Fk */
-    field?: string;
-    /** Filters of the list */
-    filters?: KeyObject;
-    /** Script to execute */
-    script?: string;
-    /** Do not show the list of nodes */
-    nolist?: boolean;
-}
-/** Parameters of a tree view rendering */
-interface TreeParam {
-    /** Object instance name */
-    inst?: string;
-    /** Search depth */
-    depth?: number;
-    /** In menu */
-    menu?: boolean;
-    /** Or docked on left */
-    docked?: boolean;
-    /** Opened tree */
-    open?: boolean;
-    /** Distinguishes first open from reload */
-    rendered?: boolean;
-    /** Work area to display the forms */
-    work?: JQuery;
-    /** Display a record in the work area, `cbk` must be called when displayed */
-    display?: (target: Container, obj: BusinessObject, rowId: string, tv: TreeView, p: KeyObject, cbk: Callback) => void;
-    /** Load a node item on open */
-    onOpen?: (node: TreeNode, cbk: (item?: RowItem | null) => void) => void;
-    /** Load a page of a linked list */
-    onPage?: (parent: string, parentId: string, object: string, page: number, cbk: (r: KeyObject) => void) => void;
-    /** Add the tree in menu */
-    addMenu?: Callback;
-    /** Remove the tree from menu */
-    delMenu?: Callback;
-}
-/**
- * Simplicit&eacute; tree view
- */
-declare class TreeView {
-    /** Session */
-    app: Session;
-    /** Tree view name */
-    name: string;
-    /** Root node */
-    root?: TreeNode;
-    private _nodes;
-    /**
-     * Constructor
-     * @param app Ajax services
-     * @param tv Treeview metadata { id, name, root... }
-     */
-    constructor(app: Session, tv: object);
-    /**
-     * Get node definition
-     * @param id node id
-     */
-    getDefinition(id: string): TreeNode;
-    /**
-     * Node definition of object
-     * @param obj object name
-     */
-    getNode(obj: string): KeyObject | undefined;
-}
-
-/**
- * `Simplicite.UI.View` namespace: viewers, renderers and components.
- * Other bundles can add their classes by module augmentation (see the Maker).
- */
-interface UIViewNamespace extends Readonly<typeof ViewClasses> {
-}
-/**
- * Extensions of the `Simplicite.Ajax` namespace (the Session class with the legacy constants).
- * Other bundles can add their classes by module augmentation (see the Maker).
- */
-interface AjaxNamespace {
-}
-
-/** Job executed in a Promise: calls `resolve` with its result or `reject` on error */
-type JobFunction = (resolve: (value?: unknown) => void, reject?: (reason?: unknown) => void) => void;
-/** Queued job with its Promise handlers */
-interface Job {
-    /** Promise of the job result */
-    promise: Promise<KeyObject | void>;
-    /** Resolve the job with its result */
-    resolve: (result: KeyObject | void) => void;
-    /** Reject the job */
-    reject: (reason?: unknown) => void;
-}
-/**
- * Queue to synchronize executions
- */
-declare class SyncQueue {
-    private queue?;
-    private working;
-    /** Constructor */
-    constructor();
-    /**
-     * Await ordered functions
-     * @param list Array of function(resolve, reject) to execute asynchronously
-     * @param stopOnError Stop on first error (default true)?
-     * @returns Promise with ordered result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
-     */
-    static all(list: JobFunction[], stopOnError?: boolean): Promise<KeyObject>;
-    /**
-     * Ordered functions
-     * @param list Array of function(resolve, reject) to execute asynchronously within Promises
-     * @returns Promise with result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
-     */
-    static allSettled(list: JobFunction[]): Promise<KeyObject>;
-    /**
-     * Enqueue a Promise and starts dequeue
-     * @param promise Promise
-     * @returns Promise
-     */
-    enqueue(promise: Promise<KeyObject | void>): Promise<KeyObject | void>;
-    /**
-     * Ask to stop next queued jobs
-     */
-    stop(): void;
-    /**
-     * Dequeue while not empty
-     */
-    dequeue(): void;
-}
-
-/**
- * Extends Simplicite.Ajax.BusinessProcess with front hooks.
- */
-declare class UIBusinessProcess extends BusinessProcess {
-}
-
-/** Data given to an external object from a view item or a parent external object */
-interface ExternalData {
-    /** External object fields and values */
-    fields: KeyObject;
-    /** Label from the item label/translation */
-    label?: string;
-    /** Help from the item translation */
-    help?: string;
-}
-/** External object metadata */
-interface ExternalMetadata {
-    /** Object name (`ObjectExternal`) */
-    object?: string;
-    /** External object row ID */
-    id?: string;
-    /** External object name */
-    name: string;
-    /** Icon name */
-    icon?: string;
-    /** Translated label */
-    label?: string;
-    /** Translated help */
-    help?: string;
-    /** URL of the external object */
-    url?: string;
-    /** Fields of the external object */
-    fields?: ObjectField[];
-    /** Displayed without decoration (no panel) */
-    embedded?: boolean;
-    /** Guides to play on display */
-    guides?: GuideMetadata[];
-    /** ViewItem boosted instance for External object on View editor */
-    meta?: ObjectMetadata;
-}
-/**
- * Simplicit&eacute; external object.
- */
-declare class ExternalObject {
-    private _app;
-    /** External object metadata */
-    metadata: ExternalMetadata;
-    /**
-     * Constructor
-     * @param app Application Simplicite.Ajax instance
-     * @param name External object name
-     */
-    constructor(app: Session, name: string);
-    /**
-     * Get meta data
-     * @returns Promise of meta data
-     */
-    getMetaData(): Promise<ExternalMetadata>;
-    /**
-     * Get name
-     * @returns Name
-     */
-    getName(): string;
-    /**
-     * Get label (is undefined as long as meta data are not loaded using <code>getMetaData</code>)
-     * @returns Label
-     */
-    getLabel(): string | undefined;
-    /**
-     * Get help (is undefined as long as meta data are not loaded using <code>getMetaData</code>)
-     * @returns Help
-     */
-    getHelp(): string | undefined;
-    /**
-     * Are metadata loaded ?
-     */
-    isLoaded(): string | undefined;
-}
-
-/** Render method of an external object */
-type RenderFunction = (params?: KeyObject, data?: KeyObject) => Promise<void>;
-/**
- * Extends Simplicite.Ajax.ExternalObject with front hooks.
- */
-declare class UIExternalObject extends ExternalObject {
-    /** External object container (`.objext`) */
-    ctn: Container;
-    /** Same as ctn */
-    container: Container;
-    /** Optional parent object */
-    obj?: BusinessObject;
-    /** Optional parent object row ID */
-    rowid?: string;
-    /** Optional data from view item or external object */
-    data?: ExternalData;
-    /**
-     * Constructor with UI context from $ui.loadURL
-     * @param ctn external object container (.objext)
-     * @param obj optional parent object
-     * @param rowid optional parent object rowId
-     * @param data optional data from view item or external object
-     * @param data.fields optional external object fields and values
-     * @param data.label optional label from item label/translate
-     * @param data.help optional item help from item translate
-     */
-    constructor(ctn: Container, obj?: BusinessObject, rowid?: string, data?: ExternalData);
-    /**
-     * Render in container
-     * @param _params Optional parameters
-     * @param _data Optional data
-     */
-    render(_params: KeyObject, _data: KeyObject): Promise<void>;
-    /**
-     * Call service
-     * @param data Optional data
-     * @param options can be a content type string, e.g. 'application/json' (or its shorthand 'json')
-     *                                  which implies the data will be sent as the body,
-     *                                  otherwise may contain custom jQuery.ajax options, e.g. { contentType: '...', ... }
-     */
-    service(data: KeyObject | string, options: string | KeyObject): Promise<void>;
-    /**
-     * Get resource URL
-     * @param name Resource name
-     * @param type Resource type
-     */
-    getResourceURL(name: string, type: string): string;
-    /**
-     * Static wrapper to exec render function asynchronously with parameters (thru the $ui.loadURL of external object)
-     * @param conf wrapper config from ResponsiveExternalObject
-     * @param conf.name External object name
-     * @param conf.id External object ID
-     * @param conf.params render parameters
-     * @param conf.data optional render data
-     * @param conf.render optional specific render method (from server-side hook getRenderFunction)
-     * @param ctn container of external object
-     * @param object optional context business object
-     * @param rowId optional context business row ID
-     * @param options options with data.fields
-     */
-    static exec(conf: {
-        name: string;
-        id: string;
-        url: string;
-        params: KeyObject;
-        data?: KeyObject;
-        render?: string;
-    }, ctn: Container, object?: BusinessObject, rowId?: string, options?: {
-        data: ExternalData;
-    }): Promise<void>;
-}
-
-/**
- * Workflow controller
- * @param ui Main UI controller
- */
-declare class Workflow {
-    /** Server-side specific instance */
-    readonly bpmActivityObject = "BPMActivityFile";
-    /** Server-side instance of the activity files */
-    readonly bpmActivityInst = "list_ajax_BPMActivityFile";
-    /**
-     * Get a business process with its UI hooks.
-     * @param process Process name or process
-     * @param cbk Optional callback with the process
-     * @returns This controller
-     */
-    getUIProcess(process: string | BusinessProcess, cbk?: (wkf: BusinessProcess) => void): this;
-    /**
-     * Display a process activity.
-     * @param ctn Container
-     * @param process Process name or process (null = current process)
-     * @param action Optional process action
-     * @param options Optional parameters
-     * @param cbk Optional callback when displayed
-     */
-    display(ctn: Container, process: string | BusinessProcess | null, action?: ProcessActionType, options?: ProcessParam, cbk?: Callback): this;
-    /** Service call */
-    service(ctn: Container, wkf: BusinessProcess, action: ProcessActionType, onSuccess: (act?: ActivityFile) => void, onError: (reason: MessageFromBack) => void, params?: {
-        road?: boolean;
-        object?: string;
-        rowId?: string;
-        step?: string;
-    }): void;
-    /** Success : dispatch response */
-    success(ctn: Container, wkf: BusinessProcess, resp?: ActivityFile, p?: ProcessParam, cbk?: Callback): void;
-    /** Error : return to activity with messages */
-    error(ctn: Container, wkf: BusinessProcess, err: MessageFromBack, p?: ProcessParam, cbk?: Callback): void;
-    /** Activities list filtered on process name and step */
-    displayList(ctn: Container, wkf: BusinessProcess, options?: {
-        step?: string;
-    } | null, cbk?: Callback): this;
-    /**
-     * Display the activity
-     * @param ctn Container
-     * @param wkf Business process instance
-     * @param activity Current activity with metadata
-     * @param options Options
-     * <ul>
-     * <li>showRoad: displays the workflow navbar, default true</li>
-     * <li>msg: back-end messages to display</li>
-     * <li>workflow: true</li>
-     * </ul>
-     * @param cbk Optional callback
-     */
-    displayActivity(ctn: Container, wkf: BusinessProcess, activity: ActivityFile | null, options?: ProcessParam, cbk?: (wkf: BusinessProcess, act?: ActivityFile, p?: ProcessParam) => void): Promise<this | undefined>;
-}
-
-/** Agenda of an object */
-interface Agenda {
-    /** Agenda row ID */
-    id: string;
-    /** Agenda name */
-    name: string;
-    /** Agenda is enabled */
-    enabled: boolean;
-    /** Events can be moved or resized */
-    editable?: boolean;
-    /** WEEK */
-    display?: string;
-    /** Default 1=monday */
-    firstDay?: number;
-    /** Hidden days (0 = sunday) */
-    hiddenDays?: number[];
-    /** [1, 2, 3, 4, 5] monday to friday */
-    workingDays?: number[];
-    /** 09:00 */
-    startTime?: string;
-    /** 18:00 */
-    endTime?: string;
-    /** Start date field name */
-    date: string;
-    /** Duration field name */
-    duration?: string;
-    /** End date field name */
-    endDate?: string;
-    /** Calendar height */
-    height?: number;
-    /** First displayed time (ex: `08:00`) */
-    minTime?: string;
-    /** Last displayed time (ex: `20:00`) */
-    maxTime?: string;
-    /** Duration of a time slot */
-    slot?: string;
-    /** Snap duration when moving an event */
-    snap?: string;
-    /** Label field names of an event */
-    labels?: string[];
-    /** Default user login */
-    user?: string;
-    /** User field name */
-    userField?: string;
-    /** Default group name */
-    group?: string;
-    /** Group field name */
-    groupField?: string;
-}
-/** Parameters of a calendar display (see `$ui.displayCalendar`) */
-interface CalendarParam {
-    /** Filter on user login */
-    login?: string;
-    /** Filter on group */
-    group?: string;
-    /** Initial date */
-    date?: Date;
-    /** Locale */
-    locale?: string;
-    /** Renderer: is the event editable? */
-    editable?: (obj: BusinessObject, item: KeyObject) => boolean;
-    /** Handler on event click */
-    click?: (arg: EventClickArg) => void;
-    /** Handler on dates selection */
-    select?: (arg: DateSelectArg) => void;
-    /** Handler on event drop */
-    drop?: (arg: EventDropArg) => void;
-    /** Handler on event resize */
-    resize?: (arg: EventResizeDoneArg) => void;
-    /** Handler on render */
-    render?: (arg: DateSelectArg) => void;
-    /** Renderer: title of the event */
-    title?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: header of a column */
-    column?: (date: string) => void;
-    /** Renderer: background color of the event */
-    color?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: border color of the event */
-    borderColor?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: text color of the event */
-    textColor?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: CSS classes of the event */
-    classNames?: (obj: BusinessObject, item: KeyObject) => string[];
-    /** Renderer: label of the color legend */
-    colorLabel?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Hook before loading */
-    beforeload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
-    /** Hook when displayed */
-    onload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
-    /** Hook when removed */
-    onunload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
-    /** First displayed time */
-    minTime?: string;
-    /** Last displayed time */
-    maxTime?: string;
-    /** Duration of a time slot */
-    slot?: string;
-    /** Snap duration when moving an event */
-    snap?: string;
-    /** Working days (1 = monday) */
-    workingDays?: number[];
-    /** Start time of the working day */
-    startTime?: string;
-    /** End time of the working day */
-    endTime?: string;
-    /** Calendar height */
-    height?: number;
-}
-/**
- * Calendar controller (based on FullCalendar V5)
- * @param options <code>\{ locale, version \}</code>
- */
-declare class UICalendar {
-    /** Date format of the service */
-    readonly dateFormat = "YYYY-MM-DD HH:mm:ss";
-    /** Current date per calendar */
-    currentDate: {
-        [key: string]: Date;
-    };
-    /** Current filter per calendar */
-    currentFilter: {
-        [key: string]: string;
-    };
-    /** FullCalendar instance */
-    cal?: Calendar;
-    /** Options `{ locale, version }` */
-    options: KeyObject;
-    constructor(options: {
-        locale?: string;
-        version?: number;
-    });
-    /**
-     * Set date
-     */
-    setDate(name: string, date?: Date): void;
-    /**
-     * Get date
-     */
-    getDate(name: string): Date;
-    /**
-     * Get filter (user or group field)
-     */
-    setFilter(name: string, filter?: string): void;
-    /**
-     * Get filter (user or group field)
-     */
-    getFilter(name: string): string;
-    /**
-     * Generate a light color
-     */
-    hsl(text: string): string;
-    /**
-     * Display calendar
-     * @param ctn Container
-     * @param obj Business object
-     * @param agd Agenda definition
-     * @param params options
-     * @param params.login optional login filter
-     * @param params.group optional group filter
-     * @param params.date current date to show
-     * @param params.editable editable?
-     * @param params.locale use locale (ex 'fr', 'es')
-     * @param params.click click handler (default open the update form)
-     * @param params.select select date handler (default open the create form)
-     * @param params.drop drop event handler (default update the event start date)
-     * @param params.resize resize event handler (default update the event duration)
-     * @param params.title handler(obj,item) of event title (default based on label fields)
-     * @param params.column handler(date) to override column header (HTML)
-     * @param params.color handler(obj,item) for event background (default grey or hash of selected login|group)
-     * @param params.borderColor handler(obj,item) for border color
-     * @param params.textColor handler(obj,item) for text color
-     * @param params.classNames handler(obj,item) to get an array of CSS classes
-     * @param params.render handler to override the render the event
-     * @param params.minTime default "00:00:00"
-     * @param params.maxTime default "24:00:00"
-     * @param params.slot default "00:30:00"
-     * @param params.snap default "00:05:00"
-     * @param params.workingDays default [1,2,3,4,5] = monday to friday
-     * @param params.startTime default "09:00" for business hours
-     * @param params.endTime default "18:00" for business hours
-     * @param params.height default 800
-     * @param cbk Optional callback
-     */
-    display(ctn: AnyContainer, obj: BusinessObject, agd: Agenda, params?: CalendarParam, cbk?: Callback): Promise<void>;
-}
-
-/** A place of a place map: one record with its coordinates and labels */
-interface Place {
-    /** Coordinates `"lat;lng"` or `"lat,lng"` */
-    coord: string;
-    /** Value of the first label field */
-    label1?: string;
-    /** Value of the second label field */
-    label2?: string;
-    /** Value of the third label field */
-    label3?: string;
-    /** Value of the address field */
-    address?: string;
-}
-/** Place map definition: object fields to locate and describe the places */
-interface Placemap {
-    /** Place map row ID */
-    id: string;
-    /** Place map name */
-    name: string;
-    /** Places to display */
-    places: Place[];
-    /** Name of the first label field */
-    label1?: string;
-    /** Name of the second label field */
-    label2?: string;
-    /** Name of the third label field */
-    label3?: string;
-    /** Name of the address field */
-    address?: string;
-}
-/** Leaflet map settings */
-interface MapSettings {
-    /** Tile layer URL template (ex: `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`) */
-    tileLayer: string;
-    /** Default center latitude */
-    lat?: number;
-    /** Default center longitude */
-    lng?: number;
-    /** Default zoom level (default 13) */
-    zoom?: number;
-    /** Attribution of the tile layer */
-    attribution?: string;
-    /** Maximum zoom level */
-    maxZoom?: number;
-}
-/**
- * Place Map renderer
- */
-declare class UIMap {
-    /** Map settings */
-    options: MapSettings;
-    /** Leaflet map, set by `display` */
-    map?: L.Map;
-    /** Markers added with `addMarker` */
-    map_markers?: L.Marker[];
-    /**
-     * @param options Options <code>\{ tileLayer, attribution, maxZoom, lat, lng, zoom \}</code>
-     */
-    constructor(options: MapSettings);
-    /**
-     * Parse coordinates.
-     * @param coord Coordinates `"lat;lng"` or `"lat,lng"`
-     * @returns The `[lat, lng]` tuple, or the default center when invalid
-     */
-    getLatLong(coord: string): LatLngTuple;
-    /**
-     * Init a map in the container
-     * @param ctn Container
-     * @param pm Placemap definition
-     */
-    display(ctn: AnyContainer, pm?: Placemap): string | false | undefined;
-    /**
-     * A map can only have bounds if it contains at least two markers.
-     * @returns true when the map has at least 2 markers
-     */
-    hasBounds(): boolean;
-    /**
-     * Bounds of all the markers.
-     * @returns The bounds, or undefined when there are less than 2 markers
-     */
-    getLatLngBounds(): L.LatLngBounds | undefined;
-    /**
-     * Add a marker on map
-     * @param params Parameters
-     * @param params.coord coma-separated coordinates
-     * @param params.onMove callback function when user moves marker
-     */
-    addSelector(params: {
-        coord: string;
-        onMove?: (lat: string, lng: string) => void;
-    }): boolean;
-    /**
-     * Add a marker on map
-     * @param params Parameters <code>\{ coord, info, center \}</code>
-     * @param params.coord coma-separated coordinates
-     * @param params.info jquery element to show in popup
-     */
-    addMarker(params: {
-        coord: string;
-        info?: JQuery;
-    }): boolean;
-    /**
-     * Build the marker info
-     */
-    getMarkerInfo(o: BusinessObject, pm: Placemap, place: Place, onOpen: (id: string) => void): JQuery<HTMLElement>;
-}
-
-/** Recipients of a Firebase notification: lists of logins and groups, or 'all' users */
-type FirebaseRecipients = {
-    users?: string[];
-    groups?: string[];
-} | "all";
-/** Firebase message or notification (from FCM, the service worker or the native app) */
-interface FirebaseMessage {
-    /** Optional embedded message */
-    notification?: FirebaseMessage;
-    /** Message body */
-    body?: string;
-    /** Optional title */
-    title?: string;
-    /** Optional priority */
-    priority?: "high" | "normal" | "low";
-    /** Optional icon */
-    icon?: string;
-    /** Optional color */
-    color?: string;
-    /** Optional origin */
-    from?: string;
-    /** Tapped by the user in foreground or background */
-    tap?: "foreground" | "background";
-    /** Background message already displayed in the system tray */
-    _background?: boolean;
-    /** Optional object name to open (or in data) */
-    object?: string;
-    /** Optional object row ID to open (or in data) */
-    rowId?: string;
-    /** Optional pairs of key-value */
-    data?: KeyObject & {
-        /** Optional object name to open */
-        object?: string;
-        /** Optional object row ID to open */
-        rowId?: string;
-    };
-}
-/** Data of the Firebase service */
-type FirebaseServiceData = FirebaseMessage & {
-    /** Config to init the plugin (see FIREBASE_CONFIG) */
-    config?: KeyObject;
-    /** Key needed for the Firebase authentication */
-    vapidKey?: string;
-    /** Device token of the user to refresh */
-    token?: string;
-    /** Message to send */
-    message?: string;
-    /** Message recipients */
-    to?: FirebaseRecipients;
-};
-/**
- * Firebase controller
- */
-declare class Firebase {
-    worker: string;
-    messaging?: KeyObject;
-    constructor();
-    /**
-     * Firebase service wrapper
-     * @param data service data, see {@link FirebaseServiceData}
-     */
-    service(data?: FirebaseServiceData): void;
-    /**
-     * Init firebase connection
-     * @param config to init plugin (see FIREBASE_CONFIG)
-     * @param vapidKey needed for firebase authent
-     */
-    init(config: KeyObject, vapidKey?: string): this | undefined;
-    /**
-     * Display a message
-     * @param m message or notification
-     * @param m.notification optional embedded message
-     * @param m.body message body
-     * @param m.title optional title
-     * @param m.priority optional priority 'high' | 'normal' | 'low'
-     * @param m.data optional pairs of key-value
-     */
-    showMessage(m: FirebaseMessage): void;
-    /**
-     * Refresh a device token on server-side
-     * @param token new token for the user
-     */
-    refreshToken(token: string): void;
-    /**
-     * Request user permission to be notified
-     */
-    requestPermission(): void;
-}
-
-/** Axis type: `C` column, `L` line, `V` value */
-type CrosstabAxisType = "C" | "L" | "V";
-/** Axis of a crosstab */
-interface CrosstabAxis {
-    /** Field name */
-    field: string;
-    /** Axis name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Order of the axis */
-    order: number;
-    /** Caption position */
-    caption?: string;
-    /** TODO "T" | "F"... */
-    method: string;
-    /** Axis type */
-    type: CrosstabAxisType;
-    /** Formula of a calculated value */
-    formula?: string;
-    /** Date grouping (year, month, day...) */
-    dateGroup?: string;
-    /** Index of the Y axis in chart */
-    yaxis?: number;
-    /** Hidden axis */
-    hidden?: boolean;
-    /** Chart type */
-    chart?: string;
-    /** Color palette */
-    palette?: string;
-    /** Field definition */
-    f?: ObjectField;
-}
-/** Crosstab metadata */
-interface CrosstabMetadata {
-    /** Crosstab row ID */
-    id: string;
-    /** Crosstab name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Default aggregation method */
-    method?: string;
-    /** Available aggregation methods */
-    methods: EnumItem[];
-    /** Available date groupings */
-    dateGroups: EnumItem[];
-    /** Color of the sub-totals */
-    subcolor?: string;
-    /** Show the control panel */
-    control?: boolean;
-    /** Show the sub-totals */
-    subtotal?: boolean;
-    /** "no" or position */
-    caption?: string;
-    /** Precision of the values */
-    precision?: number;
-    /** Editable axis */
-    editable?: boolean;
-    /** Chart type */
-    chart?: string;
-    /** Chart width */
-    width?: string;
-    /** Chart height */
-    height?: string;
-    /** Color palette */
-    palette?: string;
-    /** Axis in columns */
-    columns?: CrosstabAxis[];
-    /** Axis in lines */
-    lines?: CrosstabAxis[];
-    /** Values */
-    values?: CrosstabAxis[];
-}
-/** Crosstab rendering options (`z` parameters sent to the service) */
-interface CrosstabParam {
-    /** "no" or position */
-    zcaption?: string;
-    /** Show the table */
-    ztable?: boolean;
-    /** Always get lines tree + metadata */
-    ztree?: true;
-    /** Show the sub-totals */
-    zstotal?: boolean;
-    /** Color of the sub-totals */
-    zstcolor?: string | null;
-    /** Axis definitions */
-    zaxis?: KeyObject[];
-    /** Filters */
-    zfilters?: KeyObject;
-    /** Color palette */
-    zpalette?: string;
-    /** Mono chart name */
-    zgraph?: string;
-    /** Chart names of multi charts */
-    [key: `zgraph_${string}`]: string;
-    /** Chart width */
-    zwidth?: string;
-    /** Chart height */
-    zheight?: string;
-    /** Show the control panel */
-    zcontrol?: boolean;
-    /** Selected tab of the control panel */
-    controlTab?: number;
-    /** Search handler */
-    search?: (filters: KeyObject) => void;
-    /** Apply the options */
-    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
-    /** Export the data in a media (CSV, XLSX...) */
-    exportData?: (media: string) => void;
-    /** Reload the crosstab */
-    reload?: Callback;
-    /** Error handler */
-    error?: Callback;
-}
-/** Parameters of a crosstab display (see `$ui.displayCrosstab`) */
-type CrosstabNavParam = NavParam & {
-    /** Optional instance name */
-    inst?: string;
-    /** Optional filters to apply */
-    filters?: KeyObject;
-    /** Optional crosstab options */
-    options?: CrosstabParam;
-    /** Search handler */
-    search?: (filters: KeyObject) => void;
-    /** Apply the options */
-    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
-    /** Export the data in a media (CSV, XLSX...) */
-    exportData?: (media: string) => void;
-    /** Reload the crosstab */
-    reload?: Callback;
-    /** Error handler */
-    error?: Callback;
-};
-/** Crosstab data */
-interface CrosstabData {
-    /** Column nodes */
-    columns: CrosstabNode[];
-    /** Root of the line nodes */
-    lines: CrosstabNode;
-}
-/** Node of a crosstab axis */
-interface CrosstabNode {
-    /** Index */
-    index: number;
-    /** Path in the tree */
-    path: string;
-    /** Name */
-    name: string;
-    /** Text color */
-    color?: string;
-    /** Background color */
-    bgcolor?: string;
-    /** Background colors per value */
-    bgcolors?: (string | null)[];
-    /** Values */
-    values?: any;
-    /** Labels */
-    labels?: string[];
-    /** Row IDs */
-    ids?: string[];
-    /** Child nodes */
-    children?: CrosstabNode[];
-}
-/**
- * Crosstab rendering
- */
-declare class Crosstab {
-    private controlTab;
-    /**
-     * Display the cross tab
-     * @param ctn Container
-     * @param obj Object
-     * @param ct Crosstab definition
-     * @param data Crosstab data
-     * @param p options { zstotal, zstcolor, zcaption, ztable, zgraph... }
-     */
-    display(ctn: Container, obj: BusinessObject, ct: CrosstabMetadata, data: CrosstabData, p: CrosstabParam, cbk?: Callback): this;
-    private axisDragDrop;
-}
-
-/** Handler on chart click */
-type ChartClickHandler = (chart: Chart, clickElements: InteractionItem[], dataset: InteractionItem[], elementIndex: number, datasetIndex: number) => void;
-/** Options of the charts (each chart uses its own subset) */
-interface ChartParam {
-    /** Chart type (ex: 'pie', 'doughnut', 'bar', 'line') */
-    type?: ChartType;
-    /** Title */
-    title?: string;
-    /** Display the legend? */
-    legend?: boolean;
-    /** Colors of the values (default palette) */
-    colors?: string[] | null;
-    /** Animate the rotation (pie)? */
-    animate?: boolean;
-    /** Animation? */
-    animation?: boolean;
-    /** Responsive chart? */
-    responsive?: boolean;
-    /** Dark mode? */
-    dark?: boolean;
-    /** Stacked bars or lines? */
-    stacked?: boolean;
-    /** Horizontal bars? */
-    horizontal?: boolean;
-    /** Aspect ratio (default 2) */
-    aspectRatio?: number;
-    /** Logarithmic Y axis? */
-    log?: boolean;
-    /** Values in log10? */
-    log10?: boolean;
-    /** Zoom on X axis by mouse drag? */
-    zoom?: boolean;
-    /** Type of X axis (ex: 'time', 'date') */
-    xType?: string;
-    /** Time format of X axis */
-    timeFormat?: string;
-    /** Minimum of X axis */
-    min?: number | string;
-    /** Maximum of X axis */
-    max?: number | string;
-    /** Unit of Y axis */
-    unit?: string;
-    /** Unit of X axis */
-    xUnit?: string;
-    /** Unit of the second Y axis */
-    y2unit?: string;
-    /** Unit of Y axis (bubble) */
-    yUnit?: string;
-    /** Label of X axis (bubble, default 'x') */
-    xLabel?: string;
-    /** Label of Y axis (bubble, default 'y') */
-    yLabel?: string;
-    /** Line tension (0 = straight lines) */
-    lineTension?: number;
-    /** Width (default 100%) */
-    width?: string;
-    /** Height (default 200px) */
-    height?: string;
-    /** Click handler */
-    onClick?: ChartClickHandler;
-    /** Existing chart to update */
-    chart?: Chart;
-}
-/** Count per status for {@link Charts.chartStatusPie}: list of [status label, count] */
-type StatusPieData = [string, number][];
-/** Count per status and date for {@link Charts.chartStatusCount} */
-interface StatusCountData {
-    /** Date format of the period */
-    format?: string;
-    /** Status labels */
-    series: string[];
-    /** Points [datetime, count] per status */
-    data: [string, number][][];
-}
-/** Duration per status for {@link Charts.chartStatusDuration} */
-interface StatusDurationData {
-    /** Duration unit: seconds, minutes, hours or days */
-    unit: "s" | "m" | "h" | "d";
-    /** Status labels */
-    ticks: string[];
-    /** Durations per status: [averages, maximums, minimums] */
-    data: [number[], number[], number[]];
-}
-/** Terminal status durations for {@link Charts.chartStatusTerminal} */
-interface StatusTerminalData {
-    /** Terminal status labels */
-    series: string[];
-    /** Points [duration in days, count] per terminal status */
-    data: [number, number][][];
-}
-/** Serie of points for {@link Charts.chartTimeSeries} */
-interface PlotSerie {
-    /** Serie label */
-    label: string;
-    /** Points `[x, y]`: x is a date `YYYY-MM-DD HH:mm:ss` or a number */
-    data: [string | number, number][];
-    /** Fill the area under the line */
-    fill?: boolean;
-    /** Display as bars */
-    bar?: boolean;
-    /** Display only the points without line */
-    points?: boolean;
-    /** Use the second Y axis on the right */
-    y2?: boolean;
-    /** Specific color */
-    color?: string;
-}
-/**
- * ChartJS controller
- */
-declare class Charts {
-    constructor();
-    /**
-     * Current palette name
-     */
-    PALETTE: string;
-    /**
-     * Predefined palettes <code>\{ name:[colors] \}</code>.
-     */
-    PALETTES: {
-        [key: string]: string[];
-    };
-    /** Bright color of the palette */
-    BRIGHT_COLOR?: string;
-    /** Dark color of the palette */
-    DARK_COLOR?: string;
-    /**
-     * Current palette of colors <br />
-     * default: <code>app.sysparams.CHART_PALETTE</code> or 'Sea'
-     */
-    COLORS: string[];
-    /** Units to format a file size */
-    readonly SIZES: (string | number)[][];
-    /**
-     * Indexed color in palette
-     * @param i Index
-     * @returns color (<code>#RRGGBB</code>)
-     */
-    getColor(i: number): string;
-    /**
-     * All palette colors
-     * @returns array of colors (<code>#RRGGBB</code>)
-     */
-    getColors(): string[];
-    /**
-     * Current palette
-     * @returns palette = list of colors
-     */
-    getPalette(): string;
-    /**
-     * Change the current palette
-     * @param name Palette name ('Sea', 'Base'...)
-     */
-    setPalette(name: string): void;
-    /**
-     * Chart JS
-     * @param ctn Container
-     * @param config From chart.js v3 config with options
-     * @param click Optional handler <code>function(chart, clickElements, dataset, elementIndex, datasetIndex)</code>
-     */
-    chart(ctn: Container, config: ChartConfiguration, click?: ChartClickHandler, ariaLabel?: string): Chart | undefined;
-    /**
-     * Destroy the charts of a container
-     * @param ctn Container
-     */
-    destroy(ctn: Container): void;
-    /**
-     * Enable the zoom on X axis by mouse drag (needs the chartjs-plugin-zoom, reset by double-click)
-     * @param config Chart config
-     */
-    zoom(config: ChartConfiguration): void;
-    /**
-     * Dark theme: black background with light texts and grid
-     * @param config Chart config
-     */
-    dark(config: ChartConfiguration): void;
-    /**
-     * Add a title and legend
-     * @param config Chart config
-     * @param title display+text
-     * @param legend display+position
-     */
-    addTitle(config: ChartConfiguration, title: TitleOptions, legend: TitleOptions): void;
-    /**
-     * Set Stacked option
-     * @param config Chart config
-     * @param stacked true to stack axis
-     */
-    stacked(config: ChartConfiguration, stacked?: boolean): void;
-    /**
-     * Apply the common scale options
-     * @param config Chart config
-     * @param p Options: `log` for a logarithmic Y axis, `zoom` to zoom on X axis by mouse drag
-     */
-    scaleOptions(config: ChartConfiguration, p: ChartParam): void;
-    /**
-     * Set the background color of chart
-     * @param config Chart config
-     * @param color background color of canvas
-     */
-    backgroundColor(config: ChartConfiguration, color: string): void;
-    /**
-     * Status count in a PIE
-     * @param ctn Container
-     * @param data Pie data
-     * @param p Optional chart.js options
-     */
-    chartStatusPie(ctn: Container, data: StatusPieData, p: ChartParam): void;
-    /**
-     * Status count in a chart line per date
-     * @param ctn Container
-     * @param data Line data
-     * @param p Optional chart.js options
-     */
-    chartStatusCount(ctn: Container, data: StatusCountData, p: ChartParam): void;
-    /**
-     * Status duration in a polar/radar/bar charts
-     * @param ctn Container
-     * @param d Duration data
-     * @param p Optional chart.js options
-     */
-    chartStatusDuration(ctn: Container, d: StatusDurationData, p: ChartParam): void;
-    /**
-     * Asysnc queue chart
-     * @param ctn Container
-     * @param hist History data
-     * @param p Options width ans height
-     */
-    chartQueueHistory(ctn: Container, hist: KeyObject, p: ChartParam): void;
-    /**
-     * Process duration in a bar chart
-     * @param ctn Container
-     * @param data Duration data
-     * @param p Optional chart.js options
-     */
-    chartStatusTerminal(ctn: Container, data: StatusTerminalData, p: ChartParam): void;
-    /**
-     * Series on a time or numeric X axis (monitoring, histories...)
-     * @param ctn Container
-     * @param series Series of points
-     * @param p Options:
-     * `title` (chart title),
-     * `xType` (`time` default or `linear`),
-     * `timeFormat` (moment format of the time ticks),
-     * `min`/`max` (X axis range),
-     * `xUnit`/`unit`/`y2unit` (units of the X, Y and second Y axis ticks),
-     * `log` (logarithmic Y axes),
-     * `stacked` (stacked Y values),
-     * `zoom` (zoom by mouse drag, default true),
-     * `legend` (default true),
-     * `dark` (dark theme),
-     * `colors` (default palette)
-     * @returns Chart
-     * @example
-     * await $factory.ChartJS();
-     * $ui.charts?.chartTimeSeries(ctn, [
-     * 	{ label: "Sessions", data: [["2026-09-24 10:00:00", 12], ["2026-09-24 11:00:00", 18]], fill: true },
-     * 	{ label: "Errors", data: [["2026-09-24 10:00:00", 1], ["2026-09-24 11:00:00", 3]], bar: true }
-     * ], { title: "Activity", timeFormat: "HH:mm", log: false });
-     */
-    chartTimeSeries(ctn: Container, series: PlotSerie[], p?: ChartParam): Chart | undefined;
-    /**
-     * Stacked bars per category
-     * @param ctn Container
-     * @param d Data: `series` (labels of series), `ticks` (categories), `data` (values per serie and category)
-     * @param p Options:
-     * `title` (chart title),
-     * `horizontal` (horizontal bars),
-     * `unit` (unit of the values),
-     * `max` (max value),
-     * `legend` (default true),
-     * `dark` (dark theme),
-     * `colors` (default palette)
-     * @returns Chart
-     * @example
-     * await $factory.ChartJS();
-     * $ui.charts?.chartBars(ctn, {
-     * 	series: ["Open", "Closed"],
-     * 	ticks: ["Jan", "Feb", "Mar"],
-     * 	data: [[10, 20, 15], [5, 8, 12]]
-     * }, { title: "Tickets", horizontal: false });
-     */
-    chartBars(ctn: Container, d: {
-        series: string[];
-        ticks: string[];
-        data: number[][];
-    }, p?: ChartParam): Chart | undefined;
-    /**
-     * Bubbles with one dataset per bubble
-     * @param ctn Container
-     * @param points Bubbles `[x, y, count, label]`
-     * @param p Options:
-     * `title` (chart title),
-     * `xUnit`/`yUnit` (units of the axes),
-     * `xLabel`/`yLabel` (labels of the values in tooltip),
-     * `colors` (default palette)
-     * @returns Chart
-     * @example
-     * await $factory.ChartJS();
-     * // [x, y, count, label]
-     * $ui.charts?.chartBubble(ctn, [[2, 5, 10, "Process A"], [4, 1, 3, "Process B"]], {
-     * 	title: "Process times", xUnit: "d", yUnit: "d"
-     * });
-     */
-    chartBubble(ctn: Container, points: [number, number, number, string][], p?: ChartParam): Chart | undefined;
-    /**
-     * Chart for crosstab
-     */
-    chartCrosstab(ctn: Container, ct: CrosstabMetadata, data: KeyObject, p?: ChartParam): void;
-    /**
-     * Format octets size to Kb/Mb/Gb/Tb
-     * @param size Size
-     */
-    size(size: string): string | undefined;
-    /**
-     * Heap chart of browser memory (LOG_UI=yes)
-     * @param ctn Container
-     * @param data Lines data <code>[\{d,u,t\},...]</code>
-     * @param p Optional chart.js options
-     */
-    chartHeapSize(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
-    /**
-     * Steps of front service (LOG_UI=yes)
-     */
-    chartServiceSteps(ctn: Container, data: KeyObject[], p: ChartParam): Chart | undefined;
-    /**
-     * Times of front service (LOG_UI=yes)
-     */
-    chartServiceTimes(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
-    /**
-     * Get the brightest color in the current palette
-     * @param darkest True to get the darkest one
-     * @returns A color <code>#RRGGBB</code>
-     */
-    getBrightColor(darkest?: boolean): string;
-    /**
-     * Get the lighten or darken color
-     * @param color <code>#RRGGBB</code>
-     * @param val -255..255
-     * @returns A color <code>#RRGGBB</code>
-     */
-    lightenDarkenColor(color: string, val: number): string;
-    /**
-     * Convert <code>#RRGGBB</code> to object <code>\{r,g,b,a\}</code>
-     * @param color Color <code>#RRGGBB</code>
-     * @param alpha Alpha (transparency)
-     * @returns object <code>\{r,g,b,a\}</code>
-     */
-    css2rgb(color: string, alpha?: number): RGBA;
-    /**
-     * Convert object <code>\{r,g,b\}</code> to <code>#RRGGBB</code>
-     * @param rgb Color <code>\{r,g,b\}</code>
-     * @returns Color <code>#RRGGBB</code>
-     */
-    rgb2css(rgb: RGB): string;
-    /**
-     * Convert <code>#RRGGBB</code> to string
-     * @param color Color <code>#RRGGBB</code>
-     * @param alpha Alpha (transparency)
-     * @returns string <code>'rgba(r,g,b,a)'</code>
-     */
-    css2rgba(color: string, alpha?: number): string;
-    /**
-     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
-     * @param color Color <code>\{r,g,b\}</code>
-     * @returns Color <code>\{h,s,v\}</code>
-     */
-    rgb2hsv(color: RGB): HSV;
-    /**
-     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
-     * @param hsv Color <code>\{h,s,v\}</code>
-     * @returns Color <code>\{r,g,b\}</code>
-     */
-    hsv2rgb(hsv: HSV): RGB;
-}
-
-/** Data of the WebPush service */
-interface WebPushData {
-    /** VAPID public key of the server */
-    vapidKey?: string;
-}
-/**
- * WebPush controller
- */
-declare class WebPush {
-    /** URL of the service worker */
-    worker: string;
-    constructor();
-    /** WebPush service */
-    service(data?: WebPushData): void;
-    /** Init webpush connection */
-    init(data?: WebPushData): this;
-    /** request permission to use WebPush API */
-    requestPermission(reg: ServiceWorkerRegistration, data: WebPushData): void;
-    private check;
-    private urlB64ToUint8Array;
-}
-
-/**
- * OCR tools (using the Tesseract.js lib) **EXPERIMENTAL**
- */
-declare class OCR {
-    /** URL of the Tesseract library */
-    readonly tessurl: string;
-    /**
-     * Extract the text of an image.
-     * @param img Image
-     * @param lang Language
-     * @returns Promise of the recognized text
-     */
-    doOCR(img: any, lang: string): Promise<any>;
-}
-
-/** Options of the speech recognition */
-interface SpeechRecognitionParam {
-    /** Language (ex: FRA, ENU or fr-FR, en-GB...) */
-    lang?: string;
-    /** Continuous speaking (sentence)? */
-    continuous?: boolean;
-    /** Continuous speaking (no timeout after long silence)? */
-    autoRestart?: boolean;
-    /** Get interim results? */
-    interimResults?: boolean;
-    /** Max alternatives search */
-    maxAlternatives?: number;
-    /** First character uppercase in a sentence? */
-    firstCapital?: boolean;
-    /** Accept new line symbol? */
-    newLine?: boolean;
-    /** Optional handler when started */
-    onStart?: () => void;
-    /** Optional handler when ended */
-    onEnd?: () => void;
-    /** Optional handler on error */
-    onError?: (e: Event) => void;
-    /** Optional handler to override change event */
-    onChange?: () => void;
-    /** Optional console info */
-    debug?: boolean;
-}
-/** Options of the speech synthesis */
-interface SpeechSynthesisParam {
-    /** Preferred language FRA, ENU... */
-    lang?: string;
-    /** Optional voice name to force if exists */
-    voice?: string;
-    /** Service URI, default native */
-    uri?: string;
-    /** 0 to 1, default 1 */
-    volume?: number;
-    /** 0.1 to 10, default 1 */
-    rate?: number;
-    /** 0 to 2, default 1 */
-    pitch?: number;
-    /** Optional handler when started */
-    onStart?: () => void;
-    /** Optional handler when ended */
-    onEnd?: () => void;
-    /** Optional console info */
-    debug?: boolean;
-}
-/**
- * Web Speech API
- */
-declare class Speech {
-    CMD: KeyObject;
-    SpeechRecognition: any;
-    voice?: SpeechSynthesisVoice;
-    readonly VOICES: KeyObject;
-    constructor();
-    /**
-     * Get language ISO
-     * @param l language FRA, ENU...
-     * @returns ISO code (ex fr-FR)
-     */
-    langISO(l: string): string;
-    /**
-     * New SpeechRecognition if exists
-     */
-    createSpeechRecognition(): any;
-    /**
-     * Speech recognition
-     * @param el Element input or textarea
-     * @param options Options
-     * @param options.lang Language (ex: FRA, ENU or fr-FR, en-GB...)
-     * @param options.continuous Continuous speaking (sentence)?
-     * @param options.autoRestart Continuous speaking (no timeout after long silence)?
-     * @param options.interimResults Get interim results?
-     * @param options.maxAlternatives Max alternatives search
-     * @param options.firstCapital First character uppercase in a sentence?
-     * @param options.newLine Accept new line symbol?
-     * @param options.onStart Optional handler when started
-     * @param options.onEnd Optional handler when ended
-     * @param options.onError Optional handler on error
-     * @param options.onChange Optional handler to override change event
-     * @param options.debug Optional console info
-     */
-    recognition(el: JQuery, options?: SpeechRecognitionParam): void;
-    /**
-     * Get browser voices
-     * @param ss speechSynthesis
-     * @param cbk callback(voices)
-     */
-    getVoices(ss: SpeechSynthesis, cbk: (voices: SpeechSynthesisVoice[]) => void): void;
-    /**
-     * Find a voice matching language
-     * @param voices supported voices
-     * @param lang Language FRA, ENU...
-     * @param use Try to use this voice if supported
-     */
-    getVoice(voices: SpeechSynthesisVoice[], lang: string, use?: string): SpeechSynthesisVoice | undefined;
-    /**
-     * Speech synthesis (experimental)
-     * @param el Text or input or textarea
-     * @param options Options
-     * @param options.lang Preferred language FRA, ENU...
-     * @param options.voice Optional voice name to force if exists
-     * @param options.uri Service URI, default native
-     * @param options.volume 0 to 1, default 1
-     * @param options.rate 0.1 to 10, default 1
-     * @param options.pitch 0 to 2, default 1
-     * @param options.onStart Optional handler when started
-     * @param options.onEnd Optional handler when ended
-     * @param options.debug Optional console info
-     */
-    speak(el: JQuery, options?: SpeechSynthesisParam): void;
-    /**
-     * Start to speech
-     * @param msg - Message to read
-     */
-    speakStart(msg: SpeechSynthesisUtterance): void;
-    /**
-     * Stop current speech
-     */
-    speakStop(): void;
-}
-
-/** Item of a view addon bar */
-interface AddonBarItem {
-    /** Unique name within the host bar (data-addon + .addon-<name>) */
-    name: string;
-    /** Accessible name: mandatory, no faked buttons */
-    label: string;
-    /** Icon, see $view.icon */
-    icon?: string;
-    /** Ascending left-to-right order (default 50) */
-    weight?: number;
-    /** Click handler (ignored when 'element' is given) */
-    click?: (e: JQuery.Event) => void;
-    /** Prebuilt element (dropdown, gotoDefinition...) */
-    element?: JQuery;
-}
-/**
- * Addon bar renderer: collects the floating controls (gotodef, copylink, guides, ...)
- * of a whole view or a single view item
- */
-declare class AddonBar {
-    static enabled(): boolean;
-    /**
-     * Closest element that can host a bar
-     */
-    hostOf(el: AnyContainer): JQuery;
-    /**
-     * Get (or create) the bar for a host
-     * @param host Host container (view item, view, external object, list or form)
-     * @param create Create the bar if it does not exist?
-     */
-    bar(host: AnyContainer, create?: boolean): JQuery;
-    /**
-     * Reorder addons by ascending weight
-     */
-    sort(items: JQuery): void;
-    /**
-     * Set the bar title (host type and name)
-     * @param host bar host
-     * @param label host name
-     * @param type optional object type (View, ObjectExternal...)
-     */
-    hostTitle(host: AnyContainer, label: string, type?: string): void;
-    /**
-     * Apply the expanded/collapsed state to a toggle button
-     */
-    static toggleState(tgl: JQuery, open: boolean): void;
-    /**
-     * Add an addon to the bar
-     */
-    add(host: AnyContainer, addon: AddonBarItem): JQuery | undefined;
-    /**
-     * Remove an addon by name
-     */
-    remove(host: AnyContainer, name: string): void;
-    /**
-     * Collapse the bar when empty, bypass the toggle for a single addon
-     */
-    refresh(bar: JQuery): void;
 }
 
 /** Status metrics cached in the object context: last params and last rendered metrics */
@@ -8070,7 +11918,7 @@ declare class UIArea extends UIComponent<Area, AreaParam> {
     /**
      * Add a counter in the tab label
      */
-    countRef(v: View, div: JQuery): void;
+    countRef(v: View, div: JQuery, list?: BusinessObject): void;
 }
 
 /** Rendering options of a view */
@@ -8965,2104 +12813,6 @@ declare class APITester {
     apiTestFilter(): void;
 }
 
-type DiagramSpringsParam = {
-    stiffness: number;
-    repulsion: number;
-    damping: number;
-    remoteness: number;
-    gravity: number;
-    maxDuration: number;
-    callback?: Callback;
-    enabled: boolean;
-};
-/**
- * Springs layout: a force directed graph algorithm
- * @constructor
- */
-declare class DiagramSprings {
-    model: DiagramModeler;
-    desktop?: DiagramDesktop;
-    box?: Rect;
-    margin: number;
-    graph?: Graph;
-    layout?: Layout;
-    renderer?: Renderer;
-    stiffness: number;
-    repulsion: number;
-    damping: number;
-    remoteness: number;
-    gravity: number;
-    enabled?: boolean;
-    constructor(model: DiagramModeler);
-    /**
-     * Spring stiffness constant F = k * dx
-     * @function
-     */
-    setStiffness(k: number): void;
-    setRepulsion(r: number): void;
-    setDamping(d: number): void;
-    setRemoteness(r: number): void;
-    setGravity(g: number): void;
-    getData(): {
-        "data-layout": string;
-        "data-stiffness": number;
-        "data-repulsion": number;
-        "data-damping": number;
-        "data-remoteness": number;
-        "data-gravity": number;
-        "data-enabled": boolean | undefined;
-    };
-    readData(svg: JSVG): this;
-    /**
-     * Prepare the nodes springs
-     * @param {(Object|$)} data
-     * @param {number} data.stiffness k = Spring stiffness
-     * @param {number} data.repulsion Nodes repulsion
-     * @param {number} data.damping Spring damping
-     * @param {number} data.remoteness Nodes remoteness (zoom)
-     * @param {number} data.gravity attraction factor
-     * @param {number} data.maxDuration optional max time to execute the placement (in milliseconds)
-     * @param {function} data.callback optional callback when all positions are fixed
-     * @param {boolean} data.enabled true by default
-     * @function
-     */
-    load(data: DiagramSpringsParam | JSVG): this;
-    disable(): this;
-    /**
-     * Start the nodes placement
-     * @function
-     */
-    start(): this;
-    /**
-     * Stop the nodes placement
-     * @function
-     */
-    stop(): this;
-    /**
-     * add node
-     * @function
-     */
-    addNode(node: HTMLElement): SpringNode | undefined;
-    /**
-     * add nodes
-     * @function
-     */
-    addNodes(nodes?: JQuery): void;
-    /**
-     * Remove nodes
-     * @function
-     */
-    removeNodes(selectorNodes: string): void;
-    /**
-     * Add a link between 2 spring nodes
-     * @function
-     */
-    addLink(link: JSVG): SpringEdge | undefined;
-    /**
-     * Move nodes
-     * @function
-     */
-    move(nodes: JSVG[]): void;
-}
-declare type SpringNodeData = {
-    label?: string;
-    mass?: number;
-    node?: DiagramNode;
-};
-declare class SpringNode implements SpringNode {
-    id: string;
-    data: SpringNodeData;
-    point?: Point$1;
-    constructor(id: string, data?: SpringNodeData);
-}
-declare type SpringEdgeData = {
-    type?: string;
-    length?: number;
-};
-declare class SpringEdge {
-    id: string;
-    source: SpringNode;
-    target: SpringNode;
-    data: SpringEdgeData;
-    from?: number;
-    to?: number;
-    type?: string;
-    directed?: boolean;
-    spring?: Spring;
-    constructor(id: string, source: SpringNode, target: SpringNode, data?: SpringEdgeData);
-}
-declare class Graph {
-    model: DiagramModeler;
-    nodes: SpringNode[];
-    edges: SpringEdge[];
-    nodeSet: {
-        [id: string]: SpringNode;
-    };
-    adjacency: {
-        [id1: string]: {
-            [id2: string]: SpringEdge[];
-        };
-    };
-    nextNodeId: number;
-    nextEdgeId: number;
-    eventListeners: Renderer[];
-    constructor(model: DiagramModeler);
-    addNode(node: SpringNode): SpringNode;
-    addNodes(list: string[]): void;
-    addEdge(edge: SpringEdge): SpringEdge;
-    addEdges(list: string[][]): void;
-    newNode(data: SpringNodeData): SpringNode;
-    newEdge(source: SpringNode, target: SpringNode, data: SpringEdgeData): SpringEdge;
-    loadJSON(json: string | KeyObject): void;
-    getEdges(node1: SpringNode, node2: SpringNode): SpringEdge[];
-    removeNode(node: SpringNode): void;
-    detachNode(node: SpringNode): void;
-    removeEdge(edge: SpringEdge): void;
-    merge(data: Graph): void;
-    filterNodes(fn: (node: SpringNode) => boolean): void;
-    filterEdges(fn: (node: SpringEdge) => boolean): void;
-    addGraphListener(obj: Renderer): void;
-    notify(): void;
-}
-declare class Point$1 {
-    p: Vector;
-    m: number;
-    v: Vector;
-    a: Vector;
-    constructor(position: Vector, mass: number);
-    applyForce(force: Vector): void;
-}
-declare class Spring {
-    point1: Point$1;
-    point2: Point$1;
-    length: number;
-    k: number;
-    constructor(point1: Point$1, point2: Point$1, length: number, k: number);
-    distanceToPoint(point: Point$1): number;
-}
-declare class ForceDirected {
-    graph: Graph;
-    stiffness: number;
-    repulsion: number;
-    damping: number;
-    remoteness: number;
-    gravity: number;
-    static Point: typeof Point$1;
-    static Spring: typeof Spring;
-    constructor(graph: Graph, stiffness: number, repulsion: number, damping: number, remoteness: number, gravity: number);
-    point(node: SpringNode): Point$1;
-    spring(edge: SpringEdge): Spring;
-    eachNode(cbk: (n: SpringNode, p: Point$1) => void): void;
-    eachEdge(cbk: (e: SpringEdge, s: Spring) => void): void;
-    eachSpring(cbk: (s: Spring) => void): void;
-    applyCoulombsLaw(): void;
-    applyHookesLaw(): void;
-    attractToCentre(p: Point$1): void;
-    updatePoint(p: Point$1, dt: number): void;
-    totalEnergy(): number;
-    _started?: boolean;
-    _stop?: boolean;
-    _energy: number;
-    _count: number;
-    _time0: number;
-    /**
-     * Start simulation if it's not running already.
-     * In case it's running then the call is ignored, and none of the callbacks passed is ever executed.
-     */
-    start(render: Callback, onRenderStart?: Callback, onRenderStop?: Callback): void;
-    stop(): void;
-    tick(dt: number): void;
-    getBound(): Rect;
-}
-declare class Layout extends ForceDirected {
-    static ForceDirected: typeof ForceDirected;
-}
-declare class Vector {
-    x: number;
-    y: number;
-    constructor(x: number, y: number);
-    static random(): Vector;
-    add(v: Vector): Vector;
-    subtract(v: Vector): Vector;
-    multiply(n: number): Vector;
-    divide(n: number): Vector;
-    magnitude(): number;
-    normal(): Vector;
-    normalise(): Vector;
-}
-/**
- * Renderer handles the layout rendering loop
- * @param onRenderStart optional callback function that gets executed whenever rendering starts.
- * @param onRenderStop optional callback function that gets executed whenever rendering stops.
- * @param onRenderFrame optional callback function that gets executed after each frame is rendered.
- */
-declare class Renderer {
-    layout: Layout;
-    clear?: Callback;
-    drawNode?: (n: SpringNode, p: Vector) => void;
-    drawEdge?: (e: SpringEdge, p1: Vector, p2: Vector) => void;
-    onRenderStart?: Callback;
-    onRenderStop?: Callback;
-    onRenderFrame?: Callback;
-    constructor(layout: Layout, clear?: Callback, drawEdge?: Callback, drawNode?: (n: SpringNode, p: Vector) => void, onRenderStart?: Callback, onRenderStop?: Callback, onRenderFrame?: Callback);
-    graphChanged(): void;
-    /**
-     * Starts the simulation of the layout in use.
-     *
-     * Note that in case the algorithm is still or already running then the layout that's in use
-     * might silently ignore the call, and your optional <code>done</code> callback is never executed.
-     * At least the built-in ForceDirected layout behaves in this way.
-     */
-    start(): void;
-    stop(): void;
-}
-
-type DiagramTreeParam = {
-    vertical?: boolean;
-    openClose?: boolean;
-    rootPosition?: number;
-    gapBetweenNodes?: number;
-    gapBetweenLevels?: number;
-    inspect?: number;
-    reverse?: boolean;
-};
-type DiagramTreeMode = "simple" | "assign" | "release";
-type DiagramTreeBound = {
-    xmin: number;
-    ymin: number;
-    xmax: number;
-    ymax: number;
-};
-/**
- * Tree singleton
- * @class
- */
-declare class DiagramTree {
-    DEFAULT_DISTANCE: number;
-    ROOT: KeyNumber;
-    INSPECT: KeyNumber;
-    constructor();
-    private static singleton;
-    static get(): DiagramTree;
-    /**
-     * Tree placement from a node
-     * @param {Simplicite.Diagram.Node} node node
-     * @param {Object} params layout options
-     * @param {boolean} params.vertical vertical direction
-     * @param {boolean} params.openClose add collapse buttons
-     * @param {Object}  params.rootPosition root absolute position {x,y}
-     * @param {number}  params.gapBetweenNodes distance between nodes (px)
-     * @param {number}  params.gapBetweenLevels distance between tree levels (px)
-     * @param {number}  params.inspect links inspection (Simplicite.Diagram.Tree.INSPECT)
-     * @param {boolean} params.reverse reverse tree?
-     * @param {string} mode 'simple' placement | 'assign' to tree | 'release' from tree
-     * @param {boolean} selected select the node
-     * @function
-     */
-    layoutNode(node: DiagramNode, params: DiagramTreeParam, mode: DiagramTreeMode, selected: boolean): void;
-    /**
-     * Menu
-     * @function
-     */
-    menu(desktop: DiagramDesktop): void;
-}
-/**
- * TreeLayout
- * @param {Simplicite.Diagram.Desktop} desktop desktop
- * @param {Object} params layout options
- * @class
- */
-declare class DiagramTreeLayout {
-    DEFAULT_DISTANCE: number;
-    tree: DiagramTree;
-    desktop: DiagramDesktop;
-    root?: DiagramTreeNode;
-    levelSizes?: number[];
-    bound?: DiagramTreeBound;
-    rootPosition: number;
-    gapBetweenNodes: number;
-    gapBetweenLevels: number;
-    inspect: number;
-    openClose: boolean;
-    vertical: boolean;
-    reverse: boolean;
-    constructor(desktop: DiagramDesktop, params: DiagramTreeParam);
-    /**
-     * Set orientation
-     * @function
-     */
-    setOrientation(vertical: boolean): void;
-    /**
-     * Set root position
-     * @function
-     */
-    setRootPosition(pos: number): void;
-    /**
-     * Set gap between nodes
-     * @function
-     */
-    setGapBetweenNodes(d: number): void;
-    /**
-     * Set gap between levels
-     * @function
-     */
-    setGapBetweenLevels(d: number): void;
-    /**
-     * Set open/close
-     * @function
-     */
-    setOpenClose(b: boolean): void;
-    /**
-     * Revalidate
-     * @function
-     */
-    revalidate(): void;
-    /**
-     * Add node
-     * @function
-     */
-    addNode(node: DiagramNode): DiagramTreeNode;
-    /**
-     * Remove node
-     * @function
-     */
-    removeNode(node: DiagramNode): void;
-    /**
-     * Remove all
-     * @function
-     */
-    removeAll(): void;
-    /**
-     * Set root
-     * @function
-     */
-    setRoot(node: DiagramNode, mode: DiagramTreeMode): void;
-    /**
-     * Open
-     * @function
-     */
-    open(node: DiagramNode, open: boolean): void;
-    /**
-     * Is open?
-     * @function
-     */
-    isOpen(node: DiagramNode): boolean;
-    /**
-     * Switch open/close
-     * @function
-     */
-    switchOpenClose(node: DiagramNode): void;
-    /**
-     * Set parent
-     * @function
-     */
-    setParent(node: DiagramNode, parent: DiagramNode | null, redraw: boolean, root: DiagramNode, assign?: boolean): void;
-    /**
-     * Get size
-     * @function
-     */
-    getSize(): Size;
-    /**
-     * Do layout
-     * @function
-     */
-    doLayout(selected?: boolean): void;
-    /**
-     * Global size
-     * @function
-     */
-    globalSize(node: DiagramNode): void;
-    /**
-     * Get tree level sizes
-     * @function
-     */
-    getTreeLevelSizes(): number[] | undefined;
-    /**
-     * Get tree level size
-     * @function
-     */
-    getTreeLevelSize(level: number): number;
-    /**
-     * Set tree level sizes
-     * @function
-     */
-    setLevelSizes(tn: DiagramTreeNode, level: number): void;
-    /**
-     * Generate the tree form the parent thru links
-     * @function
-     */
-    layoutNodeBuildTree(parent: DiagramNode, mode: DiagramTreeMode): void;
-    /**
-     * Insert node
-     * @function
-     */
-    insertNode(child: DiagramNode, parent: DiagramNode, mode: DiagramTreeMode, link: DiagramLink): void;
-}
-/**
- * TreeNode assigned to node
- * @class
- */
-declare class DiagramTreeNode {
-    root?: DiagramNode;
-    node: DiagramNode;
-    key: string;
-    children: DiagramTreeNode[];
-    parent: DiagramTreeNode | null;
-    layout: DiagramTreeLayout;
-    assign?: boolean;
-    constructor(node: DiagramNode, parent: DiagramTreeNode | null, layout: DiagramTreeLayout);
-    /**
-     * Is leaf?
-     * @function
-     */
-    isLeaf(): boolean;
-    /**
-     * Has child?
-     * @function
-     */
-    hasChild(tn: DiagramTreeNode): boolean;
-    /**
-     * Get tree size
-     * @function
-     */
-    getTreeSize(level: number, subTreeOnly: boolean): Size;
-    /**
-     * Get angle in [0..2PI[
-     * @function
-     */
-    getAngle(): number;
-    /**
-     * Add child
-     * @function
-     */
-    addChild(child: DiagramTreeNode): void;
-    /**
-     * Remove child
-     * @function
-     */
-    removeChild(child: DiagramTreeNode): void;
-    /**
-     * Open
-     * @function
-     */
-    open(visible: boolean): void;
-    /**
-     * Is open?
-     * @function
-     */
-    isOpen(): boolean;
-    /**
-     * Do layout
-     * @function
-     */
-    doLayout(selected: boolean): void;
-    /**
-     * Do layout hierarchy (recursive)
-     * @function
-     */
-    doLayoutHierarchy(x: number, y: number, level: number, selected?: boolean): void;
-    /**
-     * Do layout radial (recursive)
-     * @function
-     */
-    doLayoutRadial(cx: number, cy: number, r: number, a1: number, a2: number, selected?: boolean): void;
-    /**
-     * Move node
-     * @function
-     */
-    moveNode(x: number, y: number): void;
-    /**
-     * Translate
-     * @function
-     */
-    translate(dx: number, dy: number): void;
-    /**
-     * Draw button
-     * @function
-     */
-    /**
-     * Move
-     * @function
-     */
-    move(): void;
-}
-
-/**
- * Nodus = linkable element (node or note)
- * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @class
- */
-declare class DiagramNodus extends DiagramElement {
-    object: string;
-    id: string;
-    links?: DiagramLink[];
-    springNode?: SpringNode;
-    treeNode?: DiagramTreeNode;
-    constructor(desktop: DiagramDesktop);
-    /**
-     * Add link
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    addLink(link: DiagramLink): void;
-    /**
-     * Remove link
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    removeLink(link: DiagramLink): void;
-    /**
-     * Move link
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    moveLinks(dx: number, dy: number): void;
-    /**
-     * Move pointer during add link
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    moveAddLink(al: DeskElementPos): void;
-    /**
-     * Create link
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    createLink(al: DeskElementPos): void;
-}
-
-type DiagramLinkTemplate = {
-    name?: string;
-    render?: number;
-    type?: number;
-    fromObject?: string;
-    fromField?: string;
-    fromRequired?: boolean;
-    fromTemplate?: string;
-    fromDisplay?: string;
-    toObject?: string;
-    toField?: string;
-    toTemplate?: string;
-    toDisplay?: string;
-    link?: string;
-    linkFromField?: string;
-    linkToField?: string;
-    linkRowIdField?: string;
-    canChangeShowLabel?: boolean;
-    canChangeRender?: boolean;
-    canChangeType?: boolean;
-    canChangeColor?: boolean;
-    canChangeCurved?: boolean;
-    canChangeBridge?: boolean;
-    canChangeThickness?: boolean;
-} & DiagramLinkStyle & DiagramLinkLabel;
-type DiagramLinkLabel = {
-    label?: string;
-    showLabel?: boolean;
-};
-type DiagramLinkStyle = {
-    color?: string;
-    thickness?: number;
-    curved?: boolean;
-    bridge?: boolean;
-    dashed?: boolean;
-};
-type DiagramLinkDef = {
-    fromObject?: string;
-    fromId?: string;
-    toObject?: string;
-    toId?: string;
-    object?: string;
-    id?: string;
-    keys?: string | KeyString;
-    template?: string | DiagramLinkTemplate;
-    from?: DiagramNode;
-    to?: DiagramNode;
-    RENDER?: KeyObject;
-    LINK?: KeyObject;
-};
-/**
- * Link constructor
- * @param {Simplicite.Diagram.Desktop} desktop Desk manager
- * @param {Object} data Link data <code>\{ object, id, template, points... \}</code>
- * @param {$} [elt] Optional DOM object to synchronize
- * @class
- */
-declare class DiagramLink extends DiagramElement {
-    RENDER: KeyNumber;
-    LINK: KeyNumber;
-    object: string;
-    id: string;
-    keys: KeyString;
-    data?: KeyObject;
-    from: DiagramNodus;
-    fromType?: number;
-    fromObject: string;
-    fromId: string;
-    to: DiagramNodus;
-    toType?: number;
-    toObject: string;
-    toId: string;
-    label: string;
-    template: DiagramLinkTemplate;
-    innerLink: boolean;
-    points: Point[];
-    masterLine: Line;
-    road?: JSVG;
-    border?: JSVG;
-    border2?: JSVG;
-    offset: number;
-    offsetMax: number;
-    render?: number;
-    thickness?: number;
-    color?: string;
-    curved?: boolean;
-    bridge?: boolean;
-    dashed?: boolean;
-    showLabel?: boolean;
-    cls?: string;
-    pointer?: JSVG;
-    constructor(desktop: DiagramDesktop, data: DiagramLinkDef, elt?: JSVG);
-    /**
-     * Remove a link
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    remove(): void;
-    /**
-     * Compare links
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    equals(link: DiagramLink): boolean;
-    /**
-     * Override position to move points
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    positionPoints(dx: number, dy: number, nb: number | null, from: boolean): Point;
-    /**
-     * Change link rendering
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    rendering(render?: number, silent?: boolean): number | undefined;
-    /**
-     * Change extremity
-     * @param {boolean} from From direction ?
-     * @param {number} type Type of LINK, accept marker syntax
-     * @param {boolean} silent no redraw/has changed
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    extremity(from: boolean, type: number | string, silent?: boolean): number | undefined;
-    /**
-     * Style
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    style(props?: DiagramLinkStyle, silent?: boolean): {
-        color: string | undefined;
-        thickness: number | undefined;
-        curved: boolean | undefined;
-        bridge: boolean | undefined;
-        dashed: boolean | undefined;
-    };
-    /**
-     * Text
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    text(props?: DiagramLinkLabel, silent?: boolean): {
-        showLabel: boolean | undefined;
-        label: string;
-    };
-    /**
-     * Draw
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    draw(): void;
-    /**
-     * Redraw
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    redraw(): void;
-    /**
-     * Draw label
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    drawLabel(label: string): void;
-    /**
-     * Path
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    path(lines?: Line[], curved?: boolean, bridge?: boolean): string;
-    /**
-     * Draw bridge path
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    drawBridge(l: DiagramLink, line: Line, inters: DiagramLink[]): string;
-    /**
-     * Draw path
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    drawPath(lines: Line[] | undefined): void;
-    /**
-     * Toggle menu
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    toggleMenu(pos: Point): void;
-    /**
-     * Update path
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    updatePath(): void;
-    /**
-     * Leave
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    leave(): void;
-    /**
-     * Add point
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    addPoint(idx: number, p: Point): void;
-    /**
-     * Remove added point at index or position
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    removePoint(index: number | null, pos?: Point): void;
-    /**
-     * Move point
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    movePoint(pt: DeskElementPos, drop?: boolean): void;
-    /**
-     * Get starting point in node "from"
-     * @param {Point} p optional x,y in percent to change relative position into node
-     * @param {boolean} prct true to return percents or absolute position
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    pointFrom(p?: Point, prct?: boolean): Point;
-    /**
-     * Get ending point in node "to"
-     * @param {Point} p optional x,y in percent to change relative position into node
-     * @param {boolean} prct true to return percents or absolute position
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    pointTo(p?: Point, prct?: boolean): Point;
-    /**
-     * Broken lines
-     * @param {boolean} full true: get lines from internal nodes, false: outgoing points from nodes
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    getLines(full?: boolean): Line[] | undefined;
-    /** Build a line between 2 points */
-    toLine(a: Point, b: Point): Line;
-    /** Build a line between 2 points */
-    toLine2(x1: number, y1: number, x2: number, y2: number): Line;
-    /** Generate simple free line between 2 vectors */
-    getFreeLines(u1: Line, u2: Line): Line[];
-    /** Generate broken lines between 2 vectors */
-    getAutoLines(u1: Line, u2: Line): Line[];
-    /** Top to Bottom lines between 2 nodes */
-    getTopBottomLines(n1: DiagramNodus, n2: DiagramNodus): Line[];
-    /** Left to Right lines between 2 nodes */
-    getLeftRightLines(n1: DiagramNodus, n2: DiagramNodus): Line[];
-    /** Vertical to Horizontal lines between 2 nodes */
-    getVertHorizLines(n1: DiagramElement, n2: DiagramElement): Line[];
-    /** Horizontal to Vertical lines between 2 nodes */
-    getHorizVertLines(n1: DiagramElement, n2: DiagramElement): Line[];
-    /** Reflexive inner lines */
-    getInnerLines(n: DiagramElement): Line[];
-    /**
-     * Normal Vector from node
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    getOutgoingPoint(n1: DiagramElement, _n2: DiagramElement, direction: number): Line;
-    /**
-     * Interpolation nearest point to path
-     * @function
-     * @memberof Simplicite.Diagram.Link
-     */
-    closestPoint(pathNode: SVGPathElement, point: Point): {
-        x: number;
-        y: number;
-        d: number;
-    };
-    /** line (p1, p2) => ax + by + c = 0 */
-    getStraightLine(l: Line): StraightLine;
-    /** Intersection in segments ? */
-    getIntersection(line1: Line, line2: Line, d1: StraightLine, d2: StraightLine): Point | undefined;
-}
-
-type DiagramNodeStyle = {
-    radius?: number;
-    color?: string;
-    shadow?: boolean;
-    shape?: string;
-    titlePos?: string;
-};
-type DiagramNodeContentTemplate = {
-    name: string;
-    object: string;
-    display?: string;
-    relParentField?: string;
-    refField?: string;
-    refRequired?: boolean;
-    relation?: string;
-    relationRowIdField?: string;
-    relContentField?: string;
-};
-type DiagramNodeTemplate = {
-    name?: string;
-    object?: string;
-    relation?: string;
-    refField?: string;
-    display?: string;
-    icon?: string;
-    contents?: {
-        [key: string]: DiagramNodeContentTemplate;
-    };
-    showContent?: boolean;
-    collapseContent?: boolean;
-    showField?: number;
-    collapseField?: boolean;
-    resizable?: boolean;
-} & DiagramNodeStyle;
-type DiagramNodeContentItem = {
-    index: number;
-    text: string;
-    object: string;
-    field?: string;
-    id: string;
-    relId?: string;
-    pre?: JSVG[];
-    post?: JSVG[];
-    cls: string;
-};
-type DiagramNodeContent = {
-    object: string;
-    template: string;
-    relField?: string;
-    relation?: string;
-    relParentField?: string;
-    items: DiagramNodeContentItem[];
-};
-type DiagramNodeDef = {
-    template: string | DiagramNodeTemplate;
-    object: string;
-    id: string;
-    x: number;
-    y: number;
-    links?: DiagramLinkDef[];
-};
-type TitlePosition = "top" | "center" | "bottom";
-/**
- * Node constructor
- * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @param {Object} data Node data { object, id, template, contents... }
- * @param {$} [elt] optional DOM object to synchronize
- * @class
- */
-declare class DiagramNode extends DiagramNodus {
-    keys: KeyString;
-    label: string;
-    titlePos?: TitlePosition;
-    icon?: string;
-    data?: KeyObject;
-    olddata?: KeyObject;
-    links: DiagramLink[];
-    contents: DiagramNodeContent[];
-    container?: DiagramContainer;
-    border?: JSVG;
-    template: DiagramNodeTemplate;
-    padding: number;
-    radius?: number;
-    color?: string;
-    shadow?: boolean;
-    shape?: string;
-    collapseContent?: boolean;
-    collapseField?: boolean;
-    canAttach?: boolean;
-    layout?: DiagramTreeLayout;
-    visible?: boolean;
-    constructor(desktop: DiagramDesktop, data: Partial<DiagramNodeDef>, elt?: JQuery | JSVG);
-    /**
-     * Load node with data
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    load(data: DiagramNode, cbk?: (data?: DiagramNode | DiagramContainer) => void): void;
-    /**
-     * Draw
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    draw(): void;
-    /**
-     * Set/Get size of node
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    size(w?: number, h?: number): Size;
-    /**
-     * Redraw
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    redraw(): void;
-    /**
-     * Is content visible?
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    isContentVisible(i: number, _content: DiagramNodeContent): boolean | undefined;
-    /**
-     * Is item visible?
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    isItemVisible(_i: number, _j: number, _content: DiagramNodeContent, _item: DiagramNodeContentItem): boolean;
-    /**
-     * Draw item
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    drawItem(data: {
-        item: DiagramNodeContentItem;
-        content: DiagramNodeContent;
-        indexContent: number;
-        indexItem: number;
-        height: number;
-        group: JSVG;
-    }): any;
-    /**
-     * Bind
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    bind(r: JSVG, g?: JSVG, data?: KeyObject): void;
-    /**
-     * Toggle menu
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    toggleMenu(item: DiagramNodeContentItem, pos: Point): void;
-    /**
-     * Collapse fields
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    collapseFields(b?: boolean, silent?: boolean): boolean | undefined;
-    /**
-     * Collapse contents
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    collapseContents(b?: boolean, silent?: boolean): boolean | undefined;
-    /**
-     * Style
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    style(props?: DiagramNodeStyle, silent?: boolean): {
-        color: string | undefined;
-        radius: number | undefined;
-        shadow: boolean | undefined;
-        shape: string | undefined;
-        titlePos: TitlePosition | undefined;
-    };
-    /**
-     * Remove
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    remove(): void;
-    /**
-     * Set/get position of element
-     * @param {number} x Horizontal coordinate
-     * @param {number} y Vertical coordinate
-     * @param {boolean} rel Relative?
-     * @param {boolean} attach Attach to parent container?
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    position(x?: number, y?: number, rel?: boolean | 0, attach?: boolean): Point;
-    /**
-     * Attach node to a container
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    attach(silent?: boolean, resize?: boolean): void;
-    /**
-     * Detach from container
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    detach(silent?: boolean): void;
-    /**
-     * Set label
-     * @param {string} label Label
-     * @function
-     * @memberof Simplicite.Diagram.Node
-     */
-    setLabel(label: string): void;
-}
-
-type ShapeParam = {
-    name: string;
-    w?: number;
-    h?: number;
-    wmin?: number;
-    hmin?: number;
-    position?: TitlePosition;
-    ar?: boolean;
-    title?: string;
-};
-type Shape = {
-    w: number;
-    h: number;
-    ar?: boolean;
-    elt: () => JSVG;
-    size: (e: JSVG, w: number, h: number) => Size;
-    intersect?: () => Point | undefined;
-};
-type ShapeGroup = {
-    name: string;
-    list: string[];
-};
-type ShapeDefs = {
-    [shape: string]: Shape;
-};
-/**
- * Node shape
- * @class
- */
-declare class DiagramShape {
-    name: string;
-    elt: JSVG;
-    title?: string;
-    position?: TitlePosition;
-    text?: JSVG;
-    wmin: number;
-    hmin: number;
-    ar: boolean;
-    static defs: ShapeDefs;
-    MIN_SIZE: number;
-    /**
-     * New shape { name, w, h, wmin, hmin, title, position, ar }
-     * @constructor
-     */
-    constructor(p: ShapeParam);
-    /** Group of shapes */
-    static getGroups(): ShapeGroup[];
-    /**
-     * Get shape
-     * @function
-     * @memberof Simplicite.Diagram.Shape
-     */
-    getShape(): JSVG;
-    /**
-     * Get title
-     * @function
-     * @memberof Simplicite.Diagram.Shape
-     */
-    getTitle(): JSVG | undefined;
-    /**
-     * Resize shape to fit centered text
-     * @function
-     * @memberof Simplicite.Diagram.Shape
-     */
-    fitText(): void;
-    /**
-     * Set/Get size of element
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Shape
-     */
-    size(w: number, h: number): {
-        w: number;
-        h: number;
-    };
-    /**
-     * To line
-     * @function
-     * @memberof Simplicite.Diagram.Shape
-     */
-    private toLine;
-    private btwn;
-    private line_line_intersect;
-    private line_circle_intersect;
-    private line_ellipse_intersect;
-    private line_path_intersect;
-    private line_rect_intersect;
-    intersect(n: Point, line: Line): Point | undefined;
-    /** Predefined Shapes definition */
-    private initShapes;
-}
-
-/** Line between 2 points */
-type Line = {
-    p1: Point;
-    p2: Point;
-};
-/** Line ax + by + c = 0 */
-type StraightLine = {
-    a: number;
-    b: number;
-    c: number;
-};
-type Bound = Rect & {
-    x2: number;
-    y2: number;
-    xc: number;
-    yc: number;
-};
-type Direction = "nw" | "sw" | "se" | "ne" | "n" | "s" | "w" | "e";
-/**
- * Default element of diagram
- * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @class
- */
-declare class DiagramElement {
-    desktop: DiagramDesktop;
-    elt: JQuery<SVGGraphicsElement>;
-    elt2?: JQuery<SVGGraphicsElement>;
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-    resizable: boolean;
-    wmin: number;
-    hmin: number;
-    s?: DiagramShape;
-    constructor(desktop: DiagramDesktop);
-    /**
-     * Mark changed
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    changed(): void;
-    /**
-     * Draw element
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    draw(): void;
-    /**
-     * Redraw element
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    redraw(): void;
-    /**
-     * Set/get position of element
-     * @param {number} x Horizontal coordinate
-     * @param {number} y Vertical coordinate
-     * @param {boolean} rel Relative?
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    position(x?: number, y?: number, rel?: boolean | 0): Point;
-    /**
-     * Set/Get size of element
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    size(w?: number, h?: number): Size;
-    /**
-     * Get bounds
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    bound(): Bound;
-    /**
-     * Remove element
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    remove(): void;
-    /**
-     * Select
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    select(sel?: boolean): boolean;
-    /**
-     * Menu
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    menu(sections: DesktopMenuItem[][], pos?: Point | null, cbk?: (menu: JQuery) => void): void;
-    /**
-     * Color picker
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    colorPicker(inp: JQuery, menu: JQuery, cbk?: (color: string) => void): void;
-    /**
-     * Is inside?
-     * @param {number} x Horizontal coordinate
-     * @param {number} y Vertical coordinate
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    isInside(x: number, y: number): boolean;
-    /**
-     * Bind resize
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    bindResize(): void;
-    /**
-     * Resize in direction
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    resize(rn: DeskElementPos, drop?: boolean): void;
-    /**
-     * Text size
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    textSize(text: string, cls?: string): {
-        w: number;
-        h: number;
-    };
-    /**
-     * Wrap text
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    wrapText(text: string, width: number, padding: number, el?: JSVG): JSVG;
-    /**
-     * Get wrapped back as string
-     * @function
-     * @memberof Simplicite.Diagram.Element
-     */
-    unwrapText(el: JQuery): string;
-}
-
-type DiagramContainerTitleAnchor = "start" | "middle" | "end";
-type DiagramContainerStyle = {
-    radius?: number;
-    color?: string;
-    shadow?: boolean;
-    vertical?: boolean;
-    anchor?: DiagramContainerTitleAnchor;
-};
-type DiagramContainerTemplate = {
-    name?: string;
-    object?: string;
-    display?: string;
-    icon?: string;
-    contents?: DiagramNodeTemplate[];
-} & DiagramContainerStyle;
-type DiagramContainerDef = {
-    template?: string;
-    object?: string;
-    id?: string;
-    keys?: string;
-    x?: number;
-    y?: number;
-    w?: number;
-    h?: number;
-    type?: number;
-    title?: string;
-    label?: string;
-    pool?: number;
-    vertical?: boolean;
-    shadow?: boolean;
-    color?: string;
-    radius?: number;
-};
-/**
- * Container constructor
- * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @param {Object} data Container data { title, type, template, x, y, w, h... }
- * @param {$} [elt] optional DOM object to synchronize
- * @class
- */
-declare class DiagramContainer extends DiagramElement {
-    container?: DiagramContainer;
-    containers: DiagramContainer[];
-    nodes: DiagramNode[];
-    object: string;
-    id: string;
-    keys: KeyString;
-    TYPE: KeyNumber;
-    data?: KeyObject;
-    olddata?: KeyObject;
-    contents?: KeyObject[];
-    template: DiagramContainerTemplate;
-    type: number;
-    icon?: string;
-    label: string;
-    title: string;
-    radius: number;
-    shadow?: boolean;
-    color?: string;
-    vertical?: boolean;
-    anchor?: string;
-    border?: JSVG;
-    head?: JSVG;
-    t?: JSVG;
-    sep?: JSVG;
-    pool: number;
-    poolMin: number;
-    padding: number;
-    margin: number;
-    canUseShadow: boolean;
-    canUseVertical: boolean;
-    constructor(desktop: DiagramDesktop, data: DiagramContainerDef | DiagramContainer, elt?: JQuery | JSVG);
-    /**
-     * Load
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    load(data: DiagramContainer | null, cbk?: Callback): void;
-    /**
-     * Draw
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    draw(): void;
-    /**
-     * Set/Get size of container
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    size(w?: number, h?: number): Size;
-    /**
-     * Size border
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    sizeBorder(w: number, h: number): void;
-    /**
-     * Change the pool position if > 0
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    setPool(pos: number, silent?: boolean): void;
-    /**
-     * Re-align all pools
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    resizePool(): void;
-    /**
-     * Bind
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    bind(el: JSVG): void;
-    /**
-     * Toggle menu
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    toggleMenu(): void;
-    /**
-     * Style
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    style(props?: DiagramContainerStyle, silent?: boolean): {
-        color: string | undefined;
-        radius: number;
-        shadow: boolean | undefined;
-        vertical: boolean | undefined;
-    };
-    /**
-     * Remove
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    remove(cascad?: boolean): void;
-    /**
-     * Bounded rectangle of all contents
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    contentBound(): {
-        x: number;
-        y: number;
-        w: number;
-        h: number;
-    } | null;
-    /**
-     * Set/get position of container
-     * @param {number} x Horizontal coordinate
-     * @param {number} y Vertical coordinate
-     * @param {boolean} rel Relative?
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    position(x?: number, y?: number, rel?: boolean, cascad?: boolean): Point;
-    /**
-     * Is container inside this container?
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    contains(cont: DiagramContainer): boolean;
-    /**
-     * Attach
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    attach(x?: DiagramNode | DiagramContainer | null, silent?: boolean, noResize?: boolean): void;
-    /**
-     * Detach
-     * @function
-     * @memberof Simplicite.Diagram.Container
-     */
-    detach(x?: DiagramNode | DiagramContainer, silent?: boolean): void;
-}
-
-type DiagramNoteData = {
-    id?: string;
-    x?: number;
-    y?: number;
-    w?: number;
-    h?: number;
-    text?: string;
-};
-type DiagramNoteStyle = {
-    color?: string;
-};
-/**
- * Note constructor
- * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @param {Object} data optional { text, x, y, w, h, id }
- * @param {$} [elt] optional DOM object to synchronize
- * @class
- */
-declare class DiagramNote extends DiagramNodus {
-    id: string;
-    color: string;
-    text: string;
-    padding: number;
-    border?: JSVG;
-    t?: JSVG;
-    constructor(desktop: DiagramDesktop, data: DiagramNoteData, elt?: JQuery | JSVG);
-    /**
-     * Draw
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    draw(): void;
-    /**
-     * Set/Get size of note
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    size(w?: number, h?: number): Size;
-    /**
-     * Redraw
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    redraw(): void;
-    /**
-     * Bind
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    bind(r: JSVG, _g?: unknown, _data?: unknown): void;
-    /**
-     * Toggle menu
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    toggleMenu(): void;
-    /**
-     * Edit note
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    edit(): void;
-    /**
-     * Style
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    style(props?: DiagramNoteStyle, silent?: boolean): {
-        color: string;
-    };
-    /**
-     * Remove
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    remove(): void;
-    /**
-     * Set/get position of element
-     * @param {number} x Horizontal coordinate
-     * @param {number} y Vertical coordinate
-     * @param {boolean} rel Relative?
-     * @function
-     * @memberof Simplicite.Diagram.Note
-     */
-    position(x?: number, y?: number, rel?: boolean): Point;
-}
-
-type DesktopMenuItem = {
-    text: string | JQuery;
-    icon?: string;
-    cbk?: JQueryHandler;
-};
-type DeskElementPos = {
-    origin: Point;
-    pos: Point;
-    pointer?: JSVG;
-    caption?: boolean;
-    container?: boolean;
-    elt?: DiagramElement;
-    dir?: Direction;
-    bound?: Bound;
-    moved?: boolean;
-    link?: DiagramLink;
-    from?: DiagramNode | DiagramNote;
-    to?: JQuery;
-    index?: number;
-    points?: Point[];
-    pointFrom?: Point;
-    pointTo?: Point;
-    line?: JSVG;
-    valid?: boolean;
-};
-type DiagramDesktopParam = {
-    svg?: string;
-    x?: number;
-    y?: number;
-    zoom?: number;
-    grid?: number;
-    color?: string;
-};
-/**
- * Desktop with SVG
- * @param {Object} p options
- * @param {number} p.x Origin position x
- * @param {number} p.y Origin position y
- * @param {number} p.zoom Zoom factor
- * @param {string} p.color Background color
- * @param {number} p.grid Grid size or 0 to hide
- * @class
- */
-declare class DiagramDesktop {
-    ctn: Container;
-    data: Required<DiagramDesktopParam>;
-    margin: number;
-    model: DiagramModeler;
-    options: KeyObject;
-    undoRedo: KeyObject;
-    pointerMode: number;
-    _poolLock?: boolean;
-    _move_links?: DiagramLink[];
-    changed: boolean;
-    isPopup: boolean;
-    desktop?: JQuery;
-    desk?: JQuery;
-    svg?: JQuery<SVGSVGElement>;
-    viewport?: JSVG;
-    background?: JSVG;
-    body?: JSVG;
-    containers?: JSVG;
-    links?: JSVG;
-    nodes?: JSVG;
-    foreground?: JSVG;
-    palZoom?: JQuery;
-    palLayout?: JQuery;
-    palModel?: JQuery;
-    palDesk?: JQuery;
-    palAdd?: JQuery;
-    constructor(ctn: Container, model: DiagramModeler, p: DiagramDesktopParam);
-    /**
-     * Init the desktop with contents, palettes...
-     * @param {boolean} sync true to synchronize nodes with DB
-     * @param {function} cbk optional callback
-     * @function
-     */
-    init(sync: boolean, cbk?: Callback): void;
-    /**
-     * Content has changed ?
-     * @param {boolean} b optional flag
-     * @function
-     */
-    hasChanged(b?: boolean): boolean;
-    /**
-     * Get the SVG content as text
-     * @param {Object} options
-     * @param {boolean} options.clear true to clear dimension, unused image...
-     * @param {number}  options.zoom optional scale 1=100%
-     * @param {number}  options.grid 0=none
-     * @param {boolean} options.xlink false to remove all use[xlink] of SVG 1.2
-     * @param {function} cbk callback(svg content)
-     * @function
-     */
-    getContent(options?: {
-        clear?: boolean;
-        zoom?: number;
-        grid?: number;
-        xlink?: boolean;
-    }, cbk?: (svg: string) => void): void;
-    /**
-     * Convert to image
-     * @param {string} format optional format (png...), default return SVG image
-     * @param {number} zoom optional scale
-     * @param {function} cbk callback to return the formatted image
-     * @function
-     */
-    getImage(format: string | null, zoom: number, cbk: (img: JQuery<HTMLImageElement> | null) => void): void;
-    /**
-     * Load image and convert to data URL
-     * @param {string} src image source URL
-     * @param {string} format base64 format (default png)
-     * @param {number} w width:  null=preserve original size | 0=maintain aspect ratio | specified size
-     * @param {number} h height: null=preserve original size | 0=maintain aspect ratio | specified size
-     * @param {function} cbk callback(dataURL, width, height)
-     * @function
-     */
-    img2base64(src: string, format: string, w: number | null, h: number | null, cbk?: (dataURL: string, width: number, height: number) => void): void;
-    getContainers(): JQuery;
-    getSelectedContainers(): JQuery;
-    /**
-     * Search a container in diagram if exists
-     * @param {Object} item filter { object, id }
-     * @function
-     */
-    getContainer(item: {
-        object?: string;
-        id?: string;
-    }): JQuery;
-    getContainerAt(pos: Point): DiagramContainer | undefined;
-    /**
-     * Search a node in diagram if exists
-     * @param {Object} item filter { object, id }
-     * @function
-     */
-    getNode(item: {
-        object?: string;
-        id?: string;
-    }): JQuery;
-    /**
-     * Search a note in diagram if exists
-     * @param {string} id note id
-     * @function
-     */
-    getNote(id: string): JQuery;
-    /**
-     * Search a content item in diagram if exists
-     * @param {Object} item content { object, id }
-     * @function
-     */
-    getNodeContent(item: {
-        object: string;
-        id: string;
-    }): JQuery;
-    /**
-     * Search a node with content in diagram if exists
-     * @param {Object} item content { object, id }
-     * @function
-     */
-    getNodeWithContent(item: {
-        object: string;
-        id: string;
-    }): JQuery;
-    /**
-     * Get all nodes in diagram
-     * @param {string} selector optional selector
-     * @function
-     */
-    getNodes(selector?: string): JQuery;
-    /**
-     * Get selected nodes in diagram
-     * @param {boolean} notes include notes ?
-     * @function
-     */
-    getSelectedNodes(notes?: boolean): JQuery<HTMLElement> | undefined;
-    /**
-     * Add a node in diagram
-     * @param {Object} data node data
-     * @function
-     */
-    addNode(data: DiagramNodeDef, cbk?: (node: DiagramNode) => void): void;
-    /**
-     * Apply a function on (selected) nodes
-     * @function
-     */
-    applyToNodes(node?: JQuery | DiagramNode | null, fn?: (node: DiagramNode) => void): void;
-    /**
-     * Remove node from diagram
-     * @param {Object} node Simplicite.Diagram.Node
-     * @function
-     */
-    removeNode(node?: JQuery | DiagramNode): void;
-    /**
-     * Remove nodes from diagram
-     * @param {jQuery} list nodes
-     * @function
-     */
-    removeNodes(list?: JSVG | JQuery): void;
-    /**
-     * Remove container from diagram
-     * @param {Object} ct Simplicite.Diagram.Container
-     * @param {boolean} cascad true to remove contents from diagram
-     * @function
-     */
-    removeContainer(ct: DiagramContainer | JQuery, cascad?: boolean): void;
-    /**
-     * Get all links on desktop
-     * @function
-     */
-    getLinks(): JSVG;
-    /**
-     * Search a link on desktop
-     * @param {Object} data filters { fromObject, fromId, toObject, toId, object, id, keys }
-     * @function
-     */
-    getLink(data?: DiagramLinkDef | DiagramLink): JSVG;
-    /**
-     * Add a link on desktop
-     * @param {Object} data { fromObject, fromId, toObject, toId, object, id }
-     * @function
-     */
-    addLink(data: DiagramLinkDef | DiagramLink): JSVG | undefined;
-    /**
-     * Remove a link on desktop
-     * @function
-     */
-    removeLink(link: DiagramLink | JSVG): void;
-    unselectAll(): void;
-    selectAllNodes(b?: boolean): void;
-    /**
-     * Select a node or a note
-     * @param {$} el element
-     * @param {boolean} sel true to select
-     * @param {boolean} add add to selection or reset
-     * @function
-     */
-    selectNode(el?: JQuery | JSVG, sel?: boolean, add?: boolean): void;
-    selectItem(el?: JSVG): void;
-    /**
-     * Select a container
-     * @param {$} el element
-     * @param {boolean} sel true to select
-     * @param {boolean} add add to selection or reset
-     * @function
-     */
-    selectContainer(el?: JSVG, sel?: boolean, add?: boolean): void;
-    /**
-     * Brings element to front/back of its layer
-     * @param {Object} x Node/Container
-     * @param {boolean} front true to bring to front, false to back
-     * @function
-     */
-    bringToLayer(x: DiagramNode | DiagramContainer, front: boolean): void;
-    /** Mouse position in desktop (or absolute position) */
-    mouseDeskPos(e: JQuery.Event, abs?: boolean): Point;
-    /** Mouse position in SVG scale */
-    mousePos(e: JQuery.Event): Point;
-    /** Convert desk point to SVG scale */
-    point2svg(pos: Point): Point;
-    /** Convert desk rect to SVG scale */
-    rect2svg(rect: Rect): Rect;
-    /** Convert SVG point to desk */
-    svg2point(pos: Point): Point;
-    /** Convert SVG point to desk */
-    svg2rect(rect: Rect): Rect;
-    private mouseWheel;
-    dragPos?: MousePos;
-    dragMovePos?: Point;
-    lasso?: JSVG;
-    movePointPos?: DeskElementPos;
-    moveElementPos?: DeskElementPos;
-    resizeElementPos?: DeskElementPos;
-    addLinkPos?: DeskElementPos;
-    private mouseDown;
-    private mouseMove;
-    private mouseUp;
-    private dblClick;
-    private drawLasso;
-    moveElements(el: DiagramElement | JQuery, x: number, y: number, rel?: boolean): void;
-    moveSelectedContainers(x: number, y: number, rel?: boolean): void;
-    moveSelectedNodes(x: number, y: number, rel?: boolean): void;
-    moveNodes(nodes: DiagramNode | JQuery, x: number, y: number, rel?: boolean): void;
-    /**
-     * Node/Container magnetism when grid is active
-     * @function
-     */
-    magnetism(node?: JQuery): void;
-    private keydown;
-    /**
-     * Change desktop zoom
-     * @param {number} zoom zoom factor
-     * @param {number} tx optional translated x origin
-     * @param {number} ty optional translated y origin
-     * @function
-     */
-    setZoom(zoom?: number | null, tx?: number, ty?: number): void;
-    /**
-     * Zoom at position (default center of desk)
-     * @function
-     */
-    zoom(z: number, pos?: Point): void;
-    /**
-     * Zoom IN
-     * @param factor factor in percent (default +5%)
-     * @function
-     */
-    zoomIn(factor?: number): void;
-    /**
-     * Zoom OUT
-     * @param factor factor in percent (default 5%)
-     * @function
-     */
-    zoomOut(factor?: number): void;
-    /**
-     * Reset zoom to scale 1
-     * @function
-     */
-    zoomReset(): void;
-    /**
-     * Adjust scale to see all content in x>0 and y>0
-     * @param {boolean} origin true to zoom and return to origin
-     * @function
-     */
-    zoomFit(origin?: boolean): void;
-    /**
-     * Search elements in model
-     * @function
-     */
-    search(): void;
-    /**
-     * scroll element to view center
-     * @param el element to show
-     * @param slide true to add a transition effect
-     * @function
-     */
-    scrollIntoView(el: HTMLElement, slide?: boolean): void;
-    /**
-     * Full size with body elements
-     * @function
-     */
-    getBound(): {
-        x: number;
-        y: number;
-        w: number;
-        h: number;
-    };
-    private buildDef;
-    /**
-     * Add definition to SVG
-     * @function
-     */
-    addDef(def: JSVG, replace?: boolean): void;
-    /**
-     * Add base64 icon to defs: inlined image for standalone usage (export to image, svg+xml...)
-     * @function
-     */
-    addDefIcon(icon: string, w: number, h: number, cbk?: (img: JSVG) => void): void;
-    /**
-     * Remove icon definition
-     * @function
-     */
-    removeDefIcon(icon: string, w: number, h: number): void;
-    /**
-     * Get defined icon
-     * @function
-     */
-    getDefIcon(icon: string, w: number, h: number): JSVG;
-    /**
-     * Add base64 image to defs: inlined image for standalone usage (export to image, svg+xml...)
-     * @function
-     */
-    addDefImage(name: string, url: string, w: number, h: number, cls: string, cbk?: (img: JSVG) => void): void;
-    /**
-     * Convert font icon to PNG definition
-     * @function
-     */
-    addDefImageFont(name: string, icon: string, w: number, h: number, cls: string, cbk?: (img: JSVG) => void): void;
-    /**
-     * Remove image definition
-     * @function
-     */
-    removeDefImage(name: string, w: number, h: number): void;
-    /**
-     * Get defined image
-     * @function
-     */
-    getDefImage(name: string, w: number, h: number): JSVG;
-    /**
-     * Display the grid
-     * @param {number} size Grid size (0 or false = hide)
-     * @function
-     */
-    showGrid(size?: number | false): void;
-    /**
-     * Change background color
-     * @function
-     */
-    setBackgroundColor(c: string): void;
-    private chooseBckColor;
-    private btn;
-    searchButton?: JQuery;
-    private palettes;
-    editContainer(cont: DiagramContainer | null, pos?: Point): void;
-    updateContainer(cont: DiagramContainer | null, data: DiagramContainerDef): DiagramContainer | null;
-    addContainer(data: DiagramContainer, cbk?: (cont: DiagramContainer) => void): void;
-    /**
-     * Add a note in diagram
-     * @param {Object} data note data { x,y,w,h,text }
-     * @function
-     */
-    addNote(data: DiagramNoteData): void;
-    getCaption(): JQuery<HTMLElement>;
-    addCaption(item: DiagramCaption): void;
-    removeCaption(): void;
-    toggleCaption(x?: number, y?: number): void;
-    moveCaption(x: number, y: number, rel?: boolean): void;
-    syncCaption(): void;
-    getLinkIconName(type: number, useCrowsFeet?: boolean): string;
-    /**
-     * Popup to ask user to select a link template between nodes
-     * @function
-     */
-    linkTemplatePicker(list: DiagramLinkTemplate[], from: DiagramNode, to: DiagramNode, pos: Point, cbk: (selected: DiagramLinkTemplate, inverse?: boolean) => void): void;
-    /**
-     * Shape selection
-     * @function
-     */
-    shapePicker(node: DiagramNode, cbk: (title: string | undefined, position?: TitlePosition) => void): void;
-    /**
-     * Ensure absolute div to be visible on desk
-     * @function
-     */
-    ensureVisible(d: JQuery): void;
-    closeMenu(): void;
-    moveMenu(): void;
-    private deskmenu;
-    private palObj;
-    private addContainerPos;
-    private addNotePos;
-    palTree(node: DiagramNode): void;
-    private palSprings;
-}
-
-/**
- * Caption constructor
- * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @param {Object} data Model data and { x, y }
- * @class
- */
-declare class DiagramCaption extends DiagramElement {
-    padding: number;
-    border?: JSVG;
-    t?: JSVG;
-    data: KeyObject;
-    constructor(desktop: DiagramDesktop, data: KeyObject);
-    /**
-     * Draw caption within hook onDrawCaption(caption, display)
-     * @function
-     * @memberOf Simplicite.Diagram.Caption
-     */
-    draw(): void;
-    /**
-     * Display the default caption with model data
-     * @function
-     * @memberOf Simplicite.Diagram.Caption
-     */
-    display(): void;
-    /**
-     * Set/Get size of caption
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberOf Simplicite.Diagram.Caption
-     */
-    size(w?: number, h?: number): Size;
-    /**
-     * Bind caption
-     * @function
-     * @memberOf Simplicite.Diagram.Caption
-     */
-    bind(el: JSVG): void;
-}
-
-/**
- * Print preview / split large images
- * @class
- */
-declare class DiagramPrint {
-    desktop: DiagramDesktop;
-    image?: JQuery<HTMLImageElement>;
-    previewPart?: JQuery;
-    previewCanvas?: JQuery<HTMLCanvasElement>;
-    canvas?: HTMLCanvasElement;
-    popup?: JQuery;
-    selFormat?: JQuery;
-    selOrient?: JQuery;
-    inpZoom?: JQuery;
-    inpSlider?: JQuery;
-    zoom: number;
-    format: string;
-    landscape: boolean;
-    wPage?: number;
-    hPage?: number;
-    cols: number;
-    rows: number;
-    FORMAT: KeyObject;
-    MARGIN: number;
-    DPI: number;
-    WIDTH: number;
-    HEIGHT: number;
-    constructor(desktop: DiagramDesktop);
-    /**
-     * Open print dialog
-     * @funtion
-     */
-    open(): void;
-    private bar;
-    private readInput;
-    private setZoom;
-    private onePage;
-    private fitPage;
-    private doPreview;
-    private toPixels;
-    private pageSize;
-    private preview;
-    private doPrint;
-}
-
 type UndoRedoAction = "nm" | // move element(s)
 "re" | // resize
 "na" | // add node
@@ -11769,8 +13519,12 @@ declare class UIGit {
     private exploded?;
     constructor(params?: KeyObject);
     render(div: string): void;
-    diff(commit: string, type: string): void;
+    diff(commit: string, type: string): Promise<void>;
+    display(ctn: Container, commit: string, type: string): Promise<void>;
+    private loadDiff;
+    private static renderDiff;
     private call;
+    private service;
     private diffCommit;
     private diffPrevious;
     private diffCurrent;
@@ -13356,1753 +15110,6 @@ declare class UIUtil extends Legacy {
     loadOptions(): KeyObject;
 }
 
-type DiagramModelerTemplate = {
-    id?: string;
-    name?: string;
-    nodes?: {
-        [name: string]: DiagramNodeTemplate;
-    };
-    containers?: {
-        [name: string]: DiagramContainerTemplate;
-    };
-    links?: {
-        [name: string]: DiagramLinkTemplate;
-    };
-    canUseGrid?: boolean;
-    canUseTitle?: boolean;
-    canReverseLink?: boolean;
-    canUseContainer?: boolean;
-    canUseFreeContainer?: boolean;
-    canUseNote?: boolean;
-    canUseSprings?: boolean;
-    canAttachContainer?: boolean;
-    canUseTree?: boolean;
-    canUseShape?: boolean;
-    script?: string;
-    canInsertNode?: (template: DiagramNodeTemplate) => boolean;
-    canCreateNode?: (template: DiagramNodeTemplate) => boolean;
-    canRemoveNode?: (template: DiagramNodeTemplate) => boolean;
-    canDeleteNode?: (template: DiagramNodeTemplate) => boolean;
-    canFetchNode?: (template: DiagramNodeTemplate) => boolean;
-    canInsertContent?: (template: DiagramNodeContentTemplate) => boolean;
-    canCreateContent?: (template: DiagramNodeContentTemplate) => boolean;
-    canRemoveContainer?: (template: DiagramContainerTemplate) => boolean;
-    canDeleteLink?: (template: DiagramLinkTemplate) => boolean;
-    canAddLink?: (template: DiagramLinkTemplate) => boolean;
-    customDesktopMenu?: () => DesktopMenuItem[];
-    customNodeMenu?: (node: DiagramNode, item: DiagramNodeContentItem, pos: Point) => DesktopMenuItem[];
-    customLinkMenuAdd?: (from: DiagramNode, to: DiagramNode, palette: JQuery) => void;
-};
-/**
- *
- * Model controller between Model servlet and desktop/palette/events
- * @class
- */
-declare class DiagramModeler {
-    modelId: string;
-    template: DiagramModelerTemplate;
-    root: string;
-    baseURL: string;
-    hidden?: boolean;
-    topui: UIEngine;
-    engine: DiagramEngine;
-    container?: Container;
-    desktop?: DiagramDesktop;
-    springs?: DiagramSprings;
-    printer?: DiagramPrint;
-    saving: boolean;
-    constructor(modelId: string, engine: DiagramEngine);
-    private getObject;
-    /**
-     * Open a model
-     * @param {Object} ctn container
-     * @param {function} cbk optional callback(diagram)
-     * @param {Object} p options
-     * @param {boolean} p.sync synchronize all nodes with DB?
-     * @function
-     */
-    open(ctn: Container, cbk?: (diagram: DiagramModeler) => void, p?: ModelParam): void;
-    listener(): void;
-    onMessage(_: KeyObject): void;
-    /**
-     * Generic hook call if exists in template
-     * @param {string} hook hook name defined as a function in template
-     * @param {function} cbk optional callback (to be called at the end of hook)
-     * @param {Array} params optional parameters
-     * @function
-     */
-    hook(hook: string, cbk?: any, params?: any): any;
-    /**
-     * Save the model
-     * @param {function} cbk optional callback
-     * @param {boolean} silent no alert?
-     * @function
-     */
-    save(cbk?: (err?: string) => void, silent?: boolean): void;
-    /**
-     * Detach diagram from Parent/Popup window
-     * @param {boolean} dock true to dock on parent window
-     * @function
-     */
-    detach(dock: boolean): void;
-    /**
-     * Close the diagram
-     * @param {boolean} confirm confirm save when has changed, auto-save if false
-     * @function
-     */
-    close(confirm: boolean): void;
-    bindSaveAndQuit(ctn: JQuery): void;
-    /**
-     * Can close the modeler
-     * @param {boolean} confirm confirm save when has changed, auto-save if false
-     * @param {function} cbk callback if closeable
-     * @function
-     */
-    canClose(confirm?: boolean, cbk?: Callback): void;
-    /**
-     * Content has changed ?
-     * @param {boolean} b optional flag to set the value
-     * @function
-     */
-    hasChanged(b?: boolean): boolean;
-    /**
-     * Image dialog with SVG source
-     * @function
-     */
-    imageSVG(): void;
-    /**
-     * Print preview
-     * @function
-     */
-    print(): void;
-    /**
-     * Ajax call to retrieve node data
-     * @param {Object} n { object, id, template, keys }
-     * @param {function} cbk
-     * @function
-     */
-    getNodeData(n: {
-        object: string;
-        id: string;
-        template: string | KeyObject;
-        keys?: string | object;
-    }, cbk: (node?: DiagramNode | DiagramContainer) => void): void;
-    /**
-     * Insert nodes
-     * @param {Object} list Array of { object, id, template, x, y }
-     * @param {function} cbk Optional callback(nodes)
-     * @function
-     */
-    insertNodes(list: KeyObject, cbk?: (nodes: DiagramNode[]) => void): void;
-    /**
-     * Insert one node or a container
-     * @param {Object} item { object, id, template, x, y, keys, container? }
-     * @param {function} cbk Optional callback(node)
-     * @function
-     */
-    insertNode(item: {
-        object: string;
-        id: string;
-        template: string | DiagramNodeTemplate;
-        x: number;
-        y: number;
-        keys?: string | object;
-        container?: boolean;
-    }, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
-    /**
-     * Reload element from DB
-     * @param {Simplicite.Diagram.Element} node node (or jquery node)
-     * @param {function} cbk optional callback
-     * @param {boolean} partial only get data without loading UI node
-     * @function
-     */
-    reloadNode(node: DiagramElement | JQuery, cbk?: (data?: DiagramNode | DiagramContainer) => void, partial?: boolean): void;
-    /**
-     * Reload a container from DB
-     * @param {Simplicite.Diagram.Container} ct container (or jquery node)
-     * @param {function} cbk optional callback
-     * @function
-     */
-    reloadContainer(ct: DiagramContainer | JQuery, cbk?: Callback): void;
-    /**
-     * Reload all elements from DB
-     * @param {function} cbk optional callback
-     * @function
-     */
-    reload(cbk?: Callback): void;
-    /**
-     * Select objects and insert them on desktop
-     * @param {string} tpl node/container template
-     * @param {Point} pos position {x,y}
-     * @param {boolean} cont container ? or node
-     * @function
-     */
-    selectObjects(tpl: DiagramNodeTemplate | DiagramContainerTemplate, pos?: Point, cont?: boolean): void;
-    /**
-     * Launch a node/container creation in UI
-     * @param {string} tpl node template
-     * @param {Poisition} pos position {x,y}
-     * @param {boolean} cont container ? or node
-     * @function
-     */
-    createNode(tpl: DiagramNodeTemplate, pos: Point, cont?: boolean): void;
-    /**
-     * Delete node from DB + UI
-     * @function
-     */
-    deleteNode(node: DiagramNode, silent?: boolean): void;
-    /**
-     * Delete link from DB + UI
-     * @function
-     */
-    deleteLink(link: DiagramLink, silent?: boolean): void;
-    /**
-     * Update fields thru Ajax
-     * @function
-     */
-    upd(obj: string, id: string, fields: {
-        field: string;
-        value: any;
-    }[], cbk?: Callback): void;
-    /**
-     * Delete object thru Ajax
-     * @function
-     */
-    del(obj: string, id: string, cbk?: Callback): void;
-    /**
-     * Call action on object form
-     * @function
-     */
-    forceUIAction(obj: string, id: string, action: string): void;
-    /**
-     * Select content to add in node
-     */
-    selectNodeContent(node: DiagramNode, c: DiagramNodeContentTemplate): void;
-    insertNodeContents(node: DiagramNode, items?: KeyObject[]): void;
-    insertNodeContent(node: DiagramNode, item: KeyObject, cbk?: Callback): void;
-    createContentLink(n: DiagramNode, t: DiagramNodeContentTemplate, id: string, cbk?: Callback): void;
-    addNodeContent(n: DiagramNode, c: DiagramNodeContentTemplate): void;
-    /**
-     * Fetch related nodes
-     * @param {Array} nodes arrays of nodes or data
-     * @param {function} cbk Optional callback(nodes)
-     * @function
-     */
-    fetchRelatedNodes(nodes?: DiagramNode[] | JQuery, cbk?: (inserted?: DiagramNode[]) => void): void;
-    /**
-     * Create a link between 2 nodes (or note to node)
-     * @function
-     */
-    createLink(from: DiagramNodus, to: DiagramNode, t?: DiagramLinkTemplate): JSVG | undefined;
-    /**
-     * Create a N,N link between 2 internal objects
-     * @function
-     */
-    createLinkMany2Many(from: DiagramNode, to: DiagramNode, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
-    /**
-     * Bind events to element
-     */
-    bind(el: any, b: {
-        mouseWheel?: JQueryHandler;
-        mouseDown?: JQueryHandler;
-        mouseMove?: JQueryHandler;
-        mouseUp?: JQueryHandler;
-        mouseOut?: JQueryHandler;
-        mouseOver?: JQueryHandler;
-        mouseLeave?: JQueryHandler;
-        contextMenu?: JQueryHandler;
-        click?: JQueryHandler;
-        dblClick?: JQueryHandler;
-    }): void;
-    /**
-     * Open target or related model form
-     * @param {Object} target optional <code>{ object, id }</code>
-     * @function
-     */
-    openForm(target?: {
-        object: string;
-        id: string;
-    } | JSVG): void;
-    /**
-     * Open workflow on top window
-     * @param {string} name workflow name
-     * @function
-     */
-    openWorkflow(name: string): void;
-    /**
-     * Load the template definition
-     * @function
-     */
-    loadTemplate(cbk?: Callback): void;
-    /**
-     * Load model
-     * @param {function} cbk post load function
-     * @function
-     */
-    loadModel(cbk: (model: string) => void): void;
-    /**
-     * Get SVG inlined styles
-     * @function
-     */
-    getStyles(): string | undefined;
-    /**
-     * Get model data
-     * @function
-     */
-    info(cbk: (data: DiagramCaption) => void): void;
-    /**
-     * Nodes self-placement with Springs layout
-     * @param {Object} data false to disable, or the $(svg) or the springs properties
-     * @function
-     */
-    layoutSprings(data: boolean | DiagramSpringsParam | JSVG): void;
-}
-
-type DiagramModelers = {
-    [modeId: string]: DiagramModeler;
-};
-type DiagramWindows = {
-    [modeId: string]: Window;
-};
-type ModelParam = {
-    docked?: boolean;
-    popup?: boolean;
-    hidden?: boolean;
-    sync?: boolean;
-    fetch?: boolean;
-    module?: string;
-    nodes?: DiagramNode[];
-};
-/**
- * Diagrams controller
- * @class
- */
-declare class DiagramEngine {
-    readonly models: DiagramModelers;
-    readonly windows: DiagramWindows;
-    /** SVG styles */
-    styles?: string;
-    constructor();
-    /**
-     * Open a SVG diagram
-     * @function
-     */
-    private openSVG;
-    /**
-     * Open a diagram
-     * @param {string} modelId model row ID
-     * @param {Object} options <code>\{ name, docked, hidden, sync \}</code>
-     * @param {function} cbk optional callback(model)
-     * @function
-     */
-    open(modelId: string, options?: ModelParam, cbk?: (model: DiagramModeler) => void): void;
-    /**
-     * Detach diagram from Parent/Popup window
-     * @param {string} modelId model row ID
-     * @param {boolean} dock true to dock diagram on parent window, false to open a new window
-     * @function
-     */
-    detach(modelId: string, dock: boolean): void;
-    /**
-     * Save a diagram
-     * @param {string} modelId model row ID
-     * @param {function} cbk optional callback
-     * @function
-     */
-    save(modelId: string, cbk?: Callback): void;
-    /**
-     * Close a diagram
-     * @param {string} modelId model row ID
-     * @param {boolean} confirm false to auto-save
-     * @function
-     */
-    close(modelId: string, confirm?: boolean): void;
-    /**
-     * Update models with incoming object
-     * @function
-     */
-    update(obj: string | BusinessObject, id: string, action: string): void;
-    /**
-     * Notify UI events (CRUD on objects)
-     * @function
-     */
-    notify(e: NotifyObject): void;
-    /**
-     * Helper to create a new SVG business model, user must have access to ModelTemplate (read) and Model (create).
-     * @param {string} template Model template name
-     * @param {string} name     Model name
-     * @param {Object} options  Model options
-     * @param {boolean} options.docked true to dock the model on the main page (default new window)
-     * @param {boolean} options.hidden true to hide the model in a silent mode
-     * @param {Array}   options.nodes  optional array of nodes to insert <code>\{ object, id, template, x, y \}</code>
-     * @param {boolean} options.fetch  true to fetch related nodes
-     * @param {boolean} options.module Optional module Id or name
-     * @param {function} cbk Callback(diagram)
-     * @function
-     */
-    create(template: string, name: string, options: ModelParam, cbk: (diagram: DiagramModeler) => void): void;
-    /**
-     * Models picker and creation
-     * @param {jQuery} ctn Container
-     * @param {Object} params options { embedded }
-     * @function
-     */
-    picker(ctn: Container, params?: KeyObject): void;
-}
-
-/** Server and client information sent with a feedback */
-interface FeedbackData {
-    /** Browser */
-    browser: {
-        /** User agent */
-        userAgent: string;
-    };
-    /** User */
-    user: {
-        /** Login */
-        login: string;
-        /** Language */
-        lang: string;
-        /** Email */
-        email?: string;
-        /** Responsibilities */
-        resp: string;
-    };
-    /** Application */
-    app: {
-        /** Name */
-        name: string;
-        /** Version */
-        version: string;
-    };
-    /** Platform */
-    platform: {
-        /** Name */
-        name: string;
-        /** Version */
-        version: string;
-        /** Build */
-        build: string;
-        /** Encoding */
-        encoding: string;
-    };
-    /** Server */
-    server: {
-        /** Vendor */
-        vendor: string;
-        /** Version */
-        version: string;
-        /** Database driver */
-        dbdriver: string;
-        /** Date */
-        date: string;
-    };
-    /** Java */
-    java: {
-        /** Vendor */
-        vendor: string;
-        /** Version */
-        version: string;
-    };
-    /** Operating system */
-    os: {
-        /** Name */
-        name: string;
-        /** Version */
-        version: string;
-        /** Architecture */
-        archi: string;
-    };
-}
-/** Feedback to send */
-interface FeedbackParam {
-    /** Email */
-    fbk_email: string;
-    /** Type: `Q` question, `R` change request, `D` defect, `F` fatal */
-    fbk_type: string;
-    /** Description */
-    fbk_desc: string;
-    /** Base64 screen image */
-    screen?: string;
-}
-/** Feedback dialog with an annotated screenshot */
-declare class Feedback {
-    /** Width of the screenshot */
-    readonly WIDTH = 1024;
-    private ctn?;
-    private dlg?;
-    private screen?;
-    /** Open the feedback */
-    open(): this;
-    /** When feedback popup is loaded */
-    ready(): this;
-    /** Close the popup */
-    close(): this;
-    /** Send data and close */
-    send(): this;
-    /** Hide/Show the screenshot */
-    hide(): this;
-    /** Crop a part of screen */
-    crop(): this;
-    /** Highlight a part of screen */
-    light(): this;
-    /** Mask a part of screen */
-    mask(): this;
-    /** Clear canvas */
-    reset(): this;
-    /** Toggle edit buttons */
-    toggle(id?: string): this;
-    /** Edit mode 1=crop, 2=highlight, 3=mask */
-    getMode(): 0 | 1 | 2 | 3;
-    /** Show/Hide edit buttons */
-    showEditButtons(vis: boolean): void;
-    /** Canvas management */
-    drawCanvas(screen?: string): this;
-    /**
-     * Build the content of the dialog.
-     * @returns The dialog content
-     */
-    getContent(): JQuery<HTMLElement>;
-}
-
-/** Legacy 6.3: 2 parts splitter */
-interface SplitPart {
-    /** Content */
-    content?: Container | string;
-    /** Resizable part */
-    resizable?: boolean;
-    /** Height */
-    height?: string;
-    /** Width */
-    width?: string;
-    /** Collapsible part */
-    collapsible?: boolean;
-    /** Collapsed part */
-    collapsed?: boolean;
-    /** Width of the splitter */
-    splitWidth?: string;
-    /** Height of the splitter */
-    splitHeight?: string;
-}
-/** Target work area to load a content */
-type LoadTargetArea = 'work_tab' | 'work_left' | 'work_right' | 'work_top' | 'work_bottom';
-/** Options of a work area */
-interface WorkAreaOptions {
-    /** Work area ID */
-    id?: number;
-    /** TODO */
-    noSplit?: boolean;
-}
-/** Context menu of a work tab */
-interface WorkTabContextMenu {
-    /** Split to right-side */
-    split?: boolean;
-    /** Close the tab */
-    close?: boolean;
-}
-/** Workarea size when splitted */
-interface WorkAreaSize {
-    /** optional area width in px or rem (only applies on horizontal split) */
-    width?: number | string;
-    /** optional area height in px or rem (only applies on vertical split) */
-    height?: number | string;
-}
-/** Serializable tab infos */
-interface WorkTabInfos {
-    /** required tab label */
-    title: string;
-    /** unique name to find the tab when requested with unique=true */
-    name: string;
-    /** unique tab? default true = if a tab with the same name already exists, activate it instead of creating a new one */
-    unique?: boolean;
-    /** can move the tab, default true */
-    draggable?: boolean;
-    /** add a close button to tab, default true */
-    closeable?: boolean;
-    /** optional context menu to split/close */
-    contextmenu?: WorkTabContextMenu;
-    /** add a .desk with navigation into container */
-    navigation?: true | number;
-    /** specific external URL from loadURL */
-    url?: string;
-}
-/** New tab options */
-type WorkTabOptions = WorkTabInfos & WorkAreaSize & {
-    /** new 'tab' or position: 'left','top','right' or 'bottom' */
-    position?: NewTabPosition;
-    /** open in top-level area (default true, false = open in caller area) */
-    toplevel?: boolean;
-};
-type WorkTab = WorkTabInfos & WorkAreaSize & {
-    id: number;
-    nav?: NavItem[];
-    active?: boolean;
-};
-interface WorkTabs {
-    tabs: WorkTab[];
-}
-interface WorkAreas {
-    vertical?: true;
-    areas: WorkAreaItem[];
-}
-interface WorkAreaItem {
-    content: WorkAreas | WorkTabs;
-    id?: number;
-    width?: string;
-    height?: string;
-}
-type WorkAreaSettings = WorkTabs | WorkAreas;
-/**
- * Tools to split the work area
- */
-declare class UISplitter {
-    private worktabId;
-    private navId;
-    private defaultWorkArea;
-    /** Work area min size */
-    readonly MIN_SIZE = 300;
-    private autoSave;
-    private lastSaved;
-    private saveKeyMulti;
-    private saveKeyMono;
-    private restoreKey;
-    /**
-     * Init splitter #work for media desktop only
-     * @param scope current user scope
-     */
-    init(scope?: Scope): void;
-    /**
-     * Allows UI to be splittable. Preserved in localStorage.
-     * @param enable optional to enable/disable
-     * @returns true if the UI is splittable
-     */
-    static enabled(enable?: boolean): boolean;
-    /**
-     * Is splitted mode enabled?
-     * @returns true if user is allowed to split work-areas
-     */
-    isEnabled(): boolean;
-    /**
-     * Build the WORKAREA sysparam save key
-     * - "WORKAREA-SPLIT <scope> <login>" for the multi work-area (splitted) mode
-     * - "WORKAREA-MONO <scope> <login>" for the single work-area mode
-     * so that each scope / user / mode keeps and restores its own saved layout.
-     * @param multi true for the multi work-area
-     * @param login current user login (switched user or current login)
-     * @param scope optional current user scope
-     * @returns the suffixed key, e.g. "WORKAREA-SPLIT myscope johndoe"
-     */
-    private saveKeyName;
-    /**
-     * Build the user preference key to restore the work-areas on the current scope
-     * @param login current user login (switched user or current login)
-     * @param scope optional current user scope
-     * @returns the suffixed key, e.g. "WORKAREA-RESTORE myscope johndoe"
-     */
-    private restoreKeyName;
-    /**
-     * User preference to restore the saved work-areas on the next load (current scope),
-     * preserved in the user's parameter "WORKAREA-RESTORE <scope> <login>" (default true).
-     * When disabled, the saved states are cleared and the home page is always displayed.
-     * @param enable optional to enable/disable
-     * @returns true if the work-areas are restored on the next load
-     */
-    restore(enable?: boolean): boolean;
-    /**
-     * Unset the legacy sysparams saved before
-     * (to be removed in a future beta release)
-     */
-    private static removeLegacyKeys;
-    /**
-     * Scope preference to enable/disable the splitter mode,
-     * preserved in localStorage key <code>splitter_\<scope\></code>
-     * @param enabled true to enable, false to disable or undefined to get the current preference
-     * @returns the current preference or null
-     */
-    static localPreference(scope?: Scope, enabled?: boolean): string | null;
-    /**
-     * Allows user to switch between 2 modes: mono work-area / multi work-areas
-     * @param switchable optional to enable/disable
-     * @returns true if the mode is switchable
-     */
-    static switchable(switchable?: boolean): boolean;
-    /**
-     * Switch button to change the splitter mode
-     */
-    switchButton(): JQuery<HTMLElement>;
-    /**
-     * Button to enable/disable the restore of the work-areas on the next load
-     */
-    restoreButton(): JQuery<HTMLElement>;
-    /**
-     * Switch the splitter mode
-     * @param enabled optional to force/abandon the splitted mode or toggle the mode by default
-     * @param home optional to display the home page after switching mode (default true)
-     */
-    switch(enabled?: boolean, home?: boolean): void;
-    /**
-     * Switch from single work area to multiple work areas (splitter mode).
-     * Creates a first default, non-closeable "home" tab then replaces the legacy #work content.
-     */
-    private singleToMultiple;
-    /**
-     * Switch from multiple work areas back to single (legacy 6.3) mode.
-     * Preserves the first desk and its navigation, resets all id increments,
-     * closes all other tabs, then wraps the result in a legacy .split container.
-     */
-    private multipleToSingle;
-    /**
-     * Load user's parameter WORKAREA and rebuild the UI
-     * @param settings optional settings to load instead of user's parameter
-     * @returns true if the UI has been rebuilt with saved settings
-     */
-    load(settings?: WorkAreaSettings | NavItem[]): boolean;
-    /**
-     * Rebuild the UI with WORKAREA settings
-     */
-    build(settings: WorkAreaSettings): void;
-    /**
-     * Save the current state (nav stack or work-areas tree) into user's parameter
-     * What happens on the next load, per work-area mode x exit type:
-     *
-     *   exit type            | mode arg | single work-area | multi work-area
-     *   ---------------------|----------|------------------|-----------------
-     *   logout (Quit)        | "logout" | home page        | restore
-     *   clear cache          | "logout" | home page        | restore
-     *   change user          | "switch" | home page        | restore
-     *   change scope         | "switch" | home page        | restore
-     *   change language      | "save"   | restore          | restore
-     *   reload / F5          | (none)*  | restore          | restore
-     *
-     *   - "restore"   = the saved state is persisted and rebuilt on next load
-     *   - "home page" = the saved state is cleared ("empty"), the default home is shown
-     *   - multi work-area mode always restores because the key is per scope + login, so a
-     *     user/scope switch finds its own layout again when coming back to it
-     *   - every "restore" case is conditioned by the user preference WORKAREA-RESTORE on the
-     *     current scope (see restore()): when disabled, the state is always cleared ("empty")
-     *   * reload / F5 does not call save() explicitly: it relies on the auto-save
-     *     (saveRequest, on every nav change) having kept the parameter up to date
-     *
-     * @param mode "save" (default, incl. auto-save, page reload and language change) persists
-     *        the current state; "logout" (explicit logout or cache clear) and "switch" (user or
-     *        scope switch) drop it in single work-area mode so the next login lands on the home
-     *        page, but still persist it in multi work-area mode
-     */
-    save(mode?: "save" | "logout" | "switch"): Promise<void>;
-    /**
-     * Auto-save request into user's parameter WORKAREA.
-     */
-    saveRequest(): void;
-    /**
-     * Tree of areas and navigations
-     */
-    jsonTree(): WorkAreaSettings;
-    /**
-     * Simple request for a new tab or a new split area.
-     * @param options Tab options
-     * @param caller The element that triggered the request
-     * @returns the new container to display the content (.content or .work-area-content) or null to use default work-area
-     */
-    request(options: WorkTabOptions, caller?: AnyContainer): JQuery | null;
-    /**
-     * Create a desk with a new navigation including 2 parts: .nav-stack and .content
-     * @param ctn container (specific or .work-tab-content)
-     * @param content optional HTML content to display
-     * @param navId optional restored nav Id (default incremental)
-     * @returns .desk.nav-container
-     */
-    createDeskNavigator(ctn: JQuery, content?: Container | null, navId?: number): JQuery;
-    /**
-     * Create a work-area with a tabs of desks
-     * @param options Work area options
-     * @param tabOptions optional tab options to create a first tab with a desk
-     * @param content optional content to insert in the new area
-     * @returns .work-area
-     */
-    createWorkArea(options?: WorkAreaOptions, tabOptions?: WorkTabOptions, content?: JQuery): JQuery<HTMLElement>;
-    /**
-     * Add a tab to .work-tab
-     * @param worktab Optional existing work tabs (default use the first tabs)
-     * @param options Tab options
-     * @param content optional content to insert
-     */
-    appendTab(worktab: JQuery | null, options?: WorkTabOptions, content?: JQuery): {
-        tab: JQuery<HTMLElement>;
-        tabpane: JQuery<HTMLElement>;
-    };
-    /**
-     * Get the work tab content of a tab
-     * @param tab tab anchor .nav-link or .nav-item
-     * @returns .work-tab-content
-     */
-    getWorkTabContent(tab: JQuery): JQuery | undefined;
-    /**
-     * Get the desk content of a tab
-     * @param el the .nav-link or a container
-     * @returns desk .content for rendering if exists (or directly the .work-tab-content when the tab has no navigation)
-     */
-    getDeskContent(el: JQuery): JQuery<HTMLElement>;
-    /**
-     * Find a tab in all work-areas
-     * @param name Optional tab name to find
-     * @returns .nav-link if found
-     */
-    findTab(name?: string): JQuery | undefined;
-    /**
-     * Get a tab of related element
-     * @param el any content element inside the .work-tab-pane
-     * @returns .nav-link of the related tab if exists
-     */
-    getTabOfElement(el?: AnyContainer): JQuery | undefined;
-    /**
-     * Get the tab container of element
-     * @param el Element inside the .work-tab
-     * @returns .work-tab if exists
-     */
-    getWorkTab(el?: AnyContainer): JQuery | undefined;
-    /**
-     * Get the work-area of element
-     * @param el Element inside the .work-area
-     * @returns .work-area if exists
-     */
-    getWorkArea(el?: AnyContainer): JQuery | undefined;
-    /**
-     * Set the options for a work tab
-     * @param el tab anchor .nav-link or .nav-item
-     * @param options the options to store in a.data("worktab")
-     */
-    setTabOptions(el?: JQuery, options?: WorkTabOptions): void;
-    /**
-     * Update the options for a work tab from navigation data
-     * @param el Element
-     * @param label the label of the navigation item
-     * @param name optional (unique) name of the navigation item
-     * @param url optional URL of the navigation item
-     */
-    updateTabOptions(el?: AnyContainer, label?: string, name?: string, url?: string): void;
-    /**
-     * Update the tab label
-     * @param el any content element inside the .work-tab-pane (or .nav-link or .nav-item)
-     * @param label New label
-     */
-    setTabLabel(el?: AnyContainer, label?: string): void;
-    /**
-     * Activate a tab
-     * @param el any content element inside the .work-tab-pane
-     */
-    activateTab(el: AnyContainer): JQuery | undefined;
-    /**
-     * Activate the first work-area tab
-     */
-    activateFirstTab(): JQuery | undefined;
-    /**
-     * Get the first work-area content: #work0 (or default #work if no enabled)
-     * @param activate activate the first tab to show the content?
-     */
-    getDefaultWorkContent(activate?: boolean): JQuery;
-    /**
-     * Move a tab in a new work-area
-     * @param tab tab .nav-link to move
-     * @param workArea target workarea to split
-     * @param pos position for the tab content top/left/right/bottom
-     */
-    moveTabToWorkArea(tab: JQuery, workArea: JQuery, pos: Position): void;
-    /**
-     * Move a tab in other tab
-     * @param tab tab .nav-link to move
-     * @param targetTab target tab
-     * @param pos place the tab on the 'left' or the 'right' of the target tab
-     */
-    moveTabToTab(tab: JQuery, targetTab: JQuery, pos: 'left' | 'right'): void;
-    /**
-     * Close a tab if can close
-     * @param tab .nav-link to close
-     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
-     * @param activatePrevious activate the previous tab if exists? default true
-     */
-    closeTab(tab: JQuery, checkCanClose?: boolean, activatePrevious?: boolean): Promise<void>;
-    /**
-     * Remove a content and its tab
-     * @param el any content element inside the .work-tab-pane
-     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
-     */
-    remove(el: AnyContainer, checkCanClose?: boolean): void;
-    /**
-     * Close a content: back to the previous page of its navigation if any,
-     * otherwise remove its tab when it is in a work tab, otherwise only close the content
-     * @param el content element (inside a .work-tab-pane or not)
-     * @example
-     * // Close the current content, ex: after detaching it in a popup
-     * $view.splitter.close(ctn);
-     */
-    close(el: AnyContainer): void;
-    /**
-     * Close all tabs if can close
-     * @param checkCanClose check can close the tab contents?
-     */
-    closeAll(checkCanClose?: boolean): Promise<void>;
-    /**
-     * Remove a tab of a work-area
-     * ZZZ not public: use closeTab to destroy the content first
-     * @param tab the .nav-link to remove
-     * @param prev click on previous (or next) tab if exists
-     */
-    private removeTab;
-    /**
-     * Remove a work-area and its children
-     * @param workarea .work-area to remove
-     */
-    removeWorkArea(workarea: JQuery): Promise<void>;
-    private refreshTimer;
-    /**
-     * Refresh container when moved/splitted/resized
-     * @param ctn container with events ui.resize and ui.zoom
-     * @param resize true to force a resizing
-     */
-    refresh(ctn: JQuery, resize?: boolean): void;
-    /**
-     * Create a .work-area and/or assign a split direction
-     * @param workarea optional .work-area to (re)assign (default returns a new one)
-     * @param vertical optional, true to split vertically, false to split horizontally
-     * @param children optional list of .work-area to append
-     */
-    workArea(workarea?: JQuery | null, vertical?: boolean, children?: JQuery[]): JQuery;
-    /**
-     * Split a work-area
-     * @param workarea .work-area to split (default the root one)
-     * @param pos insert at position left/right/top/bottom
-     * @param tabOptions tab options
-     * @param content optional content to insert in the new area
-     * @returns newArea and content
-     */
-    splitWorkArea(workarea: JQuery | null, pos: Position | undefined, tabOptions: WorkTabOptions, content?: JQuery): {
-        /** New work-area */
-        newArea: JQuery;
-        /** Content of the new work-area */
-        content: JQuery;
-    };
-    /**
-     * Convert a CSS size value to pixels.
-     * Supports plain numbers (treated as px), "rem" units (1rem = 16px),
-     * and "%" relative to the total #work width.
-     * @param value Size as a number (px) or a CSS string ("300px", "20rem", "50%")
-     * @returns Equivalent size in pixels
-     */
-    private toPixel;
-    /**
-     * Resize a work area (and its next area) in a horizontal split
-     * @param workarea workarea to resize
-     * @param width width in pixels or in rem (or in % of the #work)
-     */
-    setWidth(workarea: JQuery, width: number | string, store?: boolean): void;
-    /**
-     * Resize a work area (and its next area) in a vertical split
-     * @param workarea workarea to resize
-     * @param height height in pixels or in rem (or in % of the #work)
-     */
-    setHeight(workarea: JQuery, height: number | string, store?: boolean): void;
-    /**
-     * Resize a work area (and its next area) in the split direction
-     * @param workarea workarea to resize
-     * @param horizontal or vertical
-     * @param size new size in pixels (fit to parent size if unset)
-     * @param save save preference?
-     */
-    setSize(workarea: JQuery, horizontal: boolean, size: number, save?: boolean): void;
-    /**
-     * Resize all work areas to fit 100% of the container
-     * @param workarea container
-     */
-    fitSize(workarea: JQuery): void;
-    /**
-     * Create context menu to request for the new tab position
-     * @param el Right clicked element
-     * @param e Context menu event
-     * @param request callback with requested position
-     * @param items optional previous menu items
-     */
-    contextMenu(el: JQuery, e: JQuery.ContextMenuEvent, request?: (pos: NewTabPosition) => void, items?: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
-    /**
-     * Add a context menu on follow link to open the target in a new tab or side
-     * @param title Tab title
-     * @param fl FollowLink definition with object and rowId to open the form
-     * @param el Caller element to bind the context menu
-     */
-    followLinkContextMenu(title: string, fl: FollowLink, el: JQuery): void;
-    /**
-     * Stop event and return mouse position
-     */
-    private xy;
-    /**
-     * Drag & drop separator to resize sibling areas
-     */
-    private dragSeparator;
-    /**
-     * Drag & drop tab
-     */
-    private dragTab;
-    /**
-     * Split the container in 2 parts (any previous split is removed).
-     * @param ctnr container
-     * @param pos position left|right|top|bottom, default 'top'
-     * @param options optional parameters or content
-     * @param options.content content to add at position
-     * @param options.resizable can resize content ?
-     * @param options.height optional content height
-     * @param options.width optional content width (in rem, px, %)
-     * @param options.collapsible can collapse content ?
-     * @param options.collapsed collapsed by default ?
-     * @param options.splitWidth optional split width (default 100%, may be "auto" to let the scroll-x to parent element)
-     * @param options.splitHeight optional split height (default 100%, may be "auto" to let the scroll-y to parent element)
-     */
-    splitPart(ctnr: AnyContainer, pos: Position, options: SplitPart | JQuery): void;
-    /**
-     * Remove the splitted content
-     * @param ctn container with splitted contents
-     */
-    unsplitPart(ctn: string | Container): void;
-}
-
-/** Load URL target = same as lov SHC_TARGET to open a shortcut */
-type LoadTarget = 'frame_work' | '_blank' | '_top' | '_popup' | LoadTargetArea;
-/** LoadURL options */
-type LoadParam = NavParam & {
-    /** Optional target _blank, _top or _popup */
-    target?: LoadTarget;
-    /** Width of the element */
-    width?: string;
-    /** Height of the element */
-    height?: string;
-    /** Optional label to display in nav/dialog/download */
-    label?: string;
-    /** Optional name for the external object */
-    name?: string;
-    /** Optional object of action */
-    object?: string | BusinessObject;
-    /** Optional instance of object */
-    inst?: string;
-    /** Optional object row ID (form/row action) */
-    rowId?: string;
-    /** Optional object item (form/row action) */
-    item?: RowItem | null;
-    /** Optional data of external object (extobject, fields) */
-    data?: KeyObject;
-    /** Optional related action */
-    action?: string | Action;
-    /** Optional flag to inline content */
-    noiframe?: boolean;
-    /** Controller of the download, set by loadURL: call `controller.abort()` to stop the client side call */
-    abortController?: AbortController;
-    /** Optional reader(content-type, attach, filename, blob, defaultReader, cbk, status) to override default download into container */
-    reader?: (contenttype: string, attach: boolean, filename: string, blob: Blob, defaultReader: (ct: string, _att: boolean, filename: string, res: File) => void, cbk?: Callback, status?: number) => void;
-};
-/**
- * UI Loader tool
- */
-declare class UILoader extends UIUtil {
-    /**
-     * Common file extension icon
-     */
-    readonly FILE_ICONS: KeyString;
-    /** Feedback instance */
-    feedback?: Feedback;
-    /** Disconnected translation */
-    labelDisconnected?: string;
-    /** Web news (popup and footer ticker) */
-    readonly news: WebNews;
-    /** Main navigator */
-    readonly nav: UINavigator;
-    /**
-     * Mime type to file extension
-     */
-    readonly MIME_EXT: KeyString;
-    constructor();
-    /**
-     * When page is loaded: load user rights, menu, texts and engine.<br />
-     * Then call the main page service.
-     * @param options some globals options to override
-     * @example
-     * // Standalone page: load the rights, texts and engine, then display the home page
-     * $(document).ready(() => $ui.ready($app, "bootstrap5", { useMainParts: true }));
-     */
-    ready(app: Session, engine: string, options?: Partial<typeof Globals>): Promise<void>;
-    private prepareBookmarks;
-    /**
-     * Set the Ajax APIs
-     * @param app Simplicite.Ajax instance
-     */
-    setAjax(app: Session): UIEngine;
-    /**
-     * Returns the local client Id from local storage.
-     * Used to identify the client in session and to change user on server-side in god mode.
-     * @example
-     * const id: string = $ui.clientId();
-     */
-    clientId(): string;
-    /**
-     * Open the user session with authtoken
-     * @param params options
-     * @param params.scope optional user scope or home view
-     * @param params.clientId optional clientId (local storage to change users)
-     * @returns Session infos
-     * @example
-     * const s: KeyObject = await $ui.session({ scope: "MyScope" });
-     */
-    session(params?: {
-        scope?: string;
-        clientId?: string;
-    }): Promise<KeyObject>;
-    /**
-     * Default logout: confirm (with text CONFIRM_LOGOUT) and save session before quit
-     * @param params logout parameters
-     * @param params.confirm true to confirm the logout
-     * @param params.url optional new location URL
-     * @param params.login optional user login to switch session
-     * @param params.token optional user token to switch session
-     * @example
-     * // Ask the confirmation, then logout
-     * $ui.logout({ confirm: true });
-     * // Logout and go to a URL
-     * $ui.logout({ url: "/ext/MyLandingPage" });
-     */
-    logout(params: {
-        confirm?: boolean;
-        url?: string;
-        login?: string;
-        token?: string;
-    }): void;
-    /**
-     * Default quit is a session logout
-     * @param params logout parameters
-     * @param params.url optional new location URL to change scope
-     * @param params.login optional user login to change user
-     * @example
-     * $ui.quit({ url: "https://www.simplicite.io" });
-     */
-    quit(params?: {
-        url?: string;
-        login?: string;
-    }): UIEngine;
-    /**
-     * Save the session
-     * @param mode "save" (default, e.g. language change) keeps the current layout / nav;
-     *        "logout" (explicit logout or cache clear) and "switch" (user or scope switch) drop it
-     *        in single work-area mode so the next login lands on the home page, but keep it per
-     *        scope + login in multi work-area mode, to be restored on return
-     * @example
-     * await $ui.saveSession();
-     */
-    saveSession(mode?: "save" | "logout" | "switch"): Promise<void>;
-    /**
-     * Load the Rendering engine
-     * @param name extended engine name (forced to bootstrap5)
-     */
-    loadEngine(name: string): Promise<void>;
-    /**
-     * Bind server side events.
-     * Custom messages from back-end
-     * <code>ServerSideEvent.notify("myCustomEvent", "message", userId)</code>
-     * Must be binded on "ui.ready"" with
-     * <code>$ui.sse.addEventListener("myCustomEvent", e => e.data ... );</code>
-     * @example
-     * // Bound on ready, then listen custom events sent by ServerSideEvent.notify("myCustomEvent", ...)
-     * $(document).on("ui.ready", () => {
-     * 	$ui.sse?.addEventListener("myCustomEvent", (e: MessageEvent) => $ui.toast(e.data));
-     * });
-     */
-    bindEventSource(): boolean;
-    /**
-     * Websocket handler for partial clear cache
-     * @param d <code>\{ object, name \}</code>
-     * @ignore
-     */
-    private onClearCache;
-    /**
-     * System clear cache
-     * @param action Action <code>cc|dc|gc</code> for server, all sessions or granted user
-     * @example
-     * // Clear the cache of the current user
-     * $ui.clearCache("gc");
-     */
-    clearCache(action: string): Promise<void>;
-    /**
-     * SSE handler for object usage
-     * @param d <code>\{ object, action, emitter \}</code>
-     * @ignore
-     */
-    private onActionObject;
-    /**
-     * SSE handler for internal notification
-     * @param n <code>\{ count, message, incoming, userId \}</code>
-     * @ignore
-     */
-    private onNotif;
-    /**
-     * Default keydown handler
-     * <br>CTRL-S : trigger "ui.key.ctrls" to all "js-ctrl-s" elements
-     * <br>ESCAPE : in order of priority close dialog, blur field (remove focus), or back in navigation
-     * <br>SHIFT-LEFT/RIGHT : navigation between list items
-     * <br>ALT-H : back to the home page
-     * <br>ALT-M : focus last visited menu item
-     * <br>ALT-W : wide screen = toggle menu
-     * <br>ALT-B : open the bookmarks dialog
-     * <br>ALT-F : focus the global searchbox
-     * <br>ALT-L : focus the first list row
-     * <br>ALT-N : focus the next area/panel
-     * @param e Key event
-     */
-    private keydown;
-    /**
-     * Displays all site parts:
-     * <ul>
-     * <li>Create main div</li>
-     * <li>load only options.resources if specified</li>
-     * <li>load part MAIN/HEADER/FOOTER/MENU/WORK when options.useMainParts=true</li>
-     * <li>load STYLES + SCRIPT resources of disposition or object</li>
-     * </ul>
-     */
-    main(cbk: Callback): Promise<void>;
-    /**
-     * Load the FOOTER_ADDON if exists
-     */
-    footerAddon(): void;
-    /**
-     * Load the text and monospace fonts and override the related CSS variables
-     * @param font text font (a plain name = assume a google font), none = default font of the theme CSS
-     * @param mfont monospace font
-     * @example
-     * // Google font for texts, default monospace font
-     * $ui.setFonts("Roboto");
-     */
-    setFonts(font?: Font | string | null, mfont?: Font | string | null): Promise<[void, void]>;
-    /**
-     * Change the current CSS theme
-     * @param base 'light' or 'dark' reboot
-     * @param theme theme name to load (vars + addon styles)
-     * @example
-     * $ui.setTheme("dark");
-     * $ui.setTheme("light", "MyTheme");
-     */
-    setTheme(base?: ThemeBase, theme?: string): Promise<void>;
-    /**
-     * Add keys shortcuts to document
-     * @param keys Pair of ('ctrl' | 'shift' | 'alt') + letter or char-code = callback or shortcut definition
-     * @example
-     * $ui.addShortcuts({
-     * 	"ctrl+shift+h": () => $ui.displayHome(),
-     * 	"alt+d": { name: "MyDoc", label: "Documentation", url: "https://docs.simplicite.io", target: "_blank" }
-     * });
-     */
-    addShortcuts(keys: ShortcutKeys): void;
-    /**
-     * Open the URL in a new window
-     * @param url URL to open
-     * @param target Optional, default <code>'_blank'</code>
-     * @example
-     * $ui.openURL("https://www.simplicite.io");
-     */
-    openURL(url: string, target?: string): void;
-    /**
-     * Open the url in a separate window with the UI engine
-     * @param url URL to load in a new window
-     * @param options Detach options
-     * @param options.name Optional window name (default detachurl)
-     * @param options.width Optional window width in px (default 1200)
-     * @param options.height Optional window height in px (default 700)
-     * @param options.top Optional window top in px (default 0)
-     * @param options.left Optional window left in px (default 0) (default 0)
-     * @param options.full True to load the main parts (menu, header... default load the URL in div.main without parts)
-     * @returns new window
-     * @example
-     * // Open an external object in a new window
-     * $ui.detachURL($app.getExternalObjectURL("MyExternalObject"), { width: 800, height: 600 });
-     */
-    detachURL(url: string, options?: {
-        name?: string;
-        width?: number;
-        height?: number;
-        top?: number;
-        left?: number;
-        full?: boolean;
-    }): Window | null;
-    /**
-     * Call periodically to check if the response is completed
-     * @param ctn Container to load the URL
-     * @param url URL to launch the asynchronous task on server side, and be polled with a check parameter periodically, must respond 202 while the task is not completed
-     * @param params Optional parameters for loadURL
-     * @param pgs Optional progress callback(message)
-     * @returns Promise when loaded, or catch when stopped
-     * @example
-     * // Launch a long task and poll until done
-     * $ui.waitForURL(ctn, myTaskURL, {}, (msg: string | ArrayBuffer | null) => $console.log("progress", msg));
-     */
-    waitForURL(ctn: Container, url: string, params?: LoadParam, pgs?: (msg: string | ArrayBuffer | null) => void): Promise<void>;
-    /**
-     * Load URL in a container: wrap the URL to specific controllers (list, form...) or call the back-end thru ajax
-     * @param ctn Container to load the URL (default is #work)
-     * @param url URL to load
-     * @param options Contextual parameters
-     * @param cbk Optional callback when loaded
-     * @example
-     * // Display an external object in the work area
-     * $ui.loadURL(null, $app.getExternalObjectURL("MyExternalObject"));
-     */
-    loadURL(ctn: AnyContainer, url: string, options?: LoadParam | null, cbk?: Callback): this;
-    getUIObject(obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
-    getUIObject(object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
-    getNavObject(ctn: AnyContainer, obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
-    getNavObject(ctn: AnyContainer, object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
-    /**
-     * Generate the instance name within the component navigator.
-     * Returns the common instance name on main navigation, otherwise add a suffix ex: the_ajax_(name)_nav(id)
-     * @param c Component
-     * @param obj Object name or BusinessObject
-     * @param inst Optional instance name, default = <code>the_ajax_(name)</code>
-     * @example
-     * const inst: string = $ui.getNavInstanceName(ctn, "MyObject"); // the_ajax_MyObject on the main navigation
-     */
-    getNavInstanceName(c: AnyContainer, obj: string | BusinessObject, inst?: string): string;
-    /** Web push service, loaded on demand */
-    _webpush?: WebPush;
-    /**
-     * WebPush service
-     * @example
-     * $ui.webpush();
-     */
-    webpush(data?: WebPushData): WebPush;
-    /** Firebase service, loaded on demand */
-    _firebase?: Firebase;
-    /**
-     * Firebase service wrapper
-     * @param data Service data, with optional keys:
-     * `config` (init web browser to receive notification),
-     * `token` (add the device token to FIREBASE_TOKENS on server side),
-     * `tap` (incoming notification has been tapped by user?),
-     * `body` (optional received message),
-     * `title` (optional message title),
-     * `from` (optional message origin),
-     * `message` (message to send on server-side),
-     * `to` (recipients `{ users:[], groups:[] }` or `'all'` users)
-     * @example
-     * // Send a notification to groups thru the server
-     * $ui.firebase({ message: "New order", to: { users: [], groups: ["MY_SALES"] } });
-     */
-    firebase(data?: FirebaseServiceData): Firebase;
-    /**
-     * Firebase default handler when a message is received thru FCM or worker.
-     * @param m Message or notification, with optional keys:
-     * `notification` (optional embedded message with title and body),
-     * `body` (message body),
-     * `title` (optional title),
-     * `priority` (optional priority `'high'|'normal'|'low'`),
-     * `data` (optional pairs of key-value, may be present on top of message, e.g. `object` and `rowId`),
-     * `tap` (foreground or background),
-     * `icon` (optional icon),
-     * `color` (optional color)
-     */
-    onMessageReceived(m: FirebaseMessage): void;
-    /** Internal: editor options */
-    _editor?: KeyObject;
-    /**
-     * Load local code editor
-     */
-    loadLocalEditor(): Promise<KeyObject>;
-    /**
-     * Load Simplicite standalone client lib
-     * @param cbk optional callback
-     * @example
-     * $ui.loadSimpliciteClient(() => $console.log("client lib loaded"));
-     */
-    loadSimpliciteClient(cbk?: Callback): UIEngine;
-    /**
-     * Load metadata of font icons
-     * @param cbk optional callback(meta)
-     * @example
-     * $ui.loadFontsMeta((meta: IconsMetadata) => $console.log(meta));
-     */
-    loadFontsMeta(cbk?: (meta: IconsMetadata) => void): UIEngine;
-    /**
-     * Load the diagram engine
-     * @example
-     * await $ui.loadDiagramEngine();
-     */
-    loadDiagramEngine(): Promise<DiagramEngine>;
-    private _speech?;
-    /**
-     * Load the speech engine
-     * @example
-     * const speech: Speech = $ui.loadSpeech();
-     */
-    loadSpeech(): Speech;
-    private _ocr?;
-    /**
-     * Load the OCR tools
-     * @example
-     * $ui.loadOCR(() => $console.log("OCR ready"));
-     */
-    loadOCR(cbk?: CallableFunction): void;
-    /**
-     * UI monitoring
-     * @param ctn Container to monitor
-     * @param params Parameters or action
-     * @param params.action Action name (get, meta, search, display...) if unset: save and stop monitoring in the container
-     * @param params.service UI service name (displayForm...)
-     * @param params.target Target name (object, view, process...)
-     * @param params.ui Front or Ajax call
-     * @example
-     * // Start tracing a custom service (a service is required on the first call)
-     * $ui.monitor(ctn, { action: "display", service: "MyService", target: "MyObject", ui: true });
-     * $ui.monitor(ctn, { action: "onload", ui: true });
-     * // No action: save the trace and stop
-     * $ui.monitor(ctn);
-     */
-    monitor(ctn: AnyContainer | null, params?: string | {
-        action: string;
-        service?: string;
-        target?: string;
-        ui?: boolean;
-    }): UIEngine | undefined;
-    /**
-     * Loading page with status
-     */
-    splash(status: boolean | string): void;
-    /**
-     * Top Simplicite window
-     * @example
-     * const topUI: Window = $ui.getTop();
-     */
-    getTop(): Window & typeof globalThis;
-}
-
-/** Parameters of a menu entry click */
-interface MenuParam {
-    /** Menu item */
-    item: MenuItem;
-    /** Object name */
-    object?: string;
-    /** Workflow name */
-    workflow?: string;
-    /** Process name */
-    process?: string;
-    /** BAM name */
-    bam?: string;
-    /** Process step */
-    step?: string;
-    /** Object name of a tray */
-    tray?: string;
-    /** Field name (tray or list of states) */
-    field?: string;
-    /** Enumeration code */
-    code?: string;
-    /** Domain name */
-    domain?: string;
-    /** View name */
-    view?: string;
-    /** URL */
-    href?: string;
-    /** Target of the URL */
-    target?: LoadTarget;
-    /** Translated label */
-    label?: string;
-    /** Open in a new tab */
-    newtab?: NewTabPosition;
-}
-/** Menu item */
-interface MenuItem {
-    /** Item type */
-    type: "object" | "statusobject" | "external" | "process" | "workflow" | "domain" | "view";
-    /** Item name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Icon name */
-    icon: string;
-    /** Opened */
-    open?: boolean;
-    /** Extendable */
-    ext?: boolean;
-    /** Extended */
-    extended?: boolean;
-    /** Create right */
-    create?: boolean;
-    /** URL */
-    url?: string;
-    /** Link URL */
-    href?: string;
-    /** Target of the link */
-    target?: string;
-    /** Width */
-    width?: number | string;
-    /** Height */
-    height?: number | string;
-    /** Field name */
-    field?: string;
-    /** Has a home page */
-    hasHome?: boolean;
-    /** Home page name */
-    homePage?: string;
-    /** Is a dashboard */
-    dashboard?: boolean;
-    /** Is a widget */
-    widget?: boolean;
-    /** Has a tray */
-    tray?: boolean;
-    /** Sub-items */
-    items?: SubMenu;
-    /** Activities of a process */
-    activities?: ActivityMetadata[];
-    /** States of a status object */
-    states?: EnumItem[];
-    /** Tray fields */
-    trays?: {
-        /** Tray field name */
-        field: string;
-        /** Tray label */
-        label: string;
-    }[];
-    /** Lists of states per field */
-    lists?: {
-        /** Field name */
-        field: string;
-        /** Field label */
-        label: string;
-        /** States of the field */
-        items: EnumItem[];
-    }[];
-    /** Position of the menu (`T` = top, else left) */
-    menu_position?: string;
-}
-/** Main menu */
-type MainMenu = MenuItem[];
-/** Sub menu */
-type SubMenu = MenuItem[];
-/** Menu settings */
-interface MenuSettings {
-    /** Top menu */
-    top: {
-        /** Top menu is active */
-        active: boolean;
-    };
-    /** Left menu */
-    left: {
-        /** Left menu is active */
-        active: boolean;
-        /** Collapse mode */
-        collapse: "icons-static" | "icons-expand" | "none";
-        /** Search box in menu */
-        searchable: boolean;
-    };
-}
-/**
- * Main menu rendering
- */
-declare class Menu {
-    /** #menu.left-sidebar */
-    container?: Container;
-    /** .main-nav-toggle */
-    navToggle?: JQuery;
-    /** Ul.main-menu role=menu */
-    menu?: JQuery;
-    /** Last focused item */
-    _focus?: JQuery;
-    /** Timer of the status refresh */
-    statusTimer?: number;
-    /** Default value to default behavior */
-    leftMinified: string;
-    /** Menu settings (default values iso v6.3) */
-    menuSettings: MenuSettings;
-    /**
-     * Main menu
-     */
-    getMenu(): JQuery<HTMLElement>;
-    /**
-     * Menu (left/top) Settings (either from sys_param or default values)
-     */
-    getMenuSettings(): MenuSettings;
-    /**
-     * Init menus (left,top)
-     */
-    init(): void;
-    private item;
-    private toggle;
-    private itemTop;
-    /** Element by id, as a JQuery set */
-    private byId;
-    /** Counter of the ids linking toggles to their controlled lists */
-    topMenuId: number;
-    private hasSubMenu;
-    private contextMenu;
-    private click;
-    /**
-     * Init the top menu (horizontal with dropdowns)
-     * - Click to open dropdowns
-     * - Click to open flyout sub-menus (no hover)
-     * - Keyboard navigation support
-     * - Flyouts detached to body to avoid clipping
-     */
-    initTopMenu(items: MenuItem[], menuSettings: MenuSettings["top"]): void;
-    /**
-     * Init the main menu (on left), use the ui.clickMenu handler
-     */
-    initLeftMenu(items: MenuItem[], menuSettings: MenuSettings["left"]): void;
-    /**
-     * Select one menu item
-     */
-    selectMenu(a: JQuery, menu?: JQuery | null): JQuery;
-    /**
-     * Focus the last selected item or first item
-     */
-    focus(): void;
-    /**
-     * hover effect when minified
-     * @param b false to remove effect
-     */
-    hover(b: boolean): void;
-    /**
-     * Menu navigation with Arrow keys
-     */
-    keydown(el: HTMLElement, e: JQuery.Event): void;
-    /**
-     * Accordion effect
-     */
-    accordion(el: JQuery): void;
-    /**
-     * Is menu minimized on the left side ?
-     */
-    isMenuMin(): boolean | undefined;
-    /**
-     * Is menu maximized on the left side ?
-     */
-    isMenuMax(): boolean;
-    /**
-     * Minimize the menu on the left side
-     * <ul>
-     * <li>displays only domain icons</li>
-     * <li>popup the sub-menus over the screen</li>
-     * <ul>
-     */
-    menuMin(): void;
-    /**
-     * Maximize the menu on the left side
-     * <ul>
-     * <li>displays domain icons and labels</li>
-     * <li>accordion sub-menus</li>
-     * <ul>
-     */
-    menuMax(): void;
-    /**
-     * Hide a sub-menu
-     * @param m menu item (li element with .sub-menu child)
-     */
-    subMenuMin(m: JQuery): void;
-    /**
-     * Show a sub-menu
-     * @param m menu item (li element with .sub-menu child)
-     */
-    subMenuMax(m: JQuery): void;
-    /**
-     * Toggle the main menu on the left side
-     * @param e optional event
-     * @param sign positive:show, negative:hide
-     */
-    menuToggle(e?: JQuery.Event | KeyboardEvent | null, sign?: number): void;
-    private setToggleState;
-    /**
-     * Start a timer to update enum counters
-     */
-    startRefreshStatus(): void;
-    /** Refresh of status counters has been started */
-    private statusStarted;
-    /**
-     * Pause the timer to update visible status counters (page hidden)
-     */
-    pauseRefreshStatus(): void;
-    /**
-     * Restart and refresh the status counters if they were paused (page restored)
-     */
-    resumeRefreshStatus(): void;
-    /**
-     * Stop the timer to update visible status counters
-     */
-    stopRefreshStatus(): void;
-    /**
-     * Update the visible enum counter
-     * @param object object name or menu item or sub-menu
-     * @param field enum field name
-     * @param code enum code
-     */
-    updateStatusBadge(object: string | JQuery, field?: string, code?: string): false | Promise<boolean | JQuery<HTMLElement>> | undefined;
-    private badge;
-    /**
-     * Update all status and enum counters of a given menu
-     * @param m sub menu
-     */
-    updateStatusBadges(m: JQuery): void;
-    /**
-     * Process incoming data from SSE event enumCounters
-     * @param d data
-     */
-    onEnumCounters(d: KeyObject): void;
-    /**
-     * Display a tree view in the menu.
-     * @param ctn Container
-     * @param o Business object
-     * @param id Root row ID
-     * @param tv Tree definition
-     * @param p Tree parameters
-     * @param cbk Optional callback when displayed
-     */
-    treeview(ctn: Container, o: BusinessObject, id: string, tv: TreeNode, p: TreeParam, cbk?: Callback): Window & typeof globalThis;
-    /**
-     * Update the badge of the notifications shortcut.
-     * @param n Notifications data (`incoming` to shake the bell)
-     */
-    updateNotificationBadge(n: KeyObject): void;
-    /**
-     * Filter menu
-     */
-    filterMenu(): void;
-    /**
-     * Open a top menu dropdown
-     */
-    openTopDropdown(mi: JQuery): void;
-    /**
-     * Close a top menu dropdown
-     */
-    closeTopDropdown(mi: JQuery): void;
-    /**
-     * Expand/collapse an expandable entry (enum group) of a dropdown or flyout
-     * - expanding one collapses its siblings (accordion)
-     */
-    toggleSub(btn: JQuery, open?: boolean): void;
-    /**
-     * Collapse all the expanded entries (enum groups) within a scope
-     */
-    collapseSubs(scope: JQuery): void;
-    /**
-     * Close all top menus
-     */
-    closeAllTopMenus(): void;
-    /**
-     * Open a flyout submenu
-     */
-    openTopFlyout(li: JQuery): void;
-    /**
-     * Close a flyout menu
-     */
-    closeTopFlyout(li: JQuery): void;
-    /**
-     * Keyboard navigation for top menu
-     * - Left/Right: between top entries, open/close flyouts, expand/collapse enum groups
-     * - Up/Down/Home/End: through the visible entries of the current dropdown/flyout
-     */
-    keydownTopMenu(el: HTMLElement, e: JQuery.Event, openFlyout?: (li: JQuery) => void, closeFlyout?: (li: JQuery) => void, getFlyoutForLi?: (li: JQuery) => JQuery | null): void;
-    /**
-     * Append flyout to body & position it (no clipping)
-     */
-    positionFlyout(li: JQuery, fm: JQuery): void;
-}
-
 /**
  * Workflow and activities rendering
  */
@@ -15506,18 +15513,24 @@ declare class UIViewer {
      */
     getContent(ctn?: AnyContainer): JQuery;
     /**
-     * Resolve on a next animation frame, once the element is attached to the page and laid out
-     * (ex: draw charts that measure their final container)
-     * @param elt Element to wait for
+     * Resolve on a next animation frame, once the optional element is attached to the page and laid out
+     * (ex: draw charts that measure their final container), or after the frame paint
+     * (ex: show a first part before a long rendering)
+     * @param elt Optional element to wait for (none = next frame)
      * @param maxWait Maximum time in ms to wait for the attachment, then resolve anyway (default 1500)
+     * @param painted Resolve after the paint of the frame, immediately in a hidden tab (default false = before the paint)
      * @returns Promise resolved once attached (or after maxWait)
      * @example
      * // Draw a chart once its container is in the page
      * const div: JQuery = $("<div/>").appendTo(ctn);
      * await $view.whenAttached(div);
      * drawChart(div);
+     * // Show the header before inserting the rows
+     * ctn.append(header);
+     * await $view.whenAttached(header, undefined, true);
+     * insertRows();
      */
-    whenAttached(elt: JQuery | HTMLElement, maxWait?: number): Promise<void>;
+    whenAttached(elt?: JQuery | HTMLElement | null, maxWait?: number, painted?: boolean): Promise<void>;
     /**
      * Checks if element is visible = not empty (without any visible field, action, external object, text or view)
      * @param x Element to test
@@ -15543,13 +15556,19 @@ declare class UIViewer {
      * @param html Optional HTML content (full page or embedded elements)
      * @param url Or optional URL to load in iframe .frame-wrapper
      * @param cbk Optional callback
+     * @param options Optional options
+     * @param options.title Title of the iframe (RGAA 2.1), default: label of the current navigation item, else the URL
      * @example
      * // HTML content
      * $view.setContent(ctn, "<h1>Hello</h1>");
      * // URL in an iframe
      * $view.setContent(ctn, null, "https://www.simplicite.io");
+     * // URL in an iframe with a title
+     * $view.setContent(ctn, null, "https://www.simplicite.io", undefined, { title: "Simplicité website" });
      */
-    setContent(ctn: Container, html?: string | null, url?: string, cbk?: Callback): void;
+    setContent(ctn: Container, html?: string | null, url?: string, cbk?: Callback, options?: {
+        title?: string;
+    }): void;
     /**
      * Create the dropup panel of FOOTER_ADDON
      * @param html HTML content to display
@@ -15568,6 +15587,24 @@ declare class UIViewer {
      * $view.skeleton(ctn, "list");
      */
     skeleton(ctn?: Container, type?: string): void;
+    /**
+     * Content displayed while building (async contents): skeleton wave effect and no interaction until the end (see waitForBuilding)
+     * @param div content to put in the page
+     * @example
+     * $view.startBuilding(div);
+     * $view.getContent(ctn).empty().append(div);
+     * // ... async contents
+     * await $view.waitForBuilding(ctn, p, div);
+     */
+    startBuilding(div: JQuery): JQuery<HTMLElement>;
+    /**
+     * Wait the end of a content building (async contents and images) then remove the wave effect
+     * and give the hand to the user (see startBuilding)
+     * @param ctn container of the building content
+     * @param p context parameters with array of promises
+     * @param div displayed content, null = nothing to release, undefined = search in container (custom display)
+     */
+    waitForBuilding(ctn: Container, p: PromisesParam, div?: JQuery | null): Promise<void>;
     /**
      * Split the container in 2 parts (any previous part is removed)
      * @example
@@ -17749,8 +17786,8 @@ type SearchAjax = InlineParam & {
     metadata?: boolean;
     /** Parent object context */
     parent?: ParentObject;
-    /** Group-by search */
-    groupby?: boolean;
+    /** Group-by search: true/false = forced, auto = by default when the object is groupable (decided by the server) */
+    groupby?: boolean | "auto";
     /** Partial list of a group-by section */
     partial?: boolean;
     /** Group-by fields */

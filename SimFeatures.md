@@ -134,13 +134,13 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `confirmAction`
 * `initAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
 * `askAction`
+* `confirmAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -349,31 +349,31 @@ stateDiagram-v2
 * `postLoad`
 * `postSave`
 * `preValidate`
+* `initCopy`
 * `initCreate`
 * `initUpdate`
-* `initCopy`
-* `preDelete`
 * `postCreate`
+* `preDelete`
+* `resetPassword`
+* `createUserToken`
+* `deletePrefs`
 * `getUserKeyLabel`
-* `isCopyEnable`
-* `isDeleteEnable`
 * `postValidate`
+* `isDeleteEnable`
+* `isCopyEnable`
 * `isActionEnable`
 * `initUpdateAll`
 * `getMappedFilePath`
-* `totpQRCode`
 * `anonymize`
-* `createUserToken`
-* `deletePrefs`
-* `resetPassword`
+* `totpQRCode`
 * `postDelete`
-* `getMappedExportPath`
-* `preSearch`
 * `postSearch`
-* `postSelect`
+* `preSearch`
 * `preCreate`
 * `preUpdate`
 * `postUpdate`
+* `postSelect`
+* `getMappedExportPath`
 * `isUpdateEnable`
 * `canReference`
 
@@ -616,8 +616,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postUpdate`
 * `postCreate`
+* `postUpdate`
 
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------

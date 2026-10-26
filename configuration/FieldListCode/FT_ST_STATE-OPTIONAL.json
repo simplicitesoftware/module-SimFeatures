@@ -4,7 +4,7 @@
  "lov_order_by": 30,
  "lov_label": "Optional State",
  "row_module_id__mdl_name": "SimFeatures",
- "lov_color": null,
+ "lov_color": "#000000",
  "lov_color_bg": "#C9DAF8",
  "lov_icon": "icon/color/btn_blue",
  "lov_display": ["L"]

@@ -2,7 +2,7 @@
  "obf_object_id__obo_name": "FtSearch",
  "obf_field_id__fld_name": "ftSrfCode",
  "obf_order": 110,
- "obf_group_by": null,
+ "obf_group_by": 1,
  "obf_dfault_order": null,
  "obf_reorder": null,
  "obf_input": null,
