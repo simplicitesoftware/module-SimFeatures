@@ -139,8 +139,8 @@ stateDiagram-v2
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
-* `askAction`
 * `confirmAction`
+* `askAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -349,33 +349,33 @@ stateDiagram-v2
 * `postLoad`
 * `postSave`
 * `preValidate`
+* `initUpdate`
 * `initCopy`
 * `initCreate`
-* `initUpdate`
 * `postCreate`
 * `preDelete`
-* `resetPassword`
-* `createUserToken`
-* `deletePrefs`
 * `getUserKeyLabel`
 * `postValidate`
-* `isDeleteEnable`
-* `isCopyEnable`
-* `isActionEnable`
 * `initUpdateAll`
+* `isCopyEnable`
+* `isDeleteEnable`
+* `isActionEnable`
 * `getMappedFilePath`
 * `anonymize`
 * `totpQRCode`
+* `resetPassword`
+* `createUserToken`
+* `deletePrefs`
 * `postDelete`
-* `postSearch`
 * `preSearch`
+* `postSearch`
 * `preCreate`
 * `preUpdate`
 * `postUpdate`
 * `postSelect`
 * `getMappedExportPath`
-* `isUpdateEnable`
 * `canReference`
+* `isUpdateEnable`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------

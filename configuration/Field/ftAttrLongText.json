@@ -27,7 +27,7 @@
  "fld_precision": null,
  "fld_fromdate_id__fld_name": null,
  "fld_dfault": null,
- "fld_indexable": false,
+ "fld_indexable": true,
  "fld_autocomp": "0",
  "fld_groupby": false,
  "fld_updall": true,

@@ -1097,8 +1097,8 @@ type ListSelection = null | "none" | "all" | "page" | (string & {}) | string[];
 type ListParam = NavParam & {
     /** List container */
     container?: JQuery;
-    /** List title */
-    title?: string;
+    /** List title or function to build it from metadata after search (label may be changed by context hooks) */
+    title?: string | ((obj: UIBusinessObject) => string);
     /** Context list or update */
     context?: number;
     /** Object instance name */
@@ -2328,7 +2328,7 @@ declare class UIBusinessObject extends BusinessObject {
      * @param _obj Object (same as this)
      * @param _p Search parameters
      */
-    beforeLoadSearch(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
+    beforeLoadSearch(_ctn: Container, _obj: UIBusinessObject, _p: SearchParam): void;
     /**
      * Front hook to display the search form
      * @param ctn Search container
@@ -10747,6 +10747,10 @@ declare class Menu {
      * @param sign positive:show, negative:hide
      */
     menuToggle(e?: JQuery.Event | KeyboardEvent | null, sign?: number): void;
+    /**
+     * Set the toggle button state (aria-expanded and icon)
+     * @param expanded true if menu is expanded, false if minimized
+     */
     private setToggleState;
     /**
      * Start a timer to update enum counters
@@ -15526,7 +15530,7 @@ declare class UIViewer {
      * await $view.whenAttached(div);
      * drawChart(div);
      * // Show the header before inserting the rows
-     * ctn.append(header);
+     * const header: JQuery = $('<div class="header"/>').appendTo(ctn);
      * await $view.whenAttached(header, undefined, true);
      * insertRows();
      */
@@ -15591,6 +15595,8 @@ declare class UIViewer {
      * Content displayed while building (async contents): skeleton wave effect and no interaction until the end (see waitForBuilding)
      * @param div content to put in the page
      * @example
+     * const p = { promises: [] };
+     * const div: JQuery = $('<div class="my-content"/>');
      * $view.startBuilding(div);
      * $view.getContent(ctn).empty().append(div);
      * // ... async contents

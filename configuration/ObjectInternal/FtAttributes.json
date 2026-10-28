@@ -15,7 +15,7 @@
  "obo_searchspec": null,
  "obo_exportorder": null,
  "obo_distinct": false,
- "obo_indexable": false,
+ "obo_indexable": true,
  "obo_groupby": false,
  "obo_dfltref": null,
  "obo_template_id__tpl_name": "FtAttributes",

@@ -5610,6 +5610,12 @@ paths:
         required: false
       - schema:
           type: string
+        in: query
+        name: _indexsearch
+        description: Index search query
+        required: false
+      - schema:
+          type: string
           enum:
           - FtAttributesPivot
         in: query
