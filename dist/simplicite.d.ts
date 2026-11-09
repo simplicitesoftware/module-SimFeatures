@@ -1,8 +1,9 @@
+import { ChartConfiguration, InteractionItem, TitleOptions, ChartType } from 'chart.js';
+import Chart from 'chart.js/auto';
 import { EventClickArg, DateSelectArg, EventDropArg, Calendar } from '@fullcalendar/core';
 import { EventResizeDoneArg } from '@fullcalendar/interaction';
+import Quill, { QuillOptions } from 'quill';
 import L$1, { LatLngTuple } from 'leaflet';
-import Chart from 'chart.js/auto';
-import { ChartConfiguration, InteractionItem, TitleOptions, ChartType } from 'chart.js';
 import * as BootstrapLib from 'bootstrap';
 import flatpickr from 'flatpickr';
 import { Options } from 'flatpickr/dist/types/options';
@@ -11,10 +12,9 @@ import moment from 'moment';
 import hljs from 'highlight.js';
 import { marked } from 'marked';
 import { Calendar as Calendar$1 } from '@fullcalendar/core/index.js';
-import Quill, { QuillOptions } from 'quill';
 import { Html5Qrcode } from 'html5-qrcode';
 import SignaturePad from 'signature_pad';
-import { GridStackOptions, GridStack } from 'gridstack';
+import { GridStack, GridStackOptions } from 'gridstack';
 import js_beautify from 'js-beautify';
 import JSZip from 'jszip';
 import JSZipUtils from 'jszip-utils';
@@ -695,6 +695,946 @@ declare class Social {
     shareButton(config?: SocialShareConfig, o?: BusinessObject, params?: SocialShareData): JQuery<HTMLElement>;
 }
 
+/** Actions of a form */
+interface FormActions {
+    /** Generic actions have been added */
+    generic?: boolean;
+    /** Visible actions of the form */
+    form?: Action[] | null;
+    /** Actions in the form "plus" dropdown */
+    formPlus?: Action[] | null;
+}
+/** Views display mode: `true`/`false`, `tabs`, `vertical` tabs, `accordion` or `split` panels */
+type ShowViewsMode = boolean | "tabs" | "vertical" | "accordion" | "split";
+/** Parameters of a form rendering (see `$ui.displayForm`) */
+type FormParam = NavParam & {
+    /** Form title */
+    title?: string;
+    /** Maximum length of the title (default 120) */
+    titleMax?: number;
+    /** Form element */
+    form?: JQuery;
+    /** Form help */
+    help?: AnyContent;
+    /** Form actions: `undefined` = generated from metadata, `null` = no action */
+    actions?: FormActions | null;
+    /** Visible actions of the form */
+    formActions?: Action[] | null;
+    /** Actions in the "plus" dropdown */
+    plusActions?: Action[] | null;
+    /** State model transitions */
+    transitions?: Transition[] | null;
+    /** Groups of actions */
+    actionGroups?: ActionGroup[];
+    /** Form template name */
+    template?: string;
+    /** Views display mode */
+    showViews?: ShowViewsMode;
+    /** Current tab name */
+    viewTab?: string;
+    /** Show the views options */
+    showOptions?: boolean;
+    /** Show the extended fields */
+    isExtended?: boolean;
+    /** @deprecated no more effect, form header is static */
+    floating?: boolean;
+    /** Collapsed areas/views */
+    collapsed?: KeyObject;
+    /** Default number of columns in areas */
+    areaColumns?: number;
+    /** Read only form */
+    readonly?: boolean;
+    /** Apply the form constraints */
+    constraints?: boolean;
+    /** With this instance name */
+    inst?: string;
+    /** In a copy context */
+    copy?: boolean;
+    /** In a workflow */
+    workflow?: boolean;
+    /** Messages to display */
+    msg?: MessageAny[];
+    /** Forced values */
+    values?: RowItem | null;
+    /** Add href on links */
+    followLinks?: boolean;
+    /** Create references on links */
+    createLinks?: boolean;
+    /** Reference buttons */
+    refButtons?: KeyObject;
+    /** In a search form */
+    search?: boolean;
+    /** Fixed filters of the search form */
+    fixedFilters?: KeyObject;
+    /** Parent object of an inlined form */
+    parent?: ParentObject;
+    /** Link of an inlined form */
+    link?: Link;
+    /** Inlined object (0,1 or 1,1 link) */
+    inline?: InlineObject;
+    /** Save button */
+    saveBtn?: JQuery;
+    /** Activate the save buttons only when the form has changed */
+    activateSaveOnChange?: boolean;
+    /** Auto-save the form on custom action (default true) */
+    actionAutoSave?: boolean;
+    /** Ignore the `canSaveClose` rule */
+    ignoreCanSaveClose?: true;
+    /** Ignore the `canClose` rule */
+    ignoreCanClose?: true;
+    /** Ignore the `canSave` rule */
+    ignoreCanSave?: true;
+    /** Ignore the `canSaveNew` rule */
+    ignoreCanSaveNew?: true;
+    /** Ignore the `canSaveCopy` rule */
+    ignoreCanSaveCopy?: true;
+    /** Hook before loading the data */
+    beforeload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
+    /** Hook after loading the data, before display */
+    preload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
+    /** Hook when the form is displayed */
+    onload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
+    /** Hook to override the rendering, `done` must be called to display the default form */
+    display?: (ctn: Container, o: UIBusinessObject, p: FormParam, done: Callback) => void;
+    /** Hook when the form is removed */
+    onunload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
+    /** Hook after reading the form, `cbk` must be called to continue */
+    onread?: (ctn: Container, o: UIBusinessObject, index?: string | null, cbk?: Callback) => void;
+    /** Hook before saving the form */
+    beforesave?: (ctn: Container, o: UIBusinessObject, index?: string, cbk?: Callback) => void;
+    /** Hook after saving the form */
+    aftersave?: (ctn: Container, o: UIBusinessObject, index?: string, cbk?: Callback) => void;
+    /** Save button handler (`null` = no button) */
+    onsave?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
+    /** Save & Close button handler (`null` = no button) */
+    onsaveclose?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
+    /** Save & New button handler (`null` = no button) */
+    onsavenew?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
+    /** Save & Copy button handler (`null` = no button) */
+    onsavecopy?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
+    /** Long help handler */
+    onhelp?: null | ((o: UIBusinessObject) => void);
+    /** Close button handler (`null` = no button) */
+    onclose?: null | ((ctn: Container, o: UIBusinessObject) => void);
+    /** Hook when the record is not found (overrides the default message and list redirection) */
+    noRowFound?: (ctn: Container, o: UIBusinessObject, id: string) => void;
+    /** Social share options */
+    socialShare?: SocialShareConfig & {
+        /** Social share is enabled */
+        enabled?: boolean;
+    };
+    /** Display the social posts */
+    onsocial?: (ctn: Container, p: {
+        object: string;
+        rowId: string;
+        embedded?: boolean;
+        activity?: boolean;
+    }) => void;
+    /** Row index (multi-creation) */
+    index?: string;
+    /** Selected tab per tabs area */
+    formTab?: KeyObject;
+    /** Parsing the template */
+    parse?: boolean;
+    /** Tab counter */
+    tabNum?: number;
+    /** Has extended fields */
+    hasMore?: boolean;
+    /** Reference buttons */
+    refb?: KeyObject;
+    /** Count of visible views */
+    visView?: number;
+    /** Promises to wait before the end of rendering (see `$ui.addPromise`) */
+    promises?: Promise<unknown>[];
+};
+/** Task of an action tracker */
+interface TrackerTask {
+    /** Task name */
+    name?: string;
+    /** Optional info message */
+    message?: string;
+    /** Optional error message */
+    error?: string;
+    /** Optional URL to log file */
+    file?: string;
+    /** Elapsed time on task */
+    time?: string;
+}
+/** Status of an action tracker */
+interface TrackerData {
+    /** Tracker name */
+    name: string;
+    /** Optional title */
+    title?: string;
+    /** Start message */
+    start?: string;
+    /** End message */
+    end?: string;
+    /** Elapsed time */
+    time?: string;
+    /** List of tasks */
+    tasks?: TrackerTask[];
+    /** Depth of the tasks */
+    depth?: number;
+    /** Progression % */
+    percent?: number;
+    /** Terminated */
+    state?: "T";
+    /** Can be minified */
+    minifiable?: boolean;
+    /** Minified in a toast */
+    minified?: boolean;
+    /** Can be closed */
+    closeable?: boolean;
+    /** Can be stopped */
+    stoppable?: boolean;
+}
+/** Callback with the tracker status */
+type TrackerCallback = (data: TrackerData) => void;
+/** Parameters of an action tracker dialog */
+interface TrackerParam {
+    /** Dialog title */
+    title?: string;
+    /** Optional related object */
+    object?: BusinessObject;
+    /** Optional action */
+    action?: Action;
+    /** Null = auto-start */
+    start?: ((cbk: TrackerCallback) => void) | null;
+    /** Service to get the back-end tracking */
+    progress?: (cbk: TrackerCallback) => void;
+    /** Service to request the action stop */
+    stop?: (cbk: TrackerCallback) => void;
+    /** Service to toggle/minify the popup */
+    minify?: (cbk: TrackerCallback) => void;
+    /** Callback when finished */
+    done?: (log: JQuery, task: (t: TrackerTask) => void, pbar: JQuery) => void;
+    /** Actions bar (default Close button) */
+    bar?: JQuery;
+}
+/**
+ * Object form rendering
+ */
+declare class Form {
+    /**
+     * Build the object form based on the UI template
+     * @param ctn parent container
+     * @param o object
+     * @param p optional parameters
+     * @param cbk optional callback with the displayed form
+     * @returns the displayed form
+     * @example
+     * // Usually called by $ui.displayForm, which also loads the record
+     * $view.form.display(ctn, obj, {}, div => div?.addClass("my-form"));
+     */
+    display(ctn: Container, o: UIBusinessObject, p: FormParam, cbk?: (div?: JQuery) => void): JQuery<HTMLElement>;
+    /**
+     * Display a state-model navbar
+     * @param ctn container
+     * @param data navbar data style BREAD/METRO/ARROW/PAVING + list of states
+     * @example
+     * $view.form.stateNavbar(ctn, {
+     * 	rdg: { style: "METRO", count: true },
+     * 	list: [
+     * 		{ code: "DRAFT", label: "Draft", role: "M", date: "2026-01-15" },
+     * 		{ code: "SENT", label: "Sent", role: "M", current: true },
+     * 		{ code: "PAID", label: "Paid", role: "M" }
+     * 	]
+     * });
+     */
+    stateNavbar(ctn: Container, data: KeyObject): void;
+    /**
+     * Bind scroll to set the floating actions vertical position
+     * @deprecated for accessibility and better responsiveness, the form/list header and footer are now static via CSS
+     */
+    floatingActions(_ctn: Container, _div: Container, _bar: JQuery, _form?: JQuery, _left?: boolean): void;
+    /** Observe the head width to rebuild the actions bar to fit-content */
+    observeHead(actions: JQuery): void;
+    /**
+     * Display the object usages
+     * @param ctn container to populate
+     * @param list list of users { login, firstname, lastname, picture, usageId }
+     * @param obj optional object name when ctn is unknown (keepAlive trigger)
+     * @param id optional row Id (keepAlive trigger)
+     * @param action optional action use|close|delete|logout
+     * @example
+     * // Called on the messages of the server: other users on a record
+     * $view.form.objectUsage(ctn, [{ login: "jdoe", firstname: "John", lastname: "Doe" } as UsageUser]);
+     */
+    objectUsage(ctn: Container | null, list?: UsageUser[], obj?: string, id?: string, action?: "use" | "close" | "delete" | "logout"): void;
+    /**
+     * Object informations
+     * @param o Object
+     * @param id Optional row ID, to also show the ID and the created/updated information
+     * @example
+     * $view.form.about(obj, obj.getRowId());
+     */
+    about(o: BusinessObject, id?: string): void;
+    /**
+     * Confirm action with dialog
+     * @param act Action
+     * @param o Object
+     * @param run Optional confirm callback with actions 'values' and 'cbk(msg)' to send errors
+     * @returns Promise(ok, refuse)
+     * @example
+     * // Ask for confirmation with the fields of the action, then run it
+     * const act = obj.getAction("MyObjSendOrder");
+     * if (act) $view.form.confirm(act, obj, params => $console.log(params?.values))
+     * 	.then(() => $console.log("confirmed"))
+     * 	.catch(() => $console.log("refused"));
+     */
+    confirm(act: Action, o: BusinessObject, run?: (params?: ConfirmRun) => void): Promise<void | KeyObject>;
+    /**
+     * Open a dialog to track one asynchronous action
+     * @param tk Tracker infos name + state + tasks
+     * @param options
+     * @param options.title optional dialog title (default tracker title or name)
+     * @param options.start optional function(cbk) to start the tracking (default auto-start)
+     * @param options.progress function(cbk) service to get back-end tracking
+     * @param options.stop Optional service to request action stop
+     * @param options.minify Optional service to toggle/minify popup
+     * @param options.done optional function(log,task,pbar) when finished
+     * @param options.bar optional actions bar (default = Close button)
+     * function
+     * @returns The dialog
+     * @example
+     * // Display the progression, the service gives the state until it is terminated
+     * $view.form.tracker({ name: "myTracker" }, {
+     * 	title: "My long task",
+     * 	progress: cbk => cbk({ name: "myTracker", percent: 100, state: "T" }),
+     * 	done: () => $ui.displayForm(null, obj, obj.getRowId())
+     * });
+     */
+    tracker(tk: TrackerData, options: TrackerParam): JQuery<HTMLElement>;
+    /**
+     * Build a form based on global form.template
+     * @param params options
+     * @param params.icon icon name
+     * @param params.title form title
+     * @param params.content form content
+     * @param params.actions form actions
+     * @returns The form
+     * @example
+     * const form = $view.form.build({ icon: "fas/cog", title: "My settings", content: $("<div/>").text("Hello") });
+     * ctn.append(form);
+     */
+    build(params: {
+        icon?: string;
+        title: string;
+        content?: AnyContent;
+        actions?: AnyContent;
+    }): JQuery<HTMLElement>;
+    /**
+     * Call to action in case of ERR_UPDATED
+     * @param force true to force the timestamp to the DB value and re-save, false to discard changes = reload form
+     * @param ctn Form container
+     * @param obj Object
+     * @param id Row ID
+     * @example
+     * // Keep my changes: same action as the message on the form
+     * $view.form.forceChange(ctn, obj, obj.getRowId(), true);
+     */
+    forceChange(ctn: Container, obj: BusinessObject, id: string, force: boolean): void;
+    private fieldSearchCompletion;
+}
+
+/** Predefined searches of a search form */
+interface SearchPredefParam {
+    /** Predefined searches */
+    list: PredefSearch[];
+    /** 1 = edit */
+    usage?: number;
+    /** Service to create, update or delete a predefined search */
+    service: (action: string, def: PredefSearch, cbk: (ps: PredefSearch) => void) => void;
+}
+/** Parameters of a search form (see `$ui.displaySearch`) */
+interface SearchParam {
+    /** Position of the search form */
+    position?: "docked" | "column" | "popup";
+    /** Slide the docked form from the right or left */
+    slide?: "right" | "left" | null;
+    /** Title */
+    title?: string;
+    /** Help */
+    help?: string;
+    /** Messages */
+    msg?: MessageAny[];
+    /** Show the fulltext search input */
+    showIndex?: boolean;
+    /** Show the sort/group-by editor */
+    showSorting?: boolean;
+    /** Show the extended fields */
+    isExtended?: boolean;
+    /** Edit the predefined searches */
+    editPredef?: boolean;
+    /** Object instance name */
+    inst?: string;
+    /** Searchable fields */
+    fields?: ObjectField[];
+    /** Fixed filters (read only) */
+    fixedFilters?: KeyObject;
+    /** Current filters */
+    filters?: KeyObject;
+    /** Group-by mode */
+    groupBy?: boolean;
+    /** Search by columns is visible */
+    toggle?: boolean;
+    /** Docked search form */
+    docked?: boolean;
+    /** Reference buttons of the search by columns */
+    refButtonsBy?: KeyObject;
+    /** Reference buttons */
+    refButtons?: KeyObject;
+    /** Predefined searches (`false` = none) */
+    predef?: false | SearchPredefParam;
+    /** Hook before loading */
+    beforeload?: (ctn: Container, o: UIBusinessObject, p: SearchParam) => void;
+    /** Hook when displayed */
+    onload?: (ctn: Container, o: UIBusinessObject, p: SearchParam) => void;
+    /** Hook to override the rendering, `done` must be called to display the default form */
+    display?: (ctn: Container, o: UIBusinessObject, p: SearchParam, done: Callback) => void;
+    /** Hook when removed */
+    onunload?: (ctn: Container, o: UIBusinessObject, p: SearchParam) => void;
+}
+/**
+ * Object search rendering
+ */
+declare class Search {
+    /**
+     * Search field
+     * @param ctn container
+     * @param o business object
+     * @param f object field
+     * @param filter current filter
+     * @param fixedFilter fixed filter
+     * @param search handler to launch the search
+     * @returns formGroupSearch with required or semireq class
+     */
+    field(ctn: Container, o: BusinessObject, f: ObjectField, filter: string, fixedFilter: string, search?: Callback): JQuery<HTMLElement>;
+    /**
+     * Build the search form
+     * @param ctn parent container
+     * @param o object
+     * @param p optional parameters
+     * @param cbk optional callback
+     */
+    display(ctn: Container, o: UIBusinessObject, p: SearchParam, cbk?: Callback): void;
+    /**
+     * Remove all UI filters
+     * @param form container
+     * @param o object
+     * @param fields optional fields array to delete foreignUserKey
+     * @example
+     * $view.search.reset(ctn, obj, obj.getFields());
+     */
+    reset(form: Container, o: BusinessObject, fields?: ObjectField[]): void;
+    /**
+     * Predefined search selector
+     * @param o object
+     * @param p search parameters with fields and predef services
+     * @param filters Current form filters
+     * @param update callback to update the form with selected search
+     * @param close callback to return to form
+     */
+    predef(o: BusinessObject, p: SearchParam, filters: KeyObject, update?: Callback, close?: Callback): JQuery<HTMLElement>;
+    /** Counter of the sort fields (unique DOM IDs) */
+    static selectIndex: number;
+    /**
+     * Sort/Group by columns editor
+     * @param o object
+     * @param p search parameters
+     * @param apply callback to process the sort on list
+     * @param close callback to return to form
+     */
+    sortby(o: BusinessObject, p: SearchParam, apply?: Callback, close?: Callback): JQuery<HTMLElement> | undefined;
+}
+
+/**
+ * Extends Simplicite.Ajax.BusinessObject with front hooks.
+ */
+declare class UIBusinessObject extends BusinessObject {
+    /** V6 legacy shorthand to $ui */
+    ui?: UIEngine;
+    /**
+     * Front constraints implementation
+     */
+    applyConstraints?: ConstraintFunction;
+    /**
+     * Bind hook functions in locals with inherited methods
+     */
+    bindHooks(): void;
+    /**
+     * Call a hook implementation
+     * @param method hook
+     * @param params array of parameters to apply
+     * @returns The result of the hook, undefined when it failed (the error is logged)
+     * @example
+     * obj.hook(obj.onLoadForm, [ctn, obj, {}]);
+     */
+    hook(method: any, params: any): any;
+    /**
+     * Front hook when object is instantiated.
+     * Useful to override locals (cloned from Simplicite.UI.Globals) properties before usage.
+     * @param _locals UI locals properties (shorthand to this.locals.ui)
+     * @example
+     * // Once per instance: change the default UI settings
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoad() {
+     * 		if (this.locals.ui)
+     * 			this.locals.ui.form.collapsed = { "MyObject-1": true };
+     * 	}
+     * }
+     */
+    onLoad(_locals?: typeof Globals): void;
+    /**
+     * Front hook before loading form data
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _p Form parameters
+     * @example
+     * // Before the record is loaded
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	beforeLoadForm(ctn: Container, obj: UIBusinessObject, p: FormParam) {
+     * 		p.readonly = !$grant.hasResponsibility("MY_MANAGER");
+     * 	}
+     * }
+     */
+    beforeLoadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
+    /**
+     * Front hook when record is not found (default NO_ROW_FOUND alert + nav fix + list redirection)
+     * @param ctn Form container
+     * @param obj Object (same as this)
+     * @param rowId Object row ID
+     * @example
+     * // Replace the default alert and the redirection to the list
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	noRowFound(ctn: Container, obj: UIBusinessObject, rowId: string) {
+     * 		$ui.toast({ type: "warning", content: "Order " + rowId + " not found" });
+     * 	}
+     * }
+     */
+    noRowFound(ctn: Container, obj: UIBusinessObject, rowId: string): void;
+    /**
+     * Front hook before rendering form
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _p Form parameters
+     * @example
+     * // The record is loaded, the form is not rendered yet
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	preLoadForm(ctn: Container, obj: UIBusinessObject, p: FormParam) {
+     * 		obj.getField("myObjComment")?.setVisible(!obj.isNew());
+     * 	}
+     * }
+     */
+    preLoadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
+    /**
+     * Front hook to display the form
+     * @param ctn Form container
+     * @param obj Object (same as this)
+     * @param p Form parameters
+     * @param cbk callback when rendered (with the displayed form)
+     * @example
+     * // Change the rendering: cbk must be called
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	displayForm(ctn: Container, obj: UIBusinessObject, p: FormParam, cbk: (div?: JQuery) => void) {
+     * 		$view.form.display(ctn, obj, p, div => {
+     * 			div?.addClass("my-form");
+     * 			cbk(div);
+     * 		});
+     * 	}
+     * }
+     */
+    displayForm(ctn: Container, obj: UIBusinessObject, p: FormParam, cbk: (div?: JQuery) => void): void;
+    /**
+     * Front hook when object form is loaded
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _p Form parameters
+     * @example
+     * // The form is displayed: bind the fields
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoadForm(ctn: Container, obj: UIBusinessObject, p: FormParam) {
+     * 		const f = $ui.getUIField(ctn, obj, "myObjType");
+     * 		f.ui.change(() => $ui.getUIField(ctn, obj, "myObjComment").ui.visible(f.ui.val() == "OTHER"));
+     * 	}
+     * }
+     */
+    onLoadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
+    /**
+     * Front hook when object form is unloaded
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _p Form parameters
+     * @example
+     * // The form is closed: release what onLoadForm has created
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onUnloadForm(ctn: Container, obj: UIBusinessObject, p: FormParam) {
+     * 		$console.log("closed", obj.getRowId());
+     * 	}
+     * }
+     */
+    onUnloadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
+    /**
+     * Front hook when object form is read
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _index record index (edit list)
+     * @param cbk callback() must be called to resolve promise
+     * @example
+     * // The inputs are read into the object: cbk must be called
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onReadForm(ctn: Container, obj: UIBusinessObject, index?: string | null, cbk?: () => void) {
+     * 		obj.setFieldValue("myObjComputed", obj.getFieldValue("myObjCode") + "-1");
+     * 		cbk?.();
+     * 	}
+     * }
+     */
+    onReadForm(_ctn: Container, _obj: UIBusinessObject, _index?: string | null, cbk?: () => void): void;
+    /**
+     * Front hook before calling Ajax object.save()
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _index record index (edit list)
+     * @param cbk callback(true|false) (must return 'true' to continue or 'false' to stop/reject promise)
+     * @example
+     * // cbk must be called: false stops the save
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	beforeSave(ctn: Container, obj: UIBusinessObject, index?: string, cbk?: (x: boolean) => void) {
+     * 		$ui.confirm({ content: "Save?", onOk: () => cbk?.(true), onCancel: () => cbk?.(false) });
+     * 	}
+     * }
+     */
+    beforeSave(_ctn: Container, _obj: UIBusinessObject, _index?: string, cbk?: (x: boolean) => void): void;
+    /**
+     * Front hook after calling Ajax object.save()
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _index record index (edit list)
+     * @param cbk callback(true|false) (must return 'true' to continue or 'false' to stop/reject promise)
+     * @example
+     * // cbk must be called
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	afterSave(ctn: Container, obj: UIBusinessObject, index?: string, cbk?: (x: boolean) => void) {
+     * 		$ui.toast({ type: "success", content: "Saved" });
+     * 		cbk?.(true);
+     * 	}
+     * }
+     */
+    afterSave(_ctn: Container, _obj: UIBusinessObject, _index?: string, cbk?: (x: boolean) => void): void;
+    /**
+     * Front hook before loading list data
+     * @param _ctn List container
+     * @param _obj Object (same as this)
+     * @param _p List parameters
+     * @example
+     * // Before the rows are loaded: force a filter
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	beforeLoadList(ctn: Container, obj: UIBusinessObject, p: ListParam) {
+     * 		obj.filters = { ...obj.filters, myObjStatus: "OPEN" };
+     * 	}
+     * }
+     */
+    beforeLoadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
+    /**
+     * Front hook before rendering list
+     * @param _ctn List container
+     * @param _obj Object (same as this)
+     * @param _p List parameters
+     * @example
+     * // The rows are loaded, the list is not rendered yet
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	preLoadList(ctn: Container, obj: UIBusinessObject, p: ListParam) {
+     * 		p.selectRows = false;
+     * 	}
+     * }
+     */
+    preLoadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
+    /**
+     * Front hook to display the list
+     * @param ctn List container
+     * @param obj Object (same as this)
+     * @param p List parameters
+     * @param cbk callback when rendered (with the displayed list)
+     * @example
+     * // Change the rendering: cbk must be called
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	displayList(ctn: Container, obj: UIBusinessObject, p: ListParam, cbk: (div?: JQuery) => void) {
+     * 		$view.list.display(ctn, obj, p).then(div => {
+     * 			div.addClass("my-list");
+     * 			cbk(div);
+     * 		});
+     * 	}
+     * }
+     */
+    displayList(ctn: Container, obj: UIBusinessObject, p: ListParam, cbk: (div?: JQuery) => void): void;
+    /**
+     * Front hook to display one list record
+     * @param ctn List container
+     * @param row Row container (tr or div)
+     * @param obj Object (same as this)
+     * @param id Row ID
+     * @param p List parameters
+     * @param cbk callback when rendered
+     * @example
+     * // Change the rendering of a row: cbk must be called
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	displayListRow(ctn: Container, row: Container, obj: UIBusinessObject, id: string, p: ListParam, cbk: Callback) {
+     * 		$view.list.row(ctn, row, obj, id, p).then(() => {
+     * 			row.toggleClass("my-late", obj.getFieldValue("myObjLate") == "1");
+     * 			cbk();
+     * 		});
+     * 	}
+     * }
+     */
+    displayListRow(ctn: Container, row: Container, obj: UIBusinessObject, id: string, p: ListParam, cbk: Callback): void;
+    /**
+     * Front hook when a list row is displayed
+     * @param _ctn List container
+     * @param _obj Object (same as this)
+     * @param _id Row ID
+     * @param _item Row item
+     * @param _row Row container (tr or div)
+     * @example
+     * // Called for each displayed row
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoadListRow(ctn: Container, obj: UIBusinessObject, id: string, item: RowData, row: Container) {
+     * 		row.toggleClass("my-open", item.myObjStatus == "OPEN");
+     * 	}
+     * }
+     */
+    onLoadListRow(_ctn: Container, _obj: UIBusinessObject, _id: string, _item: RowData, _row: Container): void;
+    /**
+     * Front hook when a list row is unloaded
+     * @param _ctn List container
+     * @param _obj Object (same as this)
+     * @param _id Row ID
+     * @param _item Row item
+     * @param _row Row container (tr or div)
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onUnloadListRow(ctn: Container, obj: UIBusinessObject, id: string, item: RowData, row: Container) {
+     * 		$console.log("row removed", id);
+     * 	}
+     * }
+     */
+    onUnloadListRow(_ctn: Container, _obj: UIBusinessObject, _id: string, _item: RowData, _row: Container): void;
+    /**
+     * Front hook when object list is loaded
+     * @param _ctn List container
+     * @param _obj Object (same as this)
+     * @param _p List parameters
+     * @example
+     * // The list is displayed
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoadList(ctn: Container, obj: UIBusinessObject, p: ListParam) {
+     * 		$(".my-summary", ctn).text(obj.count + " records");
+     * 	}
+     * }
+     */
+    onLoadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
+    /**
+     * Front hook when object list is unloaded
+     * @param _ctn List container
+     * @param _obj Object (same as this)
+     * @param _p List parameters
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onUnloadList(ctn: Container, obj: UIBusinessObject, p: ListParam) {
+     * 		$console.log("list closed", obj.getName());
+     * 	}
+     * }
+     */
+    onUnloadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
+    /**
+     * Front hook before loading search form
+     * @param _ctn Search container
+     * @param _obj Object (same as this)
+     * @param _p Search parameters
+     * @example
+     * // Before rendering the form: choose the fields
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	beforeLoadSearch(ctn: Container, obj: UIBusinessObject, p: SearchParam) {
+     * 		p.fields = obj.getFields().filter(f => f.searchable);
+     * 	}
+     * }
+     */
+    beforeLoadSearch(_ctn: Container, _obj: UIBusinessObject, _p: SearchParam): void;
+    /**
+     * Front hook to display the search form
+     * @param ctn Search container
+     * @param obj Object (same as this)
+     * @param p Search parameters
+     * @param cbk callback when rendered
+     * @example
+     * // Change the rendering: cbk must be called
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	displaySearch(ctn: Container, obj: UIBusinessObject, p: SearchParam, cbk: Callback) {
+     * 		$view.search.display(ctn, obj, p, () => {
+     * 			ctn.addClass("my-search");
+     * 			cbk();
+     * 		});
+     * 	}
+     * }
+     */
+    displaySearch(ctn: Container, obj: UIBusinessObject, p: SearchParam, cbk: Callback): void;
+    /**
+     * Front hook when object search is loaded
+     * @param _ctn Search container
+     * @param _obj Object (same as this)
+     * @param _p Search parameters
+     * @example
+     * // The search form is displayed
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoadSearch(ctn: Container, obj: UIBusinessObject, p: SearchParam) {
+     * 		$ui.getUIField(ctn, obj, "myObjCode").ui.focus();
+     * 	}
+     * }
+     */
+    onLoadSearch(_ctn: Container, _obj: UIBusinessObject, _p: SearchParam): void;
+    /**
+     * Front hook when object search is unloaded
+     * @param _ctn Search container
+     * @param _obj Object (same as this)
+     * @param _p Search parameters
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onUnloadSearch(ctn: Container, obj: UIBusinessObject, p: SearchParam) {
+     * 		$console.log("search closed", obj.getName());
+     * 	}
+     * }
+     */
+    onUnloadSearch(_ctn: Container, _obj: UIBusinessObject, _p: SearchParam): void;
+    /**
+     * Front hook before loading summary
+     * @param _ctn Form container
+     * @param _obj Object (same as this)
+     * @param _p Parameters
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	beforeLoadSummary(ctn: Container, obj: UIBusinessObject, p: SummaryParam) {
+     * 		$console.log("load summary", obj.getName(), p);
+     * 	}
+     * }
+     */
+    beforeLoadSummary(_ctn: Container, _obj: UIBusinessObject, _p: SummaryParam): void;
+    /**
+     * Front hook to display the object summary
+     * @param ctn Summary container
+     * @param mo Meta object
+     * @param obj Object (same as this)
+     * @param cbk callback when rendered
+     * @example
+     * // Change the rendering: cbk must be called
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	displaySummary(ctn: Container, mo: MetaObject, obj: UIBusinessObject, cbk: Callback) {
+     * 		$view.list.summary(ctn, mo, obj, () => {
+     * 			ctn.addClass("my-summary");
+     * 			cbk();
+     * 		});
+     * 	}
+     * }
+     */
+    displaySummary(ctn: Container, mo: MetaObject, obj: UIBusinessObject, cbk: Callback): void;
+    /**
+     * Front hook when object summary is loaded
+     * @param _ctn Summary container
+     * @param _mo Meta object
+     * @param _obj Object (same as this)
+     * @param _p Parameters
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoadSummary(ctn: Container, mo: MetaObject, obj: UIBusinessObject, p: SummaryParam) {
+     * 		$console.log("summary displayed", mo.object, p);
+     * 	}
+     * }
+     */
+    onLoadSummary(_ctn: Container, _mo: MetaObject, _obj: UIBusinessObject, _p: SummaryParam): void;
+    /**
+     * Front hook before loading calendar
+     * @param _ctn container
+     * @param _obj Object (same as this)
+     * @param _agd Agenda definition
+     * @param _p parameters
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	beforeLoadAgenda(ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) {
+     * 		$console.log("load agenda", agd, p);
+     * 	}
+     * }
+     */
+    beforeLoadAgenda(_ctn: Container, _obj: UIBusinessObject, _agd: object, _p: KeyObject): void;
+    /**
+     * Front hook when calendar is loaded
+     * @param _ctn container
+     * @param _obj Object (same as this)
+     * @param _agd Agenda definition
+     * @param _p parameters
+     * @example
+     * // The calendar is displayed
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoadAgenda(ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) {
+     * 		ctn.addClass("my-agenda");
+     * 	}
+     * }
+     */
+    onLoadAgenda(_ctn: Container, _obj: UIBusinessObject, _agd: object, _p: KeyObject): void;
+    /**
+     * Front hook when calendar is unloaded
+     * @param _ctn container
+     * @param _obj Object (same as this)
+     * @param _agd Agenda definition
+     * @param _p parameters
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onUnloadAgenda(ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) {
+     * 		$console.log("agenda closed", obj.getName());
+     * 	}
+     * }
+     */
+    onUnloadAgenda(_ctn: Container, _obj: UIBusinessObject, _agd: object, _p: KeyObject): void;
+    /**
+     * Front hook before loading timesheet
+     * @param _ctn container
+     * @param _obj Object (same as this)
+     * @param _p parameters
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	beforeLoadTimesheet(ctn: Container, obj: UIBusinessObject, p: KeyObject) {
+     * 		$console.log("load timesheet", p);
+     * 	}
+     * }
+     */
+    beforeLoadTimesheet(_ctn: Container, _obj: UIBusinessObject, _p: KeyObject): void;
+    /**
+     * Front hook when timesheet is loaded
+     * @param _ctn container
+     * @param _obj Object (same as this)
+     * @param _ts Timesheet definition
+     * @example
+     * // The timesheet is displayed
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onLoadTimesheet(ctn: Container, obj: UIBusinessObject, ts: KeyObject) {
+     * 		ctn.addClass("my-timesheet");
+     * 	}
+     * }
+     */
+    onLoadTimesheet(_ctn: Container, _obj: UIBusinessObject, _ts: KeyObject): void;
+    /**
+     * Front hook when timesheet is unloaded
+     * @param _ctn container
+     * @param _obj Object (same as this)
+     * @param _ts Timesheet definition
+     * @example
+     * class MyObject extends Simplicite.UI.BusinessObject {
+     * 	onUnloadTimesheet(ctn: Container, obj: UIBusinessObject, ts: KeyObject) {
+     * 		$console.log("timesheet closed", ts);
+     * 	}
+     * }
+     */
+    onUnloadTimesheet(_ctn: Container, _obj: UIBusinessObject, _ts: KeyObject): void;
+}
+
 /** Type of an alert */
 type AlertType = "error" | "danger" | "warning" | "info" | "secondary" | "success";
 /** Position */
@@ -1009,12 +1949,14 @@ declare class UIRenderDialog {
      * Manage import XML thru UI
      * @param ctn Optional container
      * @param adapter Optional adapter to use
+     * @param options Optional options to use
+     * @param help Optional help
      * @example
      * $ui.displayImportXML(null);
      * // with a specific adapter
      * $ui.displayImportXML(null, "MyXMLAdapter");
      */
-    displayImportXML(ctn: AnyContainer, adapter?: string): void;
+    displayImportXML(ctn: AnyContainer, adapter?: string, options?: string, help?: string): void;
     /**
      * Manage import CSV thru UI
      * @param ctn Optional container
@@ -1341,6 +2283,9 @@ declare class List {
      * @param f Field definition
      * @param v Raw value
      * @returns The formatted value
+     * @example
+     * const f = obj.getField("myObjAmount");
+     * const display = f && $view.list.toUI(f, "1234.5");
      */
     toUI(f: ObjectField, v: FieldValue): string | string[];
     /**
@@ -1349,6 +2294,10 @@ declare class List {
      * @param o Business object
      * @param sel `"all"` | `"page"` | `"none"` | row ID(s)
      * @param p List parameters with the `onSelectRow` service
+     * @example
+     * // Select the current page, then a single row
+     * $view.list.selectRow(listCtn, obj, "page", {});
+     * $view.list.selectRow(listCtn, obj, rowId, {});
      */
     selectRow(ctn: Container, o: BusinessObject, sel: ListSelection, p: Pick<ListParam, "onSelectRow">): void;
     /**
@@ -1363,6 +2312,9 @@ declare class List {
      * @param o Business object with the loaded list
      * @param p List parameters
      * @returns the displayed list
+     * @example
+     * // Usually called by $ui.displayList, which also loads the rows
+     * $view.list.display(listCtn, obj, {}).then(div => div.addClass("my-list"));
      */
     display(ctn: Container, o: UIBusinessObject, p: ListParam): Promise<JQuery>;
     private linkPillboxOrder;
@@ -1383,6 +2335,9 @@ declare class List {
      * @param o Business object with the current item
      * @param rowid Row ID
      * @param p List parameters
+     * @example
+     * // Default rendering in a custom row hook
+     * $view.list.row(listCtn, t, obj, rowId, {}).then(() => t.addClass("my-row"));
      */
     row(ctn: Container, elt: JQuery, o: UIBusinessObject, rowid: string, p: ListParam): Promise<void>;
     /**
@@ -1391,6 +2346,9 @@ declare class List {
      * @param el Clicked element in the row
      * @param o Business object
      * @param p List parameters
+     * @example
+     * // Open the row of a clicked element
+     * $view.list.open(listCtn, t, obj, { onopen: (_ctn, _o, id) => $console.log("open", id) });
      */
     open(ctn: JQuery, el: JQuery, o: UIBusinessObject, p: ListParam): void;
     /**
@@ -1412,6 +2370,8 @@ declare class List {
      * @param o Business object
      * @param tpl Search template
      * @param pos Template position
+     * @example
+     * $view.list.searchTemplate(listCtn, obj, '<div class="my-search"></div>', "top");
      */
     searchTemplate(div: Container, o: UIBusinessObject, tpl: string, pos: Position): void;
     /**
@@ -1434,14 +2394,25 @@ declare class List {
      * @param o Optional business object
      * @param cbk Optional callback when displayed
      * @returns This instance
+     * @example
+     * $view.list.summary(ctn, { object: "MyObject", row_id: rowId }, obj, () => $console.log("displayed"));
      */
     summary(ctn: Container, mo: MetaObject, o?: UIBusinessObject, cbk?: Callback): this;
     /**
      * Display the export options dialog (mode, format and format options).
      * @param obj Business object to export
-     * @param opt Export options: enabled formats (`CSV`, `XLS`, `PDF`...), `list` mode, print templates...
+     * @param opt Export options, all required: `enabled` of each format (`CSV`, `XLS`, `PDF`, `ARC`, `XML`, `JSON`, `YAML`, `ZIP`), `list` mode, `prints` templates
      * @param cbk Callback with the selected options
      * @returns This instance
+     * @example
+     * // Usually opened by the export action of the list, with the options of the object
+     * const off = { enabled: false };
+     * $view.list.exportDialog(obj, {
+     * 	list: true,
+     * 	prints: [],
+     * 	CSV: { enabled: true, sep: ";" },
+     * 	XLS: off, PDF: off, ARC: off, XML: off, JSON: off, YAML: off, ZIP: off
+     * }, param => $console.log(param.media, param.mode));
      */
     exportDialog(obj: BusinessObject, opt: KeyObject, cbk?: (param: KeyObject) => void): this;
     /**
@@ -1450,6 +2421,9 @@ declare class List {
      * @param p List parameters
      * @param cbk Callback with the selected row ID(s)
      * @returns The dialog
+     * @example
+     * // Select several records
+     * $view.list.selectDialog(obj, { selectRows: true }, (_o, ids) => $console.log(ids));
      */
     selectDialog(obj: BusinessObject, p: ListParam, cbk: (obj: BusinessObject, ids?: string | string[]) => void): JQuery<HTMLElement>;
     /**
@@ -1459,14 +2433,27 @@ declare class List {
      * @param o Object
      * @param name Field name of the message
      * @returns Controls (inputs, selects, textareas, Select2 comboboxes)
+     * @example
+     * $view.list.rowFieldControls(t, obj, "myObjCode").addClass("my-control");
      */
     rowFieldControls(tr: JQuery, o: UIBusinessObject, name: string): JQuery;
     /**
      * Give the focus to the first editable control of a row
      * @param row Row
      * @returns true when a control has been focused
+     * @example
+     * $view.list.focusEditable(t);
      */
     focusEditable(row: JQuery): boolean;
+    /**
+     * Give the focus to the first row in error (edit list saved with errors)
+     * @param ctn List container
+     * @returns true when a control has been focused
+     * @example
+     * // After saving an edit list
+     * $view.list.focusRowError(listCtn);
+     */
+    focusRowError(ctn: Container): boolean;
     /**
      * Accessible name of a row control, fallback when the text is not defined: "<verb> : <row ID field label> <row ID>"
      * @param o Object
@@ -1584,28 +2571,46 @@ declare class UINavigator {
     constructor(ctn?: Container, uniqueId?: string);
     /**
      * Navigation history
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const items = nav.getItems();
      */
     getItems(): NavItem[];
     /**
      * Navigation element
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const first = nav.getItem(0);
      */
     getItem(i: number): NavItem;
     /**
      * Root element
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const root = nav.getRootItem();
      */
     getRootItem(): NavItem;
     /**
      * Current element
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const current = nav.getCurrentItem();
      */
     getCurrentItem(): NavItem;
     /**
      * Navigation length
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const n = nav.length();
      */
     length(): number;
     /**
      * Navigator Id to isolate its object instances
      * @param id Optional value to set the unique id
      * @returns navigator Id
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const id = nav.navId();
      */
     navId(id?: string): string | undefined;
     /**
@@ -1625,12 +2630,22 @@ declare class UINavigator {
      * <li>url: optional specific location to load in container</li>
      * <li>index: index search</li>
      * </ul>
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const current = nav.nav();
+     * // Push a new item
+     * nav.nav("add", { type: "form", object: obj, rowId, label: "My record" });
      */
     nav(action?: NavAction, item?: NavItem): NavItem;
     /**
      * Returns back in navigation
      * @param n backward iterations (default 1, reload 0)
      * @param params Optional additive parameters (to display messages or to override old parameters)
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * // Previous screen, then reload the current one
+     * nav.navBack();
+     * nav.navBack(0);
      */
     navBack(n?: number, params?: {
         msg?: MessageAny[];
@@ -1646,25 +2661,40 @@ declare class UINavigator {
      * Navigate to item. Returns to home if unknown.
      * @param n Navigation item or index, default is the last one
      * @param params Optional additive parameters (to display messages or to override old parameters)
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.navTo(nav.getRootItem());
      */
     navTo(n?: NavItem | null, params?: KeyObject): this;
     private itemUniqueName;
     /**
      * Reload current navigation and notify js-reload components
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.reload();
      */
     reload(): this;
     /**
      * Preserve nav informations (scroll and focus)
      * @param y save the scrollTop + focus of nav container
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.leave(ctn, ctn.scrollTop() || 0);
      */
     leave(ctn: Container, y: number): this;
     /**
      * Set whether focus should be restored on navback
      * @param b a selector, true to restore, false to skip
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.setRestoreFocus("#myInput");
      */
     setRestoreFocus(b: boolean | string): this;
     /**
      * Restore nav informations (scroll and focus)
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.restore(ctn);
      */
     restore(ctn: Container): this;
     /**
@@ -1672,26 +2702,40 @@ declare class UINavigator {
      * @param apply apply when true or save the scrollTop of nav container
      * @param n Item with scrollTop property
      * @param ctn Container
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.vscroll(true, nav.getCurrentItem(), ctn);
      */
     vscroll(apply: boolean | number, n: NavItem, ctn?: Container): this;
     /**
      * Preserve page focus.
      * If the previous focus is not found, try to focus the first visible '.js-focusable' in container
      * @param apply true to restore focus, false to keep activeElement infos
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.focus(true, nav.getCurrentItem(), ctn);
      */
     focus(apply: boolean | number, n: NavItem, ctn: Container): this;
     /**
      * Extract only simple types parameters to be serializable in JSON and to avoid cyclic object references
      * @param params Parameters
      * @returns Simplified parameters
+     * @example
+     * const simple = Simplicite.UI.Navigator.parameters({ page: 1, object: obj });
      */
     static parameters(params?: KeyObject): KeyObject | undefined;
     /**
      * Navigation as serializable JSON array
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const json = nav.toJSON();
      */
     toJSON(): NavItem[];
     /**
      * Navigation item as serializable JSON object
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const json = nav.itemToJSON(nav.getCurrentItem());
      */
     itemToJSON(item: NavItem): NavItem;
     /**
@@ -1700,22 +2744,37 @@ declare class UINavigator {
     private itemInit;
     /**
      * Rebuild the navigation from serialized nav
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.fromJSON(nav.toJSON(), ctn);
      */
     fromJSON(list: NavItem[], ctn: JQuery): void;
     /**
      * Session history
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const history = nav.getHistory();
      */
     getHistory(): NavHistItem[];
     /**
      * Load sysparam HISTORY
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.loadHistory();
      */
     loadHistory(): this;
     /**
      * Clear sysparam HISTORY
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.clearHistory(() => $console.log("cleared"));
      */
     clearHistory(cbk?: Callback): this;
     /**
      * JSON representation
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const json = nav.jsonHistory();
      */
     jsonHistory(): {
         /** Object name */
@@ -1727,21 +2786,33 @@ declare class UINavigator {
     }[];
     /**
      * Save sysparam HISTORY
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.saveHistory();
      */
     saveHistory(timer?: boolean): Promise<string>;
     /**
      * Add a history of opened object in main navigation
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.addHistory({ object: "MyObject", rowId } as NavHistItem);
      */
     addHistory(item: NavHistItem): this;
     /**
      * Remove an item from session history and persist the change
      * @param item History item to remove (matched by object name and rowId)
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * nav.removeHistory({ object: "MyObject", rowId });
      */
     removeHistory(item: Pick<NavHistItem, "object" | "rowId">): this;
     /**
      * Find the index of an item in session history
      * @param item History item to look up (matched by object name and rowId)
      * @returns Zero-based index, or -1 if not found
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const i = nav.findHistory({ object: "MyObject", rowId });
      */
     findHistory(item: Pick<NavHistItem, "object" | "rowId">): number;
     /**
@@ -1756,855 +2827,885 @@ declare class UINavigator {
     private navPop;
 }
 
-/** Actions of a form */
-interface FormActions {
-    /** Generic actions have been added */
-    generic?: boolean;
-    /** Visible actions of the form */
-    form?: Action[] | null;
-    /** Actions in the form "plus" dropdown */
-    formPlus?: Action[] | null;
+/** HSV color */
+interface HSV {
+    /** 0..360 */
+    h: number;
+    /** 0..100 */
+    s: number;
+    /** 0..100 */
+    v: number;
 }
-/** Views display mode: `true`/`false`, `tabs`, `vertical` tabs or `split` panels */
-type ShowViewsMode = boolean | "tabs" | "vertical" | "split";
-/** Parameters of a form rendering (see `$ui.displayForm`) */
-type FormParam = NavParam & {
-    /** Form title */
-    title?: string;
-    /** Maximum length of the title (default 120) */
-    titleMax?: number;
-    /** Form element */
-    form?: JQuery;
-    /** Form help */
-    help?: AnyContent;
-    /** Form actions: `undefined` = generated from metadata, `null` = no action */
-    actions?: FormActions | null;
-    /** Visible actions of the form */
-    formActions?: Action[] | null;
-    /** Actions in the "plus" dropdown */
-    plusActions?: Action[] | null;
-    /** State model transitions */
-    transitions?: Transition[] | null;
-    /** Groups of actions */
-    actionGroups?: ActionGroup[];
-    /** Form template name */
-    template?: string;
-    /** Views display mode */
-    showViews?: ShowViewsMode;
-    /** Current tab name */
-    viewTab?: string;
-    /** Show the views options */
-    showOptions?: boolean;
-    /** Show the extended fields */
-    isExtended?: boolean;
-    /** @deprecated no more effect, form header is static */
-    floating?: boolean;
-    /** Collapsed areas/views */
-    collapsed?: KeyObject;
-    /** Default number of columns in areas */
-    areaColumns?: number;
-    /** Read only form */
-    readonly?: boolean;
-    /** Apply the form constraints */
-    constraints?: boolean;
-    /** With this instance name */
-    inst?: string;
-    /** In a copy context */
-    copy?: boolean;
-    /** In a workflow */
-    workflow?: boolean;
-    /** Messages to display */
-    msg?: MessageAny[];
-    /** Forced values */
-    values?: RowItem | null;
-    /** Add href on links */
-    followLinks?: boolean;
-    /** Create references on links */
-    createLinks?: boolean;
-    /** Reference buttons */
-    refButtons?: KeyObject;
-    /** In a search form */
-    search?: boolean;
-    /** Fixed filters of the search form */
-    fixedFilters?: KeyObject;
-    /** Parent object of an inlined form */
-    parent?: ParentObject;
-    /** Link of an inlined form */
-    link?: Link;
-    /** Inlined object (0,1 or 1,1 link) */
-    inline?: InlineObject;
-    /** Save button */
-    saveBtn?: JQuery;
-    /** Activate the save buttons only when the form has changed */
-    activateSaveOnChange?: boolean;
-    /** Auto-save the form on custom action (default true) */
-    actionAutoSave?: boolean;
-    /** Ignore the `canSaveClose` rule */
-    ignoreCanSaveClose?: true;
-    /** Ignore the `canClose` rule */
-    ignoreCanClose?: true;
-    /** Ignore the `canSave` rule */
-    ignoreCanSave?: true;
-    /** Ignore the `canSaveNew` rule */
-    ignoreCanSaveNew?: true;
-    /** Ignore the `canSaveCopy` rule */
-    ignoreCanSaveCopy?: true;
-    /** Hook before loading the data */
-    beforeload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
-    /** Hook after loading the data, before display */
-    preload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
-    /** Hook when the form is displayed */
-    onload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
-    /** Hook to override the rendering, `done` must be called to display the default form */
-    display?: (ctn: Container, o: UIBusinessObject, p: FormParam, done: Callback) => void;
-    /** Hook when the form is removed */
-    onunload?: (ctn: Container, o: UIBusinessObject, p: FormParam) => void;
-    /** Hook after reading the form, `cbk` must be called to continue */
-    onread?: (ctn: Container, o: UIBusinessObject, p: FormParam, cbk: Callback) => void;
-    /** Hook before saving the form */
-    beforesave?: (ctn: Container, o: UIBusinessObject, index?: string, cbk?: Callback) => void;
-    /** Hook after saving the form */
-    aftersave?: (ctn: Container, o: UIBusinessObject, index?: string, cbk?: Callback) => void;
-    /** Save button handler (`null` = no button) */
-    onsave?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
-    /** Save & Close button handler (`null` = no button) */
-    onsaveclose?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
-    /** Save & New button handler (`null` = no button) */
-    onsavenew?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
-    /** Save & Copy button handler (`null` = no button) */
-    onsavecopy?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
-    /** Long help handler */
-    onhelp?: null | ((o: UIBusinessObject) => void);
-    /** Close button handler (`null` = no button) */
-    onclose?: null | ((ctn: Container, o: UIBusinessObject) => void);
-    /** Hook when the record is not found (overrides the default message and list redirection) */
-    noRowFound?: (ctn: Container, o: UIBusinessObject, id: string) => void;
-    /** Social share options */
-    socialShare?: SocialShareConfig & {
-        /** Social share is enabled */
-        enabled?: boolean;
-    };
-    /** Display the social posts */
-    onsocial?: (ctn: Container, p: {
-        object: string;
-        rowId: string;
-        embedded?: boolean;
-        activity?: boolean;
-    }) => void;
-    /** Row index (multi-creation) */
-    index?: string;
-    /** Selected tab per tabs area */
-    formTab?: KeyObject;
-    /** Parsing the template */
-    parse?: boolean;
-    /** Tab counter */
-    tabNum?: number;
-    /** Has extended fields */
-    hasMore?: boolean;
-    /** Reference buttons */
-    refb?: KeyObject;
-    /** Count of visible views */
-    visView?: number;
-    /** Promises to wait before the end of rendering (see `$ui.addPromise`) */
-    promises?: Promise<unknown>[];
+/** RGB color */
+interface RGB {
+    /** 0..255 */
+    r: number;
+    /** 0..255 */
+    g: number;
+    /** 0..255 */
+    b: number;
+}
+/** RGB color with alpha */
+type RGBA = RGB & {
+    /** 0..1 */
+    a?: number;
 };
-/** Task of an action tracker */
-interface TrackerTask {
-    /** Task name */
-    name?: string;
-    /** Optional info message */
-    message?: string;
-    /** Optional error message */
+/** Oklab color */
+interface OKLAB {
+    /** Positive */
+    L: number;
+    /** Signed */
+    a: number;
+    /** Signed */
+    b: number;
+}
+/** Contrast between a text and its background */
+interface Contrast {
+    /** Background color */
+    bgcolor: RGBA;
+    /** Text color */
+    color: RGBA;
+    /** Min 4.5 */
+    ratio: number;
+    /** Error when the contrast is too low */
     error?: string;
-    /** Optional URL to log file */
-    file?: string;
-    /** Elapsed time on task */
-    time?: string;
 }
-/** Status of an action tracker */
-interface TrackerData {
-    /** Tracker name */
+/** Named CSS colors by group */
+interface CSSColors {
+    /** Group name */
     name: string;
-    /** Optional title */
-    title?: string;
-    /** Start message */
-    start?: string;
-    /** End message */
-    end?: string;
-    /** Elapsed time */
-    time?: string;
-    /** List of tasks */
-    tasks?: TrackerTask[];
-    /** Depth of the tasks */
-    depth?: number;
-    /** Progression % */
-    percent?: number;
-    /** Terminated */
-    state?: "T";
-    /** Can be minified */
-    minifiable?: boolean;
-    /** Minified in a toast */
-    minified?: boolean;
-    /** Can be closed */
-    closeable?: boolean;
-    /** Can be stopped */
-    stoppable?: boolean;
+    /** Named colors of the group */
+    list: KeyString[];
 }
-/** Callback with the tracker status */
-type TrackerCallback = (data: TrackerData) => void;
-/** Parameters of an action tracker dialog */
-interface TrackerParam {
-    /** Dialog title */
-    title?: string;
-    /** Optional related object */
-    object?: BusinessObject;
-    /** Optional action */
-    action?: Action;
-    /** Null = auto-start */
-    start?: ((cbk: TrackerCallback) => void) | null;
-    /** Service to get the back-end tracking */
-    progress?: (cbk: TrackerCallback) => void;
-    /** Service to request the action stop */
-    stop?: (cbk: TrackerCallback) => void;
-    /** Service to toggle/minify the popup */
-    minify?: (cbk: TrackerCallback) => void;
-    /** Callback when finished */
-    done?: (log: JQuery, task: (t: TrackerTask) => void, pbar: JQuery) => void;
-    /** Actions bar (default Close button) */
-    bar?: JQuery;
-}
+/** Named CSS colors by group */
+declare const CSSCOLORS: CSSColors[];
 /**
- * Object form rendering
+ * Color helpers
  */
-declare class Form {
+declare class UIColor {
+    /** Type of colors */
+    static readonly TYPES: string[];
+    /** minimal WCAG level AAA is 4.5 */
+    static readonly MIN_CONTRAST = 4.5;
+    /** legacy regex for 'rgb(123, 123, 123)' or 'rgba(123, 123, 123, 0.33)'*/
+    static readonly rgbaRegex: RegExp;
+    /** legacy regex for 'rgb(123, 123, 123)' */
+    static readonly rgbRegex: RegExp;
+    /** regex for 'rgb(123 123 123)' or 'rgb(123 123 123 / 0.5)' */
+    static readonly rgbRegex2: RegExp;
+    /** regex for '#RRGGBB' or '#rrggbb' */
+    static readonly hexRegex: RegExp;
+    /** regex for 'color(srgb 0.17 0.13 0.28 / 0.5)' */
+    static readonly srgbRegex: RegExp;
+    /** oklab(0.28 -0.07 -0.03 / 0.5) */
+    static readonly oklabRegex: RegExp;
     /**
-     * Build the object form based on the UI template
-     * @param ctn parent container
-     * @param o object
-     * @param p optional parameters
-     * @param cbk optional callback with the displayed form
-     * @returns the displayed form
+     * Convert color string to #rrggbb
+     * @param rgb color
+     * @returns A color <code>#RRGGBB</code>
      */
-    display(ctn: Container, o: UIBusinessObject, p: FormParam, cbk?: (div?: JQuery) => void): JQuery<HTMLElement>;
+    rgb2hex(rgb: string): string;
     /**
-     * Display a state-model navbar
-     * @param ctn container
-     * @param data navbar data style BREAD/METRO/ARROW + list of states
+     * Convert string color to object
+     * @param color css color
+     * @param alpha optioanl alpha (transparency 0..1)
+     * @returns object <code>\{r,g,b,a\}</code>
      */
-    stateNavbar(ctn: Container, data: KeyObject): void;
+    css2rgb(color: string, alpha?: number): RGBA;
     /**
-     * Bind scroll to set the floating actions vertical position
-     * @deprecated for accessibility and better responsiveness, the form/list header and footer are now static via CSS
+     * Convert color to hexa format
+     * @param rgb Color
+     * @returns Color <code>#RRGGBB</code> or <code>#RRGGBBAA</code>
      */
-    floatingActions(_ctn: Container, _div: Container, _bar: JQuery, _form?: JQuery, _left?: boolean): void;
-    /** Observe the head width to rebuild the actions bar to fit-content */
-    observeHead(actions: JQuery): void;
+    rgb2css(rgb?: RGBA | null): string;
     /**
-     * Display the object usages
-     * @param ctn container to populate
-     * @param list list of users { login, firstname, lastname, picture, usageId }
-     * @param obj optional object name when ctn is unknown (keepAlive trigger)
-     * @param id optional row Id (keepAlive trigger)
-     * @param action optional action use|close|delete|logout
+     * Convert <code>#RRGGBB</code> to string
+     * @param color Color <code>#RRGGBB</code>
+     * @param alpha Alpha (transparency)
+     * @returns string <code>'rgba(r,g,b,a)'</code>
      */
-    objectUsage(ctn: Container | null, list?: UsageUser[], obj?: string, id?: string, action?: "use" | "close" | "delete" | "logout"): void;
+    css2rgba(color: string, alpha?: number): string;
     /**
-     * Object informations
+     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
+     * @param color Color <code>\{r,g,b\}</code>
+     * @returns Color <code>\{h,s,v\}</code>
      */
-    about(o: BusinessObject, id?: string): void;
+    rgb2hsv(color: RGB): HSV;
     /**
-     * Confirm action with dialog
-     * @param act Action
-     * @param o Object
-     * @param run Optional confirm callback with actions 'values' and 'cbk(msg)' to send errors
-     * @returns Promise(ok, refuse)
+     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
+     * @param hsv Color <code>\{h,s,v\}</code>
+     * @returns Color <code>\{r,g,b\}</code>
      */
-    confirm(act: Action, o: BusinessObject, run?: (params?: ConfirmRun) => void): Promise<void | KeyObject>;
+    hsv2rgb(hsv: HSV): RGB;
     /**
-     * Open a dialog to track one asynchronous action
-     * @param tk Tracker infos name + state + tasks
-     * @param options
-     * @param options.title optional dialog title (default tracker title or name)
-     * @param options.start optional function(cbk) to start the tracking (default auto-start)
-     * @param options.progress function(cbk) service to get back-end tracking
-     * @param options.stop Optional service to request action stop
-     * @param options.minify Optional service to toggle/minify popup
-     * @param options.done optional function(log,task,pbar) when finished
-     * @param options.bar optional actions bar (default = Close button)
-     * function
+     * Calculate the color luminance 0..1
+     * @param c #RRGGBB or <code>\{r,g,b\}</code>
+     * @returns luminance
      */
-    tracker(tk: TrackerData, options: TrackerParam): JQuery<HTMLElement>;
+    luminance(c: string | RGB): number;
     /**
-     * Build a form based on global form.template
-     * @param params options
-     * @param params.icon icon name
-     * @param params.title form title
-     * @param params.content form content
-     * @param params.actions form actions
+     * Calculate the contrast ratio between 2 colors
+     * @param c1 #RRGGBB or <code>\{r,g,b\}</code>
+     * @param c2 #RRGGBB or <code>\{r,g,b\}</code>
+     * @returns minimal ratio recommanded by WCAG is 4.5 (or 3 for larger font-sizes)
      */
-    build(params: {
-        icon?: string;
-        title: string;
-        content?: AnyContent;
-        actions?: AnyContent;
-    }): JQuery<HTMLElement>;
+    contrast(c1: string | RGB, c2: string | RGB): number;
     /**
-     * Call to action in case of ERR_UPDATED
-     * @param force true to force the timestamp to the DB value and re-save, false to discard changes = reload form
+     * Computed text and background colors of an element (transparent colors look at the parents).
+     * @param el Element
+     * @returns The colors
      */
-    forceChange(ctn: Container, obj: BusinessObject, id: string, force: boolean): void;
-    private fieldSearchCompletion;
+    getComputedColors(el: HTMLElement): Partial<Contrast>;
+    /**
+     * Contrast of an element with its background.
+     * @param el Element
+     * @param minRatio Minimum ratio (WCAG)
+     * @returns The contrast with an error when too low, or undefined when not evaluable
+     */
+    elementContrast(el: HTMLElement, minRatio?: number): Contrast | undefined;
+    /**
+     * Black or white color to contrast with a color.
+     * @param color Background color
+     * @returns `black` or `white`
+     */
+    contrastedColor(color: string): "black" | "white";
+    /**
+     * Convert a color to RGB object
+     * @param color supported spaces: #RRGGBB, rgb(), color(srgb r g b / x), oklab(L a b / x)
+     */
+    static convertToRGB(color: string): RGBA | undefined;
+    /**
+     * Gamma 2.2 to linear value.
+     * @param c Value 0..1
+     * @returns Linear value
+     */
+    static gamma2Linear(c: number): number;
+    /**
+     * Linear to gamma 2.2 value.
+     * @param c Value 0..1
+     * @returns Gamma value
+     */
+    static linear2Gamma(c: number): number;
+    /**
+     * Convert a RGB color to Oklab.
+     * @param color RGB color
+     * @param linear true when the RGB is linear (else sRGB)
+     * @returns Oklab color
+     */
+    static sRGB2oklab(color: RGB, linear?: boolean): OKLAB;
+    /**
+     * Round and clamp a value in a range.
+     * @param value Value
+     * @param min Minimum (default 0)
+     * @param max Maximum (default 255)
+     * @returns Clamped value
+     */
+    static clamp(value: number, min?: number, max?: number): number;
+    /**
+     * Convert an Oklab color to RGB.
+     * @param oklab Oklab color
+     * @param linear true to return linear RGB (else sRGB)
+     * @returns RGB color
+     */
+    static oklab2RGB(oklab: OKLAB, linear?: boolean): RGB;
+    /**
+     * Convert a sRGB color (0..1) to RGB (0..255).
+     * @param rgb sRGB color
+     * @param linear true when the color is already linear
+     * @returns RGB color
+     */
+    static sRGB2RGB(rgb: RGB, linear?: boolean): RGB;
+    /** WCAG 2.1 sRGB transfer function (distinct from the 2.2 gamma used by Oklab) */
+    static srgb2Linear(c: number): number;
 }
 
-/** Predefined searches of a search form */
-interface SearchPredefParam {
-    /** Predefined searches */
-    list: PredefSearch[];
-    /** 1 = edit */
-    usage?: number;
-    /** Service to create, update or delete a predefined search */
-    service: (action: string, def: PredefSearch, cbk: (ps: PredefSearch) => void) => void;
-}
-/** Parameters of a search form (see `$ui.displaySearch`) */
-interface SearchParam {
-    /** Position of the search form */
-    position?: "docked" | "column" | "popup";
-    /** Slide the docked form from the right or left */
-    slide?: "right" | "left" | null;
-    /** Title */
-    title?: string;
-    /** Help */
-    help?: string;
-    /** Messages */
-    msg?: MessageAny[];
-    /** Show the fulltext search input */
-    showIndex?: boolean;
-    /** Show the sort/group-by editor */
-    showSorting?: boolean;
-    /** Show the extended fields */
-    isExtended?: boolean;
-    /** Edit the predefined searches */
-    editPredef?: boolean;
-    /** Object instance name */
-    inst?: string;
-    /** Searchable fields */
-    fields?: ObjectField[];
-    /** Fixed filters (read only) */
-    fixedFilters?: KeyObject;
-    /** Current filters */
-    filters?: KeyObject;
-    /** Group-by mode */
-    groupBy?: boolean;
-    /** Search by columns is visible */
-    toggle?: boolean;
-    /** Docked search form */
-    docked?: boolean;
-    /** Reference buttons of the search by columns */
-    refButtonsBy?: KeyObject;
-    /** Reference buttons */
-    refButtons?: KeyObject;
-    /** Predefined searches (`false` = none) */
-    predef?: false | SearchPredefParam;
-    /** Hook before loading */
-    beforeload?: (ctn: Container, o: UIBusinessObject, p: SearchParam) => void;
-    /** Hook when displayed */
-    onload?: (ctn: Container, o: UIBusinessObject, p: SearchParam) => void;
-    /** Hook to override the rendering, `done` must be called to display the default form */
-    display?: (ctn: Container, o: UIBusinessObject, p: SearchParam, done: Callback) => void;
-    /** Hook when removed */
-    onunload?: (ctn: Container, o: UIBusinessObject, p: SearchParam) => void;
-}
-/**
- * Object search rendering
- */
-declare class Search {
-    /**
-     * Search field
-     * @param ctn container
-     * @param o business object
-     * @param f object field
-     * @param filter current filter
-     * @param fixedFilter fixed filter
-     * @param search handler to launch the search
-     * @returns formGroupSearch with required or semireq class
-     */
-    field(ctn: Container, o: BusinessObject, f: ObjectField, filter: string, fixedFilter: string, search?: Callback): JQuery<HTMLElement>;
-    /**
-     * Build the search form
-     * @param ctn parent container
-     * @param o object
-     * @param p optional parameters
-     * @param cbk optional callback
-     */
-    display(ctn: Container, o: UIBusinessObject, p: SearchParam, cbk?: Callback): void;
-    /**
-     * Remove all UI filters
-     * @param form container
-     * @param o object
-     * @param fields optional fields array to delete foreignUserKey
-     */
-    reset(form: Container, o: BusinessObject, fields?: ObjectField[]): void;
-    /**
-     * Predefined search selector
-     * @param o object
-     * @param p search parameters with fields and predef services
-     * @param filters Current form filters
-     * @param update callback to update the form with selected search
-     * @param close callback to return to form
-     */
-    predef(o: BusinessObject, p: SearchParam, filters: KeyObject, update?: Callback, close?: Callback): JQuery<HTMLElement>;
-    /** Counter of the sort fields (unique DOM IDs) */
-    static selectIndex: number;
-    /**
-     * Sort/Group by columns editor
-     * @param o object
-     * @param p search parameters
-     * @param apply callback to process the sort on list
-     * @param close callback to return to form
-     */
-    sortby(o: BusinessObject, p: SearchParam, apply?: Callback, close?: Callback): JQuery<HTMLElement> | undefined;
-}
-
-/**
- * Extends Simplicite.Ajax.BusinessObject with front hooks.
- */
-declare class UIBusinessObject extends BusinessObject {
-    /** V6 legacy shorthand to $ui */
-    ui?: UIEngine;
-    /**
-     * Front constraints implementation
-     */
-    applyConstraints?: ConstraintFunction;
-    /**
-     * Bind hook functions in locals with inherited methods
-     */
-    bindHooks(): void;
-    /**
-     * Call a hook implementation
-     * @param method hook
-     * @param params array of parameters to apply
-     */
-    hook(method: any, params: any): any;
-    /**
-     * Front hook when object is instantiated.
-     * Useful to override locals (cloned from Simplicite.UI.Globals) properties before usage.
-     * @param _locals UI locals properties (shorthand to this.locals.ui)
-     */
-    onLoad(_locals?: typeof Globals): void;
-    /**
-     * Front hook before loading form data
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _p Form parameters
-     */
-    beforeLoadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
-    /**
-     * Front hook when record is not found (default NO_ROW_FOUND alert + nav fix + list redirection)
-     * @param ctn Form container
-     * @param obj Object (same as this)
-     * @param rowId Object row ID
-     */
-    noRowFound(ctn: Container, obj: UIBusinessObject, rowId: string): void;
-    /**
-     * Front hook before rendering form
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _p Form parameters
-     */
-    preLoadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
-    /**
-     * Front hook to display the form
-     * @param ctn Form container
-     * @param obj Object (same as this)
-     * @param p Form parameters
-     * @param cbk callback when rendered (with the displayed form)
-     */
-    displayForm(ctn: Container, obj: UIBusinessObject, p: FormParam, cbk: (div?: JQuery) => void): void;
-    /**
-     * Front hook when object form is loaded
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _p Form parameters
-     */
-    onLoadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
-    /**
-     * Front hook when object form is unloaded
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _p Form parameters
-     */
-    onUnloadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam): void;
-    /**
-     * Front hook when object form is read
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _p Form parameters
-     * @param cbk callback() must be called to resolve promise
-     */
-    onReadForm(_ctn: Container, _obj: UIBusinessObject, _p: FormParam, cbk?: () => void): void;
-    /**
-     * Front hook before calling Ajax object.save()
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _index record index (edit list)
-     * @param cbk callback(true|false) (must return 'true' to continue or 'false' to stop/reject promise)
-     */
-    beforeSave(_ctn: Container, _obj: UIBusinessObject, _index?: string, cbk?: (x: boolean) => void): void;
-    /**
-     * Front hook after calling Ajax object.save()
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _index record index (edit list)
-     * @param cbk callback(true|false) (must return 'true' to continue or 'false' to stop/reject promise)
-     */
-    afterSave(_ctn: Container, _obj: UIBusinessObject, _index?: string, cbk?: (x: boolean) => void): void;
-    /**
-     * Front hook before loading list data
-     * @param _ctn List container
-     * @param _obj Object (same as this)
-     * @param _p List parameters
-     */
-    beforeLoadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
-    /**
-     * Front hook before rendering list
-     * @param _ctn List container
-     * @param _obj Object (same as this)
-     * @param _p List parameters
-     */
-    preLoadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
-    /**
-     * Front hook to display the list
-     * @param ctn List container
-     * @param obj Object (same as this)
-     * @param p List parameters
-     * @param cbk callback when rendered (with the displayed list)
-     */
-    displayList(ctn: Container, obj: UIBusinessObject, p: ListParam, cbk: (div?: JQuery) => void): void;
-    /**
-     * Front hook to display one list record
-     * @param ctn List container
-     * @param row Row container (tr or div)
-     * @param obj Object (same as this)
-     * @param id Row ID
-     * @param p List parameters
-     * @param cbk callback when rendered
-     */
-    displayListRow(ctn: Container, row: Container, obj: UIBusinessObject, id: string, p: ListParam, cbk: Callback): void;
-    /**
-     * Front hook when a list row is displayed
-     * @param _ctn List container
-     * @param _obj Object (same as this)
-     * @param _id Row ID
-     * @param _item Row item
-     * @param _row Row container (tr or div)
-     */
-    onLoadListRow(_ctn: Container, _obj: UIBusinessObject, _id: string, _item: RowData, _row: Container): void;
-    /**
-     * Front hook when a list row is unloaded
-     * @param _ctn List container
-     * @param _obj Object (same as this)
-     * @param _id Row ID
-     * @param _item Row item
-     * @param _row Row container (tr or div)
-     */
-    onUnloadListRow(_ctn: Container, _obj: UIBusinessObject, _id: string, _item: RowData, _row: Container): void;
-    /**
-     * Front hook when object list is loaded
-     * @param _ctn List container
-     * @param _obj Object (same as this)
-     * @param _p List parameters
-     */
-    onLoadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
-    /**
-     * Front hook when object list is unloaded
-     * @param _ctn List container
-     * @param _obj Object (same as this)
-     * @param _p List parameters
-     */
-    onUnloadList(_ctn: Container, _obj: UIBusinessObject, _p: ListParam): void;
-    /**
-     * Front hook before loading search form
-     * @param _ctn Search container
-     * @param _obj Object (same as this)
-     * @param _p Search parameters
-     */
-    beforeLoadSearch(_ctn: Container, _obj: UIBusinessObject, _p: SearchParam): void;
-    /**
-     * Front hook to display the search form
-     * @param ctn Search container
-     * @param obj Object (same as this)
-     * @param p Search parameters
-     * @param cbk callback when rendered
-     */
-    displaySearch(ctn: Container, obj: UIBusinessObject, p: SearchParam, cbk: Callback): void;
-    /**
-     * Front hook when object search is loaded
-     * @param _ctn Search container
-     * @param _obj Object (same as this)
-     * @param _p Search parameters
-     */
-    onLoadSearch(_ctn: Container, _obj: UIBusinessObject, _p: SearchParam): void;
-    /**
-     * Front hook when object search is unloaded
-     * @param _ctn Search container
-     * @param _obj Object (same as this)
-     * @param _p Search parameters
-     */
-    onUnloadSearch(_ctn: Container, _obj: UIBusinessObject, _p: SearchParam): void;
-    /**
-     * Front hook before loading summary
-     * @param _ctn Form container
-     * @param _obj Object (same as this)
-     * @param _p Parameters
-     */
-    beforeLoadSummary(_ctn: Container, _obj: UIBusinessObject, _p: SummaryParam): void;
-    /**
-     * Front hook to display the object summary
-     * @param ctn Summary container
-     * @param mo Meta object
-     * @param obj Object (same as this)
-     * @param cbk callback when rendered
-     */
-    displaySummary(ctn: Container, mo: MetaObject, obj: UIBusinessObject, cbk: Callback): void;
-    /**
-     * Front hook when object summary is loaded
-     * @param _ctn Summary container
-     * @param _mo Meta object
-     * @param _obj Object (same as this)
-     * @param _p Parameters
-     */
-    onLoadSummary(_ctn: Container, _mo: MetaObject, _obj: UIBusinessObject, _p: SummaryParam): void;
-    /**
-     * Front hook before loading calendar
-     * @param _ctn container
-     * @param _obj Object (same as this)
-     * @param _agd Agenda definition
-     * @param _p parameters
-     */
-    beforeLoadAgenda(_ctn: Container, _obj: UIBusinessObject, _agd: object, _p: KeyObject): void;
-    /**
-     * Front hook when calendar is loaded
-     * @param _ctn container
-     * @param _obj Object (same as this)
-     * @param _agd Agenda definition
-     * @param _p parameters
-     */
-    onLoadAgenda(_ctn: Container, _obj: UIBusinessObject, _agd: object, _p: KeyObject): void;
-    /**
-     * Front hook when calendar is unloaded
-     * @param _ctn container
-     * @param _obj Object (same as this)
-     * @param _agd Agenda definition
-     * @param _p parameters
-     */
-    onUnloadAgenda(_ctn: Container, _obj: UIBusinessObject, _agd: object, _p: KeyObject): void;
-    /**
-     * Front hook before loading timesheet
-     * @param _ctn container
-     * @param _obj Object (same as this)
-     * @param _p parameters
-     */
-    beforeLoadTimesheet(_ctn: Container, _obj: UIBusinessObject, _p: KeyObject): void;
-    /**
-     * Front hook when timesheet is loaded
-     * @param _ctn container
-     * @param _obj Object (same as this)
-     * @param _ts Timesheet definition
-     */
-    onLoadTimesheet(_ctn: Container, _obj: UIBusinessObject, _ts: KeyObject): void;
-    /**
-     * Front hook when timesheet is unloaded
-     * @param _ctn container
-     * @param _obj Object (same as this)
-     * @param _ts Timesheet definition
-     */
-    onUnloadTimesheet(_ctn: Container, _obj: UIBusinessObject, _ts: KeyObject): void;
-}
-
-/** Type of preferences */
-type PrefType = "list" | "search" | "action";
-/** Preferences of an object */
-interface PrefItem {
-    /** Object name */
+/** Axis type: `C` column, `L` line, `V` value */
+type CrosstabAxisType = "C" | "L" | "V";
+/** Axis of a crosstab */
+interface CrosstabAxis {
+    /** Field name */
+    field: string;
+    /** Axis name */
     name: string;
     /** Translated label */
-    label?: string;
-    /** User key */
-    userkey?: string;
-    /** Visible */
-    visible?: boolean;
-    /** Fields preferences */
-    fields?: {
-        /** Field name */
-        name: string;
-        /** Field is visible */
-        visible: boolean;
-        /** Field is required */
-        required?: boolean;
-        /** Field is part of the user key */
-        userkey?: boolean;
-        /** Field label */
-        label?: string;
-    }[];
+    label: string;
+    /** Order of the axis */
+    order: number;
+    /** Caption position */
+    caption?: string;
+    /** TODO "T" | "F"... */
+    method: string;
+    /** Axis type */
+    type: CrosstabAxisType;
+    /** Formula of a calculated value */
+    formula?: string;
+    /** Date grouping (year, month, day...) */
+    dateGroup?: string;
+    /** Index of the Y axis in chart */
+    yaxis?: number;
+    /** Hidden axis */
+    hidden?: boolean;
+    /** Chart type */
+    chart?: string;
+    /** Color palette */
+    palette?: string;
+    /** Field definition */
+    f?: ObjectField;
 }
-/** Parameters of the preferences dialog */
-interface PrefsParam {
-    /** List preferences */
-    list?: PrefItem[];
-    /** Search preferences */
-    search?: PrefItem[];
-    /** Actions preferences */
-    actions?: PrefItem[];
-    /** Show the action labels */
-    actionLabel?: boolean;
-    /** Restore the default preferences */
-    restore?: Callback;
-    /** Save the preferences */
-    save?: (p: PrefsParam, cbk: Callback) => void;
-    /** Reload after save */
+/** Crosstab metadata */
+interface CrosstabMetadata {
+    /** Crosstab row ID */
+    id: string;
+    /** Crosstab name */
+    name: string;
+    /** Translated label */
+    label: string;
+    /** Default aggregation method */
+    method?: string;
+    /** Available aggregation methods */
+    methods: EnumItem[];
+    /** Available date groupings */
+    dateGroups: EnumItem[];
+    /** Color of the sub-totals */
+    subcolor?: string;
+    /** Show the control panel */
+    control?: boolean;
+    /** Show the sub-totals */
+    subtotal?: boolean;
+    /** "no" or position */
+    caption?: string;
+    /** Precision of the values */
+    precision?: number;
+    /** Editable axis */
+    editable?: boolean;
+    /** Chart type */
+    chart?: string;
+    /** Chart width */
+    width?: string;
+    /** Chart height */
+    height?: string;
+    /** Color palette */
+    palette?: string;
+    /** Axis in columns */
+    columns?: CrosstabAxis[];
+    /** Axis in lines */
+    lines?: CrosstabAxis[];
+    /** Values */
+    values?: CrosstabAxis[];
+}
+/** Crosstab rendering options (`z` parameters sent to the service) */
+interface CrosstabParam {
+    /** "no" or position */
+    zcaption?: string;
+    /** Show the table */
+    ztable?: boolean;
+    /** Always get lines tree + metadata */
+    ztree?: true;
+    /** Show the sub-totals */
+    zstotal?: boolean;
+    /** Color of the sub-totals */
+    zstcolor?: string | null;
+    /** Axis definitions */
+    zaxis?: KeyObject[];
+    /** Filters */
+    zfilters?: KeyObject;
+    /** Color palette */
+    zpalette?: string;
+    /** Mono chart name */
+    zgraph?: string;
+    /** Chart names of multi charts */
+    [key: `zgraph_${string}`]: string;
+    /** Chart width */
+    zwidth?: string;
+    /** Chart height */
+    zheight?: string;
+    /** Show the control panel */
+    zcontrol?: boolean;
+    /** Selected tab of the control panel */
+    controlTab?: number;
+    /** Search handler */
+    search?: (filters: KeyObject) => void;
+    /** Apply the options */
+    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
+    /** Export the data in a media (CSV, XLSX...) */
+    exportData?: (media: string) => void;
+    /** Reload the crosstab */
     reload?: Callback;
-    /** Close the dialog */
-    close?: Callback;
+    /** Error handler */
+    error?: Callback;
 }
-/** Bookmarks of an object */
-interface Bookmark {
-    /** Object name */
-    o: string;
-    /** Icon */
-    i?: string;
-    /** Bookmarked records */
-    b: {
-        /** Row_id */
-        id: string;
-        /** Text = user key */
-        t: string;
-    }[];
+/** Parameters of a crosstab display (see `$ui.displayCrosstab`) */
+type CrosstabNavParam = NavParam & {
+    /** Optional instance name */
+    inst?: string;
+    /** Optional filters to apply */
+    filters?: KeyObject;
+    /** Optional crosstab options */
+    options?: CrosstabParam;
+    /** Search handler */
+    search?: (filters: KeyObject) => void;
+    /** Apply the options */
+    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
+    /** Export the data in a media (CSV, XLSX...) */
+    exportData?: (media: string) => void;
+    /** Reload the crosstab */
+    reload?: Callback;
+    /** Error handler */
+    error?: Callback;
+};
+/** Crosstab data */
+interface CrosstabData {
+    /** Column nodes */
+    columns: CrosstabNode[];
+    /** Root of the line nodes */
+    lines: CrosstabNode;
 }
-/** User bookmarks */
-interface Bookmarks {
-    /** Where to show the bookmarks (`top`, `bottom`...) or `false` */
-    show: string | boolean;
-    /** Bookmarks per object */
-    list?: Bookmark[];
-}
-/** Parameters of the bookmarks display */
-interface BookmarkParam {
-    /** Where to show the bookmarks or `false` */
-    show?: string | false;
-}
-/** Parameters of the user filters display */
-interface UserFilterParam {
-    /** Filters bar only (else dialog or form) */
-    bar: boolean;
+/** Node of a crosstab axis */
+interface CrosstabNode {
+    /** Index */
+    index: number;
+    /** Path in the tree */
+    path: string;
+    /** Name */
+    name: string;
+    /** Text color */
+    color?: string;
+    /** Background color */
+    bgcolor?: string;
+    /** Background colors per value */
+    bgcolors?: (string | null)[];
+    /** Values */
+    values?: any;
+    /** Labels */
+    labels?: string[];
+    /** Row IDs */
+    ids?: string[];
+    /** Child nodes */
+    children?: CrosstabNode[];
 }
 /**
- * Object preferences rendering
+ * Crosstab rendering
  */
-declare class Prefs {
+declare class Crosstab {
+    private controlTab;
     /**
-     * Build the object preferences dialog
-     * @param o object
-     * @param p parameters
-     * @param p.list array of fields
-     * @param p.search array of fields
-     * @param p.actions array of actions
-     * @param p.actionLabel show/hide the action labels ?
-     * @param p.restore restore handler
-     * @param p.save save handler
-     * @param p.reload reload handler
-     * @param p.close close handler
+     * Display the cross tab
+     * @param ctn Container
+     * @param obj Object
+     * @param ct Crosstab definition
+     * @param data Crosstab data
+     * @param p options { zstotal, zstcolor, zcaption, ztable, zgraph... }
      */
-    display(o: BusinessObject, p: PrefsParam): this;
-    /**
-     * Title of user filters
-     * @param ctn optional container (#userfilters if null)
-     * @param obj UserFilters object
-     */
-    userFiltersTitle(ctn: AnyContainer, obj: BusinessObject): void;
-    /**
-     * Badge of a user filter
-     * @param ctn badges container
-     * @param data <code>\{ dmin, dmax \}</code> or <code>\{ field, value or values \}</code>
-     * @param remove optional handler to remove filter (if not required)
-     * @param click optional handler on click
-     */
-    userFiltersBadge(ctn: Container, data: KeyObject, remove?: JQueryHandler, click?: JQueryHandler): JQuery<HTMLElement> | null;
-    /**
-     * Display the dialog of user global filters
-     * @param ctn optional container (dialog if null)
-     * @param obj UserFilters object
-     * @param id UserFilters id
-     * @param p options <code>\{ bar \}</code>
-     */
-    userFilters(ctn: AnyContainer | null, obj: UIBusinessObject, id: string, p?: UserFilterParam): this | undefined;
-    /**
-     * Display the user's bookmarks
-     * @param ctn optional container (default popup)
-     * @param bm bookmarks
-     * @param p options show=top|bottom
-     */
-    bookmarks(ctn: AnyContainer, bm: Bookmarks, p: BookmarkParam): void;
+    display(ctn: Container, obj: BusinessObject, ct: CrosstabMetadata, data: CrosstabData, p: CrosstabParam, cbk?: Callback): this;
+    private axisDragDrop;
 }
 
-/**
- * `Simplicite.UI.View` namespace: viewers, renderers and components.
- * Other bundles can add their classes by module augmentation (see the Maker).
- */
-interface UIViewNamespace extends Readonly<typeof ViewClasses> {
+/** Handler on chart click */
+type ChartClickHandler = (chart: Chart, clickElements: InteractionItem[], dataset: InteractionItem[], elementIndex: number, datasetIndex: number) => void;
+/** Options of the charts (each chart uses its own subset) */
+interface ChartParam {
+    /** Chart type (ex: 'pie', 'doughnut', 'bar', 'line') */
+    type?: ChartType;
+    /** Title */
+    title?: string;
+    /** Display the legend? */
+    legend?: boolean;
+    /** Colors of the values (default palette) */
+    colors?: string[] | null;
+    /** Animate the rotation (pie)? */
+    animate?: boolean;
+    /** Animation? */
+    animation?: boolean;
+    /** Responsive chart? */
+    responsive?: boolean;
+    /** Dark mode? */
+    dark?: boolean;
+    /** Stacked bars or lines? */
+    stacked?: boolean;
+    /** Horizontal bars? */
+    horizontal?: boolean;
+    /** Aspect ratio (default 2) */
+    aspectRatio?: number;
+    /** Logarithmic Y axis? */
+    log?: boolean;
+    /** Values in log10? */
+    log10?: boolean;
+    /** Zoom on X axis by mouse drag? */
+    zoom?: boolean;
+    /** Type of X axis (ex: 'time', 'date') */
+    xType?: string;
+    /** Time format of X axis */
+    timeFormat?: string;
+    /** Minimum of X axis */
+    min?: number | string;
+    /** Maximum of X axis */
+    max?: number | string;
+    /** Unit of Y axis */
+    unit?: string;
+    /** Unit of X axis */
+    xUnit?: string;
+    /** Unit of the second Y axis */
+    y2unit?: string;
+    /** Unit of Y axis (bubble) */
+    yUnit?: string;
+    /** Label of X axis (bubble, default 'x') */
+    xLabel?: string;
+    /** Label of Y axis (bubble, default 'y') */
+    yLabel?: string;
+    /** Line tension (0 = straight lines) */
+    lineTension?: number;
+    /** Width (default 100%) */
+    width?: string;
+    /** Height (default 200px) */
+    height?: string;
+    /** Click handler */
+    onClick?: ChartClickHandler;
+    /** Existing chart to update */
+    chart?: Chart;
+}
+/** Count per status for {@link Charts.chartStatusPie}: list of [status label, count] */
+type StatusPieData = [string, number][];
+/** Count per status and date for {@link Charts.chartStatusCount} */
+interface StatusCountData {
+    /** Date format of the period */
+    format?: string;
+    /** Status labels */
+    series: string[];
+    /** Points [datetime, count] per status */
+    data: [string, number][][];
+}
+/** Duration per status for {@link Charts.chartStatusDuration} */
+interface StatusDurationData {
+    /** Duration unit: seconds, minutes, hours or days */
+    unit: "s" | "m" | "h" | "d";
+    /** Status labels */
+    ticks: string[];
+    /** Durations per status: [averages, maximums, minimums] */
+    data: [number[], number[], number[]];
+}
+/** Terminal status durations for {@link Charts.chartStatusTerminal} */
+interface StatusTerminalData {
+    /** Terminal status labels */
+    series: string[];
+    /** Points [duration in days, count] per terminal status */
+    data: [number, number][][];
+}
+/** Serie of points for {@link Charts.chartTimeSeries} */
+interface PlotSerie {
+    /** Serie label */
+    label: string;
+    /** Points `[x, y]`: x is a date `YYYY-MM-DD HH:mm:ss` or a number */
+    data: [string | number, number][];
+    /** Fill the area under the line */
+    fill?: boolean;
+    /** Display as bars */
+    bar?: boolean;
+    /** Display only the points without line */
+    points?: boolean;
+    /** Use the second Y axis on the right */
+    y2?: boolean;
+    /** Specific color */
+    color?: string;
 }
 /**
- * Extensions of the `Simplicite.Ajax` namespace (the Session class with the legacy constants).
- * Other bundles can add their classes by module augmentation (see the Maker).
+ * ChartJS controller
  */
-interface AjaxNamespace {
-}
-
-/** Job executed in a Promise: calls `resolve` with its result or `reject` on error */
-type JobFunction = (resolve: (value?: unknown) => void, reject?: (reason?: unknown) => void) => void;
-/** Queued job with its Promise handlers */
-interface Job {
-    /** Promise of the job result */
-    promise: Promise<KeyObject | void>;
-    /** Resolve the job with its result */
-    resolve: (result: KeyObject | void) => void;
-    /** Reject the job */
-    reject: (reason?: unknown) => void;
-}
-/**
- * Queue to synchronize executions
- */
-declare class SyncQueue {
-    private queue?;
-    private working;
-    /** Constructor */
+declare class Charts {
     constructor();
     /**
-     * Await ordered functions
-     * @param list Array of function(resolve, reject) to execute asynchronously
-     * @param stopOnError Stop on first error (default true)?
-     * @returns Promise with ordered result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
+     * Current palette name
      */
-    static all(list: JobFunction[], stopOnError?: boolean): Promise<KeyObject>;
+    PALETTE: string;
     /**
-     * Ordered functions
-     * @param list Array of function(resolve, reject) to execute asynchronously within Promises
-     * @returns Promise with result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
+     * Predefined palettes <code>\{ name:[colors] \}</code>.
      */
-    static allSettled(list: JobFunction[]): Promise<KeyObject>;
+    PALETTES: {
+        [key: string]: string[];
+    };
+    /** Bright color of the palette */
+    BRIGHT_COLOR?: string;
+    /** Dark color of the palette */
+    DARK_COLOR?: string;
     /**
-     * Enqueue a Promise and starts dequeue
-     * @param promise Promise
-     * @returns Promise
+     * Current palette of colors <br />
+     * default: <code>app.sysparams.CHART_PALETTE</code> or 'Sea'
      */
-    enqueue(promise: Promise<KeyObject | void>): Promise<KeyObject | void>;
+    COLORS: string[];
+    /** Units to format a file size */
+    readonly SIZES: (string | number)[][];
     /**
-     * Ask to stop next queued jobs
+     * Indexed color in palette
+     * @param i Index
+     * @returns color (<code>#RRGGBB</code>)
+     * @example
+     * const color = $ui.charts?.getColor(0);
      */
-    stop(): void;
+    getColor(i: number): string;
     /**
-     * Dequeue while not empty
+     * All palette colors
+     * @returns array of colors (<code>#RRGGBB</code>)
+     * @example
+     * const colors = $ui.charts?.getColors();
      */
-    dequeue(): void;
+    getColors(): string[];
+    /**
+     * Current palette
+     * @returns palette = list of colors
+     * @example
+     * const palette = $ui.charts?.getPalette();
+     */
+    getPalette(): string;
+    /**
+     * Change the current palette
+     * @param name Palette name ('Sea', 'Base'...)
+     * @example
+     * $ui.charts?.setPalette("Sea");
+     */
+    setPalette(name: string): void;
+    /**
+     * Chart JS
+     * @param ctn Container
+     * @param config From chart.js v3 config with options
+     * @param click Optional handler <code>function(chart, clickElements, dataset, elementIndex, datasetIndex)</code>
+     * @example
+     * $ui.charts?.chart(ctn, {
+     * 	type: "bar",
+     * 	data: { labels: ["A", "B"], datasets: [{ label: "Orders", data: [12, 19] }] }
+     * });
+     */
+    chart(ctn: Container, config: ChartConfiguration, click?: ChartClickHandler, ariaLabel?: string): Chart | undefined;
+    /**
+     * Destroy the charts of a container
+     * @param ctn Container
+     * @example
+     * $ui.charts?.destroy(ctn);
+     */
+    destroy(ctn: Container): void;
+    /**
+     * Enable the zoom on X axis by mouse drag (needs the chartjs-plugin-zoom, reset by double-click)
+     * @param config Chart config
+     * @example
+     * $ui.charts?.zoom(chartConfig);
+     */
+    zoom(config: ChartConfiguration): void;
+    /**
+     * Dark theme: black background with light texts and grid
+     * @param config Chart config
+     * @example
+     * $ui.charts?.dark(chartConfig);
+     */
+    dark(config: ChartConfiguration): void;
+    /**
+     * Add a title and legend
+     * @param config Chart config
+     * @param title display+text
+     * @param legend display+position
+     * @example
+     * $ui.charts?.addTitle(chartConfig, chartTitle, chartLegend);
+     */
+    addTitle(config: ChartConfiguration, title: TitleOptions, legend: TitleOptions): void;
+    /**
+     * Set Stacked option
+     * @param config Chart config
+     * @param stacked true to stack axis
+     * @example
+     * $ui.charts?.stacked(chartConfig, true);
+     */
+    stacked(config: ChartConfiguration, stacked?: boolean): void;
+    /**
+     * Apply the common scale options
+     * @param config Chart config
+     * @param p Options: `log` for a logarithmic Y axis, `zoom` to zoom on X axis by mouse drag
+     * @example
+     * $ui.charts?.scaleOptions(chartConfig, { log: true, zoom: true });
+     */
+    scaleOptions(config: ChartConfiguration, p: ChartParam): void;
+    /**
+     * Set the background color of chart
+     * @param config Chart config
+     * @param color background color of canvas
+     * @example
+     * $ui.charts?.backgroundColor(chartConfig, "#ffffff");
+     */
+    backgroundColor(config: ChartConfiguration, color: string): void;
+    /**
+     * Status count in a PIE
+     * @param ctn Container
+     * @param data Pie data
+     * @param p Optional chart.js options
+     */
+    chartStatusPie(ctn: Container, data: StatusPieData, p: ChartParam): void;
+    /**
+     * Status count in a chart line per date
+     * @param ctn Container
+     * @param data Line data
+     * @param p Optional chart.js options
+     */
+    chartStatusCount(ctn: Container, data: StatusCountData, p: ChartParam): void;
+    /**
+     * Status duration in a polar/radar/bar charts
+     * @param ctn Container
+     * @param d Duration data
+     * @param p Optional chart.js options
+     */
+    chartStatusDuration(ctn: Container, d: StatusDurationData, p: ChartParam): void;
+    /**
+     * Asysnc queue chart
+     * @param ctn Container
+     * @param hist History data
+     * @param p Options width ans height
+     */
+    chartQueueHistory(ctn: Container, hist: KeyObject, p: ChartParam): void;
+    /**
+     * Process duration in a bar chart
+     * @param ctn Container
+     * @param data Duration data
+     * @param p Optional chart.js options
+     */
+    chartStatusTerminal(ctn: Container, data: StatusTerminalData, p: ChartParam): void;
+    /**
+     * Series on a time or numeric X axis (monitoring, histories...)
+     * @param ctn Container
+     * @param series Series of points
+     * @param p Options:
+     * `title` (chart title),
+     * `xType` (`time` default or `linear`),
+     * `timeFormat` (moment format of the time ticks),
+     * `min`/`max` (X axis range),
+     * `xUnit`/`unit`/`y2unit` (units of the X, Y and second Y axis ticks),
+     * `log` (logarithmic Y axes),
+     * `stacked` (stacked Y values),
+     * `zoom` (zoom by mouse drag, default true),
+     * `legend` (default true),
+     * `dark` (dark theme),
+     * `colors` (default palette)
+     * @returns Chart
+     * @example
+     * await $factory.ChartJS();
+     * $ui.charts?.chartTimeSeries(ctn, [
+     * 	{ label: "Sessions", data: [["2026-09-24 10:00:00", 12], ["2026-09-24 11:00:00", 18]], fill: true },
+     * 	{ label: "Errors", data: [["2026-09-24 10:00:00", 1], ["2026-09-24 11:00:00", 3]], bar: true }
+     * ], { title: "Activity", timeFormat: "HH:mm", log: false });
+     */
+    chartTimeSeries(ctn: Container, series: PlotSerie[], p?: ChartParam): Chart | undefined;
+    /**
+     * Stacked bars per category
+     * @param ctn Container
+     * @param d Data: `series` (labels of series), `ticks` (categories), `data` (values per serie and category)
+     * @param p Options:
+     * `title` (chart title),
+     * `horizontal` (horizontal bars),
+     * `unit` (unit of the values),
+     * `max` (max value),
+     * `legend` (default true),
+     * `dark` (dark theme),
+     * `colors` (default palette)
+     * @returns Chart
+     * @example
+     * await $factory.ChartJS();
+     * $ui.charts?.chartBars(ctn, {
+     * 	series: ["Open", "Closed"],
+     * 	ticks: ["Jan", "Feb", "Mar"],
+     * 	data: [[10, 20, 15], [5, 8, 12]]
+     * }, { title: "Tickets", horizontal: false });
+     */
+    chartBars(ctn: Container, d: {
+        series: string[];
+        ticks: string[];
+        data: number[][];
+    }, p?: ChartParam): Chart | undefined;
+    /**
+     * Bubbles with one dataset per bubble
+     * @param ctn Container
+     * @param points Bubbles `[x, y, count, label]`
+     * @param p Options:
+     * `title` (chart title),
+     * `xUnit`/`yUnit` (units of the axes),
+     * `xLabel`/`yLabel` (labels of the values in tooltip),
+     * `colors` (default palette)
+     * @returns Chart
+     * @example
+     * await $factory.ChartJS();
+     * // [x, y, count, label]
+     * $ui.charts?.chartBubble(ctn, [[2, 5, 10, "Process A"], [4, 1, 3, "Process B"]], {
+     * 	title: "Process times", xUnit: "d", yUnit: "d"
+     * });
+     */
+    chartBubble(ctn: Container, points: [number, number, number, string][], p?: ChartParam): Chart | undefined;
+    /**
+     * Chart for crosstab
+     */
+    chartCrosstab(ctn: Container, ct: CrosstabMetadata, data: KeyObject, p?: ChartParam): void;
+    /**
+     * Format octets size to Kb/Mb/Gb/Tb
+     * @param size Size
+     * @example
+     * const s = $ui.charts?.size("2048");
+     */
+    size(size: string): string | undefined;
+    /**
+     * Heap chart of browser memory (LOG_UI=yes)
+     * @param ctn Container
+     * @param data Lines data <code>[\{d,u,t\},...]</code>
+     * @param p Optional chart.js options
+     */
+    chartHeapSize(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
+    /**
+     * Steps of front service (LOG_UI=yes)
+     */
+    chartServiceSteps(ctn: Container, data: KeyObject[], p: ChartParam): Chart | undefined;
+    /**
+     * Times of front service (LOG_UI=yes)
+     */
+    chartServiceTimes(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
+    /**
+     * Get the brightest color in the current palette
+     * @param darkest True to get the darkest one
+     * @returns A color <code>#RRGGBB</code>
+     * @example
+     * const bright = $ui.charts?.getBrightColor();
+     * const dark = $ui.charts?.getBrightColor(true);
+     */
+    getBrightColor(darkest?: boolean): string;
+    /**
+     * Get the lighten or darken color
+     * @param color <code>#RRGGBB</code>
+     * @param val -255..255
+     * @returns A color <code>#RRGGBB</code>
+     * @example
+     * const lighter = $ui.charts?.lightenDarkenColor("#336699", 40);
+     */
+    lightenDarkenColor(color: string, val: number): string;
+    /**
+     * Convert <code>#RRGGBB</code> to object <code>\{r,g,b,a\}</code>
+     * @param color Color <code>#RRGGBB</code>
+     * @param alpha Alpha (transparency)
+     * @returns object <code>\{r,g,b,a\}</code>
+     * @example
+     * const rgb = $ui.charts?.css2rgb("#336699", 0.5);
+     */
+    css2rgb(color: string, alpha?: number): RGBA;
+    /**
+     * Convert object <code>\{r,g,b\}</code> to <code>#RRGGBB</code>
+     * @param rgb Color <code>\{r,g,b\}</code>
+     * @returns Color <code>#RRGGBB</code>
+     * @example
+     * const css = $ui.charts?.rgb2css({ r: 51, g: 102, b: 153 });
+     */
+    rgb2css(rgb: RGB): string;
+    /**
+     * Convert <code>#RRGGBB</code> to string
+     * @param color Color <code>#RRGGBB</code>
+     * @param alpha Alpha (transparency)
+     * @returns string <code>'rgba(r,g,b,a)'</code>
+     * @example
+     * const rgba = $ui.charts?.css2rgba("#336699", 0.5);
+     */
+    css2rgba(color: string, alpha?: number): string;
+    /**
+     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
+     * @param color Color <code>\{r,g,b\}</code>
+     * @returns Color <code>\{h,s,v\}</code>
+     * @example
+     * const hsv = $ui.charts?.rgb2hsv({ r: 51, g: 102, b: 153 });
+     */
+    rgb2hsv(color: RGB): HSV;
+    /**
+     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
+     * @param hsv Color <code>\{h,s,v\}</code>
+     * @returns Color <code>\{r,g,b\}</code>
+     * @example
+     * const rgb = $ui.charts?.hsv2rgb({ h: 210, s: 0.67, v: 0.6 });
+     */
+    hsv2rgb(hsv: HSV): RGB;
+}
+
+/** Status metrics cached in the object context: last params and last rendered metrics */
+interface ContextMetrics {
+    /** From date (YYYY-MM-DD) */
+    fromDate?: string;
+    /** To date (YYYY-MM-DD) */
+    toDate?: string;
+    /** Group by period: 1=hour, 2=day, 3=week, 4=month, 5=quarter, 6=semester, 7=year */
+    period?: number | string;
+    /** Palette name */
+    palette?: string;
+    /** Last rendered metrics element, kept to be restored as is by the navigation */
+    view?: JQuery;
+    /** Container of the rendered metrics */
+    ctn?: HTMLElement;
+}
+/** Filter input of the status metrics: visible, hidden or `read` only */
+type StatusMetricsInput = boolean | "read";
+/** Elements to show in the status metrics (all visible by default) */
+interface StatusMetricsShow {
+    /** Show the count per status */
+    count?: boolean;
+    /** Show the duration per status */
+    duration?: boolean;
+    /** Show the status history */
+    history?: boolean;
+    /** Show the terminal status per duration */
+    terminal?: boolean;
+    /** Show the palette picker */
+    palette?: boolean;
+    /** Use the status colors (no palette picker) */
+    statusColor?: boolean;
+    /** Period selector */
+    period?: StatusMetricsInput;
+    /** From date input */
+    fromDate?: StatusMetricsInput;
+    /** To date input */
+    toDate?: StatusMetricsInput;
+}
+/** Parameters of the status metrics */
+interface StatusMetricsParam {
+    /** Palette name in `Simplicite.UI.Charts.PALETTE` (ex 'sea', 'mars'...) */
+    palette?: string;
+    /** Data groupment 1:hour, 2:day, 3:week, 4:month, 5:quarter, 6:semester, 7:year */
+    period?: number | string;
+    /** Search data from this date YYYY-MM-DD */
+    fromDate?: string;
+    /** Search data to this date YYYY-MM-DD */
+    toDate?: string;
+    /** Show options */
+    show?: StatusMetricsShow;
+    /** Restore the last metrics as is without backend call (used by the navigation), otherwise a new search is done */
+    restore?: boolean;
+}
+/** Parameters of the status metrics display */
+type StatusMetricsDisplayParam = StatusMetricsParam & NavParam & {
+    /** Before loading */
+    beforeload?: (ctn: Container, obj: UIBusinessObject) => void;
+    /** When loaded */
+    onload?: (ctn: Container, obj: UIBusinessObject) => void;
+    /** When unloaded */
+    onunload?: (ctn: Container, obj: UIBusinessObject) => void;
+};
+/** Metrics data from the `bamMetric` service (charts are present when requested in the show options) */
+interface StatusMetricsData {
+    /** Objects as [code, label], null when no data */
+    objects?: [string, string][] | null;
+    /** Count per status */
+    pie?: StatusPieData;
+    /** Count per status and date */
+    count?: StatusCountData;
+    /** Duration per status */
+    duration?: StatusDurationData;
+    /** Terminal status durations */
+    term?: StatusTerminalData;
+}
+/** State model metrics rendering (charts per status) */
+declare class StatusMetrics {
+    /**
+     * State model charts
+     * @param ctn Container
+     * @param obj Business object
+     * @param data Metrics from service
+     * @param params Options: palette, period, dates and elements to show
+     * @returns The metrics element, undefined when there is nothing to display
+     */
+    static display(ctn: AnyContainer, obj: BusinessObject, data: StatusMetricsData, params?: StatusMetricsParam): JQuery | undefined;
 }
 
 /** Activity of a business process */
@@ -2781,46 +3882,74 @@ declare class BusinessProcess {
     constructor(app: Session, name: string);
     /**
      * Loads meta data.
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const md = await pcs.getMetaData();
      */
     getMetaData(): Promise<ProcessMetadata>;
     /**
      * Are metadata loaded ?
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * if (!pcs.isLoaded()) await pcs.getMetaData();
      */
     isLoaded(): string;
     /**
      * Gets name from meta data.
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const name = pcs.getName();
      */
     getName(): string;
     /**
      * Gets label name from meta data.
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const label = pcs.getLabel();
      */
     getLabel(): string;
     /**
      * Local parameter in instance
      * @param name Parameter key name
      * @param value Optional value (to get or set)
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * pcs.localParameter("myKey", 12);
+     * const v = pcs.localParameter("myKey");
      */
     localParameter(name: string, value?: unknown): unknown;
     /**
      * Initialize the local parameters hasChanged and hasChangedFields
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * pcs.initChangedFields();
      */
     initChangedFields(): void;
     /**
      * Add a field when has changed
      * @param f field or name
      * @param id optional id (edit list)
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * pcs.addChangedField("myObjCode");
      */
     addChangedField(f: string | ObjectField, id?: string): void;
     /**
      * Remove a field when has not changed
      * @param f field or name
      * @param id optional id (edit list)
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * pcs.removeChangedField("myObjCode");
      */
     removeChangedField(f: string | ObjectField, id?: string): void;
     /**
      * Trigger the has changed flag
      * @param v optional to set the hasChanged value (true when the array of hasChangedFields is not empty)
      * @returns the local parameter hasChanged
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const changed = pcs.hasChanged();
      */
     hasChanged(v?: unknown): unknown;
     /**
@@ -2829,6 +3958,9 @@ declare class BusinessProcess {
      * @param params.road true to get the full navigation array, false to get the current activity
      * @param params.object launcher object name
      * @param params.rowId launcher object row Id
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const first = await pcs.start({ road: true });
      */
     start(params?: {
         road?: boolean;
@@ -2837,22 +3969,37 @@ declare class BusinessProcess {
     }): Promise<ActivityFile | undefined>;
     /**
      * Abort the process
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * await pcs.abort();
      */
     abort(): Promise<ActivityFile>;
     /**
      * Process road
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const road = await pcs.road();
      */
     road(): Promise<object | undefined>;
     /**
      * Set data values in the current activity
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * pcs.setActivityData("Data", "myField", ["value"]);
      */
     setActivityData(group: string, name: string, values: string[]): void;
     /**
      * Get data values of the current activity
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const values = pcs.getActivityData("Data", "myField");
      */
     getActivityData(group: string, name: string): string[] | null;
     /**
      * Get data values of a road step
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const values = pcs.getData("Step1", "Data", "myField");
      */
     getData(step: string, group: string, name: string): string[] | null | undefined;
     /**
@@ -2861,36 +4008,60 @@ declare class BusinessProcess {
      * @param activity Activity data
      * @param params Optional parameters
      * @param params.road true to get the full navigation array, false to get the current activity
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const act = { step: "Step1", aid: "1" } as ActivityFile;
+     * const next = await pcs.action("nextpage", act);
      */
     action(action: string, activity: ActivityFile, params?: {
         road?: boolean;
     }): Promise<ActivityFile | undefined>;
     /**
      * Read the activity with <code>\{ step, aid \}</code>
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const act = { step: "Step1", aid: "1" } as ActivityFile;
+     * pcs.read(act).then(a => $console.log(a));
      */
     read(activity: ActivityFile, params?: {
         road?: boolean;
     }): Promise<ActivityFile | undefined>;
     /**
      * Read and lock the activity <code>\{ step, aid \}</code>
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const act = { step: "Step1", aid: "1" } as ActivityFile;
+     * pcs.lock(act).then(a => $console.log(a));
      */
     lock(activity: ActivityFile, params?: {
         road?: boolean;
     }): Promise<ActivityFile | undefined>;
     /**
      * Read and unlock the activity <code>\{ step, aid \}</code>
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const act = { step: "Step1", aid: "1" } as ActivityFile;
+     * pcs.unlock(act).then(a => $console.log(a));
      */
     unlock(activity: ActivityFile, params?: {
         road?: boolean;
     }): Promise<ActivityFile | undefined>;
     /**
      * Cancel the activity, returns the next activity or the forward parameters
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const act = { step: "Step1", aid: "1" } as ActivityFile;
+     * pcs.cancel(act).then(a => $console.log(a));
      */
     cancel(activity: ActivityFile, params?: {
         road?: boolean;
     }): Promise<ActivityFile | undefined>;
     /**
      * Validate the activity with data, returns errors, the next activity or the forward parameters
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const act = { step: "Step1", aid: "1" } as ActivityFile;
+     * pcs.validate(act).then(a => $console.log(a));
      */
     validate(activity: ActivityFile, params?: {
         road?: boolean;
@@ -2903,16 +4074,356 @@ declare class BusinessProcess {
     }) => Promise<ActivityFile | undefined>;
     /**
      * Unlock the activity and read/lock the previous one
+     * @example
+     * const pcs = $app.getBusinessProcess("MyProcess");
+     * const act = { step: "Step1", aid: "1" } as ActivityFile;
+     * pcs.back(act).then(a => $console.log(a));
      */
     back(activity: ActivityFile, params?: {
         road?: boolean;
     }): Promise<ActivityFile | undefined>;
 }
 
+/** Node of a tree view (a record and its linked lists) */
+interface TreeNode {
+    /** Node ID */
+    id?: string;
+    /** Node name */
+    name: string;
+    /** Node type */
+    type: number;
+    /** Icon name */
+    image?: string;
+    /** Class name */
+    style?: string;
+    /** Node layout */
+    layout?: string;
+    /** Html */
+    userkey?: string;
+    /** Path of the node in the tree */
+    path?: string;
+    /** Row ID of the record */
+    row_id?: string;
+    /** Object of the node: name or rights */
+    object?: string | {
+        /** Object name */
+        name: string;
+        /** Open the form */
+        form?: boolean;
+        /** Show the list */
+        list?: boolean;
+        /** Plus menu */
+        plus?: boolean;
+    };
+    /** Record values */
+    item?: RowData;
+    /** Old record values (to compare) */
+    old?: RowData;
+    /** Equ | new | upd | del */
+    diff: 0 | 1 | 2 | 3;
+    /** Linked lists */
+    links?: TreeNodeList[];
+    /** Child nodes */
+    children?: TreeNode[];
+    /** Count of children */
+    count?: number;
+    /** History of the tree */
+    history?: KeyObject[];
+    /** Root: closed paths */
+    closed?: {
+        [path: string]: boolean;
+    };
+    /** Root: objects of the tree */
+    objects?: string[];
+    /** Root: show the lists of nodes */
+    showNodeList?: boolean;
+}
+/** List of child nodes of a link, or a menu entry (process, URL, action or script) */
+interface TreeNodeList {
+    /** Object name */
+    object: string;
+    /** Icon name */
+    icon?: string;
+    /** Translated label */
+    label: string;
+    /** Path of the list in the tree */
+    path?: string;
+    /** Count of records */
+    count: number;
+    /** Page index */
+    page: number;
+    /** Max page index */
+    maxpage: number;
+    /** Nodes of the page */
+    list: TreeNode[];
+    /** Process to start */
+    process?: string;
+    /** External URL to open */
+    exturl?: string;
+    /** Action name */
+    action?: string;
+    /** Action metadata */
+    meta?: Action;
+    /** Fk */
+    field?: string;
+    /** Filters of the list */
+    filters?: KeyObject;
+    /** Script to execute */
+    script?: string;
+    /** Do not show the list of nodes */
+    nolist?: boolean;
+}
+/** Parameters of a tree view rendering */
+interface TreeParam {
+    /** Object instance name */
+    inst?: string;
+    /** Search depth */
+    depth?: number;
+    /** In menu */
+    menu?: boolean;
+    /** Or docked on left */
+    docked?: boolean;
+    /** Opened tree */
+    open?: boolean;
+    /** Distinguishes first open from reload */
+    rendered?: boolean;
+    /** Work area to display the forms */
+    work?: JQuery;
+    /** Display a record in the work area, `cbk` must be called when displayed */
+    display?: (target: Container, obj: BusinessObject, rowId: string, tv: TreeView, p: KeyObject, cbk: Callback) => void;
+    /** Load a node item on open */
+    onOpen?: (node: TreeNode, cbk: (item?: RowItem | null) => void) => void;
+    /** Load a page of a linked list */
+    onPage?: (parent: string, parentId: string, object: string, page: number, cbk: (r: KeyObject) => void) => void;
+    /** Add the tree in menu */
+    addMenu?: Callback;
+    /** Remove the tree from menu */
+    delMenu?: Callback;
+}
 /**
- * Extends Simplicite.Ajax.BusinessProcess with front hooks.
+ * Simplicit&eacute; tree view
  */
-declare class UIBusinessProcess extends BusinessProcess {
+declare class TreeView {
+    /** Session */
+    app: Session;
+    /** Tree view name */
+    name: string;
+    /** Root node */
+    root?: TreeNode;
+    private _nodes;
+    /**
+     * Constructor
+     * @param app Ajax services
+     * @param tv Treeview metadata { id, name, root... }
+     */
+    constructor(app: Session, tv: object);
+    /**
+     * Get node definition
+     * @param id node id
+     */
+    getDefinition(id: string): TreeNode;
+    /**
+     * Node definition of object
+     * @param obj object name
+     */
+    getNode(obj: string): KeyObject | undefined;
+}
+
+/** Agenda of an object */
+interface Agenda {
+    /** Agenda row ID */
+    id: string;
+    /** Agenda name */
+    name: string;
+    /** Agenda is enabled */
+    enabled: boolean;
+    /** Events can be moved or resized */
+    editable?: boolean;
+    /** WEEK */
+    display?: string;
+    /** Default 1=monday */
+    firstDay?: number;
+    /** Hidden days (0 = sunday) */
+    hiddenDays?: number[];
+    /** [1, 2, 3, 4, 5] monday to friday */
+    workingDays?: number[];
+    /** 09:00 */
+    startTime?: string;
+    /** 18:00 */
+    endTime?: string;
+    /** Start date field name */
+    date: string;
+    /** Duration field name */
+    duration?: string;
+    /** End date field name */
+    endDate?: string;
+    /** Calendar height */
+    height?: number;
+    /** First displayed time (ex: `08:00`) */
+    minTime?: string;
+    /** Last displayed time (ex: `20:00`) */
+    maxTime?: string;
+    /** Duration of a time slot */
+    slot?: string;
+    /** Snap duration when moving an event */
+    snap?: string;
+    /** Label field names of an event */
+    labels?: string[];
+    /** Default user login */
+    user?: string;
+    /** User field name */
+    userField?: string;
+    /** Default group name */
+    group?: string;
+    /** Group field name */
+    groupField?: string;
+}
+/** Parameters of a calendar display (see `$ui.displayCalendar`) */
+interface CalendarParam {
+    /** Filter on user login */
+    login?: string;
+    /** Filter on group */
+    group?: string;
+    /** Initial date */
+    date?: Date;
+    /** Locale */
+    locale?: string;
+    /** Renderer: is the event editable? */
+    editable?: (obj: BusinessObject, item: KeyObject) => boolean;
+    /** Handler on event click */
+    click?: (arg: EventClickArg) => void;
+    /** Handler on dates selection */
+    select?: (arg: DateSelectArg) => void;
+    /** Handler on event drop */
+    drop?: (arg: EventDropArg) => void;
+    /** Handler on event resize */
+    resize?: (arg: EventResizeDoneArg) => void;
+    /** Handler on render */
+    render?: (arg: DateSelectArg) => void;
+    /** Renderer: title of the event */
+    title?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: header of a column */
+    column?: (date: string) => void;
+    /** Renderer: background color of the event */
+    color?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: border color of the event */
+    borderColor?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: text color of the event */
+    textColor?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Renderer: CSS classes of the event */
+    classNames?: (obj: BusinessObject, item: KeyObject) => string[];
+    /** Renderer: label of the color legend */
+    colorLabel?: (obj: BusinessObject, item: KeyObject) => string;
+    /** Hook before loading */
+    beforeload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
+    /** Hook when displayed */
+    onload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
+    /** Hook when removed */
+    onunload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
+    /** First displayed time */
+    minTime?: string;
+    /** Last displayed time */
+    maxTime?: string;
+    /** Duration of a time slot */
+    slot?: string;
+    /** Snap duration when moving an event */
+    snap?: string;
+    /** Working days (1 = monday) */
+    workingDays?: number[];
+    /** Start time of the working day */
+    startTime?: string;
+    /** End time of the working day */
+    endTime?: string;
+    /** Calendar height */
+    height?: number;
+    /** Heading level of the agenda title */
+    heading?: 1 | 2 | false;
+}
+/**
+ * Calendar controller (based on FullCalendar V5)
+ * @param options <code>\{ locale, version \}</code>
+ */
+declare class UICalendar {
+    /** Date format of the service */
+    readonly dateFormat = "YYYY-MM-DD HH:mm:ss";
+    /** Current date per calendar */
+    currentDate: {
+        [key: string]: Date;
+    };
+    /** Current filter per calendar */
+    currentFilter: {
+        [key: string]: string;
+    };
+    /** FullCalendar instance */
+    cal?: Calendar;
+    /** Options `{ locale, version }` */
+    options: KeyObject;
+    /** Enum items per calendar, field and code, merged from all received metadata */
+    enums: {
+        [agenda: string]: {
+            [field: string]: {
+                [code: string]: KeyObject;
+            };
+        };
+    };
+    constructor(options: {
+        locale?: string;
+        version?: number;
+    });
+    /**
+     * Set date
+     */
+    setDate(name: string, date?: Date): void;
+    /**
+     * Get date
+     */
+    getDate(name: string): Date;
+    /**
+     * Get filter (user or group field)
+     */
+    setFilter(name: string, filter?: string): void;
+    /**
+     * Get filter (user or group field)
+     */
+    getFilter(name: string): string;
+    /**
+     * Generate a light color
+     */
+    hsl(text: string): string;
+    /**
+     * Display calendar
+     * @param ctn Container
+     * @param obj Business object
+     * @param agd Agenda definition
+     * @param params options
+     * @param params.login optional login filter
+     * @param params.group optional group filter
+     * @param params.date current date to show
+     * @param params.editable editable?
+     * @param params.locale use locale (ex 'fr', 'es')
+     * @param params.click click handler (default open the update form)
+     * @param params.select select date handler (default open the create form)
+     * @param params.drop drop event handler (default update the event start date)
+     * @param params.resize resize event handler (default update the event duration)
+     * @param params.title handler(obj,item) of event title (default based on label fields)
+     * @param params.column handler(date) to override column header (HTML)
+     * @param params.color handler(obj,item) for event background (default grey or hash of selected login|group)
+     * @param params.borderColor handler(obj,item) for border color
+     * @param params.textColor handler(obj,item) for text color
+     * @param params.classNames handler(obj,item) to get an array of CSS classes
+     * @param params.render handler to override the render the event
+     * @param params.minTime default "00:00:00"
+     * @param params.maxTime default "24:00:00"
+     * @param params.slot default "00:30:00"
+     * @param params.snap default "00:05:00"
+     * @param params.workingDays default [1,2,3,4,5] = monday to friday
+     * @param params.startTime default "09:00" for business hours
+     * @param params.endTime default "18:00" for business hours
+     * @param params.height default 800
+     * @param params.heading title level 1 (default), 2 when embedded in a page, or false for no title
+     * @param cbk Optional callback
+     */
+    display(ctn: AnyContainer, obj: BusinessObject, agd: Agenda, params?: CalendarParam, cbk?: Callback): Promise<void>;
 }
 
 /** Guide (interactive tour) */
@@ -3061,6 +4572,1034 @@ declare class ExternalObject {
     isLoaded(): string | undefined;
 }
 
+/** Action button associated to field input */
+type FieldAddon = JQuery | Addon;
+/** Rendering options and context of a field */
+interface FieldParam {
+    /** Display the label? */
+    showLabel?: boolean;
+    /** Display the help? */
+    showHelp?: boolean;
+    /** Context list? */
+    list?: boolean;
+    /** Context form */
+    form?: JQuery;
+    /** Current tabs on form */
+    formTab?: KeyObject;
+    /** Field of inlined link? */
+    inline?: boolean;
+    /** Optional parent object */
+    parent?: ParentObject;
+    /** Extended form? */
+    isExtended?: boolean;
+    /** Has more field flag */
+    hasMore?: boolean;
+    /** HTML input type (defaults to text) */
+    inputtype?: string;
+    /** HTML input mode */
+    inputmode?: string;
+    /** Buttons of the referenced fields (not used by the default rendering) */
+    refb?: KeyObject | null;
+    /** Promises to wait before the end of rendering (see `$ui.addPromise`) */
+    promises?: Promise<unknown>[];
+}
+/** Search input of a field */
+interface FieldSearch {
+    /** Prefix element */
+    prefix?: JQuery;
+    /** Input */
+    input: JQuery;
+    /** Action buttons */
+    addons?: FieldAddon[] | null;
+}
+/** Options of the field search input (see drawSearch) */
+interface DrawSearchOptions {
+    /** Search by field of list header */
+    searchby?: boolean;
+    /** Search handler (with the keyup event: search on Enter only) */
+    search?: (e?: JQuery.Event) => void;
+    /** Read-only search (fixed filter) */
+    readonly?: boolean;
+}
+/**
+ * UI Field: common behavior for simple textual field.
+ * Other types are inherited from this class to specialize the rendering.
+ */
+declare class UIField extends UIComponent<UIObjectField, FieldParam, FormParam | ListParam> {
+    /** Optional business object */
+    obj: UIBusinessObject | null;
+    /** Field definition */
+    field: UIObjectField;
+    /** Same as field, backward compat */
+    def: UIObjectField;
+    /**
+     * Input dom ID: incremental to be unique in page.
+     * ZZZ no more used by UI except in related <label for="id">
+     */
+    id: string;
+    /** Input name <field.name>[_id<index>], unique in container */
+    name: string;
+    /** Related edit-list rowId, action/extobj name... */
+    index?: string;
+    /** All controls (input/textarea/select) associated to the field rendering */
+    input: JQuery<HTMLElement>;
+    /** Same as input for 6.3 compat */
+    element: JQuery<HTMLElement>;
+    /** True=editable field, false=search field */
+    form?: boolean;
+    /** Input file of document */
+    file?: HTMLInputElement;
+    /** Edit cell: auto-save handler is registered */
+    cellChange?: boolean;
+    /**
+     * UI Field: common behavior for textual types
+     * @param ctn container
+     * @param obj Object
+     * @param field Field
+     * @param index optional edit list index = rowId, or inlined field foreignkey, or confirm action name
+     */
+    constructor(ctn: Container, obj: UIBusinessObject | null, field: ObjectField, index?: string);
+    /**
+     * Set the UI field index
+     * @param index optional field index: edit list rowId, action name, foreignkey of inlined field, external object...
+     */
+    setIndex(index?: string): void;
+    /**
+     * Get all controls related to field (inputs, select, textarea)
+     * - use the "name" because unique in the field container (form, list...)
+     * - no more based on unique "id" in page / incremental / non determinist
+     * @returns field UI elements
+     */
+    find(_checked?: boolean): JQuery;
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     * @example
+     * const v = $ui.getUIField(ctn, obj, "myObjCode").ui.val();
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     * @example
+     * // No 'change' event: trigger it to apply the constraints
+     * $ui.getUIField(ctn, obj, "myObjCode").ui.val("ABC").change();
+     */
+    val(v: FieldValue): this;
+    /**
+     * Apply a UI function to all referenced fields
+     * @param f field
+     * @param fn function to apply
+     * @param args function arguments
+     */
+    cascad(f: ObjectField, fn: string, ...args: unknown[]): void;
+    /**
+     * Show/Hide UI field
+     * @param vis visibility ?
+     * <ul>
+     * <li>true/false</li>
+     * <li>Simplicite.VIS_HIDDEN</li>
+     * <li>Simplicite.VIS_BOTH</li>
+     * <li>Simplicite.VIS_FORM</li>
+     * <li>Simplicite.VIS_LIST</li>
+     * </ul>
+     * @param slide true to add a slide effect
+     * @param context optional Simplicite.CONTEXT_*
+     * @param toRef true when applied from its foreign key to a referenced field: show or hide it from its own visibility, without changing it
+     * @example
+     * const f = $ui.getUIField(ctn, obj, "myObjComment");
+     * f.ui.visible(false);
+     * // On the form only, with a slide effect
+     * f.ui.visible($app.VIS_FORM, true);
+     */
+    visible(vis: boolean | number, slide?: boolean, context?: number, toRef?: boolean): this;
+    /**
+     * Enable/Disable UI field
+     * @param upd updatable ? true/false or Simplicite.UPD_READ_ONLY|ALWAYS|FORM_ONLY|LIST_ONLY
+     * <ul>
+     * <li>true/false</li>
+     * <li>Simplicite.UPD_READ_ONLY</li>
+     * <li>Simplicite.UPD_ALWAYS</li>
+     * <li>Simplicite.UPD_FORM_ONLY</li>
+     * <li>Simplicite.UPD_LIST_ONLY</li>
+     * </ul>
+     * The field is redrawn: the handlers added with `on` or `change` are kept.
+     * @example
+     * const f = $ui.getUIField(ctn, obj, "myObjCode");
+     * f.ui.updatable(false);
+     * f.ui.updatable($app.UPD_FORM_ONLY);
+     */
+    updatable(upd: boolean | number): this;
+    /**
+     * Set required UI field
+     * @param req is required ?
+     * The field is redrawn: the handlers added with `on` or `change` are kept.
+     * @example
+     * $ui.getUIField(ctn, obj, "myObjComment").ui.required(true);
+     */
+    required(req: boolean): this;
+    /**
+     * Bind 'focus' event or set the focus on field
+     * @param handler optional handler
+     * @example
+     * // Set the focus on the first visible input of the field
+     * $ui.getUIField(ctn, obj, "myObjCode").ui.focus();
+     */
+    focus(handler?: JQueryHandler): this;
+    /**
+     * Read the form field into object field (async/file reading)
+     * @returns Promise
+     * @example
+     * // Documents are read asynchronously
+     * const f = $ui.getUIField(ctn, obj, "myObjDocument");
+     * f.ui.read().then(() => $console.log(f.value()));
+     */
+    read(): Promise<FieldValue>;
+    /**
+     * Init field components when displayed on screen
+     * @param _p context parameters of the form or the list
+     */
+    init(_p?: FormParam | ListParam): this;
+    /**
+     * Display the field
+     * @param disp optional display 'full' (default = label+input+help) | 'label' | 'input' | 'preview' | 'value' | 'help' | 'image'
+     * @param p rendering options and context
+     * @returns Rendered control
+     * @example
+     * // Without the label, then init the component (datepicker, select2...)
+     * const f = $ui.getUIField(ctn, obj, "myObjCode");
+     * ctn.append(f.ui.display("input"));
+     * f.ui.init();
+     */
+    display(disp?: null | FieldDisplay, p?: FieldParam): string | JQuery;
+    /**
+     * Render the value only
+     * @param v field value
+     * @returns rendered read-only value, default returns field.displayValue(v,true)
+     * @example
+     * const r = $ui.getUIField(ctn, obj, "myObjStatus").ui.renderValue("OPEN");
+     */
+    renderValue(v: FieldValue, _item?: EnumItem | null): string | JQuery;
+    /**
+     * Render the object field with label/help and styles
+     * @param options rendering options and context
+     * @param options.showLabel display the label?
+     * @param options.showHelp display the help?
+     * @param options.list context list?
+     * @param options.form context form?
+     * @param options.formTab current tabs on form
+     * @param options.inline field of inlined link?
+     * @param options.parent optional parent object
+     * @param options.isExtended extended form?
+     * @param options.hasMore has more field flag
+     * @returns Rendered control
+     */
+    render(options?: FieldParam): JQuery;
+    /**
+     * Draw the UI controls: input + addon buttons
+     * @param options Options
+     * @param options.inputtype HTML input type (defaults to text)
+     * @param options.inputmode HTML input mode
+     */
+    draw(options?: {
+        inputtype?: string;
+        inputmode?: string;
+    }): JQuery;
+    /**
+     * Draw the UI input only
+     * @param options Options
+     * @param options.inputtype HTML input type (defaults to text)
+     * @param options.inputmode HTML input mode
+     */
+    drawInput(options?: {
+        inputtype?: string;
+        inputmode?: string;
+    }): JQuery;
+    /**
+     * Build a form group with input and addon buttons (help, ref picker, datamap...)
+     * @param inp Input control
+     * @param addons Optional addons
+     * @param ext Optional extended controls to add beyond the form group
+     * @returns .field-container
+     */
+    drawGroup(inp: JQuery, addons?: FieldAddon[], ext?: JQuery[]): JQuery;
+    /**
+     * Redraw the UI field at same place and rebind events
+     * @example
+     * // After a change of metadata
+     * const f = $ui.getUIField(ctn, obj, "myObjCode");
+     * f.label = "New label";
+     * f.ui.redraw();
+     */
+    redraw(): this;
+    /**
+     * Render the search field and addon buttons
+     * @param filter Filter value
+     * @param options Options
+     * @param options.search Search handler
+     * @param options.searchby Search by field of list header?
+     * @param options.searchbyfocus set the focus?
+     * @example
+     * const s = $ui.getUIField(ctn, obj, "myObjStatus").ui.renderSearch("OPEN");
+     */
+    renderSearch(filter?: FieldFilter | null, options?: {
+        search?: Callback;
+        searchby?: boolean;
+        searchbyfocus?: boolean;
+    }): JQuery;
+    /**
+     * Draw the input of field search
+     * @returns Single input or complex <code>\{ prefix, input, addons \}</code> or array <code>[\{ prefix, input, addons \}...]</code>
+     */
+    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
+    /**
+     * Read the search form into object filters
+     * @param ctn container with .search-control
+     * @param o Object to set filters
+     * @param noRemove True to keep filter with default <code>'%'</code>
+     * @example
+     * // Read the filters, then reload the list
+     * Simplicite.UI.View.UIField.readSearch(ctn, obj);
+     * $ui.displayList(listCtn, obj);
+     */
+    static readSearch(ctn: Container, o: BusinessObject, noRemove?: boolean): void;
+    /**
+     * Get the field case style
+     */
+    caseStyle(): string;
+    /**
+     * Reload and redraw all linked lists
+     * @param all get all linked values when field is empty (case of search)
+     * @example
+     * $ui.getUIField(ctn, obj, "myObjCountry").ui.linkedLists();
+     */
+    linkedLists(all?: boolean): void;
+    /**
+     * Helper to assist common filter expression
+     * @param f object field
+     * @param input search input to assist
+     * @param type helper type 'number', 'string' or 'date'
+     * @param onOk optional callback(expression)
+     */
+    searchHelper(f: ObjectField, input: JQuery, type: string, onOk: (expr: string) => void): void;
+    /**
+     * Return a simple clipboard icon, copying the given value to clipboard
+     * @param ctn
+     * @param obj
+     * @param field
+     * @param index
+     * @param btn Optional button to complete
+     */
+    static buttonClipboard: (ctn: Container, obj: UIBusinessObject | null, field: ObjectField, index: string | undefined, btn?: JQuery) => JQuery<HTMLElement>;
+    /**
+     * Copy a value to the clipboard and show a toast.
+     * @param v Value to copy
+     * @example
+     * Simplicite.UI.View.UIField.clipboard(obj.getFieldValue("myObjCode"));
+     */
+    static clipboard(v: unknown): void;
+    /**
+     * Bind a debounced listener that refreshes the value-dependent style on change
+     */
+    onStyleChange(): this;
+    /**
+     * Refresh the value-dependent field style by calling the back-end `getStyle`,
+     * swap the style class on the enclosing `.form-group`
+     * and fire a `ui.field.style` event so concerned elements (e.g. progress bar) can react.
+     * @param value Service value to evaluate the style for (defaults to the current UI value)
+     * @returns the resolved style
+     * @example
+     * $ui.getUIField(ctn, obj, "myObjAmount").ui.refreshStyle().then(s => $console.log(s));
+     */
+    refreshStyle(value?: string): Promise<string>;
+}
+
+/**
+ * Field with its UI component always set (see $view.getField).
+ * Only a type: fields are created as `ObjectField` by the model, and `ui` is set by `getField`.
+ * The other members are set by the UI when the field is rendered.
+ * @example
+ * // Known field: ui is set
+ * const f: UIObjectField = $ui.getUIField(ctn, obj, "myObjCode");
+ * f.ui.updatable(false);
+ * // Field got from the model: may be undefined, ui is only set once $ui.getUIField has been called
+ * const g = obj.getField("myObjAmount") as UIObjectField | undefined;
+ * g?.ui?.updatable(true);
+ */
+interface UIObjectField extends ObjectField {
+    /** UI rendering */
+    ui: UIField;
+    /** Displayed in the form template (`.field[data-field]`): not rendered again in its area */
+    moved?: boolean;
+    /** DOM ID of the column header, for the `headers` attribute of the cells (WCAG) */
+    _thId?: string;
+    /** Name of the transition selected on the status field, sent on save (the target state can be ambiguous) */
+    _tran?: string;
+    /** Field displaying the input of this foreign key, redrawn when the foreign key becomes updatable or not */
+    _refInputField?: UIObjectField;
+    /** Timesheet input: maximum for a period, from the default value */
+    periodMax?: number;
+    /** Big decimal: full precision value, the input displays a shorter precision */
+    bigdec?: string;
+    /** Foreign key: user key of the referenced record (from the `fuk__` data of the row) */
+    foreignUserKey?: string;
+    /** Action of the confirm dialog displaying this field */
+    inAction?: Action;
+    /** External object of the widget settings displaying this field */
+    inExternal?: ExternalObject;
+    /** Long string: Ace editors by row index or `form` */
+    _editor?: KeyObject;
+    /** Long string: Ace params by row index or `form`, read when the field is initialized */
+    _ace?: KeyObject;
+    /** Long string: grid editor and its settings */
+    _grid?: GridEditorParam;
+    /** HTML: Quill params by row index or `form`, read when the field is initialized */
+    _quillParams?: KeyHash<QuillOptions>;
+}
+
+/** Timesheet service parameters */
+interface TimesheetData {
+    /** Action (`save` or undefined to read) */
+    action?: string;
+    /** Timesheet name */
+    name: string;
+    /** Resource row ID */
+    resId?: string;
+    /** Start date of the range */
+    start?: string;
+    /** End date of the range */
+    end?: string;
+    /** Grid data to save */
+    data?: KeyObject;
+    /** Swap inputs and resources */
+    swap?: boolean;
+    /** Go to today */
+    today?: boolean;
+    /** Show all the lines */
+    showall?: boolean;
+    /** Shift the period backward (-1) or forward (1) */
+    shift?: TimesheetShift;
+    /** Gantt name */
+    gantt?: string;
+}
+/** Totals of a timesheet line */
+interface TimesheetTotal {
+    /** Total */
+    total: number;
+    /** Sub-total */
+    subtotal: number;
+    /** Workload */
+    workload: number;
+}
+/** Line of a timesheet (N,N assignment between 2 resources) */
+interface TimesheetLine {
+    /** N,N row_id */
+    id: string;
+    /** Resource 1 */
+    id1: string;
+    /** Label of resource 1 */
+    label1: string;
+    /** Resource 2 */
+    id2: string;
+    /** Label of resource 2 */
+    label2: string;
+    /** Group index */
+    groupby: number;
+    /** Begin date of the assignment */
+    begin: string;
+    /** End date of the assignment */
+    end: string;
+    /** Input values per date key */
+    inputs: {
+        [key: string]: string[];
+    };
+    /** Totals */
+    totals: TimesheetTotal[];
+    /** Status field */
+    sfield?: ObjectField;
+    /** Status value */
+    status?: string;
+}
+/** Period (column) of a timesheet */
+interface TimesheetPeriod {
+    /** Date key */
+    key: string;
+    /** Day label */
+    day: string;
+    /** Open day */
+    open?: boolean;
+    /** Read only */
+    read?: boolean;
+}
+/** Shift backward (-1) or forward (1) */
+type TimesheetShift = 1 | -1;
+/** Timesheet metadata and handlers */
+interface TimesheetMetadata {
+    /** Container */
+    ctn: Container;
+    /** Timesheet row ID */
+    id: string;
+    /** Timesheet name */
+    name: string;
+    /** Period type (`D` = day, `W` = week, `Y` = year) */
+    type: "D" | "W" | "Y";
+    /** Read only timesheet */
+    readOnly?: boolean;
+    /** Allow inputs in the past */
+    backward?: boolean;
+    /** Show the sheet */
+    useSheet?: boolean;
+    /** Use a chart */
+    useChart?: boolean;
+    /** Show the chart */
+    showChart?: boolean;
+    /** Swap inputs and resources */
+    swapInput?: boolean;
+    /** Show all the lines */
+    showall?: boolean;
+    /** Start date */
+    start?: string;
+    /** End date */
+    end?: string;
+    /** Go to today */
+    today?: boolean;
+    /** Shift of the period */
+    shift?: TimesheetShift;
+    /** Assign N,N object name */
+    assign: string;
+    /** Object of root resource 1 or 2 */
+    object: UIBusinessObject;
+    /** Row ID of resource 1 */
+    id1?: string;
+    /** Object of resource 1 */
+    obj1?: string;
+    /** Field of resource 1 */
+    field1: string;
+    /** Row ID of resource 2 */
+    id2?: string;
+    /** Object of resource 2 */
+    obj2?: string;
+    /** Field of resource 2 */
+    field2: string;
+    /** Lines */
+    lines: TimesheetLine[];
+    /** Status values */
+    status: EnumItem[];
+    /** Input fields */
+    inputs: UIObjectField[];
+    /** Periods (columns) */
+    periods: TimesheetPeriod[];
+    /** Groups */
+    groups: number[];
+    /** Chart */
+    chart?: Chart;
+    /** Save the timesheet */
+    save: (cbk?: Callback) => void;
+    /** Close the timesheet */
+    close: Callback;
+    /** Redraw the timesheet */
+    redraw?: Callback;
+    /** Read the grid data */
+    read?: () => KeyObject;
+    /** Swap inputs and resources */
+    swap?: Callback;
+    /** Go to today */
+    showToday?: Callback;
+    /** Add a line */
+    add?: Callback;
+    /** Open a record */
+    open?: (obj: string, id: string, form: boolean) => void;
+    /** Shift the period */
+    onshift: (sign: number) => void;
+}
+/** Timesheet data from the server */
+interface TimesheetParam {
+    /** Timesheet metadata */
+    ts: TimesheetMetadata;
+    /** Messages */
+    msg?: MessageJSON[];
+}
+/** Timesheet display options */
+type TimesheetOptions = NavParam & {
+    /** Hook before loading */
+    beforeload?: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => void;
+    /** Hook when displayed */
+    onload?: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => void;
+    /** Hook when removed */
+    onunload?: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => void;
+};
+/** Gantt data */
+interface TimesheetGanttData {
+    /** Periods */
+    period: TimesheetPeriod[];
+    /** TODO */
+    meta: KeyObject;
+    /** TODO */
+    data: KeyObject;
+}
+/** Gantt display options */
+type TimesheetGanttParam = {
+    /** Object instance name */
+    inst?: string;
+    /** Start date */
+    start?: string;
+    /** End date */
+    end?: string;
+} & NavParam;
+/**
+ * Timesheet rendering
+ */
+declare class Timesheet {
+    /**
+     * Display a timesheet.
+     * @param ctn Container
+     * @param obj Business object
+     * @param t Timesheet data
+     * @param cbk Optional callback when displayed
+     */
+    display(ctn: Container, obj: BusinessObject, t: TimesheetParam, cbk?: Callback): void;
+    /**
+     * Read form data
+     * field name => assign id => period key: value
+     */
+    private read;
+    /**
+     * Bulk transition
+     */
+    private transition;
+    /**
+     * Format float
+     */
+    private format;
+    private grid;
+    private fixed;
+    /** Generated colors per resource label */
+    _colors: KeyString;
+    /**
+     * Generate a color to resource label
+     */
+    private color;
+    /**
+     * Resource chart
+     */
+    private chart;
+    /**
+     * Gantt chart
+     */
+    displayGantt(ctn: Container, obj: BusinessObject, tsName: string, data: TimesheetGanttData, upd?: (p: KeyObject, cbk: (err: MessageJSON) => void) => void, cbk?: Callback): void;
+}
+
+/** Parameters of the fulltext index search */
+type IndexParam = NavParam & {
+    /** Optional title */
+    title?: string;
+    /** Optional object name */
+    object?: string;
+    /** Optional domain */
+    domain?: string;
+};
+/** Parameters of a place map display */
+type MapParam = NavParam & {
+    /** Optional display mode */
+    mode?: string;
+    /** Optional object name */
+    obj?: string;
+    /** Optional instance name */
+    inst?: string;
+    /** Optional placemap */
+    placemap?: string;
+    /** Optional coordinates */
+    coords?: string;
+    /** Optional move handler */
+    onMove?: (lat: string, lng: string) => void;
+};
+/**
+ * UI rendering, part of the UI engine `$ui` (see UIEngine): views: home page, views and dashboards, index search, crosstabs, tree views, calendars, timesheets, metrics, maps, trays, workflows, site map
+ */
+declare class UIRenderView {
+    /**
+     * Home page
+     * @param ctn Container
+     * @param options Options <code>\{ nav, showNav \}</code>
+     * @param cbk Optional callback
+     * @example
+     * $ui.displayHome();
+     * // with the navigation bar
+     * $ui.displayHome(null, { nav: "new", showNav: true });
+     */
+    displayHome(ctn?: AnyContainer, options?: NavParam | null, cbk?: Callback): void;
+    /**
+     * Display a view
+     * @param ctn Container
+     * @param view View definition or name
+     * @param options View options
+     * @param cbk Optional callback
+     * @example
+     * // Display the view MyView in the work area
+     * $ui.displayView(null, "MyView", {
+     * 	onload: (ctn: Container, view?: View) => $console.log("loaded", view?.name)
+     * });
+     */
+    displayView(ctn: AnyContainer, view: View | string, options?: ViewParam, cbk?: (ctn?: Container, view?: View) => void): void;
+    /**
+     * Display the user dashboard
+     * @param ctn Container
+     * @param view Optional dashboard name / null = overview
+     * @param options View options
+     * @param options.beforeload Optional before load callback
+     * @param options.onload Optional onload callback
+     * @param options.onunload Optional unload callback
+     * @param cbk Optional callback
+     * @example
+     * // Dashboard overview
+     * $ui.displayDashboard(null);
+     * // A named dashboard
+     * $ui.displayDashboard(null, "MyDashboard", { onload: () => $console.log("loaded") });
+     */
+    displayDashboard(ctn: AnyContainer, view?: string | null, options?: {
+        beforeload?: Callback;
+        onload?: (ctn: Container, view?: View) => void;
+        onunload?: (ctn: Container, view?: View) => void;
+    }, cbk?: (ctn?: Container, view?: View) => void): void;
+    /**
+     * Crosstab
+     * @param ctn Container
+     * @param object Name or Object
+     * @param name Crosstab name
+     * @param options Options <code>\{ inst, filters, options, nav, showNav \}</code>
+     * @param cbk Optional callback
+     * @example
+     * // Crosstab "MyObjCrosstab" filtered on the year
+     * $ui.displayCrosstab(null, "MyObject", "MyObjCrosstab", {
+     * 	nav: "add",
+     * 	filters: { myObjYear: "2026" }
+     * });
+     */
+    displayCrosstab(ctn: AnyContainer, object: string | BusinessObject, name: string, options?: CrosstabNavParam, cbk?: Callback): void;
+    /**
+     * Index search form
+     * @param ctn Container
+     * @param options Options
+     * @param cbk Optional callback
+     * @example
+     * $ui.displayIndex(null, { title: "Search", nav: "add" });
+     */
+    displayIndex(ctn?: AnyContainer, options?: IndexParam | null, cbk?: Callback): void;
+    /**
+     * Session index
+     * @param ctn Container for result
+     * @example
+     * $ui.displayIndexSearchSession($("#result"));
+     */
+    displayIndexSearchSession(ctn: AnyContainer): void;
+    /**
+     * Index search in domain
+     * @param ctn Container for result
+     * @param domain Domain name
+     * @param filter Optional filter
+     * @param all False to limit search to objects updated by the user
+     * @param options Options <code>\{ object, nav, showNav \}</code>
+     * @example
+     * // Records of the domain updated by the user
+     * $ui.displayIndexSearchDomain($("#result"), "MyDomain", "", false);
+     */
+    displayIndexSearchDomain(ctn: Container, domain: string, filter?: string, all?: boolean, options?: IndexParam): void;
+    /**
+     * Index search in documents
+     * @param ctn Container for result
+     * @param req User request
+     * @param list Array of objects with documents
+     * @param options Options <code>\{ object, nav, showNav \}</code>
+     * @example
+     * $ui.displayIndexSearchDocs($("#result"), "contract", ["MyContract", "MyInvoice"]);
+     */
+    displayIndexSearchDocs(ctn: Container, req: string, list: string[], options?: IndexParam): void;
+    /**
+     * Index search result
+     * @param ctn Container
+     * @param req User request (see Simplicite.Ajax.indexsearch service)
+     * @param options Options <code>\{ object, nav, showNav \}</code>
+     * @param cbk Optional callback
+     * @example
+     * // Full-text search limited to an object
+     * $ui.displayIndexSearch(null, "dupont", { object: "MyCustomer", nav: "add" });
+     */
+    displayIndexSearch(ctn: AnyContainer, req: string, options?: IndexParam, cbk?: Callback): void;
+    /**
+     * Display a tree view
+     * @param ctn Optional container
+     * @param object Root object
+     * @param rowId Row ID of the record
+     * @param name Treeview name
+     * @param options Optional parameters <code>\{ inst, depth, display, menu, docked, onOpen, addMenu, delMenu, onPage \}</code>
+     * @param options.inst optional instance name (default <code>tree_ajax_[tvname]_[object]</code>)
+     * @param options.depth Max deep search (default <code>2</code>)
+     * @param options.menu Add the tree in main menu (default open in container)
+     * @param options.docked Open tree in left dock (default open in container)
+     * @param options.display Optional to override default menu.treeview renderer
+     * @param options.onOpen Optional open node handler <code>function(n,cbk)</code>
+     * @param options.addMenu Optional add to menu handler
+     * @param options.delMenu Optional remove from menu handler
+     * @param options.onPage Optional add page handler
+     * @param cbk Optional callback
+     * @example
+     * // Tree view of a record docked on the left
+     * $ui.displayTreeView(null, "MyObject", rowId, "MyObjTree", { depth: 3, docked: true });
+     */
+    displayTreeView(ctn: AnyContainer, object: string | BusinessObject, rowId: string, name: string, options?: TreeParam, cbk?: Callback): void;
+    /**
+     * Timesheet of object
+     * @param ctn Container
+     * @param object Resource object 1 or 2, or panel instance of assign object
+     * @param rowId Optional resource row ID
+     * @param tsName Timesheet name
+     * @param options Options
+     * @param cbk Optional callback
+     * @example
+     * $ui.displayTimesheet(null, "MyResource", rowId, "MyTimesheet", {
+     * 	nav: "add",
+     * 	onload: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => $console.log("loaded", ts)
+     * });
+     */
+    displayTimesheet(ctn: AnyContainer, object: string | BusinessObject, rowId: string, tsName: string, options?: TimesheetOptions, cbk?: Callback): void;
+    /**
+     * Gantt diagram based on timesheet data
+     * @param ctn Container
+     * @param object Assignment object
+     * @param tsName Timesheet name
+     * @param params Options
+     * @param cbk Optional callback
+     * @example
+     * // Gantt of the assignments over a period
+     * $ui.displayGantt(null, "MyAssignment", "MyTimesheet", { start: "2026-01-01", end: "2026-03-31" });
+     */
+    displayGantt(ctn: AnyContainer, object: string | BusinessObject, tsName: string, params?: TimesheetGanttParam, cbk?: Callback): void;
+    /**
+     * Calendar rendering
+     * @param ctn Container
+     * @param object Name or Business object
+     * @param agenda Agenda name
+     * @param params Options
+     * @param cbk Optional callback
+     * @example
+     * $ui.displayCalendar(null, "MyMeeting", "MyMeetingAgenda", { nav: "add" });
+     */
+    displayCalendar(ctn: AnyContainer, object: string | BusinessObject, agenda: string, params?: KeyObject | null, cbk?: (obj: UIBusinessObject, agd: Agenda, p: KeyObject) => void): void;
+    /**
+     * Status metrics
+     * @param c Container
+     * @param object Name or Business object
+     * @param params Options, with optional keys:
+     * `fromDate` (from date search YYYY-MM-DD, default 1 week ago or obj.locals.ui.metrics.fromDate),
+     * `toDate` (to date search YYYY-MM-DD, default today or obj.locals.ui.metrics.toDate),
+     * `period` (group by period: 1=hour, 2=day, 3=week, 4=month, 5=quarter, 6=semester, 7=year / default 2=day or obj.locals.ui.metrics.period),
+     * `palette` (palette name, default sysparam CHART_PALETTE or obj.locals.ui.metrics.palette),
+     * `show` (options to show/hide elements, all visible by default: `count`, `duration`, `history`, `terminal`, `palette`, `statusColors` as booleans, and `period`/`fromDate`/`toDate` as true|false or 'read')
+     * @param cbk Optional callback
+     * @example
+     * // Duration per status by week, without the palette selector
+     * $ui.displayStatusMetrics(null, "MyObject", {
+     * 	fromDate: "2026-01-01",
+     * 	period: 3,
+     * 	show: { palette: false }
+     * });
+     */
+    displayStatusMetrics(c: AnyContainer, object: string | BusinessObject, params?: StatusMetricsDisplayParam, cbk?: Callback): void;
+    /**
+     * Trays based on a state model
+     * @param ctn Container
+     * @param obj Name or Business object
+     * @param field Optional enum name (default is the status field)
+     * @param options Optional parameters
+     * @param cbk Optional callback
+     * @example
+     * // Trays on the status field
+     * $ui.displayTray(null, "MyObject");
+     * // Trays on another enumeration
+     * $ui.displayTray(null, "MyObject", "myObjPriority");
+     */
+    displayTray(ctn: AnyContainer, obj: string | BusinessObject, field?: string, options?: KeyObject, cbk?: Callback): void;
+    /**
+     * Map service.
+     * Loads object data to pass to the map renderer.
+     * Can be a single object or multi-object
+     * @param ctn Container to append the map to
+     * @param params Options
+     * @example
+     * // Records of a place map
+     * $ui.displayMap(null, { mode: "placemap", obj: "MyStore", placemap: "MyStoreMap", nav: "add" });
+     * // One point
+     * $ui.displayMap($("#map", ctn), { mode: "point", coords: "48.8566;2.3522" });
+     */
+    displayMap(ctn: AnyContainer, params: MapParam): void;
+    /**
+     * Workflow wrapper
+     * @param ctn Container
+     * @param wkf Business process or name
+     * @param action Action <code>start|abort|lock|unlock|validate|cancel|back|list</code>
+     * @param options Optional activity <code>\{ step \}</code>
+     * @param cbk Optional callback
+     * @example
+     * // Start a process
+     * $ui.displayWorkflow(null, "MyProcess", "start");
+     * // Resume an activity
+     * $ui.displayWorkflow(null, "MyProcess", "list", { step: "MyProcess-ACT1" });
+     */
+    displayWorkflow(ctn: AnyContainer, wkf: string | BusinessProcess | null, action?: ProcessActionType, options?: ProcessParam, cbk?: Callback): void;
+    /**
+     * Display the site map (plan du site) in the work area.
+     * @example
+     * $ui.displaySitemap();
+     */
+    displaySitemap(ctn?: AnyContainer): UIEngine;
+}
+
+/** Fulltext index metadata */
+interface IndexMetadata {
+    /** Objects with indexed documents */
+    withDocs: ObjectMetadata[];
+}
+/**
+ * Index search rendering
+ */
+declare class IndexSearch {
+    /** current tab */
+    private tab;
+    /** user request */
+    private req;
+    /** selected domain */
+    private domain;
+    private domainFilter?;
+    /** selected objects with docs */
+    private docs;
+    /** index search result */
+    readonly searchResult: JQuery<HTMLElement>;
+    /** domain search result */
+    readonly domResult: JQuery<HTMLElement>;
+    /** doc search result */
+    readonly docResult: JQuery<HTMLElement>;
+    /** session history */
+    readonly histResult: JQuery<HTMLElement>;
+    /** Search button */
+    button?: JQuery;
+    /** Search button DOM ID */
+    private searchButtonId?;
+    /** Hide the current searches */
+    private save;
+    /** Init the current searches */
+    private init;
+    /**
+     * Index search form
+     * @param ctn container
+     * @param md search metadata
+     * @param md.withDocs List of business objects with documents
+     * @param p optional parameters
+     */
+    form(ctn: Container, md?: IndexMetadata, p?: IndexParam): void;
+    /**
+     * Search result rendering in a grid
+     * @param ctn container
+     * @param req user request
+     * @param result search result
+     * @param p optional parameters
+     * @param p.msg TEXT code or message
+     * @param p.layout grid layout (masonry, float, inline, article)
+     */
+    result(ctn: Container, req: string, result: KeyObject, p: {
+        msg?: string;
+        layout?: string;
+    }, cbk?: Callback): void;
+    /**
+     * Filter dialog to pick some objects from user's menu
+     * @param list list of selected objects (all if empty)
+     * @param indexable true to list indexable objects only
+     * @param cbk callback(list) with selected objects
+     */
+    filterDialog(list: string[], indexable: boolean, cbk?: (list?: string[]) => void): void;
+    /**
+     * Init index search widget
+     * @param ctn div.searchbox container
+     */
+    searchBox(ctn: JQuery): void;
+    private easterEgg;
+    private handleSearchInput;
+    /**
+     * Move the virtual cursor in the listbox (APG combobox pattern)
+     * @param input the combobox input
+     * @param $items the option items collection
+     * @param idx target index, or -1 to clear the selection
+     */
+    private setActive;
+}
+
+/**
+ * `Simplicite.UI.View` namespace: viewers, renderers and components.
+ * Other bundles can add their classes by module augmentation (see the Maker).
+ */
+interface UIViewNamespace extends Readonly<typeof ViewClasses> {
+}
+/**
+ * Extensions of the `Simplicite.Ajax` namespace (the Session class with the legacy constants).
+ * Other bundles can add their classes by module augmentation (see the Maker).
+ */
+interface AjaxNamespace {
+}
+
+/** Job executed in a Promise: calls `resolve` with its result or `reject` on error */
+type JobFunction = (resolve: (value?: unknown) => void, reject?: (reason?: unknown) => void) => void;
+/** Queued job with its Promise handlers */
+interface Job {
+    /** Promise of the job result */
+    promise: Promise<KeyObject | void>;
+    /** Resolve the job with its result */
+    resolve: (result: KeyObject | void) => void;
+    /** Reject the job */
+    reject: (reason?: unknown) => void;
+}
+/**
+ * Queue to synchronize executions
+ */
+declare class SyncQueue {
+    private queue?;
+    private working;
+    /** Constructor */
+    constructor();
+    /**
+     * Await ordered functions
+     * @param list Array of function(resolve, reject) to execute asynchronously
+     * @param stopOnError Stop on first error (default true)?
+     * @returns Promise with ordered result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
+     */
+    static all(list: JobFunction[], stopOnError?: boolean): Promise<KeyObject>;
+    /**
+     * Ordered functions
+     * @param list Array of function(resolve, reject) to execute asynchronously within Promises
+     * @returns Promise with result array of \{ index, status:'fulfilled' or 'rejected', value or reason \}
+     */
+    static allSettled(list: JobFunction[]): Promise<KeyObject>;
+    /**
+     * Enqueue a Promise and starts dequeue
+     * @param promise Promise
+     * @returns Promise
+     */
+    enqueue(promise: Promise<KeyObject | void>): Promise<KeyObject | void>;
+    /**
+     * Ask to stop next queued jobs
+     */
+    stop(): void;
+    /**
+     * Dequeue while not empty
+     */
+    dequeue(): void;
+}
+
+/**
+ * Extends Simplicite.Ajax.BusinessProcess with front hooks.
+ */
+declare class UIBusinessProcess extends BusinessProcess {
+}
+
 /** Render method of an external object */
 type RenderFunction = (params?: KeyObject, data?: KeyObject) => Promise<void>;
 /**
@@ -3133,185 +5672,4504 @@ declare class UIExternalObject extends ExternalObject {
     }): Promise<void>;
 }
 
-type DiagramContainerTitleAnchor = "start" | "middle" | "end";
-type DiagramContainerStyle = {
-    radius?: number;
-    color?: string;
-    shadow?: boolean;
-    vertical?: boolean;
-    anchor?: DiagramContainerTitleAnchor;
-};
-type DiagramContainerTemplate = {
+/** Button of a dialog */
+type DialogAction = Omit<Action, "name" | "callback"> & {
+    /** Action name is not mandatory */
     name?: string;
-    object?: string;
-    display?: string;
-    icon?: string;
-    contents?: DiagramNodeTemplate[];
-} & DiagramContainerStyle;
-type DiagramContainerDef = {
-    template?: string;
-    object?: string;
-    id?: string;
-    keys?: string;
-    x?: number;
-    y?: number;
-    w?: number;
-    h?: number;
-    type?: number;
-    title?: string;
-    label?: string;
-    pool?: number;
-    vertical?: boolean;
-    shadow?: boolean;
-    color?: string;
-    radius?: number;
+    /** Handler on click */
+    callback?: AlertCallback;
+    /** Alias for action "callback" */
+    click?: AlertCallback;
 };
-/**
- * Container constructor
- * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @param {Object} data Container data { title, type, template, x, y, w, h... }
- * @param {$} [elt] optional DOM object to synchronize
- * @class
- */
-declare class DiagramContainer extends DiagramElement {
-    container?: DiagramContainer;
-    containers: DiagramContainer[];
-    nodes: DiagramNode[];
-    object: string;
-    id: string;
-    keys: KeyString;
-    TYPE: KeyNumber;
-    data?: KeyObject;
-    olddata?: KeyObject;
-    contents?: KeyObject[];
-    template: DiagramContainerTemplate;
-    type: number;
+/** Parameters of a dialog (see `$tools.dialog`) */
+interface DialogParam {
+    /** Optional name */
+    name?: string;
+    /** Optional dialog title (rich content) */
+    title?: AnyContent;
+    /** Contextual help */
+    help?: AnyContent;
+    /** Optional type `error`, `danger`, `warning` or `info` */
+    type?: AlertType;
+    /** Dialog body */
+    content?: AnyContent;
+    /** Optional footer */
+    footer?: AnyContent;
+    /** True to add a close button in header */
+    closeable?: boolean;
+    /** True to focus the primary, success or first button (default true for ENTER key), or a selector element to focus */
+    focus?: boolean | string;
+    /** False to remove fade effect (default true) */
+    fade?: boolean;
+    /** True to disable click outside dialog and ESC keyboard button */
+    modal?: boolean;
+    /** Optional scrollable body (default true) */
+    scrollable?: boolean;
+    /** True to handle dialog move (handle = header), or a selector of the handle element */
+    moveable?: boolean | string;
+    /** True to create a new navigation in dialog */
+    nav?: boolean;
+    /** True to add scrollbars */
+    overflow?: boolean;
+    /** Optional width (ex: '600px' or '80%'), forced to 100% on XS device */
+    width?: string | number;
+    /** Optional fullscreen size */
+    fullscreen?: boolean;
+    /** Optional 'left' or 'right' slide with swipe event */
+    slide?: "right" | "left" | null;
+    /** Optional header actions */
+    buttonsHeader?: JQuery | DialogAction[] | null;
+    /** Optional footer actions */
+    buttons?: JQuery | DialogAction[] | null;
+    /** Optional callback when displayed */
+    onload?: JQueryHandler;
+    /** Optional callback when closing (use preventDefault to cancel) */
+    beforeunload?: JQueryHandler;
+    /** Optional callback when closed */
+    unload?: JQueryHandler;
+    /** Optional "don't ask again" callback */
+    dontAskAgain?: (action: string) => void;
+}
+/** Tab of a tabs component */
+interface Tab {
+    /** Tab title */
+    title?: string | JQuery;
+    /** Tooltip */
+    tooltip?: string;
+    /** Icon name */
     icon?: string;
-    label: string;
-    title: string;
-    radius: number;
-    shadow?: boolean;
-    color?: string;
+    /** Tab content */
+    content?: AnyContent;
+    /** Hidden tab */
+    hidden?: boolean;
+    /** Handler when the tab is selected */
+    click?: JQueryHandler;
+    /** Handler when the tab is hidden */
+    hide?: JQueryHandler;
+    /** Tab key */
+    key?: string;
+    /** Tab data */
+    data?: KeyObject;
+}
+/** Parameters of a tabs component (see `$tools.tabs`) */
+interface Tabs {
+    /** Tabs ID */
+    id: string;
+    /** Tabs options */
+    tabs?: Tab[];
+    /** Selected tab index (default 0) */
+    selected?: number;
+    /** Tabs position `top` (default), `left`, `right` or `bottom` */
+    position?: Position;
+    /** Vertical tabs (same as position left) */
     vertical?: boolean;
-    anchor?: string;
-    border?: JSVG;
-    head?: JSVG;
-    t?: JSVG;
-    sep?: JSVG;
-    pool: number;
-    poolMin: number;
-    padding: number;
-    margin: number;
-    canUseShadow: boolean;
-    canUseVertical: boolean;
-    constructor(desktop: DiagramDesktop, data: DiagramContainerDef | DiagramContainer, elt?: JQuery | JSVG);
+    /** Underlined tab style */
+    underline?: boolean;
+    /** Optional class to add */
+    cls?: string;
+    /** Optional handler to allow drag */
+    ondrag?: (li: JQuery) => void;
+    /** Optional handler to allow drop, `cbk` confirms the move */
+    ondrop?: (move: {
+        li: JQuery;
+        from: number;
+        to: number;
+    }, cbk: (confirm: boolean) => void) => void;
+    /** Tabs in an overflow dropdown */
+    overflow?: {
+        /** Label of the overflow dropdown */
+        show: string;
+        /** Icon of the overflow dropdown */
+        icon?: string;
+    };
+}
+/** Item of a dropdown or an input addon */
+interface InputAddon extends Omit<Addon, "label" | "cbk"> {
+    /** Label */
+    label: string;
+    /** Reset item */
+    reset?: boolean;
+    /** Edit item */
+    edit?: boolean;
+    /** Handler on click */
+    cbk?: Callback;
+    /** Alias */
+    callback?: Callback;
+    /** Alias */
+    click?: Callback;
+}
+/** Item of a dropdown */
+type DropdownItem = InputAddon;
+/** Any addon: element, field addon or input addon */
+type AnyAddon = Container | FieldAddon | InputAddon;
+/** Parameters of a button (see `$tools.button`) */
+interface Button {
+    /** Button optional ID */
+    id?: string;
+    /** Button name */
+    name?: string;
+    /** Icon */
+    icon?: AnyContent | null;
+    /** Button label */
+    label?: AnyContent;
+    /** Optional screen reader only text */
+    sr?: string | null;
+    /** Optional tooltip */
+    tooltip?: string;
+    /** Optional size */
+    size?: ActionSize | null;
+    /** Optional level (ex: `primary`, `secondary`, `plus`) */
+    level?: ActionLevel;
+    /** Optional additional CSS class(es) */
+    style?: string;
+    /** Optional type (ex: `submit` default, `button`) */
+    type?: string;
+    /** Disabled button */
+    disabled?: boolean;
+    /** Handler on click */
+    click?: JQueryHandler;
+}
+/** Level of an alert */
+type AlertLevel = "help" | "info" | "success" | "warning" | "danger";
+/**
+ * Bootstrap V5 Tools
+ */
+declare class Bootstrap5 {
+    /** Bootstrap library, set when loaded */
+    bootstrap: typeof BootstrapLib;
     /**
-     * Load
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Load bootstrap libs
      */
-    load(data: DiagramContainer | null, cbk?: Callback): void;
+    load(cbk?: Callback): Promise<this>;
     /**
-     * Draw
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Home is displayed
      */
-    draw(): void;
+    ready(): this;
     /**
-     * Set/Get size of container
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Bootstrap full version (e.g. <code>5.1.3</code>)
+     * @example
+     * $console.log("Bootstrap " + $tools.getVersion());
      */
-    size(w?: number, h?: number): Size;
+    getVersion(): string;
     /**
-     * Size border
-     * @param {number} w Width
-     * @param {number} h Height
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Get UI template
      */
-    sizeBorder(w: number, h: number): void;
+    getTemplate(d?: {
+        template?: string;
+    }): JQuery<HTMLElement>;
     /**
-     * Change the pool position if > 0
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Init a container with bootstrap elements
+     * @param ctn form container
+     * @example
+     * // Init tooltips/popovers of a custom content
+     * const c: JQuery = $("<div/>").html('<span title="Hello" data-bs-toggle="tooltip">?</span>').appendTo(ctn);
+     * $tools.init(c);
      */
-    setPool(pos: number, silent?: boolean): void;
+    init(ctn: Container): void;
     /**
-     * Re-align all pools
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Destroy bootstrap elements
+     * @param ctn form container
+     * @example
+     * $tools.destroy(c);
      */
-    resizePool(): void;
+    destroy(ctn: Container): void;
     /**
-     * Bind
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Simple checkbox or radio
+     * @param d Options
+     * @param d.id Input id
+     * @param d.name Input name
+     * @param d.value Hidden value
+     * @param d.label Label
+     * @param d.inline Inlined in form?
+     * @param d.disabled Disabled?
+     * @param d.readonly Readonly?
+     * @param d.checked Checked?
+     * @param d.change Optional handler
+     * @param d.type Type <code>'checkbox'</code> (default) or <code>'radio'</code>
+     * @example
+     * const cb: JQuery = $tools.check({
+     * 	id: "myAccept",
+     * 	name: "accept",
+     * 	label: "I accept the terms",
+     * 	change: function (this: HTMLElement) { $console.log($(this).prop("checked")); }
+     * });
+     * ctn.append(cb);
      */
-    bind(el: JSVG): void;
+    check(d: {
+        id?: string;
+        name?: string;
+        value?: string;
+        label?: AnyContent;
+        inline?: boolean;
+        disabled?: boolean;
+        readonly?: boolean;
+        checked?: boolean;
+        change?: JQueryHandler;
+        type?: "checkbox" | "radio";
+    }): JQuery<HTMLElement>;
     /**
-     * Toggle menu
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Simple radio
+     * @param d Options
+     * @param d.id Input id
+     * @param d.name Input name
+     * @param d.value Hidden value
+     * @param d.label Label
+     * @param d.inline Inlined in form?
+     * @param d.disabled Disabled?
+     * @param d.readonly Readonly?
+     * @param d.checked Checked?
+     * @param d.change Optional handler
+     * @param d.type Forced to "radio"
+     * @example
+     * ctn.append(
+     * 	$tools.radio({ id: "sizeS", name: "size", value: "S", label: "Small", inline: true, checked: true }),
+     * 	$tools.radio({ id: "sizeL", name: "size", value: "L", label: "Large", inline: true })
+     * );
      */
-    toggleMenu(): void;
+    radio(d: {
+        id?: string;
+        name?: string;
+        value?: string;
+        label?: AnyContent;
+        inline?: boolean;
+        disabled?: boolean;
+        readonly?: boolean;
+        checked?: boolean;
+        change?: JQueryHandler;
+        type?: "radio";
+    }): JQuery<HTMLElement>;
     /**
-     * Style
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Toogle checked class on an array of checkboxes/radio buttons's parent element
+     * @param elts Array of checkboxes/radio buttons
+     * @example
+     * $tools.toggleChecked($("input[name='size']", ctn));
      */
-    style(props?: DiagramContainerStyle, silent?: boolean): {
-        color: string | undefined;
-        radius: number;
-        shadow: boolean | undefined;
-        vertical: boolean | undefined;
+    toggleChecked(elts?: JQuery<HTMLInputElement>): void;
+    /**
+     * Get responsive image (.img-fluid)
+     * @param src Source
+     * @param onload optional callback
+     * @param onerror optional error callback
+     * @example
+     * ctn.append($tools.image($app.imageURL("MyObject", "myObjImage", rowId, docId), () => $console.log("loaded")));
+     */
+    image(src?: string, onload?: JQueryHandler, onerror?: JQueryHandler): JQuery<HTMLImageElement>;
+    /**
+     * Long description of an image (displayed in a11y mode only, see a11y.less)
+     * @param text optional description
+     * @param id optional id (to be referenced by the image aria-describedby)
+     */
+    imageLongDesc(text?: string, id?: string): JQuery;
+    /**
+     * Link search rendering (for N,N pillbox)
+     * @param ctn Search container
+     * @param o Business object
+     * @param link N,N link
+     * @param filter Current filter
+     * @param options Search options
+     * @param options.search Search handler
+     * @param options.searchby Search by field of list header
+     */
+    displayLinkSearch(ctn: Container, o: BusinessObject, link: Link, filter: string | null, options?: {
+        search?: () => void;
+        searchby?: boolean;
+    }): "" | JQuery<HTMLElement>;
+    /**
+     * Dialog box
+     * @param params String content or object
+     * @param params.name Optional name
+     * @param params.title Optional dialog title (rich content)
+     * @param params.help Contextual help
+     * @param params.type Optional <code>error|danger|warning|info</code>
+     * @param params.content Dialog body
+     * @param params.closeable True to add a close button in header
+     * @param params.focus True to focus the primary, success or first button (default true for ENTER key), or a selector element to focus
+     * @param params.fade False to remove fade effect (default true)
+     * @param params.modal True to disable click outside dialog and ESC keyboard button
+     * @param params.scrollable Optional scrollable body (default true)
+     * @param params.moveable True to handle dialog move (handle = header), or a selector of the handle element
+     * @param params.nav True to create a new navigation in dialog
+     * @param params.overflow True to add scrollbars
+     * @param params.width Optional width (ex: '600px' or '80%'), forced to 100% on XS device
+     * @param params.fullscreen Optional fullscreen size
+     * @param params.slide Optional 'left|right' with swipe event
+     * @param params.buttonsHeader Optional header actions
+     * @param params.buttons Optional footer actions [{ name, label, icon, style:'primary|secondary|success|info|danger', callback (or click), close:true|false, disabled:true|false }]
+     * @param params.footer Optional footer
+     * @param params.onload Optional callback when displayed
+     * @param params.beforeunload Optional callback when closing (use preventDefault to cancel)
+     * @param params.unload Optional callback when closed
+     * @param params.dontAskAgain Optional 'dont't ask again' callback
+     * @example
+     * const dlg = $tools.dialog({
+     * 	title: "My dialog",
+     * 	content: $("<div/>").text("Hello world !"),
+     * 	closeable: true,
+     * 	// each button closes the dialog by default (unless close: false)
+     * 	buttons: [{
+     * 		name: "OK",
+     * 		label: $T("OK"),
+     * 		style: "primary",
+     * 		close: false,
+     * 		callback: () => {
+     * 			$console.log("clicked");
+     * 			$tools.dialogClose(dlg); // explicitly close the dialog
+     * 		}
+     * 	}, {
+     * 		name: "CANCEL",
+     * 		label: $T("CANCEL"),
+     * 		style: "secondary"
+     * 	}]
+     * });
+     */
+    dialog(params: string | DialogParam): JQuery;
+    /**
+     * Find a visible dialog
+     * @param dlg optional dialog, name or "all", or returns the top level dialog if unset
+     * @example
+     * const dlg: JQuery = $tools.getDialog(); // top level dialog
+     */
+    getDialog(dlg?: string | JQuery): JQuery;
+    /**
+     * Is the dialog modal (no keyboard ESC and no close button) ?
+     * @param dlg optional name or top level dialog if unset
+     * @example
+     * if (!$tools.isDialogModal(dlg)) $tools.dialogClose(dlg);
+     */
+    isDialogModal(dlg: string | JQuery): boolean;
+    /**
+     * Close the dialog box
+     * @param dlg name or modal, undefined = close the top dialog if unset, "all" = close all
+     * @param cbk optional callback when dialog is closed
+     * @example
+     * // Close the top dialog, or all dialogs
+     * $tools.dialogClose();
+     * $tools.dialogClose("all", () => $console.log("closed"));
+     */
+    dialogClose(dlg?: string | JQuery, cbk?: JQueryHandler): JQuery<HTMLElement>;
+    /**
+     * Icon button
+     * @param p Optional parameters
+     * @param p.name Action name
+     * @param p.title Icon title
+     * @param p.icon Icon name (default <code>'star'</code>)
+     * @param p.click Handler on click or Enter
+     * @param p.right True to pull on right side
+     * @example
+     * ctn.append($tools.spanIcon({ name: "refresh", title: "Refresh", icon: "fas/sync", click: () => $view.reload() }));
+     */
+    spanIcon(p: {
+        name?: string;
+        title?: string;
+        icon?: string;
+        click?: JQueryHandler;
+        right?: boolean;
+    }): JQuery<HTMLElement>;
+    /**
+     * Icon button
+     * @param p Optional parameters
+     * @param p.name Action name
+     * @param p.title Icon title
+     * @param p.icon Icon name (default <code>'star'</code>)
+     * @param p.click Handler on click or Enter
+     * @param p.right True to pull on right side
+     * @param p.cls Optional extra class name(s)
+     * @param p.label Optional accessible name if different from the title (e.g. feature name for a toggle whose title is the switch)
+     * @param p.pressed Optional toggle state (sets <code>aria-pressed</code>), to be updated with <code>buttonIconState</code>
+     * @example
+     * // Toggle button
+     * const b: JQuery = $tools.buttonIcon({
+     * 	name: "myFav",
+     * 	title: "Add to favorites",
+     * 	icon: "far/star",
+     * 	pressed: false,
+     * 	click: () => $tools.buttonIconState(b, { icon: "fas/star", pressed: true, title: "Remove from favorites" })
+     * });
+     * ctn.append(b);
+     */
+    buttonIcon(p: {
+        name?: string;
+        title?: string;
+        id?: string;
+        icon?: string;
+        click?: JQueryHandler;
+        right?: boolean;
+        cls?: string;
+        pressed?: boolean;
+        label?: string;
+    }): JQuery<HTMLElement>;
+    /**
+     * Update the state of a toggle button built with <code>buttonIcon</code>
+     * (icon = current state, <code>aria-pressed</code> = status, title = next switch)
+     * @param b Button
+     * @param s New state
+     * @param s.icon New icon (current state)
+     * @param s.pressed New status
+     * @param s.title New title
+     * @example
+     * $tools.buttonIconState(b, { icon: "fas/star", pressed: true, title: "Remove from favorites" });
+     */
+    buttonIconState(b: JQuery, s: {
+        icon?: string;
+        pressed?: boolean;
+        title?: string;
+    }): JQuery<HTMLElement>;
+    /**
+     * Icon button
+     * @param p Optional parameters
+     * @param p.name Action name
+     * @param p.title Title as HTML tooltip
+     * @param p.subtitle Optional Subtitle
+     * @param p.placement Tooltip placement (default <code>'bottom'</code>)
+     * @param p.icon Icon name
+     * @param p.disabled Icon disabled?
+     * @param p.size Optional size (e.g. <code>'xs'</code>, <code>'sm'</code>, <code>'lg'</code>)
+     * @param p.click Handler
+     * @example
+     * ctn.append($tools.actionIcon({
+     * 	name: "myExport",
+     * 	title: "Export",
+     * 	subtitle: "CSV format",
+     * 	icon: "fas/download",
+     * 	click: () => $ui.displayExport(null, obj)
+     * }));
+     */
+    actionIcon(p: {
+        name?: string;
+        title?: AnyContent;
+        subtitle?: string | null;
+        placement?: Position;
+        icon?: AnyContent;
+        disabled?: boolean;
+        size?: string;
+        click?: JQueryHandler | null;
+    }): JQuery<HTMLElement>;
+    /**
+     * Flatten grouped menu items with dividers between groups
+     * @param items Array of item groups (li)
+     * @example
+     * const li = (label: string): JQuery => $("<li/>").append($("<a class='dropdown-item'/>").text(label));
+     * const items: JQuery[] = $tools.actionMenuItems([[li("Copy"), li("Paste")], [li("Delete")]]);
+     */
+    actionMenuItems(items: (JQuery<HTMLElement>[])[]): JQuery[];
+    /**
+     * Create a 'plus' button
+     * @param items Array of items (li)
+     * @param right Align popup to the right of button
+     * @param dropUp On top?
+     * @example
+     * // "plus" menu with 2 groups separated by a divider, aligned to the right
+     * const plus: JQuery | null = $tools.actionPlus([[li("Copy"), li("Paste")], [li("Delete")]], true);
+     * plus && ctn.append(plus);
+     */
+    actionPlus(items: (JQuery<HTMLElement>[])[], right?: boolean, dropUp?: boolean): JQuery | null;
+    /**
+     * Create a button
+     * @param p Options
+     * @param p.id Button optional id
+     * @param p.name Button name (attribute data-action and class 'btn-')
+     * @param p.icon Optional icon name (e.g. <code>'fas/search'</code>) or icon
+     * @param p.label Button label
+     * @param p.tooltip Optional tooltip
+     * @param p.sr Optional screen reader only
+     * @param p.click Optional callback
+     * @param p.size Optional size (e.g. <code>'xs'</code>, <code>'sm'</code>, <code>'lg'</code>, <code>'icon'</code>)
+     * @param p.level Optional level (e.g. <code>'primary'</code>, <code>'secondary'</code>, <code>'plus'</code>)
+     * @param p.style Optional additional CSS class(es)
+     * @param p.type Optional type (e.g. <code>'submit'</code> default, <code>'button'</code>)
+     * @param p.disabled Disabled?
+     * @example
+     * ctn.append($tools.button({
+     * 	name: "mySearch",
+     * 	label: $T("SEARCH"),
+     * 	icon: "fas/search",
+     * 	level: "primary",
+     * 	type: "button",
+     * 	click: () => $ui.displaySearch(null, "MyObject")
+     * }));
+     */
+    button(p: Button): JQuery;
+    /**
+     * Button of action
+     * @param a Action <code>\{ name, label, level, primary, icon, help, showLabel, toState, custom, enabled, disabled, style, background, size \}</code>
+     * @param o Business Object
+     * @param rowid Optional row ID
+     * @param click Handler
+     * @param minified Hide label?
+     * @example
+     * // Button of an object action in a custom toolbar
+     * const a: Action | undefined = obj.getAction("MyObjSendOrder");
+     * a && $("#toolbar", ctn).append($tools.actionButton(a, obj, obj.getRowId(), (act: Action, o: UIBusinessObject, id?: string | null) => $ui.doAction(act, o, id)));
+     */
+    actionButton(a: Action, o: UIBusinessObject, rowid?: string | null, click?: ActionHandler, minified?: boolean): JQuery<HTMLElement>;
+    /**
+     * Progress bar: creates the bar or updates an existing one.
+     * <br>Value and text can be refreshed later by the event <code>ui.progressbar</code>:
+     * <pre>const pb = $tools.progressBar("mybar", 0, null, undefined, "Loading...");
+     * pb.trigger("ui.progressbar", [50, "Processing..."]); // value + text
+     * pb.trigger("ui.progressbar", [100]); // value only, the text is kept</pre>
+     * @param name Progress element or name
+     * @param p Value in percent [0..100]
+     * @param style Optional style to apply on the bar
+     * @param ctn Optional container to search the bar when name is not the element
+     * @param text Optional text displayed above the bar (the bar must be in the DOM to display it)
+     * @returns Progress element <code>.progress</code>
+     * @example
+     * const pb: JQuery = $tools.progressBar("myBar", 0, "bg-success");
+     * ctn.append(pb);
+     * pb.trigger("ui.progressbar", [50, "Processing..."]);
+     */
+    progressBar(name: AnyContent, p?: number, style?: string | null, ctn?: Container, text?: string): JQuery<HTMLElement>;
+    /**
+     * Hack to make a drop-down inside responsive table visible
+     */
+    dropdownVisible(p: JQuery, eventOpen?: string, eventClose?: string): {
+        /** Handler to call when the drop-down opens */
+        onOpen: Callback;
+        /** Handler to call when the drop-down closes */
+        onClose: Callback;
     };
     /**
-     * Remove
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * Simple panel (implemented with card)
+     * @param params Parameters <code>\{ id, title, icon, content, hidden, collapsed, onCollapsed, footer \}</code>
+     * @param params.id Panel ID
+     * @param params.title Optional title or header
+     * @param params.icon Optional icon name
+     * @param params.content Body
+     * @param params.hidden Hidden?
+     * @param params.collapsed Collapsed?
+     * @param params.onCollapsed Optional collapse handler(body, collapsed)
+     * @param params.footer Optional footer
+     * @example
+     * // Collapsible panel
+     * ctn.append($tools.panel({
+     * 	id: "myPanel",
+     * 	title: "Details",
+     * 	icon: "fas/info-circle",
+     * 	content: $("<p/>").text("Hello world"),
+     * 	collapsed: false,
+     * 	onCollapsed: (body: JQuery, collapsed: boolean) => $console.log(collapsed)
+     * }));
      */
-    remove(cascad?: boolean): void;
+    panel(params: {
+        id?: string;
+        title?: AnyContent;
+        icon?: string;
+        content?: AnyContent;
+        hidden?: boolean;
+        collapsed?: boolean;
+        onCollapsed?: (body: JQuery, collapsed: boolean) => void;
+        footer?: AnyContent;
+    }): JQuery<HTMLElement>;
     /**
-     * Bounded rectangle of all contents
-     * @function
-     * @memberof Simplicite.Diagram.Container
+     * card/panel alias
      */
-    contentBound(): {
+    card: (params: {
+        id?: string;
+        title?: AnyContent;
+        icon?: string;
+        content?: AnyContent;
+        hidden?: boolean;
+        collapsed?: boolean;
+        onCollapsed?: (body: JQuery, collapsed: boolean) => void;
+        footer?: AnyContent;
+    }) => JQuery<HTMLElement>;
+    /**
+     * Manage collapsible panels as accordion
+     * @param ctn Container of panels .collapse
+     * @example
+     * // Only one panel open at a time
+     * $tools.accordion($("#myPanels", ctn));
+     */
+    accordion(ctn: JQuery): JQuery<HTMLElement>;
+    /**
+     * Responsive tabs: accordion when the horizontal tabs labels do not fit on one line
+     * (vertical tabs: on xs container), only the active tab is opened.
+     * The panes contents are moved (not rebuilt) to preserve the rendered contents (fields, lists...).
+     * @param tt Tabs built by $tools.tabs, the accordion is inserted after it
+     * @param params.items Panels title and icon (same order as the tabs)
+     * @param params.disabled Optional, true to keep the tabs (ex: in template editor)
+     * @param params.onTabs Optional handler when the contents are back in tabs (ex: tabs visibility)
+     * @example
+     * const tt = $tools.tabs({ id: "myTabs", tabs: [{ title: "Details", content: "..." }, { title: "History", content: "..." }] });
+     * $tools.responsiveTabs(tt, { items: [{ title: "Details", icon: "fas/info-circle" }, { title: "History" }] });
+     */
+    responsiveTabs(tt: JQuery, params: {
+        items: {
+            title?: string;
+            icon?: string;
+        }[];
+        disabled?: () => boolean;
+        onTabs?: () => void;
+    }): JQuery<HTMLElement>;
+    /**
+     * Return a simple help icon with a popover or a dialog when help is too long
+     * @param name Button name
+     * @param help Text or html
+     * @param title Optional title of dialog
+     * @param btn Optional button to complete
+     * @example
+     * const help: JQuery | undefined = $tools.buttonHelp("myHelp", "Amount <b>without</b> taxes", "Amount");
+     * help && $("label[for='myAmount']", ctn).append(help);
+     */
+    buttonHelp(name: string, help: string, title?: string, btn?: JQuery): JQuery | undefined;
+    /**
+     * Return a compliance hint icon with a popover or a dialog when the hint is too long
+     * Works exactly as HELP but with `field.complianceHint` as source
+     * @param name Button name
+     * @param hint Text or html
+     * @param title Optional title of dialog
+     * @param btn Optional button to complete
+     * @example
+     * const hint: JQuery | undefined = $tools.buttonComplianceHint("myHint", "Personal data: kept 3 years (GDPR)");
+     * hint && $("label[for='myEmail']", ctn).append(hint);
+     */
+    buttonComplianceHint(name: string, hint: string, title?: string, btn?: JQuery): JQuery | undefined;
+    /**
+     * Simple tabs
+     * @param params Parameters
+     * @param params.id Tab ID
+     * @param params.selected Selected tab index (default <code>0</code>)
+     * @param params.tabs Tabs options <code>\{ title, tooltip, icon, content, hidden, click, key, data \}</code>
+     * @param params.position Tabs position 'top' as default, 'left', 'right' or 'bottom'
+     * @param params.vertical Vertical tabs (same as position:left) ?
+     * @param params.underline Underlined tab style
+     * @param params.cls Optional class to add
+     * @param params.ondrag Optional handler <code>function(li,cbk)</code> to allow drag
+     * @param params.ondrop Optional handler <code>function(\{li, from, to\ }, cbk)</code> to allow drop
+     * @param params.overflow no wrap tabs, overflow hidden tabs in a dropdown, with keys:
+     * `show` (bring hidden tab visible at 'first' or 'last' position, always triggers a ui.tab.click) and
+     * `icon` (dropdown icon, default simple caret)
+     * @example
+     * const t: JQuery = $tools.tabs({
+     * 	id: "myTabs",
+     * 	selected: 0,
+     * 	tabs: [
+     * 		{ title: "General", icon: "fas/home", content: $("<div/>").text("Tab 1") },
+     * 		{ title: "Details", key: "details", content: $("<div/>").text("Tab 2"), click: () => $console.log("shown") }
+     * 	]
+     * });
+     * ctn.append(t);
+     */
+    tabs(params: Tabs): JQuery;
+    /**
+     * Add a tab
+     * @param t Existing .tabs
+     * @param tab Tab options
+     * @param tab.title tab title
+     * @param tab.content tab content
+     * @param tab.tooltip Optional tooltip
+     * @param tab.icon optional icon name
+     * @param tab.hidden is the tab hidden?
+     * @param tab.hide optional handler on bootstrap hide event 'hide.bs.tab'
+     * @param tab.click optional handler when tab is shown on bootstrap event 'shown.bs.tab'
+     * @param tab.key optional anchor DOM property 'data-key'
+     * @param tab.data optional jQuery 'data' to add to anchor
+     * @param active Activate this tab?
+     * @returns tab = li.nav-item + tab-pane
+     * @example
+     * $tools.addTab(t, { title: "History", key: "history", content: $("<div/>") }, true);
+     */
+    addTab(t: JQuery, tab: Tab, active?: boolean): {
+        /** Tab item `li.nav-item` */
+        tab: JQuery<HTMLElement>;
+        /** Tab content `div.tab-pane` */
+        tabpane: JQuery<HTMLElement>;
+    };
+    /**
+     * Set a tab content
+     * @param t Tabs
+     * @param index Tab index or tab data-key
+     * @param content HTML content
+     * @example
+     * $tools.setTabContent(t, "history", $("<p/>").text("No history"));
+     */
+    setTabContent(t: JQuery, index: number | string, content: AnyContent): void;
+    /**
+     * Get a tab container
+     * @param t Tabs
+     * @param index Tab index or tab data-key
+     * @example
+     * // Display a list in the pane of the tab "details"
+     * $ui.displayList($tools.getTabPane(t, "details"), "MyChild", { embedded: true });
+     */
+    getTabPane(t: JQuery, index: number | string): JQuery<HTMLElement>;
+    /**
+     * Get the active tab anchor with data
+     * @param t Tabs
+     * @example
+     * const active: JQuery = $tools.getTabActive(t);
+     * $console.log(active.data("key"));
+     */
+    getTabActive(t: JQuery): JQuery<HTMLElement>;
+    /**
+     * Set the active tab anchor
+     * @param t Tabs
+     * @param index Tab index or tab data-key
+     * @example
+     * $tools.setTabActive(t, 1);
+     */
+    setTabActive(t: JQuery, index: number | string): void;
+    /**
+     * Get the tab anchors with data
+     * @param t Tabs
+     * @param s Optional anchor selector
+     * @example
+     * $tools.getTabs(t).each((i: number, a: HTMLElement) => $console.log($(a).text()));
+     */
+    getTabs(t: JQuery, s?: string): JQuery<HTMLElement>;
+    /**
+     * Is the tabs empty?
+     * @param t Tabs
+     * @param s Optional anchor selector
+     * @example
+     * if ($tools.isEmptyTabs(t)) t.hide();
+     */
+    isEmptyTabs(t: JQuery, s?: string): boolean;
+    /**
+     * Remove a tab
+     * @param t Tabs
+     * @param index Tab index or tab data-key
+     * @param prev Click on previous (or next) tab if exists
+     * @example
+     * // Remove the tab and activate the previous one
+     * $tools.removeTab(t, "history", true);
+     */
+    removeTab(t: JQuery, index: number | string, prev?: boolean): void;
+    /**
+     * Show/Hide empty tabs and ensure to activate a non-empty tab
+     * @param t Tabs
+     * @param fn Optional function to test if a tab is visible
+     * @param cls Class 'hidden' or 'empty' to hide the tab
+     * @returns True if the tabs is visible = contains something visible
+     * @example
+     * // Hide the tabs without visible content
+     * $tools.showTabs(t, (pane: JQuery) => pane.children(":visible").length > 0, "empty");
+     */
+    showTabs(t: JQuery, fn?: (tabPane: JQuery) => boolean, cls?: 'hidden' | 'empty'): boolean;
+    /**
+     * Show/hide a tab in a tabs and ensure to activate a visible tab
+     * @param t Tabs
+     * @param id Tab ID
+     * @param show False to hide the tab
+     * @example
+     * // Hide the tab of a pane (by pane ID)
+     * $tools.showTab(t, $tools.getTabPane(t, "details").attr("id") || "", false);
+     */
+    showTab(t: JQuery, id: string, show?: boolean): void;
+    /**
+     * Focus one element and active/expand tabs/collapsed parents
+     * @param el Element to focus
+     * @example
+     * // Focus a field even inside a collapsed panel or an inactive tab
+     * $tools.focus($("#myAmount", ctn));
+     */
+    focus(el: JQuery): void;
+    /**
+     * Add/Replace a badge counter to tab
+     * @param tab Tab href or any tab content element
+     * @param val Badge value (no badge if null)
+     * @example
+     * $tools.tabBadge($tools.getTabPane(t, "details"), 12);
+     * // remove the badge
+     * $tools.tabBadge($tools.getTabPane(t, "details"), null);
+     */
+    tabBadge(tab: JQuery, val: number | string | null): JQuery<HTMLElement> | null;
+    /**
+     * Simple alert content
+     * @param html HTML content
+     * @param level Optional <code>help|info|success|warning|danger</code>
+     * @example
+     * ctn.append($tools.alert("The record is <b>locked</b>", "warning"));
+     */
+    alert(html: AnyContent, level?: AlertLevel): JQuery<HTMLElement>;
+    /**
+     * Simple help
+     * @param h Content as safe HTML (any script is ignored)
+     * @example
+     * ctn.append($tools.help("Fill the <b>amount</b> without taxes"));
+     */
+    help(h: AnyContent): JQuery<HTMLElement>;
+    /**
+     * Simple info
+     * @param h Content
+     * @example
+     * ctn.append($tools.success("Order sent"));
+     */
+    success(h: AnyContent): JQuery<HTMLElement>;
+    /**
+     * Simple info
+     * @param h Content
+     */
+    info: (h: AnyContent) => JQuery<HTMLElement>;
+    /**
+     * Simple warning
+     * @param h Content
+     * @example
+     * ctn.append($tools.warning("Stock is low"));
+     */
+    warning(h: AnyContent): JQuery<HTMLElement>;
+    /**
+     * Simple error
+     * @param h Content
+     * @example
+     * ctn.append($tools.danger("Payment refused"));
+     */
+    danger(h: AnyContent): JQuery<HTMLElement>;
+    /**
+     * Simple error
+     * @param h Content
+     */
+    error: (h: AnyContent) => JQuery<HTMLElement>;
+    /**
+     * Inlined message alert
+     * @param m String or <code>\{ level, label \}</code>
+     * @example
+     * ctn.append($tools.message({ level: "W", text: "Check the delivery date" }));
+     */
+    message(m: MessageAny): JQuery;
+    /**
+     * Create a dropdown button
+     * @param elt Optional left side of button
+     * @param btn The button to convert to dropdown
+     * @param items List of elements <code>$</code>
+     * 				or items <code>\{ name, label, icon, cbk|callback|click, and custom data... \}</code> stored in anchor in <code>data('item')</code>
+     * @param right Align popup on right side of button
+     * @param dropUp True to drop on the top of button
+     * @param caret Display a caret on the right side of button?
+     * @param autoclose true(default) | inside | outside | false
+     * @example
+     * // Dropdown with actions
+     * const btn: JQuery = $tools.button({ name: "myMenu", label: "Actions", type: "button" });
+     * ctn.append($tools.dropdown(null, btn, [
+     * 	{ name: "copy", label: "Copy", icon: "fas/copy", click: () => $console.log("copy") },
+     * 	{ name: "delete", label: "Delete", icon: "fas/trash", click: () => $console.log("delete") }
+     * ], true));
+     */
+    dropdown(elt: JQuery | null, btn: JQuery, items?: null | AnyAddon[], right?: boolean, dropUp?: boolean, caret?: boolean, autoclose?: boolean | string): JQuery<HTMLElement>;
+    /**
+     * Create a dropdown button with a non-list (div) popup container.
+     * Like dropdown(), but for content that isn't a set of menu items
+     * (e.g. a fieldset of checkboxes, arbitrary form content).
+     * @param elt Optional left side of button
+     * @param btn The button to convert to dropdown
+     * @param content Popup content (appended as-is into a div.dropdown-menu)
+     * @param right Align popup on right side of button
+     * @param dropUp True to drop on the top of button
+     * @param caret Display a caret on the right side of button?
+     * @param autoclose true(default) | inside | outside | false
+     * @example
+     * // Dropdown with free content (ex: options to check)
+     * const opt: JQuery = $tools.button({ name: "myOptions", label: "Options", type: "button" });
+     * ctn.append($tools.dropdownDiv(null, opt, $("<div class='p-2'/>").append($tools.check({ id: "myOpt1", label: "Option 1" })), false, false, true, "outside"));
+     */
+    dropdownDiv(elt: JQuery | null, btn: JQuery, content: AnyContent | JQuery[], right?: boolean, dropUp?: boolean, caret?: boolean, autoclose?: boolean | string): JQuery<HTMLElement>;
+    /**
+     * Create a dropup button
+     * @param elt Optional left side of button
+     * @param btn Toggle button
+     * @param items List of <code>$</code> or action <code>\{ name, label, icon, cbk \}</code>
+     * @param right Align popup on right side of button
+     * @example
+     * ctn.append($tools.dropup(null, btn, [{ name: "help", label: "Help", click: () => $ui.displayHelp(obj) }]));
+     */
+    dropup(elt: JQuery | null, btn: JQuery, items?: null | (Container | DropdownItem)[], right?: boolean): JQuery<HTMLElement>;
+    /**
+     * Create an input group with prefix and addons actions
+     * @param inp Input element
+     * @param addons Optional array of <code>$</code> or actions <code>\{ name, label, icon, plus, cbk \}</code>
+     * @param prefix Optional prefix
+     * @example
+     * // Input with a prefix and a reset button
+     * const inp: JQuery = $tools.input({ type: "text", id: "myCode", name: "myCode" });
+     * ctn.append($tools.inputGroup(inp, [{ name: "reset", label: "Reset", icon: "fas/times", click: () => inp.val("") }], "#"));
+     */
+    inputGroup(inp: JQuery, addons?: AnyAddon[] | null, prefix?: string | JQuery): JQuery;
+    /**
+     * Form group of input
+     * @param name Group name
+     * @param label Optional label
+     * @param inp Input group
+     * @param msg Optional backend message
+     * @param suggestCallback a suggestion callback, sets new value, returns old value
+     */
+    formGroup(name: string, label: AnyContent | null, inp: AnyContent, msg?: MessageJSON, suggestCallback?: (v: string) => string, msgId?: string): JQuery;
+    /**
+     * Form group for search form
+     * @param cls Class
+     * @param label Text
+     * @param inp Input
+     */
+    formGroupSearch(cls: string, label: string, inp?: JQuery | string): JQuery;
+    /**
+     * Simple form group with boolean, select or text field
+     * @param id input id
+     * @param label field label
+     * @param val field value
+     * @param arg true for boolean, array of code/value, 'textarea'
+     * @param col optional size from 1 to 12
+     * @param addon optional addon
+     * @param disabled false to disable input
+     * @param multi true for enum multi
+     * @example
+     * // Text, boolean and select fields in a custom form
+     * ctn.append(
+     * 	$tools.simpleFormGroup("myName", "Name", ""),
+     * 	$tools.simpleFormGroup("myActive", "Active", true, true),
+     * 	$tools.simpleFormGroup("mySize", "Size", "M", [{ code: "S", value: "Small" }, { code: "M", value: "Medium" }]),
+     * 	$tools.simpleFormGroup("myComment", "Comment", "", "textarea")
+     * );
+     */
+    simpleFormGroup(id: string, label?: string, val?: string | number | boolean | string[] | null, arg?: true | string | EnumItem[] | 'textarea' | 'div' | null, col?: number, addon?: string | JQuery | null, disabled?: boolean | null, multi?: boolean): JQuery;
+    /**
+     * Input with attributes
+     * @param a Object with attributes
+     * @example
+     * const email: JQuery = $tools.input({ type: "email", id: "myEmail", name: "email", placeholder: "name@example.com" });
+     */
+    input(a?: KeyObject): JQuery;
+    /**
+     * Select with options
+     * @param a Object with attributes
+     * @param o Array of <code>\{ value, label, data \}</code>
+     * @example
+     * const s: JQuery = $tools.select({ id: "mySize", name: "size" }, [
+     * 	{ value: "S", label: "Small", data: {} },
+     * 	{ value: "M", label: "Medium", data: {} }
+     * ]);
+     */
+    select(a?: KeyObject, o?: {
+        value: string;
+        label: string;
+        data: KeyObject;
+    }[]): JQuery;
+    /**
+     * Create a row with columns
+     * @param cols Array of columns
+     * @example
+     * // 2 columns on medium screens and more
+     * ctn.append($tools.row([
+     * 	$tools.col("md-6", $("<div/>").text("Left")),
+     * 	$tools.col("md-6", $("<div/>").text("Right"))
+     * ]));
+     */
+    row(cols?: AnyContent[]): JQuery;
+    /**
+     * Simple column
+     * @param size Media-width: short syntax 'md-5' or long syntax 'col-lg-4 col-md-8', default 'col-12', 'xs-' is supported
+     * @param content Optional content or array of contents
+     * @example
+     * $tools.col("col-lg-4 col-md-6", "Content");
+     */
+    col(size?: string, content?: string | JQuery | JQuery[]): JQuery;
+    /**
+     * Simple form
+     * @param p Parameters <code>\{ name, inline, content, autocomplete, onsubmit \}</code>
+     */
+    form(p: {
+        name?: string;
+        inline?: boolean;
+        content?: AnyContent;
+        autocomplete?: string;
+        onsubmit?: string;
+    }): JQuery;
+    /**
+     * Add a tooltip to element
+     * @param e Element
+     * @param title Text or html
+     * @param placement Optional, default 'bottom'
+     * @param html HTML Title?
+     * @example
+     * $tools.tooltip($("#myAmount", ctn), "Amount without taxes", "top");
+     */
+    tooltip(e: JQuery, title: AnyContent, placement?: Position, html?: boolean): JQuery<HTMLElement>;
+    /**
+     * Init all tooltips and popovers
+     * @param ctn optional container
+     * @example
+     * $tools.initTooltips(ctn);
+     */
+    initTooltips(ctn?: AnyContainer): this;
+    /**
+     * Hide all (remaining) tooltips and popovers
+     * @param ctn optional container
+     * @example
+     * $tools.hideTooltips();
+     */
+    hideTooltips(ctn?: AnyContainer): this;
+}
+
+/**
+ * Workflow controller
+ * @param ui Main UI controller
+ */
+declare class Workflow {
+    /** Server-side specific instance */
+    readonly bpmActivityObject = "BPMActivityFile";
+    /** Server-side instance of the activity files */
+    readonly bpmActivityInst = "list_ajax_BPMActivityFile";
+    /**
+     * Get a business process with its UI hooks.
+     * @param process Process name or process
+     * @param cbk Optional callback with the process
+     * @returns This controller
+     */
+    getUIProcess(process: string | BusinessProcess, cbk?: (wkf: BusinessProcess) => void): this;
+    /**
+     * Display a process activity.
+     * @param ctn Container
+     * @param process Process name or process (null = current process)
+     * @param action Optional process action
+     * @param options Optional parameters
+     * @param cbk Optional callback when displayed
+     */
+    display(ctn: Container, process: string | BusinessProcess | null, action?: ProcessActionType, options?: ProcessParam, cbk?: Callback): this;
+    /** Service call */
+    service(ctn: Container, wkf: BusinessProcess, action: ProcessActionType, onSuccess: (act?: ActivityFile) => void, onError: (reason: MessageFromBack) => void, params?: {
+        road?: boolean;
+        object?: string;
+        rowId?: string;
+        step?: string;
+    }): void;
+    /** Success : dispatch response */
+    success(ctn: Container, wkf: BusinessProcess, resp?: ActivityFile, p?: ProcessParam, cbk?: Callback): void;
+    /** Error : return to activity with messages */
+    error(ctn: Container, wkf: BusinessProcess, err: MessageFromBack, p?: ProcessParam, cbk?: Callback): void;
+    /** Activities list filtered on process name and step */
+    displayList(ctn: Container, wkf: BusinessProcess, options?: {
+        step?: string;
+    } | null, cbk?: Callback): this;
+    /**
+     * Display the activity
+     * @param ctn Container
+     * @param wkf Business process instance
+     * @param activity Current activity with metadata
+     * @param options Options
+     * <ul>
+     * <li>showRoad: displays the workflow navbar, default true</li>
+     * <li>msg: back-end messages to display</li>
+     * <li>workflow: true</li>
+     * </ul>
+     * @param cbk Optional callback
+     */
+    displayActivity(ctn: Container, wkf: BusinessProcess, activity: ActivityFile | null, options?: ProcessParam, cbk?: (wkf: BusinessProcess, act?: ActivityFile, p?: ProcessParam) => void): Promise<this | undefined>;
+}
+
+/** A place of a place map: one record with its coordinates and labels */
+interface Place {
+    /** Coordinates `"lat;lng"` or `"lat,lng"` */
+    coord: string;
+    /** Value of the first label field */
+    label1?: string;
+    /** Value of the second label field */
+    label2?: string;
+    /** Value of the third label field */
+    label3?: string;
+    /** Value of the address field */
+    address?: string;
+}
+/** Place map definition: object fields to locate and describe the places */
+interface Placemap {
+    /** Place map row ID */
+    id: string;
+    /** Place map name */
+    name: string;
+    /** Places to display */
+    places: Place[];
+    /** Name of the first label field */
+    label1?: string;
+    /** Name of the second label field */
+    label2?: string;
+    /** Name of the third label field */
+    label3?: string;
+    /** Name of the address field */
+    address?: string;
+}
+/** Leaflet map settings */
+interface MapSettings {
+    /** Tile layer URL template (ex: `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`) */
+    tileLayer: string;
+    /** Default center latitude */
+    lat?: number;
+    /** Default center longitude */
+    lng?: number;
+    /** Default zoom level (default 13) */
+    zoom?: number;
+    /** Attribution of the tile layer */
+    attribution?: string;
+    /** Maximum zoom level */
+    maxZoom?: number;
+}
+/**
+ * Place Map renderer
+ */
+declare class UIMap {
+    /** Map settings */
+    options: MapSettings;
+    /** Leaflet map, set by `display` */
+    map?: L.Map;
+    /** Markers added with `addMarker` */
+    map_markers?: L.Marker[];
+    /**
+     * @param options Options <code>\{ tileLayer, attribution, maxZoom, lat, lng, zoom \}</code>
+     */
+    constructor(options: MapSettings);
+    /**
+     * Parse coordinates.
+     * @param coord Coordinates `"lat;lng"` or `"lat,lng"`
+     * @returns The `[lat, lng]` tuple, or the default center when invalid
+     */
+    getLatLong(coord: string): LatLngTuple;
+    /**
+     * Init a map in the container
+     * @param ctn Container
+     * @param pm Placemap definition
+     */
+    display(ctn: AnyContainer, pm?: Placemap): string | false | undefined;
+    /**
+     * A map can only have bounds if it contains at least two markers.
+     * @returns true when the map has at least 2 markers
+     */
+    hasBounds(): boolean;
+    /**
+     * Bounds of all the markers.
+     * @returns The bounds, or undefined when there are less than 2 markers
+     */
+    getLatLngBounds(): L.LatLngBounds | undefined;
+    /**
+     * Add a marker on map
+     * @param params Parameters
+     * @param params.coord coma-separated coordinates
+     * @param params.onMove callback function when user moves marker
+     */
+    addSelector(params: {
+        coord: string;
+        onMove?: (lat: string, lng: string) => void;
+    }): boolean;
+    /**
+     * Add a marker on map
+     * @param params Parameters <code>\{ coord, info, center \}</code>
+     * @param params.coord coma-separated coordinates
+     * @param params.info jquery element to show in popup
+     */
+    addMarker(params: {
+        coord: string;
+        info?: JQuery;
+    }): boolean;
+    /**
+     * Build the marker info
+     */
+    getMarkerInfo(o: BusinessObject, pm: Placemap, place: Place, onOpen: (id: string) => void): JQuery<HTMLElement>;
+}
+
+/** Recipients of a Firebase notification: lists of logins and groups, or 'all' users */
+type FirebaseRecipients = {
+    users?: string[];
+    groups?: string[];
+} | "all";
+/** Firebase message or notification (from FCM, the service worker or the native app) */
+interface FirebaseMessage {
+    /** Optional embedded message */
+    notification?: FirebaseMessage;
+    /** Message body */
+    body?: string;
+    /** Optional title */
+    title?: string;
+    /** Optional priority */
+    priority?: "high" | "normal" | "low";
+    /** Optional icon */
+    icon?: string;
+    /** Optional color */
+    color?: string;
+    /** Optional origin */
+    from?: string;
+    /** Tapped by the user in foreground or background */
+    tap?: "foreground" | "background";
+    /** Background message already displayed in the system tray */
+    _background?: boolean;
+    /** Optional object name to open (or in data) */
+    object?: string;
+    /** Optional object row ID to open (or in data) */
+    rowId?: string;
+    /** Optional pairs of key-value */
+    data?: KeyObject & {
+        /** Optional object name to open */
+        object?: string;
+        /** Optional object row ID to open */
+        rowId?: string;
+    };
+}
+/** Data of the Firebase service */
+type FirebaseServiceData = FirebaseMessage & {
+    /** Config to init the plugin (see FIREBASE_CONFIG) */
+    config?: KeyObject;
+    /** Key needed for the Firebase authentication */
+    vapidKey?: string;
+    /** Device token of the user to refresh */
+    token?: string;
+    /** Message to send */
+    message?: string;
+    /** Message recipients */
+    to?: FirebaseRecipients;
+};
+/**
+ * Firebase controller
+ */
+declare class Firebase {
+    worker: string;
+    messaging?: KeyObject;
+    constructor();
+    /**
+     * Firebase service wrapper
+     * @param data service data, see {@link FirebaseServiceData}
+     */
+    service(data?: FirebaseServiceData): void;
+    /**
+     * Init firebase connection
+     * @param config to init plugin (see FIREBASE_CONFIG)
+     * @param vapidKey needed for firebase authent
+     */
+    init(config: KeyObject, vapidKey?: string): this | undefined;
+    /**
+     * Display a message
+     * @param m message or notification
+     * @param m.notification optional embedded message
+     * @param m.body message body
+     * @param m.title optional title
+     * @param m.priority optional priority 'high' | 'normal' | 'low'
+     * @param m.data optional pairs of key-value
+     */
+    showMessage(m: FirebaseMessage): void;
+    /**
+     * Refresh a device token on server-side
+     * @param token new token for the user
+     */
+    refreshToken(token: string): void;
+    /**
+     * Request user permission to be notified
+     */
+    requestPermission(): void;
+}
+
+/** Data of the WebPush service */
+interface WebPushData {
+    /** VAPID public key of the server */
+    vapidKey?: string;
+}
+/**
+ * WebPush controller
+ */
+declare class WebPush {
+    /** URL of the service worker */
+    worker: string;
+    constructor();
+    /** WebPush service */
+    service(data?: WebPushData): void;
+    /** Init webpush connection */
+    init(data?: WebPushData): this;
+    /** request permission to use WebPush API */
+    requestPermission(reg: ServiceWorkerRegistration, data: WebPushData): void;
+    private check;
+    private urlB64ToUint8Array;
+}
+
+/**
+ * OCR tools (using the Tesseract.js lib) **EXPERIMENTAL**
+ */
+declare class OCR {
+    /** URL of the Tesseract library */
+    readonly tessurl: string;
+    /**
+     * Extract the text of an image.
+     * @param img Image
+     * @param lang Language
+     * @returns Promise of the recognized text
+     */
+    doOCR(img: any, lang: string): Promise<any>;
+}
+
+/** Options of the speech recognition */
+interface SpeechRecognitionParam {
+    /** Language (ex: FRA, ENU or fr-FR, en-GB...) */
+    lang?: string;
+    /** Continuous speaking (sentence)? */
+    continuous?: boolean;
+    /** Continuous speaking (no timeout after long silence)? */
+    autoRestart?: boolean;
+    /** Get interim results? */
+    interimResults?: boolean;
+    /** Max alternatives search */
+    maxAlternatives?: number;
+    /** First character uppercase in a sentence? */
+    firstCapital?: boolean;
+    /** Accept new line symbol? */
+    newLine?: boolean;
+    /** Optional handler when started */
+    onStart?: () => void;
+    /** Optional handler when ended */
+    onEnd?: () => void;
+    /** Optional handler on error */
+    onError?: (e: Event) => void;
+    /** Optional handler to override change event */
+    onChange?: () => void;
+    /** Optional console info */
+    debug?: boolean;
+}
+/** Options of the speech synthesis */
+interface SpeechSynthesisParam {
+    /** Preferred language FRA, ENU... */
+    lang?: string;
+    /** Optional voice name to force if exists */
+    voice?: string;
+    /** Service URI, default native */
+    uri?: string;
+    /** 0 to 1, default 1 */
+    volume?: number;
+    /** 0.1 to 10, default 1 */
+    rate?: number;
+    /** 0 to 2, default 1 */
+    pitch?: number;
+    /** Optional handler when started */
+    onStart?: () => void;
+    /** Optional handler when ended */
+    onEnd?: () => void;
+    /** Optional console info */
+    debug?: boolean;
+}
+/**
+ * Web Speech API
+ */
+declare class Speech {
+    CMD: KeyObject;
+    SpeechRecognition: any;
+    voice?: SpeechSynthesisVoice;
+    readonly VOICES: KeyObject;
+    constructor();
+    /**
+     * Get language ISO
+     * @param l language FRA, ENU...
+     * @returns ISO code (ex fr-FR)
+     */
+    langISO(l: string): string;
+    /**
+     * New SpeechRecognition if exists
+     */
+    createSpeechRecognition(): any;
+    /**
+     * Speech recognition
+     * @param el Element input or textarea
+     * @param options Options
+     * @param options.lang Language (ex: FRA, ENU or fr-FR, en-GB...)
+     * @param options.continuous Continuous speaking (sentence)?
+     * @param options.autoRestart Continuous speaking (no timeout after long silence)?
+     * @param options.interimResults Get interim results?
+     * @param options.maxAlternatives Max alternatives search
+     * @param options.firstCapital First character uppercase in a sentence?
+     * @param options.newLine Accept new line symbol?
+     * @param options.onStart Optional handler when started
+     * @param options.onEnd Optional handler when ended
+     * @param options.onError Optional handler on error
+     * @param options.onChange Optional handler to override change event
+     * @param options.debug Optional console info
+     */
+    recognition(el: JQuery, options?: SpeechRecognitionParam): void;
+    /**
+     * Get browser voices
+     * @param ss speechSynthesis
+     * @param cbk callback(voices)
+     */
+    getVoices(ss: SpeechSynthesis, cbk: (voices: SpeechSynthesisVoice[]) => void): void;
+    /**
+     * Find a voice matching language
+     * @param voices supported voices
+     * @param lang Language FRA, ENU...
+     * @param use Try to use this voice if supported
+     */
+    getVoice(voices: SpeechSynthesisVoice[], lang: string, use?: string): SpeechSynthesisVoice | undefined;
+    /**
+     * Speech synthesis (experimental)
+     * @param el Text or input or textarea
+     * @param options Options
+     * @param options.lang Preferred language FRA, ENU...
+     * @param options.voice Optional voice name to force if exists
+     * @param options.uri Service URI, default native
+     * @param options.volume 0 to 1, default 1
+     * @param options.rate 0.1 to 10, default 1
+     * @param options.pitch 0 to 2, default 1
+     * @param options.onStart Optional handler when started
+     * @param options.onEnd Optional handler when ended
+     * @param options.debug Optional console info
+     */
+    speak(el: JQuery, options?: SpeechSynthesisParam): void;
+    /**
+     * Start to speech
+     * @param msg - Message to read
+     */
+    speakStart(msg: SpeechSynthesisUtterance): void;
+    /**
+     * Stop current speech
+     */
+    speakStop(): void;
+}
+
+/** News item */
+interface News {
+    /** Row ID */
+    id?: string;
+    /** Row ID */
+    row_id?: string;
+    /** Title */
+    title?: string;
+    /** Title (field name) */
+    nws_title?: string;
+    /** Description */
+    description?: string;
+    /** Description (field name) */
+    nws_description?: string;
+    /** Image */
+    image?: DocumentDB;
+    /** Image (field name) */
+    nws_image?: DocumentDB;
+    /** Publication date */
+    date?: string;
+    /** Publication date (field name) */
+    nws_date?: string;
+}
+/**
+ * Web news: popup on logon and footer ticker,
+ * reloaded every 5 min without SSE when the tab is visible
+ */
+declare class WebNews {
+    /** Ticker refresh timer */
+    private timer?;
+    /** Ticker has been started (and not stopped) */
+    private started;
+    /**
+     * Start the news when granted: popup on logon + footer ticker
+     */
+    start(): void;
+    /**
+     * Display the footer ticker and start the refresh timer without SSE
+     */
+    private startTicker;
+    /**
+     * Pause the ticker refresh (page hidden)
+     */
+    pause(): void;
+    /**
+     * Restart and refresh the ticker if it was started (page restored)
+     */
+    resume(): void;
+    /**
+     * Stop the ticker refresh
+     */
+    stop(): void;
+    /**
+     * SSE handler for incoming news
+     * @param n News
+     */
+    onNews(n: KeyObject): void;
+}
+
+/** Name of a color palette */
+type PaletteName = "Base" | "Pastel" | "Strong" | "Light" | "Bright" | "Mars" | "Sea" | "Berry" | "Fire" | "Choco";
+/** Parameters of a toast (see `$view.widget.toast`) */
+interface ToastParam {
+    /** Optional level */
+    level?: AlertType;
+    /** Toast body */
+    content: AnyContent;
+    /** Position `top` or `bottom` */
+    position?: string;
+    /** Align `left`, `right` or `center` */
+    align?: string;
+    /** Duration in ms (default 3000, -1 = no auto close) */
+    duration?: number;
+    /** Add an undo button */
+    undo?: boolean;
+    /** Add a pin button to keep the toast open */
+    pinable?: boolean;
+}
+/** Parameters of a scratch pad to draw on an image */
+interface ScratchPadParam {
+    /** Width */
+    width?: number;
+    /** Height */
+    height?: number;
+    /** Dialog title */
+    title?: string;
+    /** Inline pad (else in a dialog) */
+    inline?: boolean;
+    /** Image to draw on */
+    image: HTMLImageElement | JQuery;
+    /** Callback when the pad is loaded */
+    onload?: (pad: JQuery) => void;
+    /** Callback with the updated image data URL (null when removed) */
+    update: (dataURL: string | null) => void;
+}
+/** Parameters of a counter widget */
+interface CounterParam {
+    /** Object name */
+    name: string;
+    /** Object instance name */
+    instance?: string;
+    /** Optional field name to get total (or simple count) */
+    field?: string;
+    /** Object filters */
+    filters?: KeyObject;
+    /** Counter label */
+    label?: string;
+    /** Optional help title */
+    help?: string;
+    /** Background color (CSS color) */
+    bgColor?: string;
+    /** Text color (CSS color) */
+    textColor?: string;
+    /** Predefined background color grey(default)|blue|orange|red|green|purple|violet|yellow|turquoise|brown */
+    color?: string;
+    /** Icon name */
+    icon?: string;
+    /** Width (number of pixels or CSS dimension) */
+    width?: string | number;
+    /** Height (number of pixels or CSS dimension) */
+    height?: string | number;
+    /** Column span (defaults to max(3, 12 / number of objects)) */
+    colSpan?: number;
+    /** Click handler, `true` to open the list */
+    onclick?: true | JQueryHandler;
+}
+/** Parameters of a slider */
+interface SliderParam {
+    /** Input ID */
+    id?: string;
+    /** Input name */
+    name?: string;
+    /** Label */
+    label?: string;
+    /** Minimum value */
+    min?: number;
+    /** Maximum value */
+    max?: number;
+    /** Step */
+    step?: number;
+    /** Value */
+    value?: number;
+    /** Width */
+    width?: string;
+    /** Height */
+    height?: string;
+    /** Show the value */
+    showValue?: boolean;
+    /** Handler on change */
+    onchange?: JQueryHandler;
+    /** Handler on input */
+    oninput?: JQueryHandler;
+    /** Disabled */
+    disabled?: boolean;
+    /** Read-only: focusable, exposed as `aria-readonly`, every change blocked (ignored if `disabled`) */
+    readonly?: boolean;
+    /** Round or square */
+    round?: boolean;
+    /** Thin input */
+    thin?: boolean;
+}
+/**
+ * Common widgets
+ */
+declare class Widget {
+    /**
+     * Predefined palettes
+     * <ul>
+     * <li>Base</li>
+     * <li>Pastel</li>
+     * <li>Strong</li>
+     * <li>Light</li>
+     * <li>Bright</li>
+     * <li>Mars</li>
+     * <li>Sea</li>
+     * <li>Berry</li>
+     * <li>Fire</li>
+     * <li>Choco</li>
+     * </ul>
+     */
+    readonly PALETTES: {
+        [key: string]: string[];
+    };
+    /**
+     * Build an avatar image
+     * @param data or { login, firstname, lastname, picture (full usr_image_id document) }
+     * @returns .avatar
+     * @example
+     * ctn.append($view.widget.avatar({ login: "jdoe", firstname: "John", lastname: "Doe" }));
+     */
+    avatar(data?: UsageUser): JQuery<HTMLElement>;
+    /**
+     * Create a badge
+     * @param p value or { name, value }
+     * @returns div.badge
+     * @example
+     * btn.append($view.widget.badge(3));
+     * btn.append($view.widget.badge({ name: "unread", value: 12 }));
+     */
+    badge(p?: string | number | {
+        name?: string;
+        value?: string | number;
+    }): JQuery<HTMLElement>;
+    /**
+     * Wait dialog box
+     * @returns div.waitdlg
+     * @example
+     * ctn.append($view.widget.waitdlg());
+     */
+    waitdlg(): JQuery<HTMLElement>;
+    /**
+     * Build a switch button on/off
+     * @param p button parameters
+     * @param p.id optional input id
+     * @param p.name input name
+     * @param p.value input initial value (default "1")
+     * @param p.onchange optional 'change' handler
+     * @param p.label optional accessible name through aria-label
+     * @param p.checked on/off ?
+     * @param p.disabled true to disable the switch
+     * @param p.round round or square?
+     * @returns span with a checkbox and a slider
+     * @example
+     * ctn.append($view.widget.switchButton({
+     * 	name: "myOption",
+     * 	label: "My option",
+     * 	checked: true,
+     * 	onchange: () => $console.log("changed")
+     * }));
+     */
+    switchButton(p: {
+        id?: string;
+        name?: string;
+        value?: string;
+        label?: string;
+        onchange?: JQueryHandler;
+        checked?: boolean;
+        disabled?: boolean;
+        round?: boolean;
+    }): JQuery<HTMLElement>;
+    /**
+     * Build a slider
+     * @param p slider parameters
+     * @param p.id input id
+     * @param p.name input name
+     * @param p.min min value
+     * @param p.max max value
+     * @param p.step slider step
+     * @param p.value slider value
+     * @param p.width optional input width
+     * @param p.height optional input height
+     * @param p.showValue insert the value?
+     * @param p.onchange optional 'change' handler (on slider release)
+     * @param p.oninput optional 'input' handler (on slider move)
+     * @param p.disabled true to disable the slider
+     * @param p.readonly true for a focusable slider that cannot be changed
+     * @param p.round round or square?
+     * @param p.thin thin input?
+     * @returns div.slider
+     * @example
+     * ctn.append($view.widget.slider({ id: "myLevel", name: "myLevel", min: 0, max: 100, step: 5, value: 50, showValue: true }));
+     */
+    slider(p: SliderParam): JQuery<HTMLElement>;
+    /**
+     * Build a star slider (rate rendering)
+     * @param p slider parameters
+     * @param p.name input name
+     * @param p.size nb of stars, server values goes from 1 to size (0 = no star checked)
+     * @param p.value slider value
+     * @param p.disabled true to disable the slider
+     * @returns div.star-slider
+     * @example
+     * ctn.append($view.widget.starSlider({ name: "myRate", size: 5, value: 3 }));
+     */
+    starSlider(p: {
+        name: string;
+        size: number;
+        value?: number;
+        disabled?: boolean;
+    }): JQuery<HTMLElement>;
+    /**
+     * Build an action control
+     * @param a action metadata
+     * @param o object
+     * @param rowId optional rowId for form/row action
+     * @param click click handler
+     * @param minified true to move the label in a tooltip
+     * @returns button or li for 'Plus' button
+     */
+    actionItem(a: Action, o: UIBusinessObject, rowId: string | null, click?: ActionHandler, minified?: boolean): JQuery<HTMLElement>;
+    /**
+     * Convert actions to buttons array
+     * @param o Business object
+     * @param rowId Optional rowId on form/row
+     * @param list List of actions as plain buttons
+     * @param plus List of actions as 'plus' button
+     * @param options Options
+     * @param options.alignRight true for right side
+     * @param options.minified true to move labels in tooltips
+     * @param options.dropUp true to drop up the 'plus' popup
+     * @param options.plusFirst true to put the plus button on first position
+     * @param options.grouped true to group plain buttons per type (print, crosstab, treeview, placemap, associate)
+     * @param options.groups additional action groups with name, icon, label, actions
+     * @returns jQuery items
+     * @example
+     * // Buttons of the object actions, then in a bar on the right
+     * const items = $view.widget.actionItems(obj, rowId, obj.metadata.actions, null, { minified: true });
+     * ctn.append($view.widget.actionBar(items, true));
+     */
+    actionItems(o: UIBusinessObject, rowId: string | null, list?: Action[] | null, plus?: Action[] | null, options?: {
+        alignRight?: boolean;
+        minified?: boolean;
+        dropUp?: boolean;
+        plusFirst?: boolean;
+        grouped?: boolean;
+        groups?: ActionGroup[];
+    }): JQuery[];
+    /**
+     * Create a searchbar
+     * @param p Options
+     * @param p.id Input id
+     * @param p.label Input aria label
+     * @param p.icon Optional icon
+     * @param p.cbk Optional callback
+     * @param p.events Input binded events
+     * @param p.collapsed Input collapsed
+     * @returns The search bar
+     * @example
+     * ctn.append($view.widget.searchBar({
+     * 	id: "mySearch",
+     * 	label: $T("SEARCH"),
+     * 	icon: "fas/search"
+     * }));
+     */
+    searchBar(p: {
+        id: string;
+        label: string;
+        icon?: string;
+        cbk?: JQueryHandler | null;
+        events?: string;
+        collapsed?: boolean;
+    }): JQuery<HTMLElement>;
+    /**
+     * Action bar
+     * @param list Array of buttons (plain or plus)
+     * @param alignRight pull on the right side of container ?
+     * @returns div.actions
+     * @example
+     * // Empty string when there is no button
+     * ctn.append($view.widget.actionBar([btn], true));
+     */
+    actionBar(list: JQuery[], alignRight?: boolean): JQuery | "";
+    /**
+     * Convert image to base64 (using a canvas)
+     * @param img DOM image
+     * @param mime mime type (ex: image/jpeg)
+     * @returns string = image BASE64 encoded
+     */
+    getBase64Image(img: HTMLImageElement, mime: string): string;
+    /**
+     * Build a breadcrump 'first / ... / last ones'
+     * @param items list of items : string or <code>{ label }</code>
+     * @param size size limit
+     * @param cbk click handler(index)
+     * @returns ol.breadcrumb
+     * @example
+     * ctn.append($view.widget.breadcrump(["Home", "Orders", "Order 12"], 3, i => $console.log("clicked", i)));
+     */
+    breadcrump(items: (string | NavItem)[], size: number, cbk?: (index: number) => void): JQuery<HTMLElement>;
+    /**
+     * Transform a bar with overflow button for invisible items in a dropdown
+     * @param ctn horizontal bar container (ul or div, with a limited height) with items (li/a, button or div)
+     * @param options Overflow options
+     * @param options.show bring hidden item visible at 'first' or 'last' position when clicked (always trigger a 'ui.bar.click' on bar)
+     * @param options.icon icon button (default fas/caret-square-down)
+     * @param options.count count hidden items in icon (default false)
+     * @returns .bar-overflow + caller must trigger 'ui.resize' when displayed to fit size
+     * @example
+     * // Then trigger 'ui.resize' when it is displayed
+     * const bar = $view.widget.barOverflow(t, { show: "first", count: true });
+     * ctn.append(bar);
+     * bar.trigger("ui.resize");
+     */
+    barOverflow(ctn: JQuery, options?: {
+        show: string;
+        icon?: string;
+        count?: boolean;
+    }): JQuery<HTMLElement>;
+    /**
+     * Bind a completion to input
+     * @param input input or null
+     * @param limit max size of results (0 = no limit)
+     * @param search search service(cbk)
+     * @param select optional callback(data) on picking (click or enter)
+     * @param disp optional callback to display a result
+     * @param options options
+     * @param options.autoselect auto-select the single result on blur or enter (default false)
+     * @returns input
+     * @example
+     * $view.widget.completion(t, 10,
+     * 	cbk => obj.search({ myObjName: t.val() + "%" }).then(rows => cbk(rows)),
+     * 	data => $console.log("selected", data.row_id),
+     * 	data => data.myObjName as string
+     * );
+     */
+    completion(input: JQuery | null, limit: number, search: (cbk: (rows: KeyObject[]) => void) => void, select?: null | ((data: KeyObject) => void), disp?: null | ((data: KeyObject) => string | JQuery), options?: {
+        autoselect?: boolean;
+    }): JQuery<HTMLElement>;
+    /**
+     * Bind a completion to textarea (substitute @login)
+     * @param textarea social textarea
+     * @example
+     * $view.widget.completionSocial(t);
+     */
+    completionSocial(textarea: JQuery): JQuery<HTMLElement>;
+    /**
+     * Pillbox control with completion, deprecated use $.pillbox
+     * @deprecated 7.0
+     */
+    pillbox(div: JQuery | null, data: PillboxItem[], limit: number, maxOccurs: number, search: null | ((values: string, cbk: (r: KeyObject) => void) => void), disp: null | ((item: KeyObject) => string), lookup: null | ((add?: Callback) => void), onAdd: null | ((id: string, fn: (...p: any) => void, data: KeyObject) => void), onRemove: null | ((id: string, fn: Callback) => void), onCreate: null | ((val: string, fn: Callback) => void), onOpen: null | ((id: string) => void)): JQuery<HTMLElement> | string[];
+    /**
+     * Launch a simple calculator on input
+     * @param inp form input
+     * @param cbk callback(result)
+     * @returns input
+     * @example
+     * $view.widget.calculator(t, r => t.val(r));
+     */
+    calculator(inp: AnyContent, cbk?: (result: number) => void): this;
+    /**
+     * Theme picker
+     * @param themes list of themes (at least 2 themes to open the dialog)
+     * @param pick callback with selected theme
+     * @example
+     * $view.widget.themePicker(app.grant?.themes, theme => $console.log(theme));
+     */
+    themePicker(themes?: Theme[], pick?: (theme: Theme) => void): void;
+    /**
+     * Theme palette preview
+     * @returns .theme-palette-preview with colors
+     * @example
+     * // Empty preview without a palette
+     * ctn.append($view.widget.palette());
+     */
+    palette(palette?: Palette): JQuery<HTMLElement>;
+    /**
+     * Predefined palette of colors picker
+     * @param p Parameters
+     * @param p.palette optional selected palette
+     * @param p.pick optional pick handler(palette)
+     * @param p.dropup true to dropup (default dropdown)
+     * @param p.inline true to inline the palettes (default display a dropdown button)
+     * @param p.label optional label dropdown button (default: selected palette name)
+     * @param p.icon optional icon of dropdown button
+     * @example
+     * ctn.append($view.widget.palettePicker({ label: "Colors", pick: palette => $console.log(palette) }));
+     */
+    palettePicker(p: {
+        palette?: string;
+        pick?: (palette: string) => void;
+        dropup?: boolean;
+        inline?: boolean;
+        label?: string;
+        icon?: string;
+    }): JQuery<HTMLElement>;
+    /**
+     * Preview image in a dialog
+     * @param p
+     * @param p.url image url
+     * @param p.alt optional image alt
+     * @param p.longDesc optional image long description
+     * @param p.name optional image name
+     * @param p.zoom percent or 'fit", fitWidth' or 'fitHeight' to screen
+     * @param p.onload optional onload callback
+     * @example
+     * $view.widget.previewImage({ url: $app.imageURL("MyObject", "myObjImage", rowId, docId), alt: "Picture", zoom: "fit" });
+     */
+    previewImage(p: {
+        url: string;
+        alt?: string;
+        longDesc?: string;
+        name?: string;
+        zoom?: string | number;
+        onload?: (img: JQuery) => void;
+    }): JQuery<HTMLElement>;
+    /**
+     * Circular progress bar
+     * @param options
+     * @param options.percent percent value 0..100
+     * @param options.background center background color
+     * @param options.color center text color
+     * @param options.color1 circle color
+     * @param options.color2 circle active color
+     * @param options.duration animation duration in ms (default 2000)
+     * @param options.radius circle radius in px
+     * @param options.width circle line width in px
+     * @param options.text optional center content (""=empty, default='n%')
+     * @param options.bar optional bar selector to update value
+     * @returns The progress bar
+     * @example
+     * ctn.append($view.widget.circularProgressBar({ percent: 75, radius: 40, width: 6 }));
+     */
+    circularProgressBar(options?: {
+        percent?: number;
+        background?: string;
+        color?: string;
+        color1?: string;
+        color2?: string;
+        duration?: number;
+        radius?: number;
+        width?: number;
+        text?: AnyContent;
+        bar?: string | JQuery;
+    }): JQuery<HTMLElement>;
+    /**
+     * POST/UPLOAD dialog
+     * @param e progress event from xhr
+     * @param p Optional parameters
+     * @param p.id dialog Id
+     * @param p.label dialog title
+     * @param p.after timeout in ms before opening the modal dialog (default 3s)
+     * @param p.background callback when the dialog in minified as toast (post in background)
+     * @example
+     * const xhr = new XMLHttpRequest();
+     * xhr.upload.onprogress = e => $view.widget.postProgress(e, { id: "myUpload", label: "Upload" });
+     */
+    postProgress(e: ProgressEvent, p?: {
+        id?: string;
+        label?: string;
+        after?: number;
+        background?: Callback;
+    }): void;
+    private _postProgress;
+    /**
+     * Toast during the export loading
+     * @param title toast title
+     * @param filename file name to download
+     * @param url url to load
+     * @param p Parameters
+     * @param p.async async URL to wait for by polling
+     * @param p.abort optional URL to abort
+     * @example
+     * // Asynchronous export with polling, and a Stop button
+     * $view.widget.toastLoading("Export", "export.csv", myTaskURL, { async: myTaskURL + "&async=true", abort: myTaskURL + "&abort=true" });
+     */
+    toastLoading(title: string, filename: string, url: string, p?: {
+        async?: string;
+        abort?: string;
+    }): void;
+    /**
+     * Toast dialog
+     * @param params text or an object with optional keys:
+     * `level` ('info' default, 'success', 'warning', 'error'='danger'),
+     * `content` (content message),
+     * `position` ('top' default or 'bottom'),
+     * `align` ('left', 'center' default or 'right'),
+     * `duration` (animation duration in ms, default 3000, -1 = infinity),
+     * `undo` (add a UNDO button?),
+     * `pinable` (add a push-pin button?)
+     * @returns The toast
+     * @example
+     * $view.widget.toast("Saved");
+     * // Kept until closed by the user
+     * $view.widget.toast({ level: "error", content: "Unable to save", position: "bottom", align: "right", duration: -1, pinable: true });
+     */
+    toast(params: string | ToastParam): JQuery<HTMLElement>;
+    private toastStacks;
+    /**
+     * Display the news
+     * @param ctn container to display articles (null to display an area or a ticker bar)
+     * @param list news list from WebNews object or <code>\{ id, title, description, date, image \}</code>
+     * @param options optional parameters
+     * @param options.template HTML template with classes to fill <code>.news-title .news-date .news-desc .news-img</code> (default Simplicite.UI.Globals.news.template)
+     * @param options.popup true to get only news to display (on logon) in a modal dialog
+     * @param options.ticker true to get only news to display on a footer ticker
+     * @example
+     * $view.widget.news(ctn, [{ id: "1", title: "New release", description: "<p>Hello</p>", date: "2026-11-01" } as News]);
+     */
+    news(ctn: AnyContainer, list?: News[], options?: {
+        template?: string;
+        popup?: boolean;
+        ticker?: boolean;
+    }): void;
+    /**
+     * Display a ticker bar
+     * @param p Optional parameters
+     * @param p.position position selector (default 'body')
+     * @param p.list list of news <code>\{ id, title, description \}</code>
+     * @example
+     * $view.widget.tickerBar({ list: [{ id: "1", title: "Maintenance tonight", description: "From 8pm" } as News] });
+     */
+    tickerBar(p?: {
+        position?: AnyContainer;
+        list?: News[];
+    }): void;
+    /**
+     * Multi-files rendering + upload
+     * @param ctn container
+     * @param list list of documents { id, name }
+     * @param p options
+     * @param p.name component name
+     * @param p.object business object
+     * @param p.field doc field with fileAccept: string or array of permitted extensions and MIME types
+     * @param p.upload upload files allowed?
+     * @param p.download download documents?
+     * @param p.preview preview documents?
+     * @param p.remove remove documents?
+     * @param p.show 'list' default or 'boxes'
+     * @param p.toggle true to toggle list|boxes
+     * @param p.min minimum files (0 = not required)
+     * @param p.max total of permitted files (0 = no limit)
+     * @example
+     * const f = obj.getField("myObjDocuments");
+     * if (f) $view.widget.docUploader(ctn, [], { id: "myDocs", name: "myDocs", object: obj, field: f, upload: true, download: true, max: 5 });
+     */
+    docUploader(ctn: JQuery, list: DocumentDB[], p: {
+        id: string;
+        name: string;
+        object: BusinessObject;
+        field: ObjectField;
+        upload?: boolean;
+        download?: boolean;
+        preview?: boolean;
+        remove?: boolean;
+        show?: "list" | "boxes";
+        toggle?: boolean;
+        min?: number;
+        max?: number;
+    }): JQuery<HTMLElement>;
+    /**
+     * Advanced notepad with activities
+     * @param p options
+     * @param p.id widget id
+     * @param p.name widget name
+     * @param p.data Content <code>{ checks:[{ title, list:[check,text]}], activities:[{ date, author, text }] }</code>
+     * @param p.readonly Read only or editable by authors
+     * @param p.popup Allows to open a popup to enlarge contents
+     * @param p.split split checklists and comments in 2 columns
+     * @param p.autosplit minimal width of container to auto-split
+     * @param p.height Optional max height
+     * @param p.change optional <code>callback({act,event})</code> when data has changed
+     * @example
+     * ctn.append($view.widget.notepad({
+     * 	id: "myNotes",
+     * 	name: "myNotes",
+     * 	data: { checks: [], activities: [] },
+     * 	popup: true,
+     * 	change: e => $console.log(e)
+     * }));
+     */
+    notepad(p: {
+        id?: string;
+        name?: string;
+        data: string | KeyObject;
+        readonly?: boolean;
+        popup?: boolean;
+        split?: boolean;
+        autosplit?: number;
+        height?: number | string;
+        change?: (p: {
+            act?: KeyObject;
+            item?: KeyObject;
+            list?: {
+                title: string;
+                list: KeyObject[];
+            };
+            event: string;
+        }) => void;
+    }): JQuery<HTMLElement>;
+    /**
+     * Simple dialog to change the user's password
+     * @example
+     * $view.widget.changePwd();
+     */
+    changePwd(): void;
+    /**
+     * Create a characters counter on input field
+     * @param input input or textarea
+     * @param p Options
+     * @param p.max Max length of input (default 100)
+     * @param p.position top or bottom (default bottom)
+     * @param p.align left or right (default left)
+     * @param p.toggle true to show/hide on focus/blur
+     * @example
+     * $view.widget.charCounter(t, { max: 200, position: "bottom", align: "right", toggle: true });
+     */
+    charCounter(input: AnyContent, p?: {
+        max?: number;
+        position?: "bottom" | "top";
+        align?: "left" | "right";
+        toggle?: boolean;
+    }): JQuery<HTMLElement>;
+    /**
+     * Edit a markdown text in a dialog with a preview area
+     * @param md Initial value
+     * @param cbk Callback with new value
+     * @example
+     * $view.widget.editMarkdown("# Title", md => $console.log(md));
+     */
+    editMarkdown(md: string, cbk?: (md: string) => void): JQuery<HTMLElement>;
+    /**
+     * Open a dialog to take a picture
+     * @param p
+     * @param p.title Dialog title
+     * @param p.facingMode video facing mode suggestion (selfie = 'user' or back camera = 'environment', not applicable if device has only one camera)
+     * @param p.videoWidth video width (use the media width by default without zoom)
+     * @param p.imageWidth result image width (use the media width if unspecified)
+     * @param p.imageHeight result image height (same video aspect ratio if unspecified)
+     * @returns Promise with data URL 'data:image/png;base64,...'
+     * @example
+     * $view.widget.takePicture({ title: "Picture", facingMode: "environment", imageWidth: 800 })
+     * 	.then(url => t.attr("src", url as string));
+     */
+    takePicture(p: {
+        title: string;
+        facingMode: string;
+        videoWidth?: number;
+        imageWidth?: number;
+        imageHeight?: number;
+    }): Promise<string>;
+    /**
+     * Simple scratch pad
+     * @param p
+     * @param p.width result image width (default 800)
+     * @param p.height result image height (default 600)
+     * @param p.title dialog title
+     * @param p.inline inline pad
+     * @param p.image source image
+     * @param p.onload callback(pad) when loaded
+     * @param p.update callback(dataURL) when signature has changed
+     * @example
+     * $view.widget.scratchPad({ title: "Draw", width: 800, height: 600, image: t, update: url => $console.log(url) });
+     */
+    scratchPad(p: ScratchPadParam): void;
+    /**
+     * Take a signature on pad
+     * @param p Options
+     * @param p.width result image width (default 400)
+     * @param p.height result image height (default 200)
+     * @param p.title dialog title
+     * @param p.inline inline pad
+     * @param p.image source image
+     * @param p.onload callback(pad) when loaded
+     * @param p.update callback(dataURL) when signature has changed
+     * @example
+     * $view.widget.takeSignature({ title: "Signature", image: t, update: url => $console.log(url) });
+     */
+    takeSignature(p: ScratchPadParam): void;
+    /**
+     * Scan a QRCode/barcode
+     * @param p
+     * @param p.width scanner width (default 350)
+     * @param p.height scanner height (default 0)
+     * @param p.scanWidth scan zone width (default 250)
+     * @param p.scanHeight scan zone height (default 250)
+     * @param p.aspectRatio scanner aspect ratio height (default 1.0)
+     * @param p.title dialog title
+     * @param p.applyButton display apply button? defaults to true
+     * @param p.retryButton display retry button? defaults to true
+     * @param p.cancelButton display cancel button? defaults to true
+     * @param p.applyLabel apply label
+     * @param p.retryLabel retry button title
+     * @param p.cancelLabel cancel button title
+     * @param p.container container to inline in (no dialog in this case)
+     * @param p.id DOM id (got from container if a container is set, defaults to 'scanner')
+     * @param p.onload callback(scanner) when loaded
+     * @param p.onscan callback(scanner, text) when scan is done
+     * @param p.onapply callback(text) when scan is applied (trigger by the apply button)
+     * @param p.onretry callback() when scan is resumed (triggered by the retry button)
+     * @param p.oncancel callback() when scan is cancelled (triggered by the cancel button)
+     * @param p.onclose callback() after closing
+     * @example
+     * $view.widget.scanCode({ title: "Scan", onapply: text => $console.log(text) });
+     */
+    scanCode(p: {
+        width?: number;
+        height?: number;
+        scanWidth?: number;
+        scanHeight?: number;
+        aspectRatio?: number;
+        title?: string;
+        applyButton?: boolean;
+        applyLabel?: string;
+        retryButton?: boolean;
+        retryLabel?: string;
+        cancelButton?: boolean;
+        cancelLabel?: string;
+        container?: JQuery;
+        id?: string;
+        onload?: Callback;
+        onscan?: (scan: Html5Qrcode | null, value: string) => void;
+        onapply?: (text: string) => void;
+        onretry?: Callback;
+        oncancel?: Callback;
+        onclose?: Callback;
+    }): void;
+    /**
+     * Display a contrast helper between 2 colors
+     * @param ctn Target container to draw the preview button with colors and contrast value
+     * @param color input of color
+     * @param bgcolor input of background color
+     * @example
+     * // Inputs of the text and background colors
+     * $view.widget.contrastHelper(ctn, t, c);
+     */
+    contrastHelper(ctn: JQuery, color: JQuery, bgcolor: JQuery): void;
+    /**
+     * Display a shortcut
+     * @param ctn Target container
+     * @param p Options
+     * @param p.shortcuts List of shortcuts, each with `name`, `url`, `label` and an optional `target`
+     * @example
+     * $view.widget.shortcuts(ctn, { shortcuts: [{ name: "MyShortcut", url: "/ui", label: "My shortcut" }] });
+     */
+    shortcuts(ctn: JQuery, p: {
+        shortcuts: Shortcut[];
+    }): JQuery<HTMLElement>;
+    /**
+     * Display a counter
+     * @param ctn Target container
+     * @param p Options
+     * @param p.name Object name
+     * @param p.instance Object instance name
+     * @param p.field Optional field name to get total (or simple count)
+     * @param p.filters Object filters
+     * @param p.label Counter label
+     * @param p.help Optional help title
+     * @param p.bgColor Background color (CSS color)
+     * @param p.textColor Text color (CSS color)
+     * @param p.color Predefined background color grey(default)|blue|orange|red|green|purple|violet|yellow|turquoise|brown
+     * @param p.icon Icon name
+     * @param p.width Width (number of pixels or CSS dimension)
+     * @param p.height Height (number of pixels or CSS dimension)
+     * @param p.onclick Click handler
+     * @example
+     * $view.widget.counter(ctn, {
+     * 	name: "MyObject",
+     * 	label: "Open orders",
+     * 	filters: { myObjStatus: "OPEN" },
+     * 	color: "blue",
+     * 	icon: "fas/shopping-cart",
+     * 	onclick: () => $ui.displayList(listCtn, obj)
+     * });
+     */
+    counter(ctn: JQuery, p: CounterParam): JQuery<HTMLElement>;
+    /**
+     * Display a set of counters
+     * @param ctn Target container (if null defauts to container with options.id DOM Id)
+     * @param p Options
+     * @param p.objects Objects to display (see CounterParam for per-object properties)
+     * @param p.id DOM Id (required if no container is passed)
+     * @param p.width Width (number of pixels or CSS dimension)
+     * @param p.height Height (number of pixels or CSS dimension)
+     * @param p.colSpan Column span (defaults to max(3, 12 / number of objects)
+     * @param p.rowClasses Optional CSS row classes (default 'row')
+     * @param p.classes Optional CSS classes to add
+     * @param p.onclick Click handler
+     * @example
+     * $view.widget.counters(ctn, {
+     * 	objects: [
+     * 		{ name: "MyObject", label: "All orders" },
+     * 		{ name: "MyObject", label: "Open orders", filters: { myObjStatus: "OPEN" }, color: "orange" }
+     * 	]
+     * });
+     */
+    counters(ctn: JQuery | null, p: {
+        id?: string;
+        objects: CounterParam[];
+        width?: string | number;
+        height?: string | number;
+        colSpan?: number;
+        rowClasses?: string;
+        classes?: string;
+        onclick?: JQueryHandler;
+    }): JQuery<HTMLElement>;
+    /**
+     * Display a carousel for a business object
+     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
+     * @param p Options
+     * @param p.name Object name
+     * @param p.instance Object instance name
+     * @param p.filters Object filters
+     * @param p.titleField Object title field
+     * @param p.subTitleField Object sub-title field
+     * @param p.descriptionField Object description field
+     * @param p.imageField Object image field
+     * @param p.imageFieldThumbnail Object image field as thumbnail ?
+     * @param p.id DOM Id (required if no container is passed)
+     * @param p.width Width (number of pixels or CSS dimension)
+     * @param p.height Height (number of pixels or CSS dimension)
+     * @param p.bgColor Background color (CSS color)
+     * @param p.onclick Click handler
+     * @example
+     * $view.widget.carousel(ctn, {
+     * 	name: "MyProduct",
+     * 	titleField: "myPrdName",
+     * 	descriptionField: "myPrdDescription",
+     * 	imageField: "myPrdPicture",
+     * 	height: 300
+     * });
+     */
+    carousel(ctn: JQuery, p: {
+        name: string;
+        instance?: string;
+        filters?: KeyObject;
+        titleField: string;
+        subTitleField?: string;
+        descriptionField?: string;
+        imageField?: string;
+        imageFieldThumbnail?: boolean;
+        id?: string;
+        width?: string | number;
+        height?: string | number;
+        bgColor?: string;
+        addon?: AnyContent;
+        onclick?: boolean | JQueryHandler;
+    }): void;
+    /**
+     * Display a set of cards for a business object
+     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
+     * @param p Options
+     * @param p.name Object name
+     * @param p.instance Object instance name
+     * @param p.filters Object filters
+     * @param p.titleField Object title field
+     * @param p.subTitleField Object sub-title field
+     * @param p.descriptionField Object description field
+     * @param p.statusField Object status field
+     * @param p.imageField Object image field
+     * @param p.imageFieldThumbnail Object image field as thumbnail ?
+     * @param p.id DOM Id (required if no container is passed)
+     * @param p.rowClasses Row-level CSS classes
+     * @param p.classes Row-level additional CSS classes
+     * @param p.width Width (number of pixels or CSS dimension)
+     * @param p.height Height (number of pixels or CSS dimension)
+     * @param p.bgColor Background color (CSS color)
+     * @param p.cardClasses Card-level additional CSS classes
+     * @param p.cardWidth Card width (number of pixels or CSS dimension)
+     * @param p.cardHeight Card height (number of pixels or CSS dimension)
+     * @param p.cardImgWidth Card image width (number of pixels or CSS dimension)
+     * @param p.cardImgHeight Card image height (number of pixels or CSS dimension)
+     * @param p.cardBgColor Card background color (CSS color)
+     * @param p.onclick Click handler
+     * @example
+     * $view.widget.cards(ctn, {
+     * 	name: "MyProduct",
+     * 	filters: { myPrdAvailable: "1" },
+     * 	titleField: "myPrdName",
+     * 	subTitleField: "myPrdCode",
+     * 	imageField: "myPrdPicture",
+     * 	imageFieldThumbnail: true,
+     * 	cardWidth: 250
+     * });
+     */
+    cards(ctn: JQuery, p: {
+        name: string;
+        instance?: string;
+        filters?: KeyObject;
+        titleField: string;
+        subTitleField?: string;
+        descriptionField?: string;
+        statusField?: string;
+        imageField?: string;
+        imageFieldThumbnail?: boolean;
+        id?: string;
+        rowClasses?: string;
+        classes?: string;
+        width?: string | number;
+        height?: string | number;
+        bgColor?: string;
+        cardClasses?: string;
+        cardWidth?: string | number;
+        cardHeight?: string | number;
+        cardImgWidth?: string | number;
+        cardImgHeight?: string | number;
+        cardBgColor?: string;
+        addon?: AnyContent;
+        button?: {
+            style?: string;
+            label?: string;
+            onclick?: JQueryHandler;
+        };
+        onclick?: boolean | JQueryHandler;
+    }): void;
+    /**
+     * Display an accordion set for a business object
+     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
+     * @param p Options
+     * @param p.name Object name
+     * @param p.instance Object instance name
+     * @param p.filters Object filters
+     * @param p.titleField Object title field
+     * @param p.contentField Object description field
+     * @param p.id DOM Id (required if no container is passed)
+     * @param p.classes Row-level additional CSS classes
+     * @param p.width Width (number of pixels or CSS dimension)
+     * @param p.height Height (number of pixels or CSS dimension)
+     * @param p.bgColor Background color (CSS color)
+     * @param p.onclick Click handler
+     * @example
+     * $view.widget.accordion(ctn, {
+     * 	name: "MyFaq",
+     * 	titleField: "myFaqQuestion",
+     * 	contentField: "myFaqAnswer"
+     * });
+     */
+    accordion(ctn: JQuery, p: {
+        name: string;
+        instance?: string;
+        filters?: KeyObject;
+        titleField: string;
+        contentField: string;
+        id?: string;
+        classes?: string;
+        width?: string | number;
+        height?: string | number;
+        bgColor?: string;
+        onclick?: boolean | JQueryHandler;
+    }): void;
+    /**
+     * Display a time line set for a business object
+     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
+     * @param p Options
+     * @param p.name Object name
+     * @param p.instance Object instance name
+     * @param p.filters Object filters
+     * @param p.titleField Object title field
+     * @param p.dateField Object date field
+     * @param p.contentField Object description field
+     * @param p.id DOM Id (required if no container is passed)
+     * @param p.classes Row-level additional CSS classes
+     * @param p.width Width (number of pixels or CSS dimension)
+     * @param p.height Height (number of pixels or CSS dimension)
+     * @param p.bgColor Background color (CSS color)
+     * @param p.onclick Click handler
+     * @example
+     * $view.widget.timeline(ctn, {
+     * 	name: "MyEvent",
+     * 	titleField: "myEvtTitle",
+     * 	dateField: "myEvtDate",
+     * 	contentField: "myEvtDescription"
+     * });
+     */
+    timeline(ctn: JQuery, p: {
+        name: string;
+        instance?: string;
+        filters?: KeyObject;
+        titleField: string;
+        dateField: string;
+        contentField: string;
+        id?: string;
+        classes?: string;
+        width?: string | number;
+        height?: string | number;
+        bgColor?: string;
+        onclick?: boolean | JQueryHandler;
+    }): void;
+    /**
+     * Create a context menu
+     * @param _element The element that was right-clicked
+     * @param e Mouse event
+     * @param items Actions
+     * @returns The menu
+     * @example
+     * t.on("contextmenu", e => {
+     * 	e.preventDefault();
+     * 	$view.widget.contextMenu(t, e, [$("<a/>").text("My action")]);
+     * });
+     */
+    contextMenu(_element: JQuery, e: JQuery.ContextMenuEvent, items: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
+}
+
+/** Item of a view addon bar */
+interface AddonBarItem {
+    /** Unique name within the host bar (data-addon + .addon-<name>) */
+    name: string;
+    /** Accessible name: mandatory, no faked buttons */
+    label: string;
+    /** Icon, see $view.icon */
+    icon?: string;
+    /** Ascending left-to-right order (default 50) */
+    weight?: number;
+    /** Click handler (ignored when 'element' is given) */
+    click?: (e: JQuery.Event) => void;
+    /** Prebuilt element (dropdown, gotoDefinition...) */
+    element?: JQuery;
+}
+/**
+ * Addon bar renderer: collects the floating controls (gotodef, copylink, guides, ...)
+ * of a whole view or a single view item
+ */
+declare class AddonBar {
+    static enabled(): boolean;
+    /**
+     * Closest element that can host a bar
+     */
+    hostOf(el: AnyContainer): JQuery;
+    /**
+     * Get (or create) the bar for a host
+     * @param host Host container (view item, view, external object, list or form)
+     * @param create Create the bar if it does not exist?
+     */
+    bar(host: AnyContainer, create?: boolean): JQuery;
+    /**
+     * Reorder addons by ascending weight
+     */
+    sort(items: JQuery): void;
+    /**
+     * Set the bar title (host type and name)
+     * @param host bar host
+     * @param label host name
+     * @param type optional object type (View, ObjectExternal...)
+     */
+    hostTitle(host: AnyContainer, label: string, type?: string): void;
+    /**
+     * Apply the expanded/collapsed state to a toggle button
+     */
+    static toggleState(tgl: JQuery, open: boolean): void;
+    /**
+     * Add an addon to the bar
+     */
+    add(host: AnyContainer, addon: AddonBarItem): JQuery | undefined;
+    /**
+     * Remove an addon by name
+     */
+    remove(host: AnyContainer, name: string): void;
+    /**
+     * Collapse the bar when empty, bypass the toggle for a single addon
+     */
+    refresh(bar: JQuery): void;
+}
+
+/**
+ * Board and view rendering
+ */
+declare class Board {
+    /**
+     * Navigation rendering
+     * @param ctn Optional container to find the .nav
+     * @param nav Navigator
+     */
+    displayNav(ctn: AnyContainer, nav: UINavigator): this;
+    /**
+     * Hide navigation
+     * @param ctn Optional container to find the .nav
+     */
+    hideNav(ctn: AnyContainer): this;
+    /**
+     * Display a view of items (i.e. home, plain view or part of form)
+     * @param ctn container
+     * @param v view metadata <code>\{ name, visible, template, ...\}</code>
+     * @param p options <code>\{ parent, home, lazy, edit \}</code>
+     * @param cbk callback when displayed
+     */
+    display(ctn: Container, v: View, p?: ViewParam, cbk?: Callback): this;
+    /**
+     * Display user's dashboards
+     * @param ctn container
+     * @param data list of user views + perm + groups
+     * @param p options
+     * @param cbk callback when displayed
+     */
+    dashboards(ctn: Container, data: KeyObject, p: KeyObject, cbk?: (div: JQuery) => void): void;
+    /** Current dashbord view to display */
+    selectedDashboard?: View;
+    /**
+     * State model charts
+     * @deprecated moved to `StatusMetrics.display`
+     */
+    statusMetrics(ctn: AnyContainer, obj: BusinessObject, data: StatusMetricsData, params?: StatusMetricsParam): this;
+    /**
+     * Version check
+     * @param ctn Target container
+     * @param options
+     * @param options.silent Do not display message in case of check error?
+     * @param options.addon Optional addon content
+     */
+    versionCheck(ctn: Container | string, options?: {
+        addon?: AnyContent;
+        silent?: boolean;
+    }): void;
+    /**
+     * Display the About dialog
+     */
+    about(): this;
+    /**
+     * System informations rendering
+     * @param ctn Container
+     * @param data Informations
+     * @param fn action callback
+     * @param cache Clear cache only or full form
+     */
+    sysinfo(ctn: Container, data: KeyObject, fn: (action: string, param?: string | null) => void, cache?: boolean): this;
+    /**
+     * Models picker and creation
+     * @param ctn Container
+     * @param params options { embedded }
+     */
+    modeler(ctn: Container, params?: KeyObject): Promise<this>;
+    /**
+     * import/export application with modules
+     */
+    moduleApp(action: string, obj: BusinessObject, service: (p: ModuleAjax, started: TrackerCallback) => void): void;
+    /** Delete module rendering */
+    moduleDelete(ctn: AnyContainer, module: BusinessObject, service: CallableFunction): this;
+    /**
+     * Check if the easter egg is allowed
+     * @param name entry name in SIM_EASTER_EGGS: true or 'devmode' only
+     * @param egg optional JS egg name to load
+     * @param jsfile resource name to install the game
+     * @returns true if allowed
+     */
+    easterEgg(name: string, egg?: string, jsfile?: string): boolean;
+    /** Load and launch the easter egg */
+    loadEasterEgg(egg: string, jsfile: string): Promise<void>;
+}
+
+/** Parameters of the bulk update form */
+type UpdateFormParam = {
+    /** Title */
+    title?: string;
+    /** Object instance name */
+    inst?: string;
+    /** Save button handler */
+    onsave?: (ctn: Container, o: BusinessObject, cbk?: Callback) => void;
+    /** Close button handler */
+    onclose?: (ctn: Container, o: BusinessObject) => void;
+    /** Hook when displayed */
+    onload?: (ctn: Container, o: BusinessObject) => void;
+    /** Hook when removed */
+    onunload?: (ctn: Container, o: BusinessObject) => void;
+} & NavParam;
+/**
+ * Bulk update rendering
+ */
+declare class Update {
+    /**
+     * Display the bulk update form
+     * @param ctn container
+     * @param o object
+     * @param p optional parameters
+     * @param cbk optional callback
+     */
+    display(ctn: Container, o: BusinessObject, p: UpdateFormParam, cbk?: Callback): this;
+}
+
+/** Parameters of an external object page */
+interface ExternalParam {
+    /** Title */
+    title?: string;
+    /** Help */
+    help?: string;
+    /** Icon name */
+    icon?: string;
+    /** HTML content */
+    html: string;
+    /** External object metadata */
+    metadata?: ExternalMetadata;
+    /** Stylesheets to load */
+    css?: string[];
+    /** Scripts to load */
+    js?: string[];
+}
+/**
+ * External object rendering
+ */
+declare class External {
+    /**
+     * Display the external object
+     * @param ctn container
+     * @param p optional parameters { title, icon, html, metadata }
+     * @param cbk optional callback
+     */
+    display(ctn: Container, p: ExternalParam, cbk: (div: JQuery) => void): this;
+}
+
+/** Callback with the picked color, `apply` = false to restore the old color on cancel */
+type ColorPickerHandler = (color: string, apply?: boolean) => void;
+/** Color with its lighter and darker shades */
+interface ColorSet {
+    /** Base color */
+    color: string;
+    /** Lighter shades */
+    lighters: string[];
+    /** Darker shades */
+    darkers: string[];
+}
+/** Colors of a palette */
+type PaletteColors = ColorSet[];
+/**
+ * Color picker widget (based on https://seballot.github.io/spectrum)
+ */
+declare class ColorPicker {
+    /** Container */
+    ctn: Container;
+    /** Color input */
+    input: JQuery;
+    /** Callback with the picked color */
+    callback?: ColorPickerHandler;
+    /** Dialog */
+    dlg?: JQuery;
+    /** Color before picking */
+    oldColor: string;
+    /** Picked color */
+    newColor?: string;
+    /** Empty color on optional field */
+    allowEmpty: boolean;
+    /** From field rendering */
+    allowAlpha: boolean;
+    /** Only RGB colors (no names) */
+    onlyRgb: boolean;
+    /** Current selected theme with colors */
+    static theme?: string;
+    /** Colors of the current theme */
+    static themeSet?: PaletteColors;
+    /** Pre-loaded colors per theme name */
+    static themePalettes: KeyHash<JQuery>;
+    constructor(ctn: Container, input: JQuery, cbk?: ColorPickerHandler);
+    private toString;
+    /**
+     * Open the color picker
+     * @param dropdown display as dropdown or dialog box
+     */
+    open(dropdown: boolean): void;
+    /** Close the picker and notify the picked color (or restore the old one on cancel) */
+    close(): void;
+    /** Get the theme palette */
+    palTheme(t: Theme): JQuery<HTMLElement> | undefined;
+    /** Themes picker to change the master palette */
+    listThemes(ctn: JQuery): "" | undefined;
+    /**
+     * Build the color sets of a theme palette.
+     * @param theme Theme name
+     * @param pal Optional palette (default palette of the theme)
+     */
+    static buildColorSets(theme: string, pal?: Palette): void;
+    private static palPrepare;
+}
+
+/**
+ * Parameters of the XML import service (IMPORTXML, IMPORTZIP or IMPORTADP)
+ */
+type ImportXMLParams = {
+    /** Data file in the multi-part POST */
+    file?: {
+        file: File;
+        name: string;
+        id: string;
+    };
+    /** Data file location */
+    url?: string;
+    /** Adapter name */
+    adapter?: string;
+    /** Adapter parameters: param1=1;param2=2 */
+    param?: string;
+    /** XML data */
+    data?: string;
+    /** Parallel import of the data */
+    async?: boolean;
+    /** Stop the import on the first error */
+    stoponerror?: boolean;
+};
+/**
+ * Import data rendering
+ */
+declare class Import {
+    /** Template of a Simplicite XML import file */
+    readonly XML_SIMPLICITE: string;
+    private help;
+    /**
+     * Import XML interface
+     * @param ctn Container
+     * @param data
+     * @param send callback to post data
+     */
+    display(ctn: Container, data: {
+        help?: AnyContent;
+        adapters?: string[];
+        adapter?: string;
+        options?: string;
+    }, send: (data: ImportXMLParams) => void): void;
+    /**
+     * Import CSV interface
+     * @param ctn Container
+     * @param data objects and help
+     * @param send callback to post data
+     */
+    displayCSV(ctn: Container, data: {
+        help?: AnyContent;
+        objects?: string[];
+    }, send: (data: KeyObject) => void): void;
+}
+
+/** Records to merge */
+interface MergeParam {
+    /** array of row IDs to merge */
+    ids: string[];
+}
+/** Parameters of a merge save */
+type MergeSaveParam = MergeParam & {
+    /** true to check only (isMergeEnable) */
+    check?: boolean;
+    /** index per field to preserve */
+    item?: object;
+    /** indexes per link to preserve */
+    links?: object;
+    /** optional limited link Ids per link and indexes to preserve */
+    linkIds?: object;
+    /** indexes per meta-object to preserve */
+    metaobj?: object;
+};
+/**
+ * Merge object rendering
+ */
+declare class Merge {
+    /**
+     * Display the merge form of records.
+     * @param ctn Container
+     * @param obj Business object
+     * @param items Records to merge
+     * @param save Save handler
+     * @param close Close handler
+     */
+    display(ctn: Container, obj: BusinessObject, items: RowDataMeta[], save?: (p: MergeSaveParam) => void, close?: Callback, cbk?: Callback): void;
+}
+
+/** Parameters of the BAM dashboard */
+interface BamParam {
+    /** Begin date */
+    begin?: string;
+    /** End date */
+    end?: string;
+    /** Period 1:hour, 2:day, 3:week, 4:month, 5:quarter, 6:semester, 7:year */
+    period?: number | string;
+}
+/** Business Activity Monitoring (BAM) rendering */
+declare class Bam {
+    private ctn;
+    private head?;
+    private _baseURL;
+    private _tab;
+    private _metrics;
+    private _cols;
+    private _log10;
+    private _colors;
+    private _fdate?;
+    private static singleton?;
+    /**
+     * Render the BAM dashboard.
+     * @param metrics Array of other available metrics {key,label}
+     * @param params begin, end, period
+     */
+    static render(metrics: KeyObject[], params?: BamParam): Promise<void>;
+    /**
+     * Render the BAM dashboard
+     * @param metrics Array of other available metrics {key,label}
+     * @param params begin, end, period
+     */
+    display(metrics: KeyObject[], params?: BamParam): void;
+    /**
+     * Display a tab: 0 = status, 1 = activities and processes, else a metric.
+     * @param tab Optional tab index (default current tab)
+     */
+    displayTab(tab?: number): void;
+    /** Reload with the selected dates, period and palette */
+    reload(): void;
+    /**
+     * Shift the period.
+     * @param s Shift (-1 = backward, 1 = forward)
+     */
+    shift(s: number): void;
+    /**
+     * Add a metric tab.
+     * @param k Metric key (`o<object>` or `p<process>`)
+     */
+    addTab(k: string): void;
+    /**
+     * Remove a metric tab.
+     * @param k Metric key (`o<object>` or `p<process>`)
+     */
+    delTab(k: string): void;
+    private _getMetric;
+    private _call;
+    private _onBamActivity;
+    private _onBamProcess;
+    private _onBamStatus;
+    private _onBamMetric;
+    /**
+     * Draw a chart in a container with error handling
+     * @param div Container id
+     * @param draw Drawing function
+     * @param error Error message prefix
+     */
+    private _plot;
+    private _plotProcessPie;
+    private _plotProcessLag;
+    private _plotProcessDate;
+    private _plotProcessUser;
+    private _plotStatusPie;
+    private _plotStatusDate;
+    private _plotStatusDuration;
+    private _plotStatusTerm;
+    /**
+     * Convert a period format of the server (strftime) to a moment format
+     * @param format Format as `%a %e-%b`, `%Y-%m`...
+     */
+    private _timeFormat;
+}
+
+/**
+ * ZIP files editor
+ */
+declare class ZIP {
+    /**
+     * Display the content of a ZIP document.
+     * @param ctn Container
+     * @param doc ZIP document
+     * @param zip Loaded ZIP
+     * @param p Optional parameters (`readonly`)
+     */
+    display(ctn: Container, doc: DocumentDB, zip: JSZip, p?: {
+        readonly?: boolean;
+    }): void;
+}
+
+/**
+ * Treeview rendering
+ */
+declare class Tree {
+    /**
+     * Object treeview rendering
+     * @param ctn container
+     * @param o business object (where o.item is a tree)
+     * @param id row Id
+     * @param tv treeview definition { name }
+     * @param p options
+     * @param cbk optional callback
+     */
+    display(ctn: Container, o: BusinessObject, id: string, tv: TreeNode, p: TreeParam, cbk?: Callback): this;
+    /**
+     * Filter tree
+     */
+    filterTree(this: HTMLElement): void;
+}
+
+/** Type of preferences */
+type PrefType = "list" | "search" | "action";
+/** Preferences of an object */
+interface PrefItem {
+    /** Object name */
+    name: string;
+    /** Translated label */
+    label?: string;
+    /** User key */
+    userkey?: string;
+    /** Visible */
+    visible?: boolean;
+    /** Fields preferences */
+    fields?: {
+        /** Field name */
+        name: string;
+        /** Field is visible */
+        visible: boolean;
+        /** Field is required */
+        required?: boolean;
+        /** Field is part of the user key */
+        userkey?: boolean;
+        /** Field label */
+        label?: string;
+    }[];
+}
+/** Parameters of the preferences dialog */
+interface PrefsParam {
+    /** List preferences */
+    list?: PrefItem[];
+    /** Search preferences */
+    search?: PrefItem[];
+    /** Actions preferences */
+    actions?: PrefItem[];
+    /** Show the action labels */
+    actionLabel?: boolean;
+    /** Restore the default preferences */
+    restore?: Callback;
+    /** Save the preferences */
+    save?: (p: PrefsParam, cbk: Callback) => void;
+    /** Reload after save */
+    reload?: Callback;
+    /** Close the dialog */
+    close?: Callback;
+}
+/** Bookmarks of an object */
+interface Bookmark {
+    /** Object name */
+    o: string;
+    /** Icon */
+    i?: string;
+    /** Bookmarked records */
+    b: {
+        /** Row_id */
+        id: string;
+        /** Text = user key */
+        t: string;
+    }[];
+}
+/** User bookmarks */
+interface Bookmarks {
+    /** Where to show the bookmarks (`top`, `bottom`...) or `false` */
+    show: string | boolean;
+    /** Bookmarks per object */
+    list?: Bookmark[];
+}
+/** Parameters of the bookmarks display */
+interface BookmarkParam {
+    /** Where to show the bookmarks or `false` */
+    show?: string | false;
+}
+/** Parameters of the user filters display */
+interface UserFilterParam {
+    /** Filters bar only (else dialog or form) */
+    bar: boolean;
+}
+/**
+ * Object preferences rendering
+ */
+declare class Prefs {
+    /**
+     * Build the object preferences dialog
+     * @param o object
+     * @param p parameters
+     * @param p.list array of fields
+     * @param p.search array of fields
+     * @param p.actions array of actions
+     * @param p.actionLabel show/hide the action labels ?
+     * @param p.restore restore handler
+     * @param p.save save handler
+     * @param p.reload reload handler
+     * @param p.close close handler
+     */
+    display(o: BusinessObject, p: PrefsParam): this;
+    /**
+     * Title of user filters
+     * @param ctn optional container (#userfilters if null)
+     * @param obj UserFilters object
+     */
+    userFiltersTitle(ctn: AnyContainer, obj: BusinessObject): void;
+    /**
+     * Badge of a user filter
+     * @param ctn badges container
+     * @param data <code>\{ dmin, dmax \}</code> or <code>\{ field, value or values \}</code>
+     * @param remove optional handler to remove filter (if not required)
+     * @param click optional handler on click
+     */
+    userFiltersBadge(ctn: Container, data: KeyObject, remove?: JQueryHandler, click?: JQueryHandler): JQuery<HTMLElement> | null;
+    /**
+     * Display the dialog of user global filters
+     * @param ctn optional container (dialog if null)
+     * @param obj UserFilters object
+     * @param id UserFilters id
+     * @param p options <code>\{ bar \}</code>
+     */
+    userFilters(ctn: AnyContainer | null, obj: UIBusinessObject, id: string, p?: UserFilterParam): this | undefined;
+    /**
+     * Display the user's bookmarks
+     * @param ctn optional container (default popup)
+     * @param bm bookmarks
+     * @param p options show=top|bottom
+     */
+    bookmarks(ctn: AnyContainer, bm: Bookmarks, p: BookmarkParam): void;
+}
+
+/**
+ * Trays rendering
+ */
+declare class UITray {
+    /**
+     * Display the trays form
+     * @param ctn container
+     * @param div optional div.tray to fill
+     * @param trays list of trays with items
+     * @param p optional parameters
+     * @param cbk optional callback
+     */
+    display(ctn: Container, div: JQuery, trays: TrayColumn[], p: {
+        cls?: string;
+        findItem?: (e: JQuery.Event) => JQuery | undefined;
+        getItemId?: (item: JQuery) => string;
+        getTrayName?: (tray: JQuery) => string;
+    }, cbk?: Callback): this;
+}
+
+/**
+ * UI Action
+ */
+declare class UIAction extends UIComponent<Action> {
+    /** business object */
+    obj: UIBusinessObject;
+    /**
+     * UI Action
+     * @param ctn container
+     * @param obj object
+     * @param action Action metadata
+     */
+    constructor(ctn: Container, obj: UIBusinessObject, action: Action);
+    /**
+     * Bind a 'click' on button
+     * @param handler related handler
+     * @returns The button, undefined when the action is not displayed
+     * @example
+     * $ui.getUIAction(ctn, obj, "MyObjSendOrder")?.ui.click(() => $console.log("sent"));
+     */
+    click(handler: JQueryHandler): JQuery<HTMLElement> | undefined;
+    /**
+     * Enable/Disable the action
+     * @param enabled false to disable
+     * @example
+     * $ui.getUIAction(ctn, obj, "MyObjSendOrder")?.ui.enable(false);
+     */
+    enable(enabled: boolean): this;
+    /**
+     * Show/Hide the action
+     * @param vis visibility ? false to hide
+     * @example
+     * $ui.getUIAction(ctn, obj, "MyObjSendOrder")?.ui.visible(false);
+     */
+    visible(vis: boolean): this;
+}
+
+/**
+ * Area with its UI component always set (see $view.getArea).
+ * Only a type: `ui` is set by `getArea`, the other members when the area is rendered.
+ * @example
+ * const x: UIObjectArea | undefined = $ui.getUIArea(ctn, obj, "MyObjDelivery");
+ * x?.ui.visible(false);
+ * const el = x?.div;
+ */
+interface UIObjectArea extends Area {
+    /** UI area component */
+    ui: UIArea;
+    /** Rendered container of the area (`.area-body`) */
+    div?: Container;
+    /** DOM ID of the area title `<th>` in a list with area titles, for the `headers` attribute of the cells (WCAG) */
+    _areaId?: string;
+}
+
+/** Parameters of an area rendering */
+interface AreaParam {
+    /** To parse the area definition on display */
+    parse?: boolean;
+    /** Read only area, or only editable cells */
+    readonly?: boolean | "editcell";
+    /** Null = no actions, undefined = from metadata */
+    formActions?: Action[] | null;
+    /** Null = no actions, undefined = from metadata */
+    plusActions?: Action[] | null;
+    /** In a workflow */
+    workflow?: boolean;
+    /** Show extended fields */
+    isExtended?: boolean;
+    /** Index to identify fields by row */
+    index?: string;
+    /** Area in a tab */
+    tabNum?: number;
+    /** Current active tabs */
+    formTab?: KeyObject;
+    /** Optional final save on ENTER */
+    saveBtn?: JQuery;
+    /** Area in form */
+    showViews?: ShowViewsMode;
+    /** Count of visible views */
+    visView?: number;
+    /** In a search area */
+    search?: boolean;
+    /** Readonly filters */
+    fixedFilters?: KeyObject;
+    /** Promises to wait before the end of rendering (see `$ui.addPromise`) */
+    promises?: Promise<unknown>[];
+}
+declare class UIArea extends UIComponent<UIObjectArea, AreaParam> {
+    /** Business object */
+    obj: UIBusinessObject;
+    /** Area body */
+    body: Container;
+    /** Tabs container */
+    tabs?: Container;
+    /** Current tab */
+    tab?: Container;
+    constructor(ctn: Container, obj: UIBusinessObject, area: Area);
+    /**
+     * Show/Hide the area
+     * @param vis visibility ? false to hide
+     * @param slide optional slide effect
+     * @example
+     * $ui.getUIArea(ctn, obj, "MyObjDelivery")?.ui.visible(false, true);
+     */
+    visible(vis: boolean, slide?: boolean): this;
+    /**
+     * Render the area
+     * @param options
+     * @param options.parse
+     */
+    render(options?: AreaParam): JQuery;
+    /**
+     * Display a template with components substitution
+     * @param d The container to fill
+     * @param template Optional template to re-apply
+     * @param options Form options
+     * @param options.parse Parse the full template
+     * @param options.readonly true to insert readonly fields, or "editcell" to edit only editbale fields by cell
+     * @param options.formActions Main actions
+     * @param options.plusActions Extended actions
+     * @param options.isExtended Extended form?
+     * @param options.search in a search area?
+     * @param options.formTab Selected tabs index
+     * @param options.saveBtn Optional Save button after last ENTER
+     */
+    display(d: Container, template: string | JQuery | null, options?: AreaParam): void;
+    /**
+     * Build a field
+     */
+    field(f: ObjectField, disp: FieldDisplay, p: AreaParam): string | JQuery<HTMLElement>;
+    /**
+     * Build a field with ENTER handler
+     */
+    static formField(ctn: Container, obj: UIBusinessObject, f: ObjectField, disp: FieldDisplay, p?: {
+        readonly?: boolean | string;
+        index?: string;
+        saveBtn?: JQuery;
+        promises?: Promise<unknown>[];
+    }): string | JQuery<HTMLElement>;
+    /**
+     * Show/hide tabs/panels containing something visible
+     * @param slide Slide effect?
+     * @example
+     * // Hide the tabs without any visible area
+     * $ui.getUIArea(ctn, obj, "MyObjDelivery")?.ui.visibleAreas();
+     */
+    visibleAreas(slide?: boolean): void;
+    /**
+     * Show/hide a view and parent panels
+     * @param el target element
+     * @param view optional view
+     * @param vis show or hide
+     * @param slide slide effect?
+     */
+    visibleView(el: HTMLElement, view?: UIObjectView, vis?: boolean, slide?: boolean): void;
+    /**
+     * Object Views and Links
+     * @param div append links to the container
+     * @param p form context
+     */
+    displayViews(div: JQuery, p: AreaParam): void;
+    /**
+     * Display a link or view related to object
+     * @param div container to fill
+     * @param v view metadata
+     * @param l or 0,n link
+     * @param p optional form context to add a promise
+     */
+    displayLink(div: JQuery, v: UIObjectView, l?: Link | null, p?: AreaParam): void;
+    /**
+     * Add a counter in the tab label
+     */
+    countRef(v: UIObjectView, div: JQuery, list?: BusinessObject): void;
+}
+
+/**
+ * UI Field Boolean
+ */
+declare class UIFieldBoolean extends UIField {
+    /**
+     * Get all inputs related to field
+     * @param checked search only checked input ?
+     * @returns field UI elements (input, select...)
+     */
+    find(checked: boolean): JQuery;
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Draw the UI input
+     */
+    drawInput(): JQuery;
+    /**
+     * Draw the search field
+     * @param filter Filter
+     * @param options Options
+     * @param options.searchby Search by field of list header
+     * @param options.search Search handler
+     * @param options.readonly Read-only search (fixed filter)
+     */
+    drawSearch(filter: string, options?: DrawSearchOptions): JQuery;
+}
+
+/**
+ * UI Field color
+ * - draw a preview area and a color picker based on spectrum
+ * - trigger event 'ui.preview.color' on input field to preview the color
+ */
+declare class UIFieldColor extends UIField {
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+}
+
+/**
+ * UI Field Date time
+ */
+declare class UIFieldDateTime extends UIField {
+    /**
+     * Init field components (with flatpickr as date picker)
+     */
+    init(p?: FormParam | ListParam): this;
+    /**
+     * Get the flatpickr instance
+     */
+    getDatePicker(): Instance;
+    /**
+     * Destroy the flatpickr instance
+     */
+    destroy(p?: FormParam | ListParam): this;
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+    /**
+     * Render the search field (with datetime picker)
+     * @param filter Filter
+     * @param options Options
+     * @param options.searchby Search by field of list header
+     * @param options.search search handler
+     */
+    renderSearch(filter: string, options?: {
+        searchby?: boolean;
+        search?: Callback;
+    }): JQuery;
+    /**
+     * A11Y: append the typed format hint below a search element and describe its input(s) with it
+     * @param el Search element
+     * @param inputs Inputs to describe (none = unchanged element)
+     * @param searchby Search by field of list header
+     * @returns The element wrapped with its hint
+     */
+    private searchHint;
+    /**
+     * Icon button of a date/time input.
+     * @param type Field type or icon name
+     * @param ariaLabel Accessible label
+     * @param click Handler on click
+     * @returns The button
+     */
+    static icon(type: number | string, ariaLabel: string, click: JQueryHandler): JQuery<HTMLElement>;
+    /**
+     * Convert a server side date 'YYYY-MM-DD HH:MI:SS' to Date
+     * @param v A date or datetime or null or a filter %
+     * @returns Date or undefined if not a date
+     */
+    toDate(v?: string | null): Date | undefined;
+    /**
+     * Manage change event to set min/maxDate
+     * @param ctn Container
+     * @param dp Date picker instance
+     * @param field Field name to bind onchange
+     * @param value Optional date value YYYY-MM-DD HH:MI:SS
+     * @param prop property minDate or maxDate to set to picker
+     * @param read readonly?
+     */
+    changeDate(ctn: Container, dp: Instance | undefined, field: string, value: string, prop: "minDate" | "maxDate", read: boolean): void;
+    /**
+     * Date picker parameters (based on flatpickr options)
+     */
+    dpParam(type: number, lang: string, df: string, rdg?: string, autoopen?: string | boolean): Options;
+    /**
+     * Get a datepicker input-group
+     * @param ctn optional container to append the picker (default is the input-group)
+     * @param options options
+     * @param options.input optional input element (create one if not specified)
+     * @param options.type $ui.TYPE_DATE (default) or $ui.TYPE_DATETIME or $ui.TYPE_TIME
+     * @param options.rendering optional field rendering
+     * @param options.autoopen true to open the picker on click
+     * @param options.clear true to add a clear button
+     * @returns input group with input and buttons
+     */
+    static datePicker(ctn: Container | null, options?: {
+        input?: JQuery;
+        type?: number;
+        rendering?: string;
+        autoopen?: boolean;
+        clear?: boolean;
+        label?: string;
+    }): JQuery<HTMLElement>;
+    /**
+     * Build datetime picker parameters (based on flatpickr options)
+     */
+    static datePickerParam(type: number, lang: string, dateformat: string, rdg?: string, autoopen?: string | boolean): Options;
+    /**
+     * Human-readable input format hint for typed date entry:
+     * a fixed sample formatted with the field's own display formatter (same as draw()),
+     * so the hint always matches the user date format and the field rendering (Y|M|D|H|I|S)
+     */
+    private formatHint;
+}
+
+/**
+ * UI Field Date
+ */
+declare class UIFieldDate extends UIFieldDateTime {
+}
+
+/**
+ * UI Field Time
+ */
+declare class UIFieldTime extends UIFieldDateTime {
+}
+
+/**
+ * UI Field Document
+ */
+declare class UIFieldDocument extends UIField {
+    /**
+     * Get all inputs related to field
+     * @returns field UI elements (input, select...)
+     */
+    find(_checked: boolean): JQuery;
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Draw the UI controls
+     */
+    draw(p?: FieldParam): JQuery;
+}
+
+/**
+ * UI Field Image
+ */
+declare class UIFieldImage extends UIFieldDocument {
+}
+
+/**
+ * UI Field Integer
+ */
+declare class UIFieldInt extends UIField {
+    /**
+     * Get all inputs related to field
+     * @param checked search only checked radio in case of stars rendering ?
+     * @returns field UI elements (input, select...)
+     */
+    find(checked: boolean): JQuery;
+    /**
+     * Init field components
+     */
+    init(p?: FormParam | ListParam): this;
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery<HTMLElement>;
+    /**
+     * Unit addon as real text, linked to the input
+     * @param inp Input
+     * @param rdg Rendering
+     * @param unit Unit text
+     */
+    private unitAddon;
+    /**
+     * Draw the search field
+     * @param filter Filter
+     * @param options Options
+     * @param options.searchby Search by field of list header
+     * @param options.search Search handler
+     * @param options.readonly Read-only search (fixed filter)
+     */
+    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
+}
+
+/**
+ * UI Field Float
+ */
+declare class UIFieldFloat extends UIFieldInt {
+}
+
+/**
+ * UI Field Big decimal
+ */
+declare class UIFieldBigDecimal extends UIFieldInt {
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Init field components
+     */
+    init(): this;
+}
+
+/**
+ * UI Field email
+ */
+declare class UIFieldEmail extends UIField {
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+}
+
+/**
+ * UI Field Enum
+ */
+declare class UIFieldEnum extends UIField {
+    /**
+     * Get all inputs related to field
+     * @param checked search only checked input ?
+     * @returns field UI elements (input, select...)
+     */
+    find(checked?: boolean): JQuery;
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Load and redraw the list of values
+     * @param lov List of values name
+     * @param cbk Optional callback(response)
+     */
+    setList(lov: string, cbk: (r: KeyObject) => void): this;
+    /**
+     * Init field components
+     */
+    init(p?: FormParam | ListParam): this;
+    /**
+     * Destroy field components
+     */
+    destroy(p?: FormParam | ListParam): this;
+    /**
+     * Transform radios/checks into columns
+     * @param inp Input
+     * @param n number of columns
+     * @param vertical vertical?
+     */
+    cols(inp: JQuery, n: number, vertical: boolean): void;
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+    /**
+     * Draw the search field (enum and enum-multi)
+     * @param filter Filter codes to display: array of codes or separated by ';' or expression "is null", "is not null", "in ('a','b') or is null"
+     * @param options Options
+     * @param options.searchby Search by field of list header
+     * @param options.search Search handler
+     * @param options.readonly Read-only search (fixed filter)
+     */
+    drawSearch(filter?: string | string[], options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
+    /**
+     * Render the value with item icon / colored tag
+     * @param v field value (enum code)
+     * @param item optional item on list / with icon, tag, color, bgcolor, hideLabel (default use definition of field)
+     * @returns div.enum
+     */
+    renderValue(v: FieldValue, item?: EnumItem): string | JQuery;
+}
+
+/**
+ * UI Field Enum multiple
+ */
+declare class UIFieldEnumMulti extends UIFieldEnum {
+    /**
+     * Get all inputs related to field
+     * @param checked search only checked input ?
+     * @returns field UI elements (input, select...)
+     */
+    find(checked?: boolean): JQuery;
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (Array of codes, or separated with ';')
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Init field components
+     */
+    init(p?: FormParam | ListParam): this;
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+    /**
+     * Add event handlers for select/unselect all functionality
+     * @param inp input element
+     * @param rdg rendering mode
+     */
+    addSelectAllHandlers(inp: JQuery, rdg?: string): void;
+    /**
+     * Render the value with item icon / colored tag
+     * @param v field values (enum codes)
+     * @returns ul.enum
+     */
+    renderValue(v: FieldValue): string | JQuery;
+}
+
+/**
+ * UI Field geo coords
+ */
+declare class UIFieldGeoCoords extends UIField {
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+    /**
+     * Helper to pick the coordinates of the search filter on a map
+     * @param f object field
+     * @param input search input to assist
+     */
+    searchHelper(f: ObjectField, input: JQuery): void;
+}
+
+/**
+ * UI Field HTML
+ */
+declare class UIFieldHtml extends UIField {
+    constructor(ctn: Container, obj: UIBusinessObject | null, f: ObjectField, index?: string);
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Init field components
+     * @param p context parameters of the form or the list
+     */
+    init(p?: FormParam | ListParam): this;
+    /**
+     * Destroy field components
+     */
+    destroy(p?: FormParam | ListParam): this;
+    /**
+     * Draw the UI controls
+     */
+    drawInput(): JQuery;
+}
+
+/**
+ * UI Field ID
+ */
+declare class UIFieldId extends UIField {
+    /**
+     * Draw the search field
+     * @param filter Filter
+     */
+    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
+}
+
+/**
+ * UI Field Long string
+ */
+declare class UIFieldLongString extends UIField {
+    /** Markdown on form: preview, data textarea and inline Ace editor when opened */
+    private md?;
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Init field components (ace or grid)
+     * @param p context parameters of the form or the list
+     */
+    init(p?: FormParam | ListParam): this;
+    /**
+     * Destroy field components (ace editor)
+     */
+    destroy(p?: FormParam | ListParam): this;
+    /**
+     * Common Ace editor settings
+     * @param ed Ace editor
+     * @param ctn Editor container
+     * @param mode Ace mode (ex: markdown)
+     * @param readonly Read-only editor
+     */
+    private setupAce;
+    /**
+     * Render the Markdown preview
+     * @param view Preview container
+     * @param v Markdown text
+     * @param h Height in rem (0 = auto)
+     */
+    private renderMarkdown;
+    /**
+     * Preview becomes editable: click or Enter/F2 opens the inline Ace editor
+     * @param view Preview container
+     * @param inp Field input container
+     */
+    private bindInline;
+    /**
+     * Replace the preview by an Ace editor in markdown mode
+     */
+    private startInline;
+    /**
+     * Back to the preview with the current value
+     * @param focus Set the focus on preview
+     */
+    private stopInline;
+    /**
+     * Destroy the inline editor
+     * @param md Markdown state
+     */
+    private closeInline;
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+}
+
+/**
+ * UI Field Notepad
+ */
+declare class UIFieldNotepad extends UIField {
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value (service syntax)
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Init field components
+     */
+    init(p?: FormParam | ListParam): this;
+    /**
+     * Draw the UI input
+     */
+    drawInput(): JQuery;
+}
+
+/**
+ * UI Field Meta-object
+ */
+declare class UIFieldObject extends UIField {
+    /**
+     * Get the UI value converted to service
+     * @returns the service value
+     */
+    val(): FieldValue | undefined;
+    /**
+     * Set a service value to UI and to the field of object
+     * @param v Value "object:row_id" or \{ object, row_id, optional parent \}
+     * @returns itself
+     */
+    val(v: FieldValue): this;
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+    /**
+     * Draw the search field
+     * @param filter Filter
+     * @param options Options
+     * @param options.searchby Search by field of list header
+     * @param options.search Search handler
+     * @param options.readonly Read-only search (fixed filter)
+     */
+    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
+}
+
+/**
+ * UI Field phone num
+ */
+declare class UIFieldPhoneNum extends UIField {
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+}
+
+/**
+ * UI Field regexp
+ */
+declare class UIFieldRegexp extends UIField {
+}
+
+/**
+ * UI Field URL
+ */
+declare class UIFieldUrl extends UIField {
+    /**
+     * Draw the UI controls
+     */
+    draw(): JQuery;
+}
+
+/**
+ * Simplicite Ajax session / model layer, with the legacy static constants (Simplicite.Ajax.CONTEXT_CREATE...)
+ */
+declare const Ajax: typeof Session & typeof AppConstants & AjaxNamespace;
+/**
+ * Classes of the `Simplicite.UI.View` namespace (typed by UIViewNamespace, see namespaces.ts)
+ * @hidden
+ */
+declare const ViewClasses: {
+    /** `Simplicite.UI.View.Bootstrap5`: alias of the `Bootstrap5` class */
+    Bootstrap5: typeof Bootstrap5;
+    /** `Simplicite.UI.View.Main`: alias of the `UIViewer` class */
+    Main: typeof UIViewer;
+    /** `Simplicite.UI.View.Widget`: alias of the `Widget` class */
+    Widget: typeof Widget;
+    /** `Simplicite.UI.View.Addons`: alias of the `AddonBar` class */
+    Addons: typeof AddonBar;
+    /** `Simplicite.UI.View.Menu`: alias of the `Menu` class */
+    Menu: typeof Menu;
+    /** `Simplicite.UI.View.Board`: alias of the `Board` class */
+    Board: typeof Board;
+    /** `Simplicite.UI.View.List`: alias of the `List` class */
+    List: typeof List;
+    /** `Simplicite.UI.View.Form`: alias of the `Form` class */
+    Form: typeof Form;
+    /** `Simplicite.UI.View.Search`: alias of the `Search` class */
+    Search: typeof Search;
+    /** `Simplicite.UI.View.Update`: alias of the `Update` class */
+    Update: typeof Update;
+    /** `Simplicite.UI.View.Social`: alias of the `Social` class */
+    Social: typeof Social;
+    /** `Simplicite.UI.View.Color`: alias of the `UIColor` class */
+    Color: typeof UIColor;
+    /** `Simplicite.UI.View.ColorPicker`: alias of the `ColorPicker` class */
+    ColorPicker: typeof ColorPicker;
+    /** `Simplicite.UI.View.Crosstab`: alias of the `Crosstab` class */
+    Crosstab: typeof Crosstab;
+    /** `Simplicite.UI.View.External`: alias of the `External` class */
+    External: typeof External;
+    /** `Simplicite.UI.View.Import`: alias of the `Import` class */
+    Import: typeof Import;
+    /** `Simplicite.UI.View.Merge`: alias of the `Merge` class */
+    Merge: typeof Merge;
+    /** `Simplicite.UI.View.Bam`: alias of the `Bam` class */
+    Bam: typeof Bam;
+    /** `Simplicite.UI.View.StatusMetrics`: alias of the `StatusMetrics` class */
+    StatusMetrics: typeof StatusMetrics;
+    /** `Simplicite.UI.View.ZIP`: alias of the `ZIP` class */
+    ZIP: typeof ZIP;
+    /** `Simplicite.UI.View.Tree`: alias of the `Tree` class */
+    Tree: typeof Tree;
+    /** `Simplicite.UI.View.Prefs`: alias of the `Prefs` class */
+    Prefs: typeof Prefs;
+    /** `Simplicite.UI.View.Timesheet`: alias of the `Timesheet` class */
+    Timesheet: typeof Timesheet;
+    /** `Simplicite.UI.View.IndexSearch`: alias of the `IndexSearch` class */
+    IndexSearch: typeof IndexSearch;
+    /** `Simplicite.UI.View.Tray`: alias of the `UITray` class */
+    Tray: typeof UITray;
+    /** `Simplicite.UI.View.Component`: alias of the `UIComponent` class */
+    Component: typeof UIComponent;
+    /** `Simplicite.UI.View.UIAction`: alias of the `UIAction` class */
+    UIAction: typeof UIAction;
+    /** `Simplicite.UI.View.UIArea`: alias of the `UIArea` class */
+    UIArea: typeof UIArea;
+    /** `Simplicite.UI.View.UIView`: alias of the `UIView` class */
+    UIView: typeof UIView;
+    /** `Simplicite.UI.View.UIField`: alias of the `UIField` class */
+    UIField: typeof UIField;
+    /** `Simplicite.UI.View.UIFieldBoolean`: alias of the `UIFieldBoolean` class */
+    UIFieldBoolean: typeof UIFieldBoolean;
+    /** `Simplicite.UI.View.UIFieldColor`: alias of the `UIFieldColor` class */
+    UIFieldColor: typeof UIFieldColor;
+    /** `Simplicite.UI.View.UIFieldDate`: alias of the `UIFieldDate` class */
+    UIFieldDate: typeof UIFieldDate;
+    /** `Simplicite.UI.View.UIFieldDateTime`: alias of the `UIFieldDateTime` class */
+    UIFieldDateTime: typeof UIFieldDateTime;
+    /** `Simplicite.UI.View.UIFieldTime`: alias of the `UIFieldTime` class */
+    UIFieldTime: typeof UIFieldTime;
+    /** `Simplicite.UI.View.UIFieldDocument`: alias of the `UIFieldDocument` class */
+    UIFieldDocument: typeof UIFieldDocument;
+    /** `Simplicite.UI.View.UIFieldImage`: alias of the `UIFieldImage` class */
+    UIFieldImage: typeof UIFieldImage;
+    /** `Simplicite.UI.View.UIFieldFloat`: alias of the `UIFieldFloat` class */
+    UIFieldFloat: typeof UIFieldFloat;
+    /** `Simplicite.UI.View.UIFieldInt`: alias of the `UIFieldInt` class */
+    UIFieldInt: typeof UIFieldInt;
+    /** `Simplicite.UI.View.UIFieldBigDecimal`: alias of the `UIFieldBigDecimal` class */
+    UIFieldBigDecimal: typeof UIFieldBigDecimal;
+    /** `Simplicite.UI.View.UIFieldEmail`: alias of the `UIFieldEmail` class */
+    UIFieldEmail: typeof UIFieldEmail;
+    /** `Simplicite.UI.View.UIFieldEnum`: alias of the `UIFieldEnum` class */
+    UIFieldEnum: typeof UIFieldEnum;
+    /** `Simplicite.UI.View.UIFieldEnumMulti`: alias of the `UIFieldEnumMulti` class */
+    UIFieldEnumMulti: typeof UIFieldEnumMulti;
+    /** `Simplicite.UI.View.UIFieldGeoCoords`: alias of the `UIFieldGeoCoords` class */
+    UIFieldGeoCoords: typeof UIFieldGeoCoords;
+    /** `Simplicite.UI.View.UIFieldHtml`: alias of the `UIFieldHtml` class */
+    UIFieldHtml: typeof UIFieldHtml;
+    /** `Simplicite.UI.View.UIFieldId`: alias of the `UIFieldId` class */
+    UIFieldId: typeof UIFieldId;
+    /** `Simplicite.UI.View.UIFieldLongString`: alias of the `UIFieldLongString` class */
+    UIFieldLongString: typeof UIFieldLongString;
+    /** `Simplicite.UI.View.UIFieldNotepad`: alias of the `UIFieldNotepad` class */
+    UIFieldNotepad: typeof UIFieldNotepad;
+    /** `Simplicite.UI.View.UIFieldObject`: alias of the `UIFieldObject` class */
+    UIFieldObject: typeof UIFieldObject;
+    /** `Simplicite.UI.View.UIFieldPhoneNum`: alias of the `UIFieldPhoneNum` class */
+    UIFieldPhoneNum: typeof UIFieldPhoneNum;
+    /** `Simplicite.UI.View.UIFieldRegexp`: alias of the `UIFieldRegexp` class */
+    UIFieldRegexp: typeof UIFieldRegexp;
+    /** `Simplicite.UI.View.UIFieldUrl`: alias of the `UIFieldUrl` class */
+    UIFieldUrl: typeof UIFieldUrl;
+};
+/**
+ * Simplicite UI / rendering classes
+ */
+declare const UI: {
+    /** `Simplicite.UI.Globals`: default UI options */
+    Globals: typeof Globals;
+    /** `Simplicite.UI.Engine`: alias of the `UIEngine` class */
+    Engine: typeof UIEngine;
+    /** `Simplicite.UI.Navigator`: alias of the `UINavigator` class */
+    Navigator: typeof UINavigator;
+    /** `Simplicite.UI.Util`: alias of the `UIUtil` class */
+    Util: typeof UIUtil;
+    /** `Simplicite.UI.Loader`: alias of the `UILoader` class */
+    Loader: typeof UILoader;
+    /** `Simplicite.UI.Factory`: alias of the `Factory` class */
+    Factory: typeof Factory;
+    /** `Simplicite.UI.BusinessObject`: alias of the `UIBusinessObject` class */
+    BusinessObject: typeof UIBusinessObject;
+    /** `Simplicite.UI.BusinessProcess`: alias of the `UIBusinessProcess` class */
+    BusinessProcess: typeof UIBusinessProcess;
+    /** `Simplicite.UI.ExternalObject`: alias of the `UIExternalObject` class */
+    ExternalObject: typeof UIExternalObject;
+    /** `Simplicite.UI.SyncQueue`: alias of the `SyncQueue` class */
+    SyncQueue: typeof SyncQueue;
+    /** `Simplicite.UI.Workflow`: alias of the `Workflow` class */
+    Workflow: typeof Workflow;
+    /** `Simplicite.UI.Calendar`: alias of the `Calendar` class */
+    Calendar: typeof UICalendar;
+    /** `Simplicite.UI.Firebase`: alias of the `Firebase` class */
+    Firebase: typeof Firebase;
+    /** `Simplicite.UI.WebPush`: alias of the `WebPush` class */
+    WebPush: typeof WebPush;
+    /** `Simplicite.UI.Tray`: alias of the `Tray` class */
+    Tray: typeof Tray;
+    /** `Simplicite.UI.OCR`: alias of the `OCR` class */
+    OCR: typeof OCR;
+    /** `Simplicite.UI.Map`: alias of the `Map` class */
+    Map: typeof UIMap;
+    /** `Simplicite.UI.Charts`: alias of the `Charts` class */
+    Charts: typeof Charts;
+    /** `Simplicite.UI.Guide`: alias of the `Guide` class */
+    Guide: typeof Guide;
+    /** `Simplicite.UI.Speech`: alias of the `Speech` class */
+    Speech: typeof Speech;
+    /** UI viewers, renderers and components (`Simplicite.UI.View`) */
+    View: UIViewNamespace;
+    /**
+     * Business object class definitions with front hooks
+     */
+    BusinessObjects: KeyBusinessObjectHook;
+    /**
+     * Object hooks: <code>Simplicite.UI.hooks['myObject'] = function(obj, cbk) \{\}</code>
+     */
+    hooks: KeyObjectHook;
+    /**
+     * External object class definitions with front hooks
+     */
+    ExternalObjects: KeyExternalObject;
+    /**
+     * Business process class definitions with front hooks
+     */
+    BusinessProcesses: KeyBusinessProcessHook;
+    /**
+     * Object contraints: <code>Simplicite.UI.constraints['myObject'] = function(ctn, obj, elt, index, context, cbk) \{\}</code>
+     */
+    constraints: KeyConstraint;
+    /**
+     * Predefined colors
+     */
+    CSSColors: CSSColors[];
+    /**
+     * Icons meta-data
+     */
+    icons: IconsMetadata;
+};
+
+/**
+ * Factory singleton
+ */
+declare const $factory: Factory;
+/**
+ * Console
+ */
+declare const $console: Console;
+/**
+ * UI main navigator
+ */
+declare const $nav: UINavigator;
+/**
+ * Global bootstrap tools
+ */
+declare const $tools: Bootstrap5;
+/**
+ * UI Viewer
+ */
+declare const $view: UIViewer;
+/**
+ * UI global singleton
+ */
+declare const $ui: UIEngine;
+/**
+ * Session singleton
+ */
+declare const $app: Session;
+/**
+ * Grant singleton
+ */
+declare const $grant: Grant;
+
+declare type Translate = (code: string, plural?: boolean) => string;
+declare global {
+    interface Window {
+        $factory: Factory;
+        $app: Session;
+        $grant: Grant;
+        $ui: UIEngine;
+        $view: UIViewer;
+        $tools: Bootstrap5;
+        $console: Console;
+        $root: string;
+        $nav: UINavigator;
+        $T: Translate;
+    }
+    var $root: string;
+    const $T: Translate;
+}
+
+/** Global `Simplicite` namespace */
+interface SimpliciteInterface {
+    /** Back-end constants */
+    Globals: BackendConstants;
+    /** Application: instance of session */
+    Application: Session;
+    /** Model classes: Session, Grant, BusinessObject, BusinessProcess... */
+    Ajax: typeof Ajax;
+    /** UI rendering classes */
+    UI: typeof UI;
+}
+declare global {
+    interface Window {
+        Simplicite: SimpliciteInterface;
+    }
+}
+
+/**
+ * API tester
+ * @class
+ */
+declare class APITester {
+    apiTestReady(): void;
+    apiTestCall(logout?: boolean): void;
+    apiTestData(): void;
+    apiMethod(): void;
+    apiOption(opt: string, b: number): void;
+    apiTestURL(): void;
+    apiTestFilter(): void;
+}
+
+/**
+ * Print preview / split large images
+ * @class
+ */
+declare class DiagramPrint {
+    desktop: DiagramDesktop;
+    image?: JQuery<HTMLImageElement>;
+    previewPart?: JQuery;
+    previewCanvas?: JQuery<HTMLCanvasElement>;
+    canvas?: HTMLCanvasElement;
+    popup?: JQuery;
+    selFormat?: JQuery;
+    selOrient?: JQuery;
+    inpZoom?: JQuery;
+    inpSlider?: JQuery;
+    zoom: number;
+    format: string;
+    landscape: boolean;
+    wPage?: number;
+    hPage?: number;
+    cols: number;
+    rows: number;
+    FORMAT: KeyObject;
+    MARGIN: number;
+    DPI: number;
+    WIDTH: number;
+    HEIGHT: number;
+    constructor(desktop: DiagramDesktop);
+    /**
+     * Open print dialog
+     * @funtion
+     */
+    open(): void;
+    private bar;
+    private readInput;
+    private setZoom;
+    private onePage;
+    private fitPage;
+    private doPreview;
+    private toPixels;
+    private pageSize;
+    private preview;
+    private doPrint;
+}
+
+type DiagramModelerTemplate = {
+    id?: string;
+    name?: string;
+    nodes?: {
+        [name: string]: DiagramNodeTemplate;
+    };
+    containers?: {
+        [name: string]: DiagramContainerTemplate;
+    };
+    links?: {
+        [name: string]: DiagramLinkTemplate;
+    };
+    canUseGrid?: boolean;
+    canUseTitle?: boolean;
+    canReverseLink?: boolean;
+    canUseContainer?: boolean;
+    canUseFreeContainer?: boolean;
+    canUseNote?: boolean;
+    canUseSprings?: boolean;
+    canAttachContainer?: boolean;
+    canUseTree?: boolean;
+    canUseShape?: boolean;
+    script?: string;
+    canInsertNode?: (template: DiagramNodeTemplate) => boolean;
+    canCreateNode?: (template: DiagramNodeTemplate) => boolean;
+    canRemoveNode?: (template: DiagramNodeTemplate) => boolean;
+    canDeleteNode?: (template: DiagramNodeTemplate) => boolean;
+    canFetchNode?: (template: DiagramNodeTemplate) => boolean;
+    canInsertContent?: (template: DiagramNodeContentTemplate) => boolean;
+    canCreateContent?: (template: DiagramNodeContentTemplate) => boolean;
+    canRemoveContainer?: (template: DiagramContainerTemplate) => boolean;
+    canDeleteLink?: (template: DiagramLinkTemplate) => boolean;
+    canAddLink?: (template: DiagramLinkTemplate) => boolean;
+    customDesktopMenu?: () => DesktopMenuItem[];
+    customNodeMenu?: (node: DiagramNode, item: DiagramNodeContentItem, pos: Point) => DesktopMenuItem[];
+    customLinkMenuAdd?: (from: DiagramNode, to: DiagramNode, palette: JQuery) => void;
+};
+/**
+ *
+ * Model controller between Model servlet and desktop/palette/events
+ * @class
+ */
+declare class DiagramModeler {
+    modelId: string;
+    template: DiagramModelerTemplate;
+    root: string;
+    baseURL: string;
+    hidden?: boolean;
+    topui: UIEngine;
+    engine: DiagramEngine;
+    container?: Container;
+    desktop?: DiagramDesktop;
+    springs?: DiagramSprings;
+    printer?: DiagramPrint;
+    saving: boolean;
+    constructor(modelId: string, engine: DiagramEngine);
+    private getObject;
+    /**
+     * Open a model
+     * @param {Object} ctn container
+     * @param {function} cbk optional callback(diagram)
+     * @param {Object} p options
+     * @param {boolean} p.sync synchronize all nodes with DB?
+     * @function
+     */
+    open(ctn: Container, cbk?: (diagram: DiagramModeler) => void, p?: ModelParam): void;
+    listener(): void;
+    onMessage(_: KeyObject): void;
+    /**
+     * Generic hook call if exists in template
+     * @param {string} hook hook name defined as a function in template
+     * @param {function} cbk optional callback (to be called at the end of hook)
+     * @param {Array} params optional parameters
+     * @function
+     */
+    hook(hook: string, cbk?: any, params?: any): any;
+    /**
+     * Save the model
+     * @param {function} cbk optional callback
+     * @param {boolean} silent no alert?
+     * @function
+     */
+    save(cbk?: (err?: string) => void, silent?: boolean): void;
+    /**
+     * Detach diagram from Parent/Popup window
+     * @param {boolean} dock true to dock on parent window
+     * @function
+     */
+    detach(dock: boolean): void;
+    /**
+     * Close the diagram
+     * @param {boolean} confirm confirm save when has changed, auto-save if false
+     * @function
+     */
+    close(confirm: boolean): void;
+    bindSaveAndQuit(ctn: JQuery): void;
+    /**
+     * Can close the modeler
+     * @param {boolean} confirm confirm save when has changed, auto-save if false
+     * @param {function} cbk callback if closeable
+     * @function
+     */
+    canClose(confirm?: boolean, cbk?: Callback): void;
+    /**
+     * Content has changed ?
+     * @param {boolean} b optional flag to set the value
+     * @function
+     */
+    hasChanged(b?: boolean): boolean;
+    /**
+     * Image dialog with SVG source
+     * @function
+     */
+    imageSVG(): void;
+    /**
+     * Print preview
+     * @function
+     */
+    print(): void;
+    /**
+     * Ajax call to retrieve node data
+     * @param {Object} n { object, id, template, keys }
+     * @param {function} cbk
+     * @function
+     */
+    getNodeData(n: {
+        object: string;
+        id: string;
+        template: string | KeyObject;
+        keys?: string | object;
+    }, cbk: (node?: DiagramNode | DiagramContainer) => void): void;
+    /**
+     * Insert nodes
+     * @param {Object} list Array of { object, id, template, x, y }
+     * @param {function} cbk Optional callback(nodes)
+     * @function
+     */
+    insertNodes(list: KeyObject, cbk?: (nodes: DiagramNode[]) => void): void;
+    /**
+     * Insert one node or a container
+     * @param {Object} item { object, id, template, x, y, keys, container? }
+     * @param {function} cbk Optional callback(node)
+     * @function
+     */
+    insertNode(item: {
+        object: string;
+        id: string;
+        template: string | DiagramNodeTemplate;
         x: number;
         y: number;
-        w: number;
-        h: number;
-    } | null;
+        keys?: string | object;
+        container?: boolean;
+    }, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
     /**
-     * Set/get position of container
-     * @param {number} x Horizontal coordinate
-     * @param {number} y Vertical coordinate
-     * @param {boolean} rel Relative?
+     * Reload element from DB
+     * @param {Simplicite.Diagram.Element} node node (or jquery node)
+     * @param {function} cbk optional callback
+     * @param {boolean} partial only get data without loading UI node
      * @function
-     * @memberof Simplicite.Diagram.Container
      */
-    position(x?: number, y?: number, rel?: boolean, cascad?: boolean): Point;
+    reloadNode(node: DiagramElement | JQuery, cbk?: (data?: DiagramNode | DiagramContainer) => void, partial?: boolean): void;
     /**
-     * Is container inside this container?
+     * Reload a container from DB
+     * @param {Simplicite.Diagram.Container} ct container (or jquery node)
+     * @param {function} cbk optional callback
      * @function
-     * @memberof Simplicite.Diagram.Container
      */
-    contains(cont: DiagramContainer): boolean;
+    reloadContainer(ct: DiagramContainer | JQuery, cbk?: Callback): void;
     /**
-     * Attach
+     * Reload all elements from DB
+     * @param {function} cbk optional callback
      * @function
-     * @memberof Simplicite.Diagram.Container
      */
-    attach(x?: DiagramNode | DiagramContainer | null, silent?: boolean, noResize?: boolean): void;
+    reload(cbk?: Callback): void;
     /**
-     * Detach
+     * Select objects and insert them on desktop
+     * @param {string} tpl node/container template
+     * @param {Point} pos position {x,y}
+     * @param {boolean} cont container ? or node
      * @function
-     * @memberof Simplicite.Diagram.Container
      */
-    detach(x?: DiagramNode | DiagramContainer, silent?: boolean): void;
+    selectObjects(tpl: DiagramNodeTemplate | DiagramContainerTemplate, pos?: Point, cont?: boolean): void;
+    /**
+     * Launch a node/container creation in UI
+     * @param {string} tpl node template
+     * @param {Poisition} pos position {x,y}
+     * @param {boolean} cont container ? or node
+     * @function
+     */
+    createNode(tpl: DiagramNodeTemplate, pos: Point, cont?: boolean): void;
+    /**
+     * Delete node from DB + UI
+     * @function
+     */
+    deleteNode(node: DiagramNode, silent?: boolean): void;
+    /**
+     * Delete link from DB + UI
+     * @function
+     */
+    deleteLink(link: DiagramLink, silent?: boolean): void;
+    /**
+     * Update fields thru Ajax
+     * @function
+     */
+    upd(obj: string, id: string, fields: {
+        field: string;
+        value: any;
+    }[], cbk?: Callback): void;
+    /**
+     * Delete object thru Ajax
+     * @function
+     */
+    del(obj: string, id: string, cbk?: Callback): void;
+    /**
+     * Call action on object form
+     * @function
+     */
+    forceUIAction(obj: string, id: string, action: string): void;
+    /**
+     * Select content to add in node
+     */
+    selectNodeContent(node: DiagramNode, c: DiagramNodeContentTemplate): void;
+    insertNodeContents(node: DiagramNode, items?: KeyObject[]): void;
+    insertNodeContent(node: DiagramNode, item: KeyObject, cbk?: Callback): void;
+    createContentLink(n: DiagramNode, t: DiagramNodeContentTemplate, id: string, cbk?: Callback): void;
+    addNodeContent(n: DiagramNode, c: DiagramNodeContentTemplate): void;
+    /**
+     * Fetch related nodes
+     * @param {Array} nodes arrays of nodes or data
+     * @param {function} cbk Optional callback(nodes)
+     * @function
+     */
+    fetchRelatedNodes(nodes?: DiagramNode[] | JQuery, cbk?: (inserted?: DiagramNode[]) => void): void;
+    /**
+     * Create a link between 2 nodes (or note to node)
+     * @function
+     */
+    createLink(from: DiagramNodus, to: DiagramNode, t?: DiagramLinkTemplate): JSVG | undefined;
+    /**
+     * Create a N,N link between 2 internal objects
+     * @function
+     */
+    createLinkMany2Many(from: DiagramNode, to: DiagramNode, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
+    /**
+     * Bind events to element
+     */
+    bind(el: any, b: {
+        mouseWheel?: JQueryHandler;
+        mouseDown?: JQueryHandler;
+        mouseMove?: JQueryHandler;
+        mouseUp?: JQueryHandler;
+        mouseOut?: JQueryHandler;
+        mouseOver?: JQueryHandler;
+        mouseLeave?: JQueryHandler;
+        contextMenu?: JQueryHandler;
+        click?: JQueryHandler;
+        dblClick?: JQueryHandler;
+    }): void;
+    /**
+     * Open target or related model form
+     * @param {Object} target optional <code>{ object, id }</code>
+     * @function
+     */
+    openForm(target?: {
+        object: string;
+        id: string;
+    } | JSVG): void;
+    /**
+     * Open workflow on top window
+     * @param {string} name workflow name
+     * @function
+     */
+    openWorkflow(name: string): void;
+    /**
+     * Load the template definition
+     * @function
+     */
+    loadTemplate(cbk?: Callback): void;
+    /**
+     * Load model
+     * @param {function} cbk post load function
+     * @function
+     */
+    loadModel(cbk: (model: string) => void): void;
+    /**
+     * Get SVG inlined styles
+     * @function
+     */
+    getStyles(): string | undefined;
+    /**
+     * Get model data
+     * @function
+     */
+    info(cbk: (data: DiagramCaption) => void): void;
+    /**
+     * Nodes self-placement with Springs layout
+     * @param {Object} data false to disable, or the $(svg) or the springs properties
+     * @function
+     */
+    layoutSprings(data: boolean | DiagramSpringsParam | JSVG): void;
 }
 
 type DiagramSpringsParam = {
@@ -4614,44 +11472,185 @@ declare class DiagramElement {
     unwrapText(el: JQuery): string;
 }
 
+type DiagramContainerTitleAnchor = "start" | "middle" | "end";
+type DiagramContainerStyle = {
+    radius?: number;
+    color?: string;
+    shadow?: boolean;
+    vertical?: boolean;
+    anchor?: DiagramContainerTitleAnchor;
+};
+type DiagramContainerTemplate = {
+    name?: string;
+    object?: string;
+    display?: string;
+    icon?: string;
+    contents?: DiagramNodeTemplate[];
+} & DiagramContainerStyle;
+type DiagramContainerDef = {
+    template?: string;
+    object?: string;
+    id?: string;
+    keys?: string;
+    x?: number;
+    y?: number;
+    w?: number;
+    h?: number;
+    type?: number;
+    title?: string;
+    label?: string;
+    pool?: number;
+    vertical?: boolean;
+    shadow?: boolean;
+    color?: string;
+    radius?: number;
+};
 /**
- * Caption constructor
+ * Container constructor
  * @param {Simplicite.Diagram.Desktop} desktop desk manager
- * @param {Object} data Model data and { x, y }
+ * @param {Object} data Container data { title, type, template, x, y, w, h... }
+ * @param {$} [elt] optional DOM object to synchronize
  * @class
  */
-declare class DiagramCaption extends DiagramElement {
-    padding: number;
+declare class DiagramContainer extends DiagramElement {
+    container?: DiagramContainer;
+    containers: DiagramContainer[];
+    nodes: DiagramNode[];
+    object: string;
+    id: string;
+    keys: KeyString;
+    TYPE: KeyNumber;
+    data?: KeyObject;
+    olddata?: KeyObject;
+    contents?: KeyObject[];
+    template: DiagramContainerTemplate;
+    type: number;
+    icon?: string;
+    label: string;
+    title: string;
+    radius: number;
+    shadow?: boolean;
+    color?: string;
+    vertical?: boolean;
+    anchor?: string;
     border?: JSVG;
+    head?: JSVG;
     t?: JSVG;
-    data: KeyObject;
-    constructor(desktop: DiagramDesktop, data: KeyObject);
+    sep?: JSVG;
+    pool: number;
+    poolMin: number;
+    padding: number;
+    margin: number;
+    canUseShadow: boolean;
+    canUseVertical: boolean;
+    constructor(desktop: DiagramDesktop, data: DiagramContainerDef | DiagramContainer, elt?: JQuery | JSVG);
     /**
-     * Draw caption within hook onDrawCaption(caption, display)
+     * Load
      * @function
-     * @memberOf Simplicite.Diagram.Caption
+     * @memberof Simplicite.Diagram.Container
+     */
+    load(data: DiagramContainer | null, cbk?: Callback): void;
+    /**
+     * Draw
+     * @function
+     * @memberof Simplicite.Diagram.Container
      */
     draw(): void;
     /**
-     * Display the default caption with model data
-     * @function
-     * @memberOf Simplicite.Diagram.Caption
-     */
-    display(): void;
-    /**
-     * Set/Get size of caption
+     * Set/Get size of container
      * @param {number} w Width
      * @param {number} h Height
      * @function
-     * @memberOf Simplicite.Diagram.Caption
+     * @memberof Simplicite.Diagram.Container
      */
     size(w?: number, h?: number): Size;
     /**
-     * Bind caption
+     * Size border
+     * @param {number} w Width
+     * @param {number} h Height
      * @function
-     * @memberOf Simplicite.Diagram.Caption
+     * @memberof Simplicite.Diagram.Container
+     */
+    sizeBorder(w: number, h: number): void;
+    /**
+     * Change the pool position if > 0
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    setPool(pos: number, silent?: boolean): void;
+    /**
+     * Re-align all pools
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    resizePool(): void;
+    /**
+     * Bind
+     * @function
+     * @memberof Simplicite.Diagram.Container
      */
     bind(el: JSVG): void;
+    /**
+     * Toggle menu
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    toggleMenu(): void;
+    /**
+     * Style
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    style(props?: DiagramContainerStyle, silent?: boolean): {
+        color: string | undefined;
+        radius: number;
+        shadow: boolean | undefined;
+        vertical: boolean | undefined;
+    };
+    /**
+     * Remove
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    remove(cascad?: boolean): void;
+    /**
+     * Bounded rectangle of all contents
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    contentBound(): {
+        x: number;
+        y: number;
+        w: number;
+        h: number;
+    } | null;
+    /**
+     * Set/get position of container
+     * @param {number} x Horizontal coordinate
+     * @param {number} y Vertical coordinate
+     * @param {boolean} rel Relative?
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    position(x?: number, y?: number, rel?: boolean, cascad?: boolean): Point;
+    /**
+     * Is container inside this container?
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    contains(cont: DiagramContainer): boolean;
+    /**
+     * Attach
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    attach(x?: DiagramNode | DiagramContainer | null, silent?: boolean, noResize?: boolean): void;
+    /**
+     * Detach
+     * @function
+     * @memberof Simplicite.Diagram.Container
+     */
+    detach(x?: DiagramNode | DiagramContainer, silent?: boolean): void;
 }
 
 type DiagramNoteData = {
@@ -5187,7634 +12186,43 @@ declare class DiagramDesktop {
 }
 
 /**
- * Print preview / split large images
+ * Caption constructor
+ * @param {Simplicite.Diagram.Desktop} desktop desk manager
+ * @param {Object} data Model data and { x, y }
  * @class
  */
-declare class DiagramPrint {
-    desktop: DiagramDesktop;
-    image?: JQuery<HTMLImageElement>;
-    previewPart?: JQuery;
-    previewCanvas?: JQuery<HTMLCanvasElement>;
-    canvas?: HTMLCanvasElement;
-    popup?: JQuery;
-    selFormat?: JQuery;
-    selOrient?: JQuery;
-    inpZoom?: JQuery;
-    inpSlider?: JQuery;
-    zoom: number;
-    format: string;
-    landscape: boolean;
-    wPage?: number;
-    hPage?: number;
-    cols: number;
-    rows: number;
-    FORMAT: KeyObject;
-    MARGIN: number;
-    DPI: number;
-    WIDTH: number;
-    HEIGHT: number;
-    constructor(desktop: DiagramDesktop);
-    /**
-     * Open print dialog
-     * @funtion
-     */
-    open(): void;
-    private bar;
-    private readInput;
-    private setZoom;
-    private onePage;
-    private fitPage;
-    private doPreview;
-    private toPixels;
-    private pageSize;
-    private preview;
-    private doPrint;
-}
-
-type DiagramModelerTemplate = {
-    id?: string;
-    name?: string;
-    nodes?: {
-        [name: string]: DiagramNodeTemplate;
-    };
-    containers?: {
-        [name: string]: DiagramContainerTemplate;
-    };
-    links?: {
-        [name: string]: DiagramLinkTemplate;
-    };
-    canUseGrid?: boolean;
-    canUseTitle?: boolean;
-    canReverseLink?: boolean;
-    canUseContainer?: boolean;
-    canUseFreeContainer?: boolean;
-    canUseNote?: boolean;
-    canUseSprings?: boolean;
-    canAttachContainer?: boolean;
-    canUseTree?: boolean;
-    canUseShape?: boolean;
-    script?: string;
-    canInsertNode?: (template: DiagramNodeTemplate) => boolean;
-    canCreateNode?: (template: DiagramNodeTemplate) => boolean;
-    canRemoveNode?: (template: DiagramNodeTemplate) => boolean;
-    canDeleteNode?: (template: DiagramNodeTemplate) => boolean;
-    canFetchNode?: (template: DiagramNodeTemplate) => boolean;
-    canInsertContent?: (template: DiagramNodeContentTemplate) => boolean;
-    canCreateContent?: (template: DiagramNodeContentTemplate) => boolean;
-    canRemoveContainer?: (template: DiagramContainerTemplate) => boolean;
-    canDeleteLink?: (template: DiagramLinkTemplate) => boolean;
-    canAddLink?: (template: DiagramLinkTemplate) => boolean;
-    customDesktopMenu?: () => DesktopMenuItem[];
-    customNodeMenu?: (node: DiagramNode, item: DiagramNodeContentItem, pos: Point) => DesktopMenuItem[];
-    customLinkMenuAdd?: (from: DiagramNode, to: DiagramNode, palette: JQuery) => void;
-};
-/**
- *
- * Model controller between Model servlet and desktop/palette/events
- * @class
- */
-declare class DiagramModeler {
-    modelId: string;
-    template: DiagramModelerTemplate;
-    root: string;
-    baseURL: string;
-    hidden?: boolean;
-    topui: UIEngine;
-    engine: DiagramEngine;
-    container?: Container;
-    desktop?: DiagramDesktop;
-    springs?: DiagramSprings;
-    printer?: DiagramPrint;
-    saving: boolean;
-    constructor(modelId: string, engine: DiagramEngine);
-    private getObject;
-    /**
-     * Open a model
-     * @param {Object} ctn container
-     * @param {function} cbk optional callback(diagram)
-     * @param {Object} p options
-     * @param {boolean} p.sync synchronize all nodes with DB?
-     * @function
-     */
-    open(ctn: Container, cbk?: (diagram: DiagramModeler) => void, p?: ModelParam): void;
-    listener(): void;
-    onMessage(_: KeyObject): void;
-    /**
-     * Generic hook call if exists in template
-     * @param {string} hook hook name defined as a function in template
-     * @param {function} cbk optional callback (to be called at the end of hook)
-     * @param {Array} params optional parameters
-     * @function
-     */
-    hook(hook: string, cbk?: any, params?: any): any;
-    /**
-     * Save the model
-     * @param {function} cbk optional callback
-     * @param {boolean} silent no alert?
-     * @function
-     */
-    save(cbk?: (err?: string) => void, silent?: boolean): void;
-    /**
-     * Detach diagram from Parent/Popup window
-     * @param {boolean} dock true to dock on parent window
-     * @function
-     */
-    detach(dock: boolean): void;
-    /**
-     * Close the diagram
-     * @param {boolean} confirm confirm save when has changed, auto-save if false
-     * @function
-     */
-    close(confirm: boolean): void;
-    bindSaveAndQuit(ctn: JQuery): void;
-    /**
-     * Can close the modeler
-     * @param {boolean} confirm confirm save when has changed, auto-save if false
-     * @param {function} cbk callback if closeable
-     * @function
-     */
-    canClose(confirm?: boolean, cbk?: Callback): void;
-    /**
-     * Content has changed ?
-     * @param {boolean} b optional flag to set the value
-     * @function
-     */
-    hasChanged(b?: boolean): boolean;
-    /**
-     * Image dialog with SVG source
-     * @function
-     */
-    imageSVG(): void;
-    /**
-     * Print preview
-     * @function
-     */
-    print(): void;
-    /**
-     * Ajax call to retrieve node data
-     * @param {Object} n { object, id, template, keys }
-     * @param {function} cbk
-     * @function
-     */
-    getNodeData(n: {
-        object: string;
-        id: string;
-        template: string | KeyObject;
-        keys?: string | object;
-    }, cbk: (node?: DiagramNode | DiagramContainer) => void): void;
-    /**
-     * Insert nodes
-     * @param {Object} list Array of { object, id, template, x, y }
-     * @param {function} cbk Optional callback(nodes)
-     * @function
-     */
-    insertNodes(list: KeyObject, cbk?: (nodes: DiagramNode[]) => void): void;
-    /**
-     * Insert one node or a container
-     * @param {Object} item { object, id, template, x, y, keys, container? }
-     * @param {function} cbk Optional callback(node)
-     * @function
-     */
-    insertNode(item: {
-        object: string;
-        id: string;
-        template: string | DiagramNodeTemplate;
-        x: number;
-        y: number;
-        keys?: string | object;
-        container?: boolean;
-    }, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
-    /**
-     * Reload element from DB
-     * @param {Simplicite.Diagram.Element} node node (or jquery node)
-     * @param {function} cbk optional callback
-     * @param {boolean} partial only get data without loading UI node
-     * @function
-     */
-    reloadNode(node: DiagramElement | JQuery, cbk?: (data?: DiagramNode | DiagramContainer) => void, partial?: boolean): void;
-    /**
-     * Reload a container from DB
-     * @param {Simplicite.Diagram.Container} ct container (or jquery node)
-     * @param {function} cbk optional callback
-     * @function
-     */
-    reloadContainer(ct: DiagramContainer | JQuery, cbk?: Callback): void;
-    /**
-     * Reload all elements from DB
-     * @param {function} cbk optional callback
-     * @function
-     */
-    reload(cbk?: Callback): void;
-    /**
-     * Select objects and insert them on desktop
-     * @param {string} tpl node/container template
-     * @param {Point} pos position {x,y}
-     * @param {boolean} cont container ? or node
-     * @function
-     */
-    selectObjects(tpl: DiagramNodeTemplate | DiagramContainerTemplate, pos?: Point, cont?: boolean): void;
-    /**
-     * Launch a node/container creation in UI
-     * @param {string} tpl node template
-     * @param {Poisition} pos position {x,y}
-     * @param {boolean} cont container ? or node
-     * @function
-     */
-    createNode(tpl: DiagramNodeTemplate, pos: Point, cont?: boolean): void;
-    /**
-     * Delete node from DB + UI
-     * @function
-     */
-    deleteNode(node: DiagramNode, silent?: boolean): void;
-    /**
-     * Delete link from DB + UI
-     * @function
-     */
-    deleteLink(link: DiagramLink, silent?: boolean): void;
-    /**
-     * Update fields thru Ajax
-     * @function
-     */
-    upd(obj: string, id: string, fields: {
-        field: string;
-        value: any;
-    }[], cbk?: Callback): void;
-    /**
-     * Delete object thru Ajax
-     * @function
-     */
-    del(obj: string, id: string, cbk?: Callback): void;
-    /**
-     * Call action on object form
-     * @function
-     */
-    forceUIAction(obj: string, id: string, action: string): void;
-    /**
-     * Select content to add in node
-     */
-    selectNodeContent(node: DiagramNode, c: DiagramNodeContentTemplate): void;
-    insertNodeContents(node: DiagramNode, items?: KeyObject[]): void;
-    insertNodeContent(node: DiagramNode, item: KeyObject, cbk?: Callback): void;
-    createContentLink(n: DiagramNode, t: DiagramNodeContentTemplate, id: string, cbk?: Callback): void;
-    addNodeContent(n: DiagramNode, c: DiagramNodeContentTemplate): void;
-    /**
-     * Fetch related nodes
-     * @param {Array} nodes arrays of nodes or data
-     * @param {function} cbk Optional callback(nodes)
-     * @function
-     */
-    fetchRelatedNodes(nodes?: DiagramNode[] | JQuery, cbk?: (inserted?: DiagramNode[]) => void): void;
-    /**
-     * Create a link between 2 nodes (or note to node)
-     * @function
-     */
-    createLink(from: DiagramNodus, to: DiagramNode, t?: DiagramLinkTemplate): JSVG | undefined;
-    /**
-     * Create a N,N link between 2 internal objects
-     * @function
-     */
-    createLinkMany2Many(from: DiagramNode, to: DiagramNode, cbk?: (node?: DiagramNode | DiagramContainer) => void): void;
-    /**
-     * Bind events to element
-     */
-    bind(el: any, b: {
-        mouseWheel?: JQueryHandler;
-        mouseDown?: JQueryHandler;
-        mouseMove?: JQueryHandler;
-        mouseUp?: JQueryHandler;
-        mouseOut?: JQueryHandler;
-        mouseOver?: JQueryHandler;
-        mouseLeave?: JQueryHandler;
-        contextMenu?: JQueryHandler;
-        click?: JQueryHandler;
-        dblClick?: JQueryHandler;
-    }): void;
-    /**
-     * Open target or related model form
-     * @param {Object} target optional <code>{ object, id }</code>
-     * @function
-     */
-    openForm(target?: {
-        object: string;
-        id: string;
-    } | JSVG): void;
-    /**
-     * Open workflow on top window
-     * @param {string} name workflow name
-     * @function
-     */
-    openWorkflow(name: string): void;
-    /**
-     * Load the template definition
-     * @function
-     */
-    loadTemplate(cbk?: Callback): void;
-    /**
-     * Load model
-     * @param {function} cbk post load function
-     * @function
-     */
-    loadModel(cbk: (model: string) => void): void;
-    /**
-     * Get SVG inlined styles
-     * @function
-     */
-    getStyles(): string | undefined;
-    /**
-     * Get model data
-     * @function
-     */
-    info(cbk: (data: DiagramCaption) => void): void;
-    /**
-     * Nodes self-placement with Springs layout
-     * @param {Object} data false to disable, or the $(svg) or the springs properties
-     * @function
-     */
-    layoutSprings(data: boolean | DiagramSpringsParam | JSVG): void;
-}
-
-type DiagramModelers = {
-    [modeId: string]: DiagramModeler;
-};
-type DiagramWindows = {
-    [modeId: string]: Window;
-};
-type ModelParam = {
-    docked?: boolean;
-    popup?: boolean;
-    hidden?: boolean;
-    sync?: boolean;
-    fetch?: boolean;
-    module?: string;
-    nodes?: DiagramNode[];
-};
-/**
- * Diagrams controller
- * @class
- */
-declare class DiagramEngine {
-    readonly models: DiagramModelers;
-    readonly windows: DiagramWindows;
-    /** SVG styles */
-    styles?: string;
-    constructor();
-    /**
-     * Open a SVG diagram
-     * @function
-     */
-    private openSVG;
-    /**
-     * Open a diagram
-     * @param {string} modelId model row ID
-     * @param {Object} options <code>\{ name, docked, hidden, sync \}</code>
-     * @param {function} cbk optional callback(model)
-     * @function
-     */
-    open(modelId: string, options?: ModelParam, cbk?: (model: DiagramModeler) => void): void;
-    /**
-     * Detach diagram from Parent/Popup window
-     * @param {string} modelId model row ID
-     * @param {boolean} dock true to dock diagram on parent window, false to open a new window
-     * @function
-     */
-    detach(modelId: string, dock: boolean): void;
-    /**
-     * Save a diagram
-     * @param {string} modelId model row ID
-     * @param {function} cbk optional callback
-     * @function
-     */
-    save(modelId: string, cbk?: Callback): void;
-    /**
-     * Close a diagram
-     * @param {string} modelId model row ID
-     * @param {boolean} confirm false to auto-save
-     * @function
-     */
-    close(modelId: string, confirm?: boolean): void;
-    /**
-     * Update models with incoming object
-     * @function
-     */
-    update(obj: string | BusinessObject, id: string, action: string): void;
-    /**
-     * Notify UI events (CRUD on objects)
-     * @function
-     */
-    notify(e: NotifyObject): void;
-    /**
-     * Helper to create a new SVG business model, user must have access to ModelTemplate (read) and Model (create).
-     * @param {string} template Model template name
-     * @param {string} name     Model name
-     * @param {Object} options  Model options
-     * @param {boolean} options.docked true to dock the model on the main page (default new window)
-     * @param {boolean} options.hidden true to hide the model in a silent mode
-     * @param {Array}   options.nodes  optional array of nodes to insert <code>\{ object, id, template, x, y \}</code>
-     * @param {boolean} options.fetch  true to fetch related nodes
-     * @param {boolean} options.module Optional module Id or name
-     * @param {function} cbk Callback(diagram)
-     * @function
-     */
-    create(template: string, name: string, options: ModelParam, cbk: (diagram: DiagramModeler) => void): void;
-    /**
-     * Models picker and creation
-     * @param {jQuery} ctn Container
-     * @param {Object} params options { embedded }
-     * @function
-     */
-    picker(ctn: Container, params?: KeyObject): void;
-}
-
-/** Data of the WebPush service */
-interface WebPushData {
-    /** VAPID public key of the server */
-    vapidKey?: string;
-}
-/**
- * WebPush controller
- */
-declare class WebPush {
-    /** URL of the service worker */
-    worker: string;
-    constructor();
-    /** WebPush service */
-    service(data?: WebPushData): void;
-    /** Init webpush connection */
-    init(data?: WebPushData): this;
-    /** request permission to use WebPush API */
-    requestPermission(reg: ServiceWorkerRegistration, data: WebPushData): void;
-    private check;
-    private urlB64ToUint8Array;
-}
-
-/** Recipients of a Firebase notification: lists of logins and groups, or 'all' users */
-type FirebaseRecipients = {
-    users?: string[];
-    groups?: string[];
-} | "all";
-/** Firebase message or notification (from FCM, the service worker or the native app) */
-interface FirebaseMessage {
-    /** Optional embedded message */
-    notification?: FirebaseMessage;
-    /** Message body */
-    body?: string;
-    /** Optional title */
-    title?: string;
-    /** Optional priority */
-    priority?: "high" | "normal" | "low";
-    /** Optional icon */
-    icon?: string;
-    /** Optional color */
-    color?: string;
-    /** Optional origin */
-    from?: string;
-    /** Tapped by the user in foreground or background */
-    tap?: "foreground" | "background";
-    /** Background message already displayed in the system tray */
-    _background?: boolean;
-    /** Optional object name to open (or in data) */
-    object?: string;
-    /** Optional object row ID to open (or in data) */
-    rowId?: string;
-    /** Optional pairs of key-value */
-    data?: KeyObject & {
-        /** Optional object name to open */
-        object?: string;
-        /** Optional object row ID to open */
-        rowId?: string;
-    };
-}
-/** Data of the Firebase service */
-type FirebaseServiceData = FirebaseMessage & {
-    /** Config to init the plugin (see FIREBASE_CONFIG) */
-    config?: KeyObject;
-    /** Key needed for the Firebase authentication */
-    vapidKey?: string;
-    /** Device token of the user to refresh */
-    token?: string;
-    /** Message to send */
-    message?: string;
-    /** Message recipients */
-    to?: FirebaseRecipients;
-};
-/**
- * Firebase controller
- */
-declare class Firebase {
-    worker: string;
-    messaging?: KeyObject;
-    constructor();
-    /**
-     * Firebase service wrapper
-     * @param data service data, see {@link FirebaseServiceData}
-     */
-    service(data?: FirebaseServiceData): void;
-    /**
-     * Init firebase connection
-     * @param config to init plugin (see FIREBASE_CONFIG)
-     * @param vapidKey needed for firebase authent
-     */
-    init(config: KeyObject, vapidKey?: string): this | undefined;
-    /**
-     * Display a message
-     * @param m message or notification
-     * @param m.notification optional embedded message
-     * @param m.body message body
-     * @param m.title optional title
-     * @param m.priority optional priority 'high' | 'normal' | 'low'
-     * @param m.data optional pairs of key-value
-     */
-    showMessage(m: FirebaseMessage): void;
-    /**
-     * Refresh a device token on server-side
-     * @param token new token for the user
-     */
-    refreshToken(token: string): void;
-    /**
-     * Request user permission to be notified
-     */
-    requestPermission(): void;
-}
-
-/** Options of the speech recognition */
-interface SpeechRecognitionParam {
-    /** Language (ex: FRA, ENU or fr-FR, en-GB...) */
-    lang?: string;
-    /** Continuous speaking (sentence)? */
-    continuous?: boolean;
-    /** Continuous speaking (no timeout after long silence)? */
-    autoRestart?: boolean;
-    /** Get interim results? */
-    interimResults?: boolean;
-    /** Max alternatives search */
-    maxAlternatives?: number;
-    /** First character uppercase in a sentence? */
-    firstCapital?: boolean;
-    /** Accept new line symbol? */
-    newLine?: boolean;
-    /** Optional handler when started */
-    onStart?: () => void;
-    /** Optional handler when ended */
-    onEnd?: () => void;
-    /** Optional handler on error */
-    onError?: (e: Event) => void;
-    /** Optional handler to override change event */
-    onChange?: () => void;
-    /** Optional console info */
-    debug?: boolean;
-}
-/** Options of the speech synthesis */
-interface SpeechSynthesisParam {
-    /** Preferred language FRA, ENU... */
-    lang?: string;
-    /** Optional voice name to force if exists */
-    voice?: string;
-    /** Service URI, default native */
-    uri?: string;
-    /** 0 to 1, default 1 */
-    volume?: number;
-    /** 0.1 to 10, default 1 */
-    rate?: number;
-    /** 0 to 2, default 1 */
-    pitch?: number;
-    /** Optional handler when started */
-    onStart?: () => void;
-    /** Optional handler when ended */
-    onEnd?: () => void;
-    /** Optional console info */
-    debug?: boolean;
-}
-/**
- * Web Speech API
- */
-declare class Speech {
-    CMD: KeyObject;
-    SpeechRecognition: any;
-    voice?: SpeechSynthesisVoice;
-    readonly VOICES: KeyObject;
-    constructor();
-    /**
-     * Get language ISO
-     * @param l language FRA, ENU...
-     * @returns ISO code (ex fr-FR)
-     */
-    langISO(l: string): string;
-    /**
-     * New SpeechRecognition if exists
-     */
-    createSpeechRecognition(): any;
-    /**
-     * Speech recognition
-     * @param el Element input or textarea
-     * @param options Options
-     * @param options.lang Language (ex: FRA, ENU or fr-FR, en-GB...)
-     * @param options.continuous Continuous speaking (sentence)?
-     * @param options.autoRestart Continuous speaking (no timeout after long silence)?
-     * @param options.interimResults Get interim results?
-     * @param options.maxAlternatives Max alternatives search
-     * @param options.firstCapital First character uppercase in a sentence?
-     * @param options.newLine Accept new line symbol?
-     * @param options.onStart Optional handler when started
-     * @param options.onEnd Optional handler when ended
-     * @param options.onError Optional handler on error
-     * @param options.onChange Optional handler to override change event
-     * @param options.debug Optional console info
-     */
-    recognition(el: JQuery, options?: SpeechRecognitionParam): void;
-    /**
-     * Get browser voices
-     * @param ss speechSynthesis
-     * @param cbk callback(voices)
-     */
-    getVoices(ss: SpeechSynthesis, cbk: (voices: SpeechSynthesisVoice[]) => void): void;
-    /**
-     * Find a voice matching language
-     * @param voices supported voices
-     * @param lang Language FRA, ENU...
-     * @param use Try to use this voice if supported
-     */
-    getVoice(voices: SpeechSynthesisVoice[], lang: string, use?: string): SpeechSynthesisVoice | undefined;
-    /**
-     * Speech synthesis (experimental)
-     * @param el Text or input or textarea
-     * @param options Options
-     * @param options.lang Preferred language FRA, ENU...
-     * @param options.voice Optional voice name to force if exists
-     * @param options.uri Service URI, default native
-     * @param options.volume 0 to 1, default 1
-     * @param options.rate 0.1 to 10, default 1
-     * @param options.pitch 0 to 2, default 1
-     * @param options.onStart Optional handler when started
-     * @param options.onEnd Optional handler when ended
-     * @param options.debug Optional console info
-     */
-    speak(el: JQuery, options?: SpeechSynthesisParam): void;
-    /**
-     * Start to speech
-     * @param msg - Message to read
-     */
-    speakStart(msg: SpeechSynthesisUtterance): void;
-    /**
-     * Stop current speech
-     */
-    speakStop(): void;
-}
-
-/** Server and client information sent with a feedback */
-interface FeedbackData {
-    /** Browser */
-    browser: {
-        /** User agent */
-        userAgent: string;
-    };
-    /** User */
-    user: {
-        /** Login */
-        login: string;
-        /** Language */
-        lang: string;
-        /** Email */
-        email?: string;
-        /** Responsibilities */
-        resp: string;
-    };
-    /** Application */
-    app: {
-        /** Name */
-        name: string;
-        /** Version */
-        version: string;
-    };
-    /** Platform */
-    platform: {
-        /** Name */
-        name: string;
-        /** Version */
-        version: string;
-        /** Build */
-        build: string;
-        /** Encoding */
-        encoding: string;
-    };
-    /** Server */
-    server: {
-        /** Vendor */
-        vendor: string;
-        /** Version */
-        version: string;
-        /** Database driver */
-        dbdriver: string;
-        /** Date */
-        date: string;
-    };
-    /** Java */
-    java: {
-        /** Vendor */
-        vendor: string;
-        /** Version */
-        version: string;
-    };
-    /** Operating system */
-    os: {
-        /** Name */
-        name: string;
-        /** Version */
-        version: string;
-        /** Architecture */
-        archi: string;
-    };
-}
-/** Feedback to send */
-interface FeedbackParam {
-    /** Email */
-    fbk_email: string;
-    /** Type: `Q` question, `R` change request, `D` defect, `F` fatal */
-    fbk_type: string;
-    /** Description */
-    fbk_desc: string;
-    /** Base64 screen image */
-    screen?: string;
-}
-/** Feedback dialog with an annotated screenshot */
-declare class Feedback {
-    /** Width of the screenshot */
-    readonly WIDTH = 1024;
-    private ctn?;
-    private dlg?;
-    private screen?;
-    /** Open the feedback */
-    open(): this;
-    /** When feedback popup is loaded */
-    ready(): this;
-    /** Close the popup */
-    close(): this;
-    /** Send data and close */
-    send(): this;
-    /** Hide/Show the screenshot */
-    hide(): this;
-    /** Crop a part of screen */
-    crop(): this;
-    /** Highlight a part of screen */
-    light(): this;
-    /** Mask a part of screen */
-    mask(): this;
-    /** Clear canvas */
-    reset(): this;
-    /** Toggle edit buttons */
-    toggle(id?: string): this;
-    /** Edit mode 1=crop, 2=highlight, 3=mask */
-    getMode(): 0 | 1 | 2 | 3;
-    /** Show/Hide edit buttons */
-    showEditButtons(vis: boolean): void;
-    /** Canvas management */
-    drawCanvas(screen?: string): this;
-    /**
-     * Build the content of the dialog.
-     * @returns The dialog content
-     */
-    getContent(): JQuery<HTMLElement>;
-}
-
-/** News item */
-interface News {
-    /** Row ID */
-    id?: string;
-    /** Row ID */
-    row_id?: string;
-    /** Title */
-    title?: string;
-    /** Title (field name) */
-    nws_title?: string;
-    /** Description */
-    description?: string;
-    /** Description (field name) */
-    nws_description?: string;
-    /** Image */
-    image?: DocumentDB;
-    /** Image (field name) */
-    nws_image?: DocumentDB;
-    /** Publication date */
-    date?: string;
-    /** Publication date (field name) */
-    nws_date?: string;
-}
-/**
- * Web news: popup on logon and footer ticker,
- * reloaded every 5 min without SSE when the tab is visible
- */
-declare class WebNews {
-    /** Ticker refresh timer */
-    private timer?;
-    /** Ticker has been started (and not stopped) */
-    private started;
-    /**
-     * Start the news when granted: popup on logon + footer ticker
-     */
-    start(): void;
-    /**
-     * Display the footer ticker and start the refresh timer without SSE
-     */
-    private startTicker;
-    /**
-     * Pause the ticker refresh (page hidden)
-     */
-    pause(): void;
-    /**
-     * Restart and refresh the ticker if it was started (page restored)
-     */
-    resume(): void;
-    /**
-     * Stop the ticker refresh
-     */
-    stop(): void;
-    /**
-     * SSE handler for incoming news
-     * @param n News
-     */
-    onNews(n: KeyObject): void;
-}
-
-/**
- * UI Component
- * @typeParam Def Type of the definition (metadata)
- * @typeParam RenderParam Type of the rendering options
- * @typeParam InitParam Type of the init/destroy context
- */
-declare class UIComponent<Def = unknown, RenderParam = unknown, InitParam = unknown> {
-    /** Component parent container */
-    ctn: Container;
-    /** Definition */
-    def: Def;
-    /** Event handlers */
-    handlers?: KeyHash<JQueryHandler[]>;
-    /** Component element */
-    element?: JQuery<HTMLElement>;
-    /** UI engine (`$ui`, backward compatibility V6) */
-    ui: UIEngine;
-    /** UI viewer (`$view`, backward compatibility V6) */
-    view: UIViewer;
-    /** Session (`$app`, backward compatibility V6) */
-    app: Session;
-    /** User grant (`$grant`, backward compatibility V6) */
-    grant: Grant;
-    /**
-     * Constructor
-     * @param ctn Component container
-     * @param def Component definition
-     */
-    constructor(ctn: Container, def: Def);
-    /**
-     * Add an event handler, bound by `rebind`.
-     * @param event Event name
-     * @param handler Handler
-     * @returns This component
-     */
-    addHandler(event: string, handler: JQueryHandler): this;
-    /**
-     * Remove an event handler.
-     * @param event Event name
-     * @param handler Handler to remove (all handlers of the event if undefined)
-     * @returns This component
-     */
-    removeHandler(event: string, handler: JQueryHandler): this;
-    /**
-     * Bind all the handlers on a target.
-     * @param target Target element
-     * @returns This component
-     */
-    rebind(target: HTMLElement | JQuery): this;
-    /**
-     * Bind UI event
-     * @param event event name (change, keydown...)
-     * @param handler related handler
-     */
-    on(event: string, handler: JQueryHandler): this;
-    /** compat alias */
-    bind(event: string, handler: JQueryHandler): this;
-    /**
-     * Unbind UI event
-     * @param event event name (change, keydown...)
-     * @param handler related handler
-     */
-    off(event: string, handler: JQueryHandler): this;
-    /** compat alias */
-    unbind(event: string, handler: JQueryHandler): this;
-    /**
-     * Bind 'change' event
-     * @param param change handler to set or change context to trigger (ex: from a 'populate')
-     */
-    change(param?: string | JQueryHandler): this;
-    /**
-     * Bind 'keyup' event
-     * @param handler related handler
-     */
-    keyup(handler?: JQueryHandler): this;
-    /**
-     * Bind 'focus' event
-     * @param handler related handler
-     */
-    focus(handler?: JQueryHandler): this;
-    /**
-     * Bind 'blur' event
-     * @param handler related handler
-     */
-    blur(handler?: JQueryHandler): this;
-    /**
-     * Init component when displayed on screen
-     * @param _options Context
-     */
-    init(_options?: InitParam): this;
-    /**
-     * Render the component
-     * @param _options Rendering options
-     * @returns element
-     */
-    render(_options?: RenderParam): JQuery;
-    /**
-     * Destroy component before closing
-     * @param _p Context
-     */
-    destroy(_p?: InitParam): this;
-}
-
-/** Action button associated to field input */
-type FieldAddon = JQuery | Addon;
-/** Rendering options and context of a field */
-interface FieldParam {
-    /** Display the label? */
-    showLabel?: boolean;
-    /** Display the help? */
-    showHelp?: boolean;
-    /** Context list? */
-    list?: boolean;
-    /** Context form */
-    form?: JQuery;
-    /** Current tabs on form */
-    formTab?: KeyObject;
-    /** Field of inlined link? */
-    inline?: boolean;
-    /** Optional parent object */
-    parent?: ParentObject;
-    /** Extended form? */
-    isExtended?: boolean;
-    /** Has more field flag */
-    hasMore?: boolean;
-    /** HTML input type (defaults to text) */
-    inputtype?: string;
-    /** HTML input mode */
-    inputmode?: string;
-    /** Buttons of the referenced fields (not used by the default rendering) */
-    refb?: KeyObject | null;
-    /** Promises to wait before the end of rendering (see `$ui.addPromise`) */
-    promises?: Promise<unknown>[];
-}
-/** Search input of a field */
-interface FieldSearch {
-    /** Prefix element */
-    prefix?: JQuery;
-    /** Input */
-    input: JQuery;
-    /** Action buttons */
-    addons?: FieldAddon[] | null;
-}
-/** Options of the field search input (see drawSearch) */
-interface DrawSearchOptions {
-    /** Search by field of list header */
-    searchby?: boolean;
-    /** Search handler (with the keyup event: search on Enter only) */
-    search?: (e?: JQuery.Event) => void;
-    /** Read-only search (fixed filter) */
-    readonly?: boolean;
-}
-/**
- * UI Field: common behavior for simple textual field.
- * Other types are inherited from this class to specialize the rendering.
- */
-declare class UIField extends UIComponent<ObjectField, FieldParam, FormParam | ListParam> {
-    /** Optional business object */
-    obj: UIBusinessObject | null;
-    /** Field definition */
-    field: ObjectField;
-    /** Same as field, backward compat */
-    def: ObjectField;
-    /**
-     * Input dom ID: incremental to be unique in page.
-     * ZZZ no more used by UI except in related <label for="id">
-     */
-    id: string;
-    /** Input name <field.name>[_id<index>], unique in container */
-    name: string;
-    /** Related edit-list rowId, action/extobj name... */
-    index?: string;
-    /** All controls (input/textarea/select) associated to the field rendering */
-    input: JQuery<HTMLElement>;
-    /** Same as input for 6.3 compat */
-    element: JQuery<HTMLElement>;
-    /** True=editable field, false=search field */
-    form?: boolean;
-    /** Input file of document */
-    file?: HTMLInputElement;
-    /**
-     * UI Field: common behavior for textual types
-     * @param ctn container
-     * @param obj Object
-     * @param field Field
-     * @param index optional edit list index = rowId, or inlined field foreignkey, or confirm action name
-     */
-    constructor(ctn: Container, obj: UIBusinessObject | null, field: ObjectField, index?: string);
-    /**
-     * Set the UI field index
-     * @param index optional field index: edit list rowId, action name, foreignkey of inlined field, external object...
-     */
-    setIndex(index?: string): void;
-    /**
-     * Get all controls related to field (inputs, select, textarea)
-     * - use the "name" because unique in the field container (form, list...)
-     * - no more based on unique "id" in page / incremental / non determinist
-     * @returns field UI elements
-     */
-    find(_checked?: boolean): JQuery;
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Apply a UI function to all referenced fields
-     * @param f field
-     * @param fn function to apply
-     * @param args function arguments
-     */
-    cascad(f: ObjectField, fn: string, ...args: unknown[]): void;
-    /**
-     * Show/Hide UI field
-     * @param vis visibility ?
-     * <ul>
-     * <li>true/false</li>
-     * <li>Simplicite.VIS_HIDDEN</li>
-     * <li>Simplicite.VIS_BOTH</li>
-     * <li>Simplicite.VIS_FORM</li>
-     * <li>Simplicite.VIS_LIST</li>
-     * </ul>
-     * @param slide true to add a slide effect
-     * @param context optional Simplicite.CONTEXT_*
-     */
-    visible(vis: boolean | number, slide?: boolean, context?: number, toRef?: boolean): this;
-    /**
-     * Enable/Disable UI field
-     * @param upd updatable ? true/false or Simplicite.UPD_READ_ONLY|ALWAYS|FORM_ONLY|LIST_ONLY
-     * <ul>
-     * <li>true/false</li>
-     * <li>Simplicite.UPD_READ_ONLY</li>
-     * <li>Simplicite.UPD_ALWAYS</li>
-     * <li>Simplicite.UPD_FORM_ONLY</li>
-     * <li>Simplicite.UPD_LIST_ONLY</li>
-     * </ul>
-     */
-    updatable(upd: boolean | number): this;
-    /**
-     * Set required UI field
-     * @param req is required ?
-     */
-    required(req: boolean): this;
-    /**
-     * Bind 'focus' event or set the focus on field
-     * @param handler optional handler
-     */
-    focus(handler?: JQueryHandler): this;
-    /**
-     * Read the form field into object field (async/file reading)
-     * @returns Promise
-     */
-    read(): Promise<FieldValue>;
-    /**
-     * Init field components when displayed on screen
-     * @param _p context parameters of the form or the list
-     */
-    init(_p?: FormParam | ListParam): this;
-    /**
-     * Display the field
-     * @param disp optional display 'full' (default = label+input+help) | 'label' | 'input' | 'preview' | 'value' | 'help' | 'image'
-     * @param p rendering options and context
-     * @returns Rendered control
-     */
-    display(disp?: null | FieldDisplay, p?: FieldParam): string | JQuery;
-    /**
-     * Render the value only
-     * @param v field value
-     * @returns rendered read-only value, default returns field.displayValue(v,true)
-     */
-    renderValue(v: FieldValue, _item?: EnumItem | null): string | JQuery;
-    /**
-     * Render the object field with label/help and styles
-     * @param options rendering options and context
-     * @param options.showLabel display the label?
-     * @param options.showHelp display the help?
-     * @param options.list context list?
-     * @param options.form context form?
-     * @param options.formTab current tabs on form
-     * @param options.inline field of inlined link?
-     * @param options.parent optional parent object
-     * @param options.isExtended extended form?
-     * @param options.hasMore has more field flag
-     * @returns Rendered control
-     */
-    render(options?: FieldParam): JQuery;
-    /**
-     * Draw the UI controls: input + addon buttons
-     * @param options Options
-     * @param options.inputtype HTML input type (defaults to text)
-     * @param options.inputmode HTML input mode
-     */
-    draw(options?: {
-        inputtype?: string;
-        inputmode?: string;
-    }): JQuery;
-    /**
-     * Draw the UI input only
-     * @param options Options
-     * @param options.inputtype HTML input type (defaults to text)
-     * @param options.inputmode HTML input mode
-     */
-    drawInput(options?: {
-        inputtype?: string;
-        inputmode?: string;
-    }): JQuery;
-    /**
-     * Build a form group with input and addon buttons (help, ref picker, datamap...)
-     * @param inp Input control
-     * @param addons Optional addons
-     * @param ext Optional extended controls to add beyond the form group
-     * @returns .field-container
-     */
-    drawGroup(inp: JQuery, addons?: FieldAddon[], ext?: JQuery[]): JQuery;
-    /**
-     * Redraw the UI field at same place and rebind events
-     */
-    redraw(): this;
-    /**
-     * Render the search field and addon buttons
-     * @param filter Filter value
-     * @param options Options
-     * @param options.search Search handler
-     * @param options.searchby Search by field of list header?
-     * @param options.searchbyfocus set the focus?
-     */
-    renderSearch(filter?: FieldFilter | null, options?: {
-        search?: Callback;
-        searchby?: boolean;
-        searchbyfocus?: boolean;
-    }): JQuery;
-    /**
-     * Draw the input of field search
-     * @returns Single input or complex <code>\{ prefix, input, addons \}</code> or array <code>[\{ prefix, input, addons \}...]</code>
-     */
-    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
-    /**
-     * Read the search form into object filters
-     * @param ctn container with .search-control
-     * @param o Object to set filters
-     * @param noRemove True to keep filter with default <code>'%'</code>
-     */
-    static readSearch(ctn: Container, o: BusinessObject, noRemove?: boolean): void;
-    /**
-     * Get the field case style
-     */
-    caseStyle(): string;
-    /**
-     * Reload and redraw all linked lists
-     * @param all get all linked values when field is empty (case of search)
-     */
-    linkedLists(all?: boolean): void;
-    /**
-     * Helper to assist common filter expression
-     * @param f object field
-     * @param input search input to assist
-     * @param type helper type 'number', 'string' or 'date'
-     * @param onOk optional callback(expression)
-     */
-    searchHelper(f: ObjectField, input: JQuery, type: string, onOk: (expr: string) => void): void;
-    /**
-     * Return a simple clipboard icon, copying the given value to clipboard
-     * @param ctn
-     * @param obj
-     * @param field
-     * @param index
-     * @param btn Optional button to complete
-     */
-    static buttonClipboard: (ctn: Container, obj: UIBusinessObject | null, field: ObjectField, index: string | undefined, btn?: JQuery) => JQuery<HTMLElement>;
-    /**
-     * Copy a value to the clipboard and show a toast.
-     * @param v Value to copy
-     */
-    static clipboard(v: unknown): void;
-    /**
-     * Bind a debounced listener that refreshes the value-dependent style on change
-     */
-    onStyleChange(): this;
-    /**
-     * Refresh the value-dependent field style by calling the back-end `getStyle`,
-     * swap the style class on the enclosing `.form-group`
-     * and fire a `ui.field.style` event so concerned elements (e.g. progress bar) can react.
-     * @param value Service value to evaluate the style for (defaults to the current UI value)
-     * @returns the resolved style
-     */
-    refreshStyle(value?: string): Promise<string>;
-}
-
-/** Button of a dialog */
-type DialogAction = Omit<Action, "name" | "callback"> & {
-    /** Action name is not mandatory */
-    name?: string;
-    /** Handler on click */
-    callback?: AlertCallback;
-    /** Alias for action "callback" */
-    click?: AlertCallback;
-};
-/** Parameters of a dialog (see `$tools.dialog`) */
-interface DialogParam {
-    /** Optional name */
-    name?: string;
-    /** Optional dialog title (rich content) */
-    title?: AnyContent;
-    /** Contextual help */
-    help?: AnyContent;
-    /** Optional type `error`, `danger`, `warning` or `info` */
-    type?: AlertType;
-    /** Dialog body */
-    content?: AnyContent;
-    /** Optional footer */
-    footer?: AnyContent;
-    /** True to add a close button in header */
-    closeable?: boolean;
-    /** True to focus the primary, success or first button (default true for ENTER key), or a selector element to focus */
-    focus?: boolean | string;
-    /** False to remove fade effect (default true) */
-    fade?: boolean;
-    /** True to disable click outside dialog and ESC keyboard button */
-    modal?: boolean;
-    /** Optional scrollable body (default true) */
-    scrollable?: boolean;
-    /** True to handle dialog move (handle = header), or a selector of the handle element */
-    moveable?: boolean | string;
-    /** True to create a new navigation in dialog */
-    nav?: boolean;
-    /** True to add scrollbars */
-    overflow?: boolean;
-    /** Optional width (ex: '600px' or '80%'), forced to 100% on XS device */
-    width?: string | number;
-    /** Optional fullscreen size */
-    fullscreen?: boolean;
-    /** Optional 'left' or 'right' slide with swipe event */
-    slide?: "right" | "left" | null;
-    /** Optional header actions */
-    buttonsHeader?: JQuery | DialogAction[] | null;
-    /** Optional footer actions */
-    buttons?: JQuery | DialogAction[] | null;
-    /** Optional callback when displayed */
-    onload?: JQueryHandler;
-    /** Optional callback when closing (use preventDefault to cancel) */
-    beforeunload?: JQueryHandler;
-    /** Optional callback when closed */
-    unload?: JQueryHandler;
-    /** Optional "don't ask again" callback */
-    dontAskAgain?: (action: string) => void;
-}
-/** Tab of a tabs component */
-interface Tab {
-    /** Tab title */
-    title?: string | JQuery;
-    /** Tooltip */
-    tooltip?: string;
-    /** Icon name */
-    icon?: string;
-    /** Tab content */
-    content?: AnyContent;
-    /** Hidden tab */
-    hidden?: boolean;
-    /** Handler when the tab is selected */
-    click?: JQueryHandler;
-    /** Handler when the tab is hidden */
-    hide?: JQueryHandler;
-    /** Tab key */
-    key?: string;
-    /** Tab data */
-    data?: KeyObject;
-}
-/** Parameters of a tabs component (see `$tools.tabs`) */
-interface Tabs {
-    /** Tabs ID */
-    id: string;
-    /** Tabs options */
-    tabs?: Tab[];
-    /** Selected tab index (default 0) */
-    selected?: number;
-    /** Tabs position `top` (default), `left`, `right` or `bottom` */
-    position?: Position;
-    /** Vertical tabs (same as position left) */
-    vertical?: boolean;
-    /** Underlined tab style */
-    underline?: boolean;
-    /** Optional class to add */
-    cls?: string;
-    /** Optional handler to allow drag */
-    ondrag?: (li: JQuery) => void;
-    /** Optional handler to allow drop, `cbk` confirms the move */
-    ondrop?: (move: {
-        li: JQuery;
-        from: number;
-        to: number;
-    }, cbk: (confirm: boolean) => void) => void;
-    /** Tabs in an overflow dropdown */
-    overflow?: {
-        /** Label of the overflow dropdown */
-        show: string;
-        /** Icon of the overflow dropdown */
-        icon?: string;
-    };
-}
-/** Item of a dropdown or an input addon */
-interface InputAddon extends Omit<Addon, "label" | "cbk"> {
-    /** Label */
-    label: string;
-    /** Reset item */
-    reset?: boolean;
-    /** Edit item */
-    edit?: boolean;
-    /** Handler on click */
-    cbk?: Callback;
-    /** Alias */
-    callback?: Callback;
-    /** Alias */
-    click?: Callback;
-}
-/** Item of a dropdown */
-type DropdownItem = InputAddon;
-/** Any addon: element, field addon or input addon */
-type AnyAddon = Container | FieldAddon | InputAddon;
-/** Parameters of a button (see `$tools.button`) */
-interface Button {
-    /** Button optional ID */
-    id?: string;
-    /** Button name */
-    name?: string;
-    /** Icon */
-    icon?: AnyContent | null;
-    /** Button label */
-    label?: AnyContent;
-    /** Optional screen reader only text */
-    sr?: string | null;
-    /** Optional tooltip */
-    tooltip?: string;
-    /** Optional size */
-    size?: ActionSize | null;
-    /** Optional level (ex: `primary`, `secondary`, `plus`) */
-    level?: ActionLevel;
-    /** Optional additional CSS class(es) */
-    style?: string;
-    /** Optional type (ex: `submit` default, `button`) */
-    type?: string;
-    /** Disabled button */
-    disabled?: boolean;
-    /** Handler on click */
-    click?: JQueryHandler;
-}
-/** Level of an alert */
-type AlertLevel = "help" | "info" | "success" | "warning" | "danger";
-/**
- * Bootstrap V5 Tools
- */
-declare class Bootstrap5 {
-    /** Bootstrap library, set when loaded */
-    bootstrap: typeof BootstrapLib;
-    /**
-     * Load bootstrap libs
-     */
-    load(cbk?: Callback): Promise<this>;
-    /**
-     * Home is displayed
-     */
-    ready(): this;
-    /**
-     * Bootstrap full version (e.g. <code>5.1.3</code>)
-     * @example
-     * $console.log("Bootstrap " + $tools.getVersion());
-     */
-    getVersion(): string;
-    /**
-     * Get UI template
-     */
-    getTemplate(d?: {
-        template?: string;
-    }): JQuery<HTMLElement>;
-    /**
-     * Init a container with bootstrap elements
-     * @param ctn form container
-     * @example
-     * // Init tooltips/popovers of a custom content
-     * const c: JQuery = $("<div/>").html('<span title="Hello" data-bs-toggle="tooltip">?</span>').appendTo(ctn);
-     * $tools.init(c);
-     */
-    init(ctn: Container): void;
-    /**
-     * Destroy bootstrap elements
-     * @param ctn form container
-     * @example
-     * $tools.destroy(c);
-     */
-    destroy(ctn: Container): void;
-    /**
-     * Simple checkbox or radio
-     * @param d Options
-     * @param d.id Input id
-     * @param d.name Input name
-     * @param d.value Hidden value
-     * @param d.label Label
-     * @param d.inline Inlined in form?
-     * @param d.disabled Disabled?
-     * @param d.readonly Readonly?
-     * @param d.checked Checked?
-     * @param d.change Optional handler
-     * @param d.type Type <code>'checkbox'</code> (default) or <code>'radio'</code>
-     * @example
-     * const cb: JQuery = $tools.check({
-     * 	id: "myAccept",
-     * 	name: "accept",
-     * 	label: "I accept the terms",
-     * 	change: function (this: HTMLElement) { $console.log($(this).prop("checked")); }
-     * });
-     * ctn.append(cb);
-     */
-    check(d: {
-        id?: string;
-        name?: string;
-        value?: string;
-        label?: AnyContent;
-        inline?: boolean;
-        disabled?: boolean;
-        readonly?: boolean;
-        checked?: boolean;
-        change?: JQueryHandler;
-        type?: "checkbox" | "radio";
-    }): JQuery<HTMLElement>;
-    /**
-     * Simple radio
-     * @param d Options
-     * @param d.id Input id
-     * @param d.name Input name
-     * @param d.value Hidden value
-     * @param d.label Label
-     * @param d.inline Inlined in form?
-     * @param d.disabled Disabled?
-     * @param d.readonly Readonly?
-     * @param d.checked Checked?
-     * @param d.change Optional handler
-     * @param d.type Forced to "radio"
-     * @example
-     * ctn.append(
-     * 	$tools.radio({ id: "sizeS", name: "size", value: "S", label: "Small", inline: true, checked: true }),
-     * 	$tools.radio({ id: "sizeL", name: "size", value: "L", label: "Large", inline: true })
-     * );
-     */
-    radio(d: {
-        id?: string;
-        name?: string;
-        value?: string;
-        label?: AnyContent;
-        inline?: boolean;
-        disabled?: boolean;
-        readonly?: boolean;
-        checked?: boolean;
-        change?: JQueryHandler;
-        type?: "radio";
-    }): JQuery<HTMLElement>;
-    /**
-     * Toogle checked class on an array of checkboxes/radio buttons's parent element
-     * @param elts Array of checkboxes/radio buttons
-     * @example
-     * $tools.toggleChecked($("input[name='size']", ctn));
-     */
-    toggleChecked(elts?: JQuery<HTMLInputElement>): void;
-    /**
-     * Get responsive image (.img-fluid)
-     * @param src Source
-     * @param onload optional callback
-     * @param onerror optional error callback
-     * @example
-     * ctn.append($tools.image($app.imageURL("MyObject", "myObjImage", rowId, docId), () => $console.log("loaded")));
-     */
-    image(src?: string, onload?: JQueryHandler, onerror?: JQueryHandler): JQuery<HTMLImageElement>;
-    /**
-     * Long description of an image (displayed in a11y mode only, see a11y.less)
-     * @param text optional description
-     * @param id optional id (to be referenced by the image aria-describedby)
-     */
-    imageLongDesc(text?: string, id?: string): JQuery;
-    /**
-     * Link search rendering (for N,N pillbox)
-     * @param ctn Search container
-     * @param o Business object
-     * @param link N,N link
-     * @param filter Current filter
-     * @param options Search options
-     * @param options.search Search handler
-     * @param options.searchby Search by field of list header
-     */
-    displayLinkSearch(ctn: Container, o: BusinessObject, link: Link, filter: string | null, options?: {
-        search?: () => void;
-        searchby?: boolean;
-    }): "" | JQuery<HTMLElement>;
-    /**
-     * Dialog box
-     * @param params String content or object
-     * @param params.name Optional name
-     * @param params.title Optional dialog title (rich content)
-     * @param params.help Contextual help
-     * @param params.type Optional <code>error|danger|warning|info</code>
-     * @param params.content Dialog body
-     * @param params.closeable True to add a close button in header
-     * @param params.focus True to focus the primary, success or first button (default true for ENTER key), or a selector element to focus
-     * @param params.fade False to remove fade effect (default true)
-     * @param params.modal True to disable click outside dialog and ESC keyboard button
-     * @param params.scrollable Optional scrollable body (default true)
-     * @param params.moveable True to handle dialog move (handle = header), or a selector of the handle element
-     * @param params.nav True to create a new navigation in dialog
-     * @param params.overflow True to add scrollbars
-     * @param params.width Optional width (ex: '600px' or '80%'), forced to 100% on XS device
-     * @param params.fullscreen Optional fullscreen size
-     * @param params.slide Optional 'left|right' with swipe event
-     * @param params.buttonsHeader Optional header actions
-     * @param params.buttons Optional footer actions [{ name, label, icon, style:'primary|secondary|success|info|danger', callback (or click), close:true|false, disabled:true|false }]
-     * @param params.footer Optional footer
-     * @param params.onload Optional callback when displayed
-     * @param params.beforeunload Optional callback when closing (use preventDefault to cancel)
-     * @param params.unload Optional callback when closed
-     * @param params.dontAskAgain Optional 'dont't ask again' callback
-     * @example
-     * const dlg = $tools.dialog({
-     * 	title: "My dialog",
-     * 	content: $("<div/>").text("Hello world !"),
-     * 	closeable: true,
-     * 	// each button closes the dialog by default (unless close: false)
-     * 	buttons: [{
-     * 		name: "OK",
-     * 		label: $T("OK"),
-     * 		style: "primary",
-     * 		close: false,
-     * 		callback: () => {
-     * 			$console.log("clicked");
-     * 			$tools.dialogClose(dlg); // explicitly close the dialog
-     * 		}
-     * 	}, {
-     * 		name: "CANCEL",
-     * 		label: $T("CANCEL"),
-     * 		style: "secondary"
-     * 	}]
-     * });
-     */
-    dialog(params: string | DialogParam): JQuery;
-    /**
-     * Find a visible dialog
-     * @param dlg optional dialog, name or "all", or returns the top level dialog if unset
-     * @example
-     * const dlg: JQuery = $tools.getDialog(); // top level dialog
-     */
-    getDialog(dlg?: string | JQuery): JQuery;
-    /**
-     * Is the dialog modal (no keyboard ESC and no close button) ?
-     * @param dlg optional name or top level dialog if unset
-     * @example
-     * if (!$tools.isDialogModal(dlg)) $tools.dialogClose(dlg);
-     */
-    isDialogModal(dlg: string | JQuery): boolean;
-    /**
-     * Close the dialog box
-     * @param dlg name or modal, undefined = close the top dialog if unset, "all" = close all
-     * @param cbk optional callback when dialog is closed
-     * @example
-     * // Close the top dialog, or all dialogs
-     * $tools.dialogClose();
-     * $tools.dialogClose("all", () => $console.log("closed"));
-     */
-    dialogClose(dlg?: string | JQuery, cbk?: JQueryHandler): JQuery<HTMLElement>;
-    /**
-     * Icon button
-     * @param p Optional parameters
-     * @param p.name Action name
-     * @param p.title Icon title
-     * @param p.icon Icon name (default <code>'star'</code>)
-     * @param p.click Handler on click or Enter
-     * @param p.right True to pull on right side
-     * @example
-     * ctn.append($tools.spanIcon({ name: "refresh", title: "Refresh", icon: "fas/sync", click: () => $view.reload() }));
-     */
-    spanIcon(p: {
-        name?: string;
-        title?: string;
-        icon?: string;
-        click?: JQueryHandler;
-        right?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
-     * Icon button
-     * @param p Optional parameters
-     * @param p.name Action name
-     * @param p.title Icon title
-     * @param p.icon Icon name (default <code>'star'</code>)
-     * @param p.click Handler on click or Enter
-     * @param p.right True to pull on right side
-     * @param p.cls Optional extra class name(s)
-     * @param p.label Optional accessible name if different from the title (e.g. feature name for a toggle whose title is the switch)
-     * @param p.pressed Optional toggle state (sets <code>aria-pressed</code>), to be updated with <code>buttonIconState</code>
-     * @example
-     * // Toggle button
-     * const b: JQuery = $tools.buttonIcon({
-     * 	name: "myFav",
-     * 	title: "Add to favorites",
-     * 	icon: "far/star",
-     * 	pressed: false,
-     * 	click: () => $tools.buttonIconState(b, { icon: "fas/star", pressed: true, title: "Remove from favorites" })
-     * });
-     * ctn.append(b);
-     */
-    buttonIcon(p: {
-        name?: string;
-        title?: string;
-        id?: string;
-        icon?: string;
-        click?: JQueryHandler;
-        right?: boolean;
-        cls?: string;
-        pressed?: boolean;
-        label?: string;
-    }): JQuery<HTMLElement>;
-    /**
-     * Update the state of a toggle button built with <code>buttonIcon</code>
-     * (icon = current state, <code>aria-pressed</code> = status, title = next switch)
-     * @param b Button
-     * @param s New state
-     * @param s.icon New icon (current state)
-     * @param s.pressed New status
-     * @param s.title New title
-     * @example
-     * $tools.buttonIconState(b, { icon: "fas/star", pressed: true, title: "Remove from favorites" });
-     */
-    buttonIconState(b: JQuery, s: {
-        icon?: string;
-        pressed?: boolean;
-        title?: string;
-    }): JQuery<HTMLElement>;
-    /**
-     * Icon button
-     * @param p Optional parameters
-     * @param p.name Action name
-     * @param p.title Title as HTML tooltip
-     * @param p.subtitle Optional Subtitle
-     * @param p.placement Tooltip placement (default <code>'bottom'</code>)
-     * @param p.icon Icon name
-     * @param p.disabled Icon disabled?
-     * @param p.size Optional size (e.g. <code>'xs'</code>, <code>'sm'</code>, <code>'lg'</code>)
-     * @param p.click Handler
-     * @example
-     * ctn.append($tools.actionIcon({
-     * 	name: "myExport",
-     * 	title: "Export",
-     * 	subtitle: "CSV format",
-     * 	icon: "fas/download",
-     * 	click: () => $ui.displayExport(null, obj)
-     * }));
-     */
-    actionIcon(p: {
-        name?: string;
-        title?: AnyContent;
-        subtitle?: string | null;
-        placement?: Position;
-        icon?: AnyContent;
-        disabled?: boolean;
-        size?: string;
-        click?: JQueryHandler | null;
-    }): JQuery<HTMLElement>;
-    /**
-     * Flatten grouped menu items with dividers between groups
-     * @param items Array of item groups (li)
-     * @example
-     * const li = (label: string): JQuery => $("<li/>").append($("<a class='dropdown-item'/>").text(label));
-     * const items: JQuery[] = $tools.actionMenuItems([[li("Copy"), li("Paste")], [li("Delete")]]);
-     */
-    actionMenuItems(items: (JQuery<HTMLElement>[])[]): JQuery[];
-    /**
-     * Create a 'plus' button
-     * @param items Array of items (li)
-     * @param right Align popup to the right of button
-     * @param dropUp On top?
-     * @example
-     * // "plus" menu with 2 groups separated by a divider, aligned to the right
-     * const plus: JQuery | null = $tools.actionPlus([[li("Copy"), li("Paste")], [li("Delete")]], true);
-     * plus && ctn.append(plus);
-     */
-    actionPlus(items: (JQuery<HTMLElement>[])[], right?: boolean, dropUp?: boolean): JQuery | null;
-    /**
-     * Create a button
-     * @param p Options
-     * @param p.id Button optional id
-     * @param p.name Button name (attribute data-action and class 'btn-')
-     * @param p.icon Optional icon name (e.g. <code>'fas/search'</code>) or icon
-     * @param p.label Button label
-     * @param p.tooltip Optional tooltip
-     * @param p.sr Optional screen reader only
-     * @param p.click Optional callback
-     * @param p.size Optional size (e.g. <code>'xs'</code>, <code>'sm'</code>, <code>'lg'</code>, <code>'icon'</code>)
-     * @param p.level Optional level (e.g. <code>'primary'</code>, <code>'secondary'</code>, <code>'plus'</code>)
-     * @param p.style Optional additional CSS class(es)
-     * @param p.type Optional type (e.g. <code>'submit'</code> default, <code>'button'</code>)
-     * @param p.disabled Disabled?
-     * @example
-     * ctn.append($tools.button({
-     * 	name: "mySearch",
-     * 	label: $T("SEARCH"),
-     * 	icon: "fas/search",
-     * 	level: "primary",
-     * 	type: "button",
-     * 	click: () => $ui.displaySearch(null, "MyObject")
-     * }));
-     */
-    button(p: Button): JQuery;
-    /**
-     * Button of action
-     * @param a Action <code>\{ name, label, level, primary, icon, help, showLabel, toState, custom, enabled, disabled, style, background, size \}</code>
-     * @param o Business Object
-     * @param rowid Optional row ID
-     * @param click Handler
-     * @param minified Hide label?
-     * @example
-     * // Button of an object action in a custom toolbar
-     * const a: Action | undefined = obj.getAction("MyObjSendOrder");
-     * a && $("#toolbar", ctn).append($tools.actionButton(a, obj, obj.getRowId(), (act: Action, o: UIBusinessObject, id?: string | null) => $ui.doAction(act, o, id)));
-     */
-    actionButton(a: Action, o: UIBusinessObject, rowid?: string | null, click?: ActionHandler, minified?: boolean): JQuery<HTMLElement>;
-    /**
-     * Progress bar: creates the bar or updates an existing one.
-     * <br>Value and text can be refreshed later by the event <code>ui.progressbar</code>:
-     * <pre>const pb = $tools.progressBar("mybar", 0, null, undefined, "Loading...");
-     * pb.trigger("ui.progressbar", [50, "Processing..."]); // value + text
-     * pb.trigger("ui.progressbar", [100]); // value only, the text is kept</pre>
-     * @param name Progress element or name
-     * @param p Value in percent [0..100]
-     * @param style Optional style to apply on the bar
-     * @param ctn Optional container to search the bar when name is not the element
-     * @param text Optional text displayed above the bar (the bar must be in the DOM to display it)
-     * @returns Progress element <code>.progress</code>
-     * @example
-     * const pb: JQuery = $tools.progressBar("myBar", 0, "bg-success");
-     * ctn.append(pb);
-     * pb.trigger("ui.progressbar", [50, "Processing..."]);
-     */
-    progressBar(name: AnyContent, p?: number, style?: string | null, ctn?: Container, text?: string): JQuery<HTMLElement>;
-    /**
-     * Hack to make a drop-down inside responsive table visible
-     */
-    dropdownVisible(p: JQuery, eventOpen?: string, eventClose?: string): {
-        /** Handler to call when the drop-down opens */
-        onOpen: Callback;
-        /** Handler to call when the drop-down closes */
-        onClose: Callback;
-    };
-    /**
-     * Simple panel (implemented with card)
-     * @param params Parameters <code>\{ id, title, icon, content, hidden, collapsed, onCollapsed, footer \}</code>
-     * @param params.id Panel ID
-     * @param params.title Optional title or header
-     * @param params.icon Optional icon name
-     * @param params.content Body
-     * @param params.hidden Hidden?
-     * @param params.collapsed Collapsed?
-     * @param params.onCollapsed Optional collapse handler(body, collapsed)
-     * @param params.footer Optional footer
-     * @example
-     * // Collapsible panel
-     * ctn.append($tools.panel({
-     * 	id: "myPanel",
-     * 	title: "Details",
-     * 	icon: "fas/info-circle",
-     * 	content: $("<p/>").text("Hello world"),
-     * 	collapsed: false,
-     * 	onCollapsed: (body: JQuery, collapsed: boolean) => $console.log(collapsed)
-     * }));
-     */
-    panel(params: {
-        id?: string;
-        title?: AnyContent;
-        icon?: string;
-        content?: AnyContent;
-        hidden?: boolean;
-        collapsed?: boolean;
-        onCollapsed?: (body: JQuery, collapsed: boolean) => void;
-        footer?: AnyContent;
-    }): JQuery<HTMLElement>;
-    /**
-     * card/panel alias
-     */
-    card: (params: {
-        id?: string;
-        title?: AnyContent;
-        icon?: string;
-        content?: AnyContent;
-        hidden?: boolean;
-        collapsed?: boolean;
-        onCollapsed?: (body: JQuery, collapsed: boolean) => void;
-        footer?: AnyContent;
-    }) => JQuery<HTMLElement>;
-    /**
-     * Manage collapsible panels as accordion
-     * @param ctn Container of panels .collapse
-     * @example
-     * // Only one panel open at a time
-     * $tools.accordion($("#myPanels", ctn));
-     */
-    accordion(ctn: JQuery): JQuery<HTMLElement>;
-    /**
-     * Return a simple help icon with a popover or a dialog when help is too long
-     * @param name Button name
-     * @param help Text or html
-     * @param title Optional title of dialog
-     * @param btn Optional button to complete
-     * @example
-     * const help: JQuery | undefined = $tools.buttonHelp("myHelp", "Amount <b>without</b> taxes", "Amount");
-     * help && $("label[for='myAmount']", ctn).append(help);
-     */
-    buttonHelp(name: string, help: string, title?: string, btn?: JQuery): JQuery | undefined;
-    /**
-     * Return a compliance hint icon with a popover or a dialog when the hint is too long
-     * Works exactly as HELP but with `field.complianceHint` as source
-     * @param name Button name
-     * @param hint Text or html
-     * @param title Optional title of dialog
-     * @param btn Optional button to complete
-     * @example
-     * const hint: JQuery | undefined = $tools.buttonComplianceHint("myHint", "Personal data: kept 3 years (GDPR)");
-     * hint && $("label[for='myEmail']", ctn).append(hint);
-     */
-    buttonComplianceHint(name: string, hint: string, title?: string, btn?: JQuery): JQuery | undefined;
-    /**
-     * Simple tabs
-     * @param params Parameters
-     * @param params.id Tab ID
-     * @param params.selected Selected tab index (default <code>0</code>)
-     * @param params.tabs Tabs options <code>\{ title, tooltip, icon, content, hidden, click, key, data \}</code>
-     * @param params.position Tabs position 'top' as default, 'left', 'right' or 'bottom'
-     * @param params.vertical Vertical tabs (same as position:left) ?
-     * @param params.underline Underlined tab style
-     * @param params.cls Optional class to add
-     * @param params.ondrag Optional handler <code>function(li,cbk)</code> to allow drag
-     * @param params.ondrop Optional handler <code>function(\{li, from, to\ }, cbk)</code> to allow drop
-     * @param params.overflow no wrap tabs, overflow hidden tabs in a dropdown, with keys:
-     * `show` (bring hidden tab visible at 'first' or 'last' position, always triggers a ui.tab.click) and
-     * `icon` (dropdown icon, default simple caret)
-     * @example
-     * const t: JQuery = $tools.tabs({
-     * 	id: "myTabs",
-     * 	selected: 0,
-     * 	tabs: [
-     * 		{ title: "General", icon: "fas/home", content: $("<div/>").text("Tab 1") },
-     * 		{ title: "Details", key: "details", content: $("<div/>").text("Tab 2"), click: () => $console.log("shown") }
-     * 	]
-     * });
-     * ctn.append(t);
-     */
-    tabs(params: Tabs): JQuery;
-    /**
-     * Add a tab
-     * @param t Existing .tabs
-     * @param tab Tab options
-     * @param tab.title tab title
-     * @param tab.content tab content
-     * @param tab.tooltip Optional tooltip
-     * @param tab.icon optional icon name
-     * @param tab.hidden is the tab hidden?
-     * @param tab.hide optional handler on bootstrap hide event 'hide.bs.tab'
-     * @param tab.click optional handler when tab is shown on bootstrap event 'shown.bs.tab'
-     * @param tab.key optional anchor DOM property 'data-key'
-     * @param tab.data optional jQuery 'data' to add to anchor
-     * @param active Activate this tab?
-     * @returns tab = li.nav-item + tab-pane
-     * @example
-     * $tools.addTab(t, { title: "History", key: "history", content: $("<div/>") }, true);
-     */
-    addTab(t: JQuery, tab: Tab, active?: boolean): {
-        /** Tab item `li.nav-item` */
-        tab: JQuery<HTMLElement>;
-        /** Tab content `div.tab-pane` */
-        tabpane: JQuery<HTMLElement>;
-    };
-    /**
-     * Set a tab content
-     * @param t Tabs
-     * @param index Tab index or tab data-key
-     * @param content HTML content
-     * @example
-     * $tools.setTabContent(t, "history", $("<p/>").text("No history"));
-     */
-    setTabContent(t: JQuery, index: number | string, content: AnyContent): void;
-    /**
-     * Get a tab container
-     * @param t Tabs
-     * @param index Tab index or tab data-key
-     * @example
-     * // Display a list in the pane of the tab "details"
-     * $ui.displayList($tools.getTabPane(t, "details"), "MyChild", { embedded: true });
-     */
-    getTabPane(t: JQuery, index: number | string): JQuery<HTMLElement>;
-    /**
-     * Get the active tab anchor with data
-     * @param t Tabs
-     * @example
-     * const active: JQuery = $tools.getTabActive(t);
-     * $console.log(active.data("key"));
-     */
-    getTabActive(t: JQuery): JQuery<HTMLElement>;
-    /**
-     * Set the active tab anchor
-     * @param t Tabs
-     * @param index Tab index or tab data-key
-     * @example
-     * $tools.setTabActive(t, 1);
-     */
-    setTabActive(t: JQuery, index: number | string): void;
-    /**
-     * Get the tab anchors with data
-     * @param t Tabs
-     * @param s Optional anchor selector
-     * @example
-     * $tools.getTabs(t).each((i: number, a: HTMLElement) => $console.log($(a).text()));
-     */
-    getTabs(t: JQuery, s?: string): JQuery<HTMLElement>;
-    /**
-     * Is the tabs empty?
-     * @param t Tabs
-     * @param s Optional anchor selector
-     * @example
-     * if ($tools.isEmptyTabs(t)) t.hide();
-     */
-    isEmptyTabs(t: JQuery, s?: string): boolean;
-    /**
-     * Remove a tab
-     * @param t Tabs
-     * @param index Tab index or tab data-key
-     * @param prev Click on previous (or next) tab if exists
-     * @example
-     * // Remove the tab and activate the previous one
-     * $tools.removeTab(t, "history", true);
-     */
-    removeTab(t: JQuery, index: number | string, prev?: boolean): void;
-    /**
-     * Show/Hide empty tabs and ensure to activate a non-empty tab
-     * @param t Tabs
-     * @param fn Optional function to test if a tab is visible
-     * @param cls Class 'hidden' or 'empty' to hide the tab
-     * @returns True if the tabs is visible = contains something visible
-     * @example
-     * // Hide the tabs without visible content
-     * $tools.showTabs(t, (pane: JQuery) => pane.children(":visible").length > 0, "empty");
-     */
-    showTabs(t: JQuery, fn?: (tabPane: JQuery) => boolean, cls?: 'hidden' | 'empty'): boolean;
-    /**
-     * Show/hide a tab in a tabs and ensure to activate a visible tab
-     * @param t Tabs
-     * @param id Tab ID
-     * @param show False to hide the tab
-     * @example
-     * // Hide the tab of a pane (by pane ID)
-     * $tools.showTab(t, $tools.getTabPane(t, "details").attr("id") || "", false);
-     */
-    showTab(t: JQuery, id: string, show?: boolean): void;
-    /**
-     * Focus one element and active/expand tabs/collapsed parents
-     * @param el Element to focus
-     * @example
-     * // Focus a field even inside a collapsed panel or an inactive tab
-     * $tools.focus($("#myAmount", ctn));
-     */
-    focus(el: JQuery): void;
-    /**
-     * Add/Replace a badge counter to tab
-     * @param tab Tab href or any tab content element
-     * @param val Badge value (no badge if null)
-     * @example
-     * $tools.tabBadge($tools.getTabPane(t, "details"), 12);
-     * // remove the badge
-     * $tools.tabBadge($tools.getTabPane(t, "details"), null);
-     */
-    tabBadge(tab: JQuery, val: number | string | null): JQuery<HTMLElement> | null;
-    /**
-     * Simple alert content
-     * @param html HTML content
-     * @param level Optional <code>help|info|success|warning|danger</code>
-     * @example
-     * ctn.append($tools.alert("The record is <b>locked</b>", "warning"));
-     */
-    alert(html: AnyContent, level?: AlertLevel): JQuery<HTMLElement>;
-    /**
-     * Simple help
-     * @param h Content as safe HTML (any script is ignored)
-     * @example
-     * ctn.append($tools.help("Fill the <b>amount</b> without taxes"));
-     */
-    help(h: AnyContent): JQuery<HTMLElement>;
-    /**
-     * Simple info
-     * @param h Content
-     * @example
-     * ctn.append($tools.success("Order sent"));
-     */
-    success(h: AnyContent): JQuery<HTMLElement>;
-    /**
-     * Simple info
-     * @param h Content
-     */
-    info: (h: AnyContent) => JQuery<HTMLElement>;
-    /**
-     * Simple warning
-     * @param h Content
-     * @example
-     * ctn.append($tools.warning("Stock is low"));
-     */
-    warning(h: AnyContent): JQuery<HTMLElement>;
-    /**
-     * Simple error
-     * @param h Content
-     * @example
-     * ctn.append($tools.danger("Payment refused"));
-     */
-    danger(h: AnyContent): JQuery<HTMLElement>;
-    /**
-     * Simple error
-     * @param h Content
-     */
-    error: (h: AnyContent) => JQuery<HTMLElement>;
-    /**
-     * Inlined message alert
-     * @param m String or <code>\{ level, label \}</code>
-     * @example
-     * ctn.append($tools.message({ level: "W", text: "Check the delivery date" }));
-     */
-    message(m: MessageAny): JQuery;
-    /**
-     * Create a dropdown button
-     * @param elt Optional left side of button
-     * @param btn The button to convert to dropdown
-     * @param items List of elements <code>$</code>
-     * 				or items <code>\{ name, label, icon, cbk|callback|click, and custom data... \}</code> stored in anchor in <code>data('item')</code>
-     * @param right Align popup on right side of button
-     * @param dropUp True to drop on the top of button
-     * @param caret Display a caret on the right side of button?
-     * @param autoclose true(default) | inside | outside | false
-     * @example
-     * // Dropdown with actions
-     * const btn: JQuery = $tools.button({ name: "myMenu", label: "Actions", type: "button" });
-     * ctn.append($tools.dropdown(null, btn, [
-     * 	{ name: "copy", label: "Copy", icon: "fas/copy", click: () => $console.log("copy") },
-     * 	{ name: "delete", label: "Delete", icon: "fas/trash", click: () => $console.log("delete") }
-     * ], true));
-     */
-    dropdown(elt: JQuery | null, btn: JQuery, items?: null | AnyAddon[], right?: boolean, dropUp?: boolean, caret?: boolean, autoclose?: boolean | string): JQuery<HTMLElement>;
-    /**
-     * Create a dropdown button with a non-list (div) popup container.
-     * Like dropdown(), but for content that isn't a set of menu items
-     * (e.g. a fieldset of checkboxes, arbitrary form content).
-     * @param elt Optional left side of button
-     * @param btn The button to convert to dropdown
-     * @param content Popup content (appended as-is into a div.dropdown-menu)
-     * @param right Align popup on right side of button
-     * @param dropUp True to drop on the top of button
-     * @param caret Display a caret on the right side of button?
-     * @param autoclose true(default) | inside | outside | false
-     * @example
-     * // Dropdown with free content (ex: options to check)
-     * const opt: JQuery = $tools.button({ name: "myOptions", label: "Options", type: "button" });
-     * ctn.append($tools.dropdownDiv(null, opt, $("<div class='p-2'/>").append($tools.check({ id: "myOpt1", label: "Option 1" })), false, false, true, "outside"));
-     */
-    dropdownDiv(elt: JQuery | null, btn: JQuery, content: AnyContent | JQuery[], right?: boolean, dropUp?: boolean, caret?: boolean, autoclose?: boolean | string): JQuery<HTMLElement>;
-    /**
-     * Create a dropup button
-     * @param elt Optional left side of button
-     * @param btn Toggle button
-     * @param items List of <code>$</code> or action <code>\{ name, label, icon, cbk \}</code>
-     * @param right Align popup on right side of button
-     * @example
-     * ctn.append($tools.dropup(null, btn, [{ name: "help", label: "Help", click: () => $ui.displayHelp(obj) }]));
-     */
-    dropup(elt: JQuery | null, btn: JQuery, items?: null | (Container | DropdownItem)[], right?: boolean): JQuery<HTMLElement>;
-    /**
-     * Create an input group with prefix and addons actions
-     * @param inp Input element
-     * @param addons Optional array of <code>$</code> or actions <code>\{ name, label, icon, plus, cbk \}</code>
-     * @param prefix Optional prefix
-     * @example
-     * // Input with a prefix and a reset button
-     * const inp: JQuery = $tools.input({ type: "text", id: "myCode", name: "myCode" });
-     * ctn.append($tools.inputGroup(inp, [{ name: "reset", label: "Reset", icon: "fas/times", click: () => inp.val("") }], "#"));
-     */
-    inputGroup(inp: JQuery, addons?: AnyAddon[] | null, prefix?: string | JQuery): JQuery;
-    /**
-     * Form group of input
-     * @param name Group name
-     * @param label Optional label
-     * @param inp Input group
-     * @param msg Optional backend message
-     * @param suggestCallback a suggestion callback, sets new value, returns old value
-     */
-    formGroup(name: string, label: AnyContent | null, inp: AnyContent, msg?: MessageJSON, suggestCallback?: (v: string) => string, msgId?: string): JQuery;
-    /**
-     * Form group for search form
-     * @param cls Class
-     * @param label Text
-     * @param inp Input
-     */
-    formGroupSearch(cls: string, label: string, inp?: JQuery | string): JQuery;
-    /**
-     * Simple form group with boolean, select or text field
-     * @param id input id
-     * @param label field label
-     * @param val field value
-     * @param arg true for boolean, array of code/value, 'textarea'
-     * @param col optional size from 1 to 12
-     * @param addon optional addon
-     * @param disabled false to disable input
-     * @param multi true for enum multi
-     * @example
-     * // Text, boolean and select fields in a custom form
-     * ctn.append(
-     * 	$tools.simpleFormGroup("myName", "Name", ""),
-     * 	$tools.simpleFormGroup("myActive", "Active", true, true),
-     * 	$tools.simpleFormGroup("mySize", "Size", "M", [{ code: "S", value: "Small" }, { code: "M", value: "Medium" }]),
-     * 	$tools.simpleFormGroup("myComment", "Comment", "", "textarea")
-     * );
-     */
-    simpleFormGroup(id: string, label?: string, val?: string | number | boolean | string[] | null, arg?: true | string | EnumItem[] | 'textarea' | 'div' | null, col?: number, addon?: string | JQuery | null, disabled?: boolean | null, multi?: boolean): JQuery;
-    /**
-     * Input with attributes
-     * @param a Object with attributes
-     * @example
-     * const email: JQuery = $tools.input({ type: "email", id: "myEmail", name: "email", placeholder: "name@example.com" });
-     */
-    input(a?: KeyObject): JQuery;
-    /**
-     * Select with options
-     * @param a Object with attributes
-     * @param o Array of <code>\{ value, label, data \}</code>
-     * @example
-     * const s: JQuery = $tools.select({ id: "mySize", name: "size" }, [
-     * 	{ value: "S", label: "Small", data: {} },
-     * 	{ value: "M", label: "Medium", data: {} }
-     * ]);
-     */
-    select(a?: KeyObject, o?: {
-        value: string;
-        label: string;
-        data: KeyObject;
-    }[]): JQuery;
-    /**
-     * Create a row with columns
-     * @param cols Array of columns
-     * @example
-     * // 2 columns on medium screens and more
-     * ctn.append($tools.row([
-     * 	$tools.col("md-6", $("<div/>").text("Left")),
-     * 	$tools.col("md-6", $("<div/>").text("Right"))
-     * ]));
-     */
-    row(cols?: AnyContent[]): JQuery;
-    /**
-     * Simple column
-     * @param size Media-width: short syntax 'md-5' or long syntax 'col-lg-4 col-md-8', default 'col-12', 'xs-' is supported
-     * @param content Optional content or array of contents
-     * @example
-     * $tools.col("col-lg-4 col-md-6", "Content");
-     */
-    col(size?: string, content?: string | JQuery | JQuery[]): JQuery;
-    /**
-     * Simple form
-     * @param p Parameters <code>\{ name, inline, content, autocomplete, onsubmit \}</code>
-     */
-    form(p: {
-        name?: string;
-        inline?: boolean;
-        content?: AnyContent;
-        autocomplete?: string;
-        onsubmit?: string;
-    }): JQuery;
-    /**
-     * Add a tooltip to element
-     * @param e Element
-     * @param title Text or html
-     * @param placement Optional, default 'bottom'
-     * @param html HTML Title?
-     * @example
-     * $tools.tooltip($("#myAmount", ctn), "Amount without taxes", "top");
-     */
-    tooltip(e: JQuery, title: AnyContent, placement?: Position, html?: boolean): JQuery<HTMLElement>;
-    /**
-     * Init all tooltips and popovers
-     * @param ctn optional container
-     * @example
-     * $tools.initTooltips(ctn);
-     */
-    initTooltips(ctn?: AnyContainer): this;
-    /**
-     * Hide all (remaining) tooltips and popovers
-     * @param ctn optional container
-     * @example
-     * $tools.hideTooltips();
-     */
-    hideTooltips(ctn?: AnyContainer): this;
-}
-
-/** Legacy 6.3: 2 parts splitter */
-interface SplitPart {
-    /** Content */
-    content?: Container | string;
-    /** Resizable part */
-    resizable?: boolean;
-    /** Height */
-    height?: string;
-    /** Width */
-    width?: string;
-    /** Collapsible part */
-    collapsible?: boolean;
-    /** Collapsed part */
-    collapsed?: boolean;
-    /** Width of the splitter */
-    splitWidth?: string;
-    /** Height of the splitter */
-    splitHeight?: string;
-}
-/** Target work area to load a content */
-type LoadTargetArea = 'work_tab' | 'work_left' | 'work_right' | 'work_top' | 'work_bottom';
-/** Options of a work area */
-interface WorkAreaOptions {
-    /** Work area ID */
-    id?: number;
-    /** TODO */
-    noSplit?: boolean;
-}
-/** Context menu of a work tab */
-interface WorkTabContextMenu {
-    /** Split to right-side */
-    split?: boolean;
-    /** Close the tab */
-    close?: boolean;
-}
-/** Workarea size when splitted */
-interface WorkAreaSize {
-    /** optional area width in px or rem (only applies on horizontal split) */
-    width?: number | string;
-    /** optional area height in px or rem (only applies on vertical split) */
-    height?: number | string;
-}
-/** Serializable tab infos */
-interface WorkTabInfos {
-    /** required tab label */
-    title: string;
-    /** unique name to find the tab when requested with unique=true */
-    name: string;
-    /** unique tab? default true = if a tab with the same name already exists, activate it instead of creating a new one */
-    unique?: boolean;
-    /** can move the tab, default true */
-    draggable?: boolean;
-    /** add a close button to tab, default true */
-    closeable?: boolean;
-    /** optional context menu to split/close */
-    contextmenu?: WorkTabContextMenu;
-    /** add a .desk with navigation into container */
-    navigation?: true | number;
-    /** specific external URL from loadURL */
-    url?: string;
-}
-/** New tab options */
-type WorkTabOptions = WorkTabInfos & WorkAreaSize & {
-    /** new 'tab' or position: 'left','top','right' or 'bottom' */
-    position?: NewTabPosition;
-    /** open in top-level area (default true, false = open in caller area) */
-    toplevel?: boolean;
-};
-type WorkTab = WorkTabInfos & WorkAreaSize & {
-    id: number;
-    nav?: NavItem[];
-    active?: boolean;
-};
-interface WorkTabs {
-    tabs: WorkTab[];
-}
-interface WorkAreas {
-    vertical?: true;
-    areas: WorkAreaItem[];
-}
-interface WorkAreaItem {
-    content: WorkAreas | WorkTabs;
-    id?: number;
-    width?: string;
-    height?: string;
-}
-type WorkAreaSettings = WorkTabs | WorkAreas;
-/**
- * Tools to split the work area
- */
-declare class UISplitter {
-    private worktabId;
-    private navId;
-    private defaultWorkArea;
-    /** Work area min size */
-    readonly MIN_SIZE = 300;
-    private autoSave;
-    private lastSaved;
-    private saveKeyMulti;
-    private saveKeyMono;
-    private restoreKey;
-    /**
-     * Init splitter #work for media desktop only
-     * @param scope current user scope
-     */
-    init(scope?: Scope): void;
-    /**
-     * Allows UI to be splittable. Preserved in localStorage.
-     * @param enable optional to enable/disable
-     * @returns true if the UI is splittable
-     */
-    static enabled(enable?: boolean): boolean;
-    /**
-     * Is splitted mode enabled?
-     * @returns true if user is allowed to split work-areas
-     */
-    isEnabled(): boolean;
-    /**
-     * Build the WORKAREA sysparam save key
-     * - "WORKAREA-SPLIT <scope> <login>" for the multi work-area (splitted) mode
-     * - "WORKAREA-MONO <scope> <login>" for the single work-area mode
-     * so that each scope / user / mode keeps and restores its own saved layout.
-     * @param multi true for the multi work-area
-     * @param login current user login (switched user or current login)
-     * @param scope optional current user scope
-     * @returns the suffixed key, e.g. "WORKAREA-SPLIT myscope johndoe"
-     */
-    private saveKeyName;
-    /**
-     * Build the user preference key to restore the work-areas on the current scope
-     * @param login current user login (switched user or current login)
-     * @param scope optional current user scope
-     * @returns the suffixed key, e.g. "WORKAREA-RESTORE myscope johndoe"
-     */
-    private restoreKeyName;
-    /**
-     * User preference to restore the saved work-areas on the next load (current scope),
-     * preserved in the user's parameter "WORKAREA-RESTORE <scope> <login>" (default true).
-     * When disabled, the saved states are cleared and the home page is always displayed.
-     * @param enable optional to enable/disable
-     * @returns true if the work-areas are restored on the next load
-     */
-    restore(enable?: boolean): boolean;
-    /**
-     * Unset the legacy sysparams saved before
-     * (to be removed in a future beta release)
-     */
-    private static removeLegacyKeys;
-    /**
-     * Scope preference to enable/disable the splitter mode,
-     * preserved in localStorage key <code>splitter_\<scope\></code>
-     * @param enabled true to enable, false to disable or undefined to get the current preference
-     * @returns the current preference or null
-     */
-    static localPreference(scope?: Scope, enabled?: boolean): string | null;
-    /**
-     * Allows user to switch between 2 modes: mono work-area / multi work-areas
-     * @param switchable optional to enable/disable
-     * @returns true if the mode is switchable
-     */
-    static switchable(switchable?: boolean): boolean;
-    /**
-     * Switch button to change the splitter mode
-     */
-    switchButton(): JQuery<HTMLElement>;
-    /**
-     * Button to enable/disable the restore of the work-areas on the next load
-     */
-    restoreButton(): JQuery<HTMLElement>;
-    /**
-     * Switch the splitter mode
-     * @param enabled optional to force/abandon the splitted mode or toggle the mode by default
-     * @param home optional to display the home page after switching mode (default true)
-     */
-    switch(enabled?: boolean, home?: boolean): void;
-    /**
-     * Switch from single work area to multiple work areas (splitter mode).
-     * Creates a first default, non-closeable "home" tab then replaces the legacy #work content.
-     */
-    private singleToMultiple;
-    /**
-     * Switch from multiple work areas back to single (legacy 6.3) mode.
-     * Preserves the first desk and its navigation, resets all id increments,
-     * closes all other tabs, then wraps the result in a legacy .split container.
-     */
-    private multipleToSingle;
-    /**
-     * Load user's parameter WORKAREA and rebuild the UI
-     * @param settings optional settings to load instead of user's parameter
-     * @returns true if the UI has been rebuilt with saved settings
-     */
-    load(settings?: WorkAreaSettings | NavItem[]): boolean;
-    /**
-     * Rebuild the UI with WORKAREA settings
-     */
-    build(settings: WorkAreaSettings): void;
-    /**
-     * Save the current state (nav stack or work-areas tree) into user's parameter
-     * What happens on the next load, per work-area mode x exit type:
-     *
-     *   exit type            | mode arg | single work-area | multi work-area
-     *   ---------------------|----------|------------------|-----------------
-     *   logout (Quit)        | "logout" | home page        | restore
-     *   clear cache          | "logout" | home page        | restore
-     *   change user          | "switch" | home page        | restore
-     *   change scope         | "switch" | home page        | restore
-     *   change language      | "save"   | restore          | restore
-     *   reload / F5          | (none)*  | restore          | restore
-     *
-     *   - "restore"   = the saved state is persisted and rebuilt on next load
-     *   - "home page" = the saved state is cleared ("empty"), the default home is shown
-     *   - multi work-area mode always restores because the key is per scope + login, so a
-     *     user/scope switch finds its own layout again when coming back to it
-     *   - every "restore" case is conditioned by the user preference WORKAREA-RESTORE on the
-     *     current scope (see restore()): when disabled, the state is always cleared ("empty")
-     *   * reload / F5 does not call save() explicitly: it relies on the auto-save
-     *     (saveRequest, on every nav change) having kept the parameter up to date
-     *
-     * @param mode "save" (default, incl. auto-save, page reload and language change) persists
-     *        the current state; "logout" (explicit logout or cache clear) and "switch" (user or
-     *        scope switch) drop it in single work-area mode so the next login lands on the home
-     *        page, but still persist it in multi work-area mode
-     */
-    save(mode?: "save" | "logout" | "switch"): Promise<void>;
-    /**
-     * Auto-save request into user's parameter WORKAREA.
-     */
-    saveRequest(): void;
-    /**
-     * Tree of areas and navigations
-     */
-    jsonTree(): WorkAreaSettings;
-    /**
-     * Simple request for a new tab or a new split area.
-     * @param options Tab options
-     * @param caller The element that triggered the request
-     * @returns the new container to display the content (.content or .work-area-content) or null to use default work-area
-     */
-    request(options: WorkTabOptions, caller?: AnyContainer): JQuery | null;
-    /**
-     * Create a desk with a new navigation including 2 parts: .nav-stack and .content
-     * @param ctn container (specific or .work-tab-content)
-     * @param content optional HTML content to display
-     * @param navId optional restored nav Id (default incremental)
-     * @returns .desk.nav-container
-     */
-    createDeskNavigator(ctn: JQuery, content?: Container | null, navId?: number): JQuery;
-    /**
-     * Create a work-area with a tabs of desks
-     * @param options Work area options
-     * @param tabOptions optional tab options to create a first tab with a desk
-     * @param content optional content to insert in the new area
-     * @returns .work-area
-     */
-    createWorkArea(options?: WorkAreaOptions, tabOptions?: WorkTabOptions, content?: JQuery): JQuery<HTMLElement>;
-    /**
-     * Add a tab to .work-tab
-     * @param worktab Optional existing work tabs (default use the first tabs)
-     * @param options Tab options
-     * @param content optional content to insert
-     */
-    appendTab(worktab: JQuery | null, options?: WorkTabOptions, content?: JQuery): {
-        tab: JQuery<HTMLElement>;
-        tabpane: JQuery<HTMLElement>;
-    };
-    /**
-     * Get the work tab content of a tab
-     * @param tab tab anchor .nav-link or .nav-item
-     * @returns .work-tab-content
-     */
-    getWorkTabContent(tab: JQuery): JQuery | undefined;
-    /**
-     * Get the desk content of a tab
-     * @param el the .nav-link or a container
-     * @returns desk .content for rendering if exists (or directly the .work-tab-content when the tab has no navigation)
-     */
-    getDeskContent(el: JQuery): JQuery<HTMLElement>;
-    /**
-     * Find a tab in all work-areas
-     * @param name Optional tab name to find
-     * @returns .nav-link if found
-     */
-    findTab(name?: string): JQuery | undefined;
-    /**
-     * Get a tab of related element
-     * @param el any content element inside the .work-tab-pane
-     * @returns .nav-link of the related tab if exists
-     */
-    getTabOfElement(el?: AnyContainer): JQuery | undefined;
-    /**
-     * Get the tab container of element
-     * @param el Element inside the .work-tab
-     * @returns .work-tab if exists
-     */
-    getWorkTab(el?: AnyContainer): JQuery | undefined;
-    /**
-     * Get the work-area of element
-     * @param el Element inside the .work-area
-     * @returns .work-area if exists
-     */
-    getWorkArea(el?: AnyContainer): JQuery | undefined;
-    /**
-     * Set the options for a work tab
-     * @param el tab anchor .nav-link or .nav-item
-     * @param options the options to store in a.data("worktab")
-     */
-    setTabOptions(el?: JQuery, options?: WorkTabOptions): void;
-    /**
-     * Update the options for a work tab from navigation data
-     * @param el Element
-     * @param label the label of the navigation item
-     * @param name optional (unique) name of the navigation item
-     * @param url optional URL of the navigation item
-     */
-    updateTabOptions(el?: AnyContainer, label?: string, name?: string, url?: string): void;
-    /**
-     * Update the tab label
-     * @param el any content element inside the .work-tab-pane (or .nav-link or .nav-item)
-     * @param label New label
-     */
-    setTabLabel(el?: AnyContainer, label?: string): void;
-    /**
-     * Activate a tab
-     * @param el any content element inside the .work-tab-pane
-     */
-    activateTab(el: AnyContainer): JQuery | undefined;
-    /**
-     * Activate the first work-area tab
-     */
-    activateFirstTab(): JQuery | undefined;
-    /**
-     * Get the first work-area content: #work0 (or default #work if no enabled)
-     * @param activate activate the first tab to show the content?
-     */
-    getDefaultWorkContent(activate?: boolean): JQuery;
-    /**
-     * Move a tab in a new work-area
-     * @param tab tab .nav-link to move
-     * @param workArea target workarea to split
-     * @param pos position for the tab content top/left/right/bottom
-     */
-    moveTabToWorkArea(tab: JQuery, workArea: JQuery, pos: Position): void;
-    /**
-     * Move a tab in other tab
-     * @param tab tab .nav-link to move
-     * @param targetTab target tab
-     * @param pos place the tab on the 'left' or the 'right' of the target tab
-     */
-    moveTabToTab(tab: JQuery, targetTab: JQuery, pos: 'left' | 'right'): void;
-    /**
-     * Close a tab if can close
-     * @param tab .nav-link to close
-     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
-     * @param activatePrevious activate the previous tab if exists? default true
-     */
-    closeTab(tab: JQuery, checkCanClose?: boolean, activatePrevious?: boolean): Promise<void>;
-    /**
-     * Remove a content and its tab
-     * @param el any content element inside the .work-tab-pane
-     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
-     */
-    remove(el: AnyContainer, checkCanClose?: boolean): void;
-    /**
-     * Close a content: back to the previous page of its navigation if any,
-     * otherwise remove its tab when it is in a work tab, otherwise only close the content
-     * @param el content element (inside a .work-tab-pane or not)
-     * @example
-     * // Close the current content, ex: after detaching it in a popup
-     * $view.splitter.close(ctn);
-     */
-    close(el: AnyContainer): void;
-    /**
-     * Close all tabs if can close
-     * @param checkCanClose check can close the tab contents?
-     */
-    closeAll(checkCanClose?: boolean): Promise<void>;
-    /**
-     * Remove a tab of a work-area
-     * ZZZ not public: use closeTab to destroy the content first
-     * @param tab the .nav-link to remove
-     * @param prev click on previous (or next) tab if exists
-     */
-    private removeTab;
-    /**
-     * Remove a work-area and its children
-     * @param workarea .work-area to remove
-     */
-    removeWorkArea(workarea: JQuery): Promise<void>;
-    private refreshTimer;
-    /**
-     * Refresh container when moved/splitted/resized
-     * @param ctn container with events ui.resize and ui.zoom
-     * @param resize true to force a resizing
-     */
-    refresh(ctn: JQuery, resize?: boolean): void;
-    /**
-     * Create a .work-area and/or assign a split direction
-     * @param workarea optional .work-area to (re)assign (default returns a new one)
-     * @param vertical optional, true to split vertically, false to split horizontally
-     * @param children optional list of .work-area to append
-     */
-    workArea(workarea?: JQuery | null, vertical?: boolean, children?: JQuery[]): JQuery;
-    /**
-     * Split a work-area
-     * @param workarea .work-area to split (default the root one)
-     * @param pos insert at position left/right/top/bottom
-     * @param tabOptions tab options
-     * @param content optional content to insert in the new area
-     * @returns newArea and content
-     */
-    splitWorkArea(workarea: JQuery | null, pos: Position | undefined, tabOptions: WorkTabOptions, content?: JQuery): {
-        /** New work-area */
-        newArea: JQuery;
-        /** Content of the new work-area */
-        content: JQuery;
-    };
-    /**
-     * Convert a CSS size value to pixels.
-     * Supports plain numbers (treated as px), "rem" units (1rem = 16px),
-     * and "%" relative to the total #work width.
-     * @param value Size as a number (px) or a CSS string ("300px", "20rem", "50%")
-     * @returns Equivalent size in pixels
-     */
-    private toPixel;
-    /**
-     * Resize a work area (and its next area) in a horizontal split
-     * @param workarea workarea to resize
-     * @param width width in pixels or in rem (or in % of the #work)
-     */
-    setWidth(workarea: JQuery, width: number | string, store?: boolean): void;
-    /**
-     * Resize a work area (and its next area) in a vertical split
-     * @param workarea workarea to resize
-     * @param height height in pixels or in rem (or in % of the #work)
-     */
-    setHeight(workarea: JQuery, height: number | string, store?: boolean): void;
-    /**
-     * Resize a work area (and its next area) in the split direction
-     * @param workarea workarea to resize
-     * @param horizontal or vertical
-     * @param size new size in pixels (fit to parent size if unset)
-     * @param save save preference?
-     */
-    setSize(workarea: JQuery, horizontal: boolean, size: number, save?: boolean): void;
-    /**
-     * Resize all work areas to fit 100% of the container
-     * @param workarea container
-     */
-    fitSize(workarea: JQuery): void;
-    /**
-     * Create context menu to request for the new tab position
-     * @param el Right clicked element
-     * @param e Context menu event
-     * @param request callback with requested position
-     * @param items optional previous menu items
-     */
-    contextMenu(el: JQuery, e: JQuery.ContextMenuEvent, request?: (pos: NewTabPosition) => void, items?: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
-    /**
-     * Add a context menu on follow link to open the target in a new tab or side
-     * @param title Tab title
-     * @param fl FollowLink definition with object and rowId to open the form
-     * @param el Caller element to bind the context menu
-     */
-    followLinkContextMenu(title: string, fl: FollowLink, el: JQuery): void;
-    /**
-     * Stop event and return mouse position
-     */
-    private xy;
-    /**
-     * Drag & drop separator to resize sibling areas
-     */
-    private dragSeparator;
-    /**
-     * Drag & drop tab
-     */
-    private dragTab;
-    /**
-     * Split the container in 2 parts (any previous split is removed).
-     * @param ctnr container
-     * @param pos position left|right|top|bottom, default 'top'
-     * @param options optional parameters or content
-     * @param options.content content to add at position
-     * @param options.resizable can resize content ?
-     * @param options.height optional content height
-     * @param options.width optional content width (in rem, px, %)
-     * @param options.collapsible can collapse content ?
-     * @param options.collapsed collapsed by default ?
-     * @param options.splitWidth optional split width (default 100%, may be "auto" to let the scroll-x to parent element)
-     * @param options.splitHeight optional split height (default 100%, may be "auto" to let the scroll-y to parent element)
-     */
-    splitPart(ctnr: AnyContainer, pos: Position, options: SplitPart | JQuery): void;
-    /**
-     * Remove the splitted content
-     * @param ctn container with splitted contents
-     */
-    unsplitPart(ctn: string | Container): void;
-}
-
-/** Load URL target = same as lov SHC_TARGET to open a shortcut */
-type LoadTarget = 'frame_work' | '_blank' | '_top' | '_popup' | LoadTargetArea;
-/** LoadURL options */
-type LoadParam = NavParam & {
-    /** Optional target _blank, _top or _popup */
-    target?: LoadTarget;
-    /** Width of the element */
-    width?: string;
-    /** Height of the element */
-    height?: string;
-    /** Optional label to display in nav/dialog/download */
-    label?: string;
-    /** Optional name for the external object */
-    name?: string;
-    /** Optional object of action */
-    object?: string | BusinessObject;
-    /** Optional instance of object */
-    inst?: string;
-    /** Optional object row ID (form/row action) */
-    rowId?: string;
-    /** Optional object item (form/row action) */
-    item?: RowItem | null;
-    /** Optional data of external object (extobject, fields) */
-    data?: KeyObject;
-    /** Optional related action */
-    action?: string | Action;
-    /** Optional flag to inline content */
-    noiframe?: boolean;
-    /** Controller of the download, set by loadURL: call `controller.abort()` to stop the client side call */
-    abortController?: AbortController;
-    /** Optional reader(content-type, attach, filename, blob, defaultReader, cbk, status) to override default download into container */
-    reader?: (contenttype: string, attach: boolean, filename: string, blob: Blob, defaultReader: (ct: string, _att: boolean, filename: string, res: File) => void, cbk?: Callback, status?: number) => void;
-};
-/**
- * UI Loader tool
- */
-declare class UILoader extends UIUtil {
-    /**
-     * Common file extension icon
-     */
-    readonly FILE_ICONS: KeyString;
-    /** Feedback instance */
-    feedback?: Feedback;
-    /** Disconnected translation */
-    labelDisconnected?: string;
-    /** Web news (popup and footer ticker) */
-    readonly news: WebNews;
-    /** Main navigator */
-    readonly nav: UINavigator;
-    /**
-     * Mime type to file extension
-     */
-    readonly MIME_EXT: KeyString;
-    constructor();
-    /**
-     * When page is loaded: load user rights, menu, texts and engine.<br />
-     * Then call the main page service.
-     * @param options some globals options to override
-     * @example
-     * // Standalone page: load the rights, texts and engine, then display the home page
-     * $(document).ready(() => $ui.ready($app, "bootstrap5", { useMainParts: true }));
-     */
-    ready(app: Session, engine: string, options?: Partial<typeof Globals>): Promise<void>;
-    private prepareBookmarks;
-    /**
-     * Set the Ajax APIs
-     * @param app Simplicite.Ajax instance
-     */
-    setAjax(app: Session): UIEngine;
-    /**
-     * Returns the local client Id from local storage.
-     * Used to identify the client in session and to change user on server-side in god mode.
-     * @example
-     * const id: string = $ui.clientId();
-     */
-    clientId(): string;
-    /**
-     * Open the user session with authtoken
-     * @param params options
-     * @param params.scope optional user scope or home view
-     * @param params.clientId optional clientId (local storage to change users)
-     * @returns Session infos
-     * @example
-     * const s: KeyObject = await $ui.session({ scope: "MyScope" });
-     */
-    session(params?: {
-        scope?: string;
-        clientId?: string;
-    }): Promise<KeyObject>;
-    /**
-     * Default logout: confirm (with text CONFIRM_LOGOUT) and save session before quit
-     * @param params logout parameters
-     * @param params.confirm true to confirm the logout
-     * @param params.url optional new location URL
-     * @param params.login optional user login to switch session
-     * @param params.token optional user token to switch session
-     * @example
-     * // Ask the confirmation, then logout
-     * $ui.logout({ confirm: true });
-     * // Logout and go to a URL
-     * $ui.logout({ url: "/ext/MyLandingPage" });
-     */
-    logout(params: {
-        confirm?: boolean;
-        url?: string;
-        login?: string;
-        token?: string;
-    }): void;
-    /**
-     * Default quit is a session logout
-     * @param params logout parameters
-     * @param params.url optional new location URL to change scope
-     * @param params.login optional user login to change user
-     * @example
-     * $ui.quit({ url: "https://www.simplicite.io" });
-     */
-    quit(params?: {
-        url?: string;
-        login?: string;
-    }): UIEngine;
-    /**
-     * Save the session
-     * @param mode "save" (default, e.g. language change) keeps the current layout / nav;
-     *        "logout" (explicit logout or cache clear) and "switch" (user or scope switch) drop it
-     *        in single work-area mode so the next login lands on the home page, but keep it per
-     *        scope + login in multi work-area mode, to be restored on return
-     * @example
-     * await $ui.saveSession();
-     */
-    saveSession(mode?: "save" | "logout" | "switch"): Promise<void>;
-    /**
-     * Load the Rendering engine
-     * @param name extended engine name (forced to bootstrap5)
-     */
-    loadEngine(name: string): Promise<void>;
-    /**
-     * Bind server side events.
-     * Custom messages from back-end
-     * <code>ServerSideEvent.notify("myCustomEvent", "message", userId)</code>
-     * Must be binded on "ui.ready"" with
-     * <code>$ui.sse.addEventListener("myCustomEvent", e => e.data ... );</code>
-     * @example
-     * // Bound on ready, then listen custom events sent by ServerSideEvent.notify("myCustomEvent", ...)
-     * $(document).on("ui.ready", () => {
-     * 	$ui.sse?.addEventListener("myCustomEvent", (e: MessageEvent) => $ui.toast(e.data));
-     * });
-     */
-    bindEventSource(): boolean;
-    /**
-     * Websocket handler for partial clear cache
-     * @param d <code>\{ object, name \}</code>
-     * @ignore
-     */
-    private onClearCache;
-    /**
-     * System clear cache
-     * @param action Action <code>cc|dc|gc</code> for server, all sessions or granted user
-     * @example
-     * // Clear the cache of the current user
-     * $ui.clearCache("gc");
-     */
-    clearCache(action: string): Promise<void>;
-    /**
-     * SSE handler for object usage
-     * @param d <code>\{ object, action, emitter \}</code>
-     * @ignore
-     */
-    private onActionObject;
-    /**
-     * SSE handler for internal notification
-     * @param n <code>\{ count, message, incoming, userId \}</code>
-     * @ignore
-     */
-    private onNotif;
-    /**
-     * Default keydown handler
-     * <br>CTRL-S : trigger "ui.key.ctrls" to all "js-ctrl-s" elements
-     * <br>ESCAPE : in order of priority close dialog, blur field (remove focus), or back in navigation
-     * <br>SHIFT-LEFT/RIGHT : navigation between list items
-     * <br>ALT-H : back to the home page
-     * <br>ALT-M : focus last visited menu item
-     * <br>ALT-W : wide screen = toggle menu
-     * <br>ALT-B : open the bookmarks dialog
-     * <br>ALT-F : focus the global searchbox
-     * <br>ALT-L : focus the first list row
-     * <br>ALT-N : focus the next area/panel
-     * @param e Key event
-     */
-    private keydown;
-    /**
-     * Displays all site parts:
-     * <ul>
-     * <li>Create main div</li>
-     * <li>load only options.resources if specified</li>
-     * <li>load part MAIN/HEADER/FOOTER/MENU/WORK when options.useMainParts=true</li>
-     * <li>load STYLES + SCRIPT resources of disposition or object</li>
-     * </ul>
-     */
-    main(cbk: Callback): Promise<void>;
-    /**
-     * Load the FOOTER_ADDON if exists
-     */
-    footerAddon(): void;
-    /**
-     * Load the text and monospace fonts and override the related CSS variables
-     * @param font text font (a plain name = assume a google font), none = default font of the theme CSS
-     * @param mfont monospace font
-     * @example
-     * // Google font for texts, default monospace font
-     * $ui.setFonts("Roboto");
-     */
-    setFonts(font?: Font | string | null, mfont?: Font | string | null): Promise<[void, void]>;
-    /**
-     * Change the current CSS theme
-     * @param base 'light' or 'dark' reboot
-     * @param theme theme name to load (vars + addon styles)
-     * @example
-     * $ui.setTheme("dark");
-     * $ui.setTheme("light", "MyTheme");
-     */
-    setTheme(base?: ThemeBase, theme?: string): Promise<void>;
-    /**
-     * Add keys shortcuts to document
-     * @param keys Pair of ('ctrl' | 'shift' | 'alt') + letter or char-code = callback or shortcut definition
-     * @example
-     * $ui.addShortcuts({
-     * 	"ctrl+shift+h": () => $ui.displayHome(),
-     * 	"alt+d": { name: "MyDoc", label: "Documentation", url: "https://docs.simplicite.io", target: "_blank" }
-     * });
-     */
-    addShortcuts(keys: ShortcutKeys): void;
-    /**
-     * Open the URL in a new window
-     * @param url URL to open
-     * @param target Optional, default <code>'_blank'</code>
-     * @example
-     * $ui.openURL("https://www.simplicite.io");
-     */
-    openURL(url: string, target?: string): void;
-    /**
-     * Open the url in a separate window with the UI engine
-     * @param url URL to load in a new window
-     * @param options Detach options
-     * @param options.name Optional window name (default detachurl)
-     * @param options.width Optional window width in px (default 1200)
-     * @param options.height Optional window height in px (default 700)
-     * @param options.top Optional window top in px (default 0)
-     * @param options.left Optional window left in px (default 0) (default 0)
-     * @param options.full True to load the main parts (menu, header... default load the URL in div.main without parts)
-     * @returns new window
-     * @example
-     * // Open an external object in a new window
-     * $ui.detachURL($app.getExternalObjectURL("MyExternalObject"), { width: 800, height: 600 });
-     */
-    detachURL(url: string, options?: {
-        name?: string;
-        width?: number;
-        height?: number;
-        top?: number;
-        left?: number;
-        full?: boolean;
-    }): Window | null;
-    /**
-     * Call periodically to check if the response is completed
-     * @param ctn Container to load the URL
-     * @param url URL to launch the asynchronous task on server side, and be polled with a check parameter periodically, must respond 202 while the task is not completed
-     * @param params Optional parameters for loadURL
-     * @param pgs Optional progress callback(message)
-     * @returns Promise when loaded, or catch when stopped
-     * @example
-     * // Launch a long task and poll until done
-     * $ui.waitForURL(ctn, myTaskURL, {}, (msg: string | ArrayBuffer | null) => $console.log("progress", msg));
-     */
-    waitForURL(ctn: Container, url: string, params?: LoadParam, pgs?: (msg: string | ArrayBuffer | null) => void): Promise<void>;
-    /**
-     * Load URL in a container: wrap the URL to specific controllers (list, form...) or call the back-end thru ajax
-     * @param ctn Container to load the URL (default is #work)
-     * @param url URL to load
-     * @param options Contextual parameters
-     * @param cbk Optional callback when loaded
-     * @example
-     * // Display an external object in the work area
-     * $ui.loadURL(null, $app.getExternalObjectURL("MyExternalObject"));
-     */
-    loadURL(ctn: AnyContainer, url: string, options?: LoadParam | null, cbk?: Callback): this;
-    getUIObject(obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
-    getUIObject(object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
-    getNavObject(ctn: AnyContainer, obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
-    getNavObject(ctn: AnyContainer, object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
-    /**
-     * Generate the instance name within the component navigator.
-     * Returns the common instance name on main navigation, otherwise add a suffix ex: the_ajax_(name)_nav(id)
-     * @param c Component
-     * @param obj Object name or BusinessObject
-     * @param inst Optional instance name, default = <code>the_ajax_(name)</code>
-     * @example
-     * const inst: string = $ui.getNavInstanceName(ctn, "MyObject"); // the_ajax_MyObject on the main navigation
-     */
-    getNavInstanceName(c: AnyContainer, obj: string | BusinessObject, inst?: string): string;
-    /** Web push service, loaded on demand */
-    _webpush?: WebPush;
-    /**
-     * WebPush service
-     * @example
-     * $ui.webpush();
-     */
-    webpush(data?: WebPushData): WebPush;
-    /** Firebase service, loaded on demand */
-    _firebase?: Firebase;
-    /**
-     * Firebase service wrapper
-     * @param data Service data, with optional keys:
-     * `config` (init web browser to receive notification),
-     * `token` (add the device token to FIREBASE_TOKENS on server side),
-     * `tap` (incoming notification has been tapped by user?),
-     * `body` (optional received message),
-     * `title` (optional message title),
-     * `from` (optional message origin),
-     * `message` (message to send on server-side),
-     * `to` (recipients `{ users:[], groups:[] }` or `'all'` users)
-     * @example
-     * // Send a notification to groups thru the server
-     * $ui.firebase({ message: "New order", to: { users: [], groups: ["MY_SALES"] } });
-     */
-    firebase(data?: FirebaseServiceData): Firebase;
-    /**
-     * Firebase default handler when a message is received thru FCM or worker.
-     * @param m Message or notification, with optional keys:
-     * `notification` (optional embedded message with title and body),
-     * `body` (message body),
-     * `title` (optional title),
-     * `priority` (optional priority `'high'|'normal'|'low'`),
-     * `data` (optional pairs of key-value, may be present on top of message, e.g. `object` and `rowId`),
-     * `tap` (foreground or background),
-     * `icon` (optional icon),
-     * `color` (optional color)
-     */
-    onMessageReceived(m: FirebaseMessage): void;
-    /** Internal: editor options */
-    _editor?: KeyObject;
-    /**
-     * Load local code editor
-     */
-    loadLocalEditor(): Promise<KeyObject>;
-    /**
-     * Load Simplicite standalone client lib
-     * @param cbk optional callback
-     * @example
-     * $ui.loadSimpliciteClient(() => $console.log("client lib loaded"));
-     */
-    loadSimpliciteClient(cbk?: Callback): UIEngine;
-    /**
-     * Load metadata of font icons
-     * @param cbk optional callback(meta)
-     * @example
-     * $ui.loadFontsMeta((meta: IconsMetadata) => $console.log(meta));
-     */
-    loadFontsMeta(cbk?: (meta: IconsMetadata) => void): UIEngine;
-    /**
-     * Load the diagram engine
-     * @example
-     * await $ui.loadDiagramEngine();
-     */
-    loadDiagramEngine(): Promise<DiagramEngine>;
-    private _speech?;
-    /**
-     * Load the speech engine
-     * @example
-     * const speech: Speech = $ui.loadSpeech();
-     */
-    loadSpeech(): Speech;
-    private _ocr?;
-    /**
-     * Load the OCR tools
-     * @example
-     * $ui.loadOCR(() => $console.log("OCR ready"));
-     */
-    loadOCR(cbk?: CallableFunction): void;
-    /**
-     * UI monitoring
-     * @param ctn Container to monitor
-     * @param params Parameters or action
-     * @param params.action Action name (get, meta, search, display...) if unset: save and stop monitoring in the container
-     * @param params.service UI service name (displayForm...)
-     * @param params.target Target name (object, view, process...)
-     * @param params.ui Front or Ajax call
-     * @example
-     * // Start tracing a custom service (a service is required on the first call)
-     * $ui.monitor(ctn, { action: "display", service: "MyService", target: "MyObject", ui: true });
-     * $ui.monitor(ctn, { action: "onload", ui: true });
-     * // No action: save the trace and stop
-     * $ui.monitor(ctn);
-     */
-    monitor(ctn: AnyContainer | null, params?: string | {
-        action: string;
-        service?: string;
-        target?: string;
-        ui?: boolean;
-    }): UIEngine | undefined;
-    /**
-     * Loading page with status
-     */
-    splash(status: boolean | string): void;
-    /**
-     * Top Simplicite window
-     * @example
-     * const topUI: Window = $ui.getTop();
-     */
-    getTop(): Window & typeof globalThis;
-}
-
-/**
- * Workflow controller
- * @param ui Main UI controller
- */
-declare class Workflow {
-    /** Server-side specific instance */
-    readonly bpmActivityObject = "BPMActivityFile";
-    /** Server-side instance of the activity files */
-    readonly bpmActivityInst = "list_ajax_BPMActivityFile";
-    /**
-     * Get a business process with its UI hooks.
-     * @param process Process name or process
-     * @param cbk Optional callback with the process
-     * @returns This controller
-     */
-    getUIProcess(process: string | BusinessProcess, cbk?: (wkf: BusinessProcess) => void): this;
-    /**
-     * Display a process activity.
-     * @param ctn Container
-     * @param process Process name or process (null = current process)
-     * @param action Optional process action
-     * @param options Optional parameters
-     * @param cbk Optional callback when displayed
-     */
-    display(ctn: Container, process: string | BusinessProcess | null, action?: ProcessActionType, options?: ProcessParam, cbk?: Callback): this;
-    /** Service call */
-    service(ctn: Container, wkf: BusinessProcess, action: ProcessActionType, onSuccess: (act?: ActivityFile) => void, onError: (reason: MessageFromBack) => void, params?: {
-        road?: boolean;
-        object?: string;
-        rowId?: string;
-        step?: string;
-    }): void;
-    /** Success : dispatch response */
-    success(ctn: Container, wkf: BusinessProcess, resp?: ActivityFile, p?: ProcessParam, cbk?: Callback): void;
-    /** Error : return to activity with messages */
-    error(ctn: Container, wkf: BusinessProcess, err: MessageFromBack, p?: ProcessParam, cbk?: Callback): void;
-    /** Activities list filtered on process name and step */
-    displayList(ctn: Container, wkf: BusinessProcess, options?: {
-        step?: string;
-    } | null, cbk?: Callback): this;
-    /**
-     * Display the activity
-     * @param ctn Container
-     * @param wkf Business process instance
-     * @param activity Current activity with metadata
-     * @param options Options
-     * <ul>
-     * <li>showRoad: displays the workflow navbar, default true</li>
-     * <li>msg: back-end messages to display</li>
-     * <li>workflow: true</li>
-     * </ul>
-     * @param cbk Optional callback
-     */
-    displayActivity(ctn: Container, wkf: BusinessProcess, activity: ActivityFile | null, options?: ProcessParam, cbk?: (wkf: BusinessProcess, act?: ActivityFile, p?: ProcessParam) => void): Promise<this | undefined>;
-}
-
-/** Agenda of an object */
-interface Agenda {
-    /** Agenda row ID */
-    id: string;
-    /** Agenda name */
-    name: string;
-    /** Agenda is enabled */
-    enabled: boolean;
-    /** Events can be moved or resized */
-    editable?: boolean;
-    /** WEEK */
-    display?: string;
-    /** Default 1=monday */
-    firstDay?: number;
-    /** Hidden days (0 = sunday) */
-    hiddenDays?: number[];
-    /** [1, 2, 3, 4, 5] monday to friday */
-    workingDays?: number[];
-    /** 09:00 */
-    startTime?: string;
-    /** 18:00 */
-    endTime?: string;
-    /** Start date field name */
-    date: string;
-    /** Duration field name */
-    duration?: string;
-    /** End date field name */
-    endDate?: string;
-    /** Calendar height */
-    height?: number;
-    /** First displayed time (ex: `08:00`) */
-    minTime?: string;
-    /** Last displayed time (ex: `20:00`) */
-    maxTime?: string;
-    /** Duration of a time slot */
-    slot?: string;
-    /** Snap duration when moving an event */
-    snap?: string;
-    /** Label field names of an event */
-    labels?: string[];
-    /** Default user login */
-    user?: string;
-    /** User field name */
-    userField?: string;
-    /** Default group name */
-    group?: string;
-    /** Group field name */
-    groupField?: string;
-}
-/** Parameters of a calendar display (see `$ui.displayCalendar`) */
-interface CalendarParam {
-    /** Filter on user login */
-    login?: string;
-    /** Filter on group */
-    group?: string;
-    /** Initial date */
-    date?: Date;
-    /** Locale */
-    locale?: string;
-    /** Renderer: is the event editable? */
-    editable?: (obj: BusinessObject, item: KeyObject) => boolean;
-    /** Handler on event click */
-    click?: (arg: EventClickArg) => void;
-    /** Handler on dates selection */
-    select?: (arg: DateSelectArg) => void;
-    /** Handler on event drop */
-    drop?: (arg: EventDropArg) => void;
-    /** Handler on event resize */
-    resize?: (arg: EventResizeDoneArg) => void;
-    /** Handler on render */
-    render?: (arg: DateSelectArg) => void;
-    /** Renderer: title of the event */
-    title?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: header of a column */
-    column?: (date: string) => void;
-    /** Renderer: background color of the event */
-    color?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: border color of the event */
-    borderColor?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: text color of the event */
-    textColor?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Renderer: CSS classes of the event */
-    classNames?: (obj: BusinessObject, item: KeyObject) => string[];
-    /** Renderer: label of the color legend */
-    colorLabel?: (obj: BusinessObject, item: KeyObject) => string;
-    /** Hook before loading */
-    beforeload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
-    /** Hook when displayed */
-    onload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
-    /** Hook when removed */
-    onunload?: (ctn: Container, obj: UIBusinessObject, agd: object, p: KeyObject) => void;
-    /** First displayed time */
-    minTime?: string;
-    /** Last displayed time */
-    maxTime?: string;
-    /** Duration of a time slot */
-    slot?: string;
-    /** Snap duration when moving an event */
-    snap?: string;
-    /** Working days (1 = monday) */
-    workingDays?: number[];
-    /** Start time of the working day */
-    startTime?: string;
-    /** End time of the working day */
-    endTime?: string;
-    /** Calendar height */
-    height?: number;
-}
-/**
- * Calendar controller (based on FullCalendar V5)
- * @param options <code>\{ locale, version \}</code>
- */
-declare class UICalendar {
-    /** Date format of the service */
-    readonly dateFormat = "YYYY-MM-DD HH:mm:ss";
-    /** Current date per calendar */
-    currentDate: {
-        [key: string]: Date;
-    };
-    /** Current filter per calendar */
-    currentFilter: {
-        [key: string]: string;
-    };
-    /** FullCalendar instance */
-    cal?: Calendar;
-    /** Options `{ locale, version }` */
-    options: KeyObject;
-    constructor(options: {
-        locale?: string;
-        version?: number;
-    });
-    /**
-     * Set date
-     */
-    setDate(name: string, date?: Date): void;
-    /**
-     * Get date
-     */
-    getDate(name: string): Date;
-    /**
-     * Get filter (user or group field)
-     */
-    setFilter(name: string, filter?: string): void;
-    /**
-     * Get filter (user or group field)
-     */
-    getFilter(name: string): string;
-    /**
-     * Generate a light color
-     */
-    hsl(text: string): string;
-    /**
-     * Display calendar
-     * @param ctn Container
-     * @param obj Business object
-     * @param agd Agenda definition
-     * @param params options
-     * @param params.login optional login filter
-     * @param params.group optional group filter
-     * @param params.date current date to show
-     * @param params.editable editable?
-     * @param params.locale use locale (ex 'fr', 'es')
-     * @param params.click click handler (default open the update form)
-     * @param params.select select date handler (default open the create form)
-     * @param params.drop drop event handler (default update the event start date)
-     * @param params.resize resize event handler (default update the event duration)
-     * @param params.title handler(obj,item) of event title (default based on label fields)
-     * @param params.column handler(date) to override column header (HTML)
-     * @param params.color handler(obj,item) for event background (default grey or hash of selected login|group)
-     * @param params.borderColor handler(obj,item) for border color
-     * @param params.textColor handler(obj,item) for text color
-     * @param params.classNames handler(obj,item) to get an array of CSS classes
-     * @param params.render handler to override the render the event
-     * @param params.minTime default "00:00:00"
-     * @param params.maxTime default "24:00:00"
-     * @param params.slot default "00:30:00"
-     * @param params.snap default "00:05:00"
-     * @param params.workingDays default [1,2,3,4,5] = monday to friday
-     * @param params.startTime default "09:00" for business hours
-     * @param params.endTime default "18:00" for business hours
-     * @param params.height default 800
-     * @param cbk Optional callback
-     */
-    display(ctn: AnyContainer, obj: BusinessObject, agd: Agenda, params?: CalendarParam, cbk?: Callback): Promise<void>;
-}
-
-/** A place of a place map: one record with its coordinates and labels */
-interface Place {
-    /** Coordinates `"lat;lng"` or `"lat,lng"` */
-    coord: string;
-    /** Value of the first label field */
-    label1?: string;
-    /** Value of the second label field */
-    label2?: string;
-    /** Value of the third label field */
-    label3?: string;
-    /** Value of the address field */
-    address?: string;
-}
-/** Place map definition: object fields to locate and describe the places */
-interface Placemap {
-    /** Place map row ID */
-    id: string;
-    /** Place map name */
-    name: string;
-    /** Places to display */
-    places: Place[];
-    /** Name of the first label field */
-    label1?: string;
-    /** Name of the second label field */
-    label2?: string;
-    /** Name of the third label field */
-    label3?: string;
-    /** Name of the address field */
-    address?: string;
-}
-/** Leaflet map settings */
-interface MapSettings {
-    /** Tile layer URL template (ex: `https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png`) */
-    tileLayer: string;
-    /** Default center latitude */
-    lat?: number;
-    /** Default center longitude */
-    lng?: number;
-    /** Default zoom level (default 13) */
-    zoom?: number;
-    /** Attribution of the tile layer */
-    attribution?: string;
-    /** Maximum zoom level */
-    maxZoom?: number;
-}
-/**
- * Place Map renderer
- */
-declare class UIMap {
-    /** Map settings */
-    options: MapSettings;
-    /** Leaflet map, set by `display` */
-    map?: L.Map;
-    /** Markers added with `addMarker` */
-    map_markers?: L.Marker[];
-    /**
-     * @param options Options <code>\{ tileLayer, attribution, maxZoom, lat, lng, zoom \}</code>
-     */
-    constructor(options: MapSettings);
-    /**
-     * Parse coordinates.
-     * @param coord Coordinates `"lat;lng"` or `"lat,lng"`
-     * @returns The `[lat, lng]` tuple, or the default center when invalid
-     */
-    getLatLong(coord: string): LatLngTuple;
-    /**
-     * Init a map in the container
-     * @param ctn Container
-     * @param pm Placemap definition
-     */
-    display(ctn: AnyContainer, pm?: Placemap): string | false | undefined;
-    /**
-     * A map can only have bounds if it contains at least two markers.
-     * @returns true when the map has at least 2 markers
-     */
-    hasBounds(): boolean;
-    /**
-     * Bounds of all the markers.
-     * @returns The bounds, or undefined when there are less than 2 markers
-     */
-    getLatLngBounds(): L.LatLngBounds | undefined;
-    /**
-     * Add a marker on map
-     * @param params Parameters
-     * @param params.coord coma-separated coordinates
-     * @param params.onMove callback function when user moves marker
-     */
-    addSelector(params: {
-        coord: string;
-        onMove?: (lat: string, lng: string) => void;
-    }): boolean;
-    /**
-     * Add a marker on map
-     * @param params Parameters <code>\{ coord, info, center \}</code>
-     * @param params.coord coma-separated coordinates
-     * @param params.info jquery element to show in popup
-     */
-    addMarker(params: {
-        coord: string;
-        info?: JQuery;
-    }): boolean;
-    /**
-     * Build the marker info
-     */
-    getMarkerInfo(o: BusinessObject, pm: Placemap, place: Place, onOpen: (id: string) => void): JQuery<HTMLElement>;
-}
-
-/** HSV color */
-interface HSV {
-    /** 0..360 */
-    h: number;
-    /** 0..100 */
-    s: number;
-    /** 0..100 */
-    v: number;
-}
-/** RGB color */
-interface RGB {
-    /** 0..255 */
-    r: number;
-    /** 0..255 */
-    g: number;
-    /** 0..255 */
-    b: number;
-}
-/** RGB color with alpha */
-type RGBA = RGB & {
-    /** 0..1 */
-    a?: number;
-};
-/** Oklab color */
-interface OKLAB {
-    /** Positive */
-    L: number;
-    /** Signed */
-    a: number;
-    /** Signed */
-    b: number;
-}
-/** Contrast between a text and its background */
-interface Contrast {
-    /** Background color */
-    bgcolor: RGBA;
-    /** Text color */
-    color: RGBA;
-    /** Min 4.5 */
-    ratio: number;
-    /** Error when the contrast is too low */
-    error?: string;
-}
-/** Named CSS colors by group */
-interface CSSColors {
-    /** Group name */
-    name: string;
-    /** Named colors of the group */
-    list: KeyString[];
-}
-/** Named CSS colors by group */
-declare const CSSCOLORS: CSSColors[];
-/**
- * Color helpers
- */
-declare class UIColor {
-    /** Type of colors */
-    static readonly TYPES: string[];
-    /** minimal WCAG level AAA is 4.5 */
-    static readonly MIN_CONTRAST = 4.5;
-    /** legacy regex for 'rgb(123, 123, 123)' or 'rgba(123, 123, 123, 0.33)'*/
-    static readonly rgbaRegex: RegExp;
-    /** legacy regex for 'rgb(123, 123, 123)' */
-    static readonly rgbRegex: RegExp;
-    /** regex for 'rgb(123 123 123)' or 'rgb(123 123 123 / 0.5)' */
-    static readonly rgbRegex2: RegExp;
-    /** regex for '#RRGGBB' or '#rrggbb' */
-    static readonly hexRegex: RegExp;
-    /** regex for 'color(srgb 0.17 0.13 0.28 / 0.5)' */
-    static readonly srgbRegex: RegExp;
-    /** oklab(0.28 -0.07 -0.03 / 0.5) */
-    static readonly oklabRegex: RegExp;
-    /**
-     * Convert color string to #rrggbb
-     * @param rgb color
-     * @returns A color <code>#RRGGBB</code>
-     */
-    rgb2hex(rgb: string): string;
-    /**
-     * Convert string color to object
-     * @param color css color
-     * @param alpha optioanl alpha (transparency 0..1)
-     * @returns object <code>\{r,g,b,a\}</code>
-     */
-    css2rgb(color: string, alpha?: number): RGBA;
-    /**
-     * Convert color to hexa format
-     * @param rgb Color
-     * @returns Color <code>#RRGGBB</code> or <code>#RRGGBBAA</code>
-     */
-    rgb2css(rgb?: RGBA | null): string;
-    /**
-     * Convert <code>#RRGGBB</code> to string
-     * @param color Color <code>#RRGGBB</code>
-     * @param alpha Alpha (transparency)
-     * @returns string <code>'rgba(r,g,b,a)'</code>
-     */
-    css2rgba(color: string, alpha?: number): string;
-    /**
-     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
-     * @param color Color <code>\{r,g,b\}</code>
-     * @returns Color <code>\{h,s,v\}</code>
-     */
-    rgb2hsv(color: RGB): HSV;
-    /**
-     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
-     * @param hsv Color <code>\{h,s,v\}</code>
-     * @returns Color <code>\{r,g,b\}</code>
-     */
-    hsv2rgb(hsv: HSV): RGB;
-    /**
-     * Calculate the color luminance 0..1
-     * @param c #RRGGBB or <code>\{r,g,b\}</code>
-     * @returns luminance
-     */
-    luminance(c: string | RGB): number;
-    /**
-     * Calculate the contrast ratio between 2 colors
-     * @param c1 #RRGGBB or <code>\{r,g,b\}</code>
-     * @param c2 #RRGGBB or <code>\{r,g,b\}</code>
-     * @returns minimal ratio recommanded by WCAG is 4.5 (or 3 for larger font-sizes)
-     */
-    contrast(c1: string | RGB, c2: string | RGB): number;
-    /**
-     * Computed text and background colors of an element (transparent colors look at the parents).
-     * @param el Element
-     * @returns The colors
-     */
-    getComputedColors(el: HTMLElement): Partial<Contrast>;
-    /**
-     * Contrast of an element with its background.
-     * @param el Element
-     * @param minRatio Minimum ratio (WCAG)
-     * @returns The contrast with an error when too low, or undefined when not evaluable
-     */
-    elementContrast(el: HTMLElement, minRatio?: number): Contrast | undefined;
-    /**
-     * Black or white color to contrast with a color.
-     * @param color Background color
-     * @returns `black` or `white`
-     */
-    contrastedColor(color: string): "black" | "white";
-    /**
-     * Convert a color to RGB object
-     * @param color supported spaces: #RRGGBB, rgb(), color(srgb r g b / x), oklab(L a b / x)
-     */
-    static convertToRGB(color: string): RGBA | undefined;
-    /**
-     * Gamma 2.2 to linear value.
-     * @param c Value 0..1
-     * @returns Linear value
-     */
-    static gamma2Linear(c: number): number;
-    /**
-     * Linear to gamma 2.2 value.
-     * @param c Value 0..1
-     * @returns Gamma value
-     */
-    static linear2Gamma(c: number): number;
-    /**
-     * Convert a RGB color to Oklab.
-     * @param color RGB color
-     * @param linear true when the RGB is linear (else sRGB)
-     * @returns Oklab color
-     */
-    static sRGB2oklab(color: RGB, linear?: boolean): OKLAB;
-    /**
-     * Round and clamp a value in a range.
-     * @param value Value
-     * @param min Minimum (default 0)
-     * @param max Maximum (default 255)
-     * @returns Clamped value
-     */
-    static clamp(value: number, min?: number, max?: number): number;
-    /**
-     * Convert an Oklab color to RGB.
-     * @param oklab Oklab color
-     * @param linear true to return linear RGB (else sRGB)
-     * @returns RGB color
-     */
-    static oklab2RGB(oklab: OKLAB, linear?: boolean): RGB;
-    /**
-     * Convert a sRGB color (0..1) to RGB (0..255).
-     * @param rgb sRGB color
-     * @param linear true when the color is already linear
-     * @returns RGB color
-     */
-    static sRGB2RGB(rgb: RGB, linear?: boolean): RGB;
-    /** WCAG 2.1 sRGB transfer function (distinct from the 2.2 gamma used by Oklab) */
-    static srgb2Linear(c: number): number;
-}
-
-/** Axis type: `C` column, `L` line, `V` value */
-type CrosstabAxisType = "C" | "L" | "V";
-/** Axis of a crosstab */
-interface CrosstabAxis {
-    /** Field name */
-    field: string;
-    /** Axis name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Order of the axis */
-    order: number;
-    /** Caption position */
-    caption?: string;
-    /** TODO "T" | "F"... */
-    method: string;
-    /** Axis type */
-    type: CrosstabAxisType;
-    /** Formula of a calculated value */
-    formula?: string;
-    /** Date grouping (year, month, day...) */
-    dateGroup?: string;
-    /** Index of the Y axis in chart */
-    yaxis?: number;
-    /** Hidden axis */
-    hidden?: boolean;
-    /** Chart type */
-    chart?: string;
-    /** Color palette */
-    palette?: string;
-    /** Field definition */
-    f?: ObjectField;
-}
-/** Crosstab metadata */
-interface CrosstabMetadata {
-    /** Crosstab row ID */
-    id: string;
-    /** Crosstab name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Default aggregation method */
-    method?: string;
-    /** Available aggregation methods */
-    methods: EnumItem[];
-    /** Available date groupings */
-    dateGroups: EnumItem[];
-    /** Color of the sub-totals */
-    subcolor?: string;
-    /** Show the control panel */
-    control?: boolean;
-    /** Show the sub-totals */
-    subtotal?: boolean;
-    /** "no" or position */
-    caption?: string;
-    /** Precision of the values */
-    precision?: number;
-    /** Editable axis */
-    editable?: boolean;
-    /** Chart type */
-    chart?: string;
-    /** Chart width */
-    width?: string;
-    /** Chart height */
-    height?: string;
-    /** Color palette */
-    palette?: string;
-    /** Axis in columns */
-    columns?: CrosstabAxis[];
-    /** Axis in lines */
-    lines?: CrosstabAxis[];
-    /** Values */
-    values?: CrosstabAxis[];
-}
-/** Crosstab rendering options (`z` parameters sent to the service) */
-interface CrosstabParam {
-    /** "no" or position */
-    zcaption?: string;
-    /** Show the table */
-    ztable?: boolean;
-    /** Always get lines tree + metadata */
-    ztree?: true;
-    /** Show the sub-totals */
-    zstotal?: boolean;
-    /** Color of the sub-totals */
-    zstcolor?: string | null;
-    /** Axis definitions */
-    zaxis?: KeyObject[];
-    /** Filters */
-    zfilters?: KeyObject;
-    /** Color palette */
-    zpalette?: string;
-    /** Mono chart name */
-    zgraph?: string;
-    /** Chart names of multi charts */
-    [key: `zgraph_${string}`]: string;
-    /** Chart width */
-    zwidth?: string;
-    /** Chart height */
-    zheight?: string;
-    /** Show the control panel */
-    zcontrol?: boolean;
-    /** Selected tab of the control panel */
-    controlTab?: number;
-    /** Search handler */
-    search?: (filters: KeyObject) => void;
-    /** Apply the options */
-    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
-    /** Export the data in a media (CSV, XLSX...) */
-    exportData?: (media: string) => void;
-    /** Reload the crosstab */
-    reload?: Callback;
-    /** Error handler */
-    error?: Callback;
-}
-/** Parameters of a crosstab display (see `$ui.displayCrosstab`) */
-type CrosstabNavParam = NavParam & {
-    /** Optional instance name */
-    inst?: string;
-    /** Optional filters to apply */
-    filters?: KeyObject;
-    /** Optional crosstab options */
-    options?: CrosstabParam;
-    /** Search handler */
-    search?: (filters: KeyObject) => void;
-    /** Apply the options */
-    apply?: (obj: BusinessObject, ct: CrosstabMetadata, p: CrosstabParam) => void;
-    /** Export the data in a media (CSV, XLSX...) */
-    exportData?: (media: string) => void;
-    /** Reload the crosstab */
-    reload?: Callback;
-    /** Error handler */
-    error?: Callback;
-};
-/** Crosstab data */
-interface CrosstabData {
-    /** Column nodes */
-    columns: CrosstabNode[];
-    /** Root of the line nodes */
-    lines: CrosstabNode;
-}
-/** Node of a crosstab axis */
-interface CrosstabNode {
-    /** Index */
-    index: number;
-    /** Path in the tree */
-    path: string;
-    /** Name */
-    name: string;
-    /** Text color */
-    color?: string;
-    /** Background color */
-    bgcolor?: string;
-    /** Background colors per value */
-    bgcolors?: (string | null)[];
-    /** Values */
-    values?: any;
-    /** Labels */
-    labels?: string[];
-    /** Row IDs */
-    ids?: string[];
-    /** Child nodes */
-    children?: CrosstabNode[];
-}
-/**
- * Crosstab rendering
- */
-declare class Crosstab {
-    private controlTab;
-    /**
-     * Display the cross tab
-     * @param ctn Container
-     * @param obj Object
-     * @param ct Crosstab definition
-     * @param data Crosstab data
-     * @param p options { zstotal, zstcolor, zcaption, ztable, zgraph... }
-     */
-    display(ctn: Container, obj: BusinessObject, ct: CrosstabMetadata, data: CrosstabData, p: CrosstabParam, cbk?: Callback): this;
-    private axisDragDrop;
-}
-
-/** Handler on chart click */
-type ChartClickHandler = (chart: Chart, clickElements: InteractionItem[], dataset: InteractionItem[], elementIndex: number, datasetIndex: number) => void;
-/** Options of the charts (each chart uses its own subset) */
-interface ChartParam {
-    /** Chart type (ex: 'pie', 'doughnut', 'bar', 'line') */
-    type?: ChartType;
-    /** Title */
-    title?: string;
-    /** Display the legend? */
-    legend?: boolean;
-    /** Colors of the values (default palette) */
-    colors?: string[] | null;
-    /** Animate the rotation (pie)? */
-    animate?: boolean;
-    /** Animation? */
-    animation?: boolean;
-    /** Responsive chart? */
-    responsive?: boolean;
-    /** Dark mode? */
-    dark?: boolean;
-    /** Stacked bars or lines? */
-    stacked?: boolean;
-    /** Horizontal bars? */
-    horizontal?: boolean;
-    /** Aspect ratio (default 2) */
-    aspectRatio?: number;
-    /** Logarithmic Y axis? */
-    log?: boolean;
-    /** Values in log10? */
-    log10?: boolean;
-    /** Zoom on X axis by mouse drag? */
-    zoom?: boolean;
-    /** Type of X axis (ex: 'time', 'date') */
-    xType?: string;
-    /** Time format of X axis */
-    timeFormat?: string;
-    /** Minimum of X axis */
-    min?: number | string;
-    /** Maximum of X axis */
-    max?: number | string;
-    /** Unit of Y axis */
-    unit?: string;
-    /** Unit of X axis */
-    xUnit?: string;
-    /** Unit of the second Y axis */
-    y2unit?: string;
-    /** Unit of Y axis (bubble) */
-    yUnit?: string;
-    /** Label of X axis (bubble, default 'x') */
-    xLabel?: string;
-    /** Label of Y axis (bubble, default 'y') */
-    yLabel?: string;
-    /** Line tension (0 = straight lines) */
-    lineTension?: number;
-    /** Width (default 100%) */
-    width?: string;
-    /** Height (default 200px) */
-    height?: string;
-    /** Click handler */
-    onClick?: ChartClickHandler;
-    /** Existing chart to update */
-    chart?: Chart;
-}
-/** Count per status for {@link Charts.chartStatusPie}: list of [status label, count] */
-type StatusPieData = [string, number][];
-/** Count per status and date for {@link Charts.chartStatusCount} */
-interface StatusCountData {
-    /** Date format of the period */
-    format?: string;
-    /** Status labels */
-    series: string[];
-    /** Points [datetime, count] per status */
-    data: [string, number][][];
-}
-/** Duration per status for {@link Charts.chartStatusDuration} */
-interface StatusDurationData {
-    /** Duration unit: seconds, minutes, hours or days */
-    unit: "s" | "m" | "h" | "d";
-    /** Status labels */
-    ticks: string[];
-    /** Durations per status: [averages, maximums, minimums] */
-    data: [number[], number[], number[]];
-}
-/** Terminal status durations for {@link Charts.chartStatusTerminal} */
-interface StatusTerminalData {
-    /** Terminal status labels */
-    series: string[];
-    /** Points [duration in days, count] per terminal status */
-    data: [number, number][][];
-}
-/** Serie of points for {@link Charts.chartTimeSeries} */
-interface PlotSerie {
-    /** Serie label */
-    label: string;
-    /** Points `[x, y]`: x is a date `YYYY-MM-DD HH:mm:ss` or a number */
-    data: [string | number, number][];
-    /** Fill the area under the line */
-    fill?: boolean;
-    /** Display as bars */
-    bar?: boolean;
-    /** Display only the points without line */
-    points?: boolean;
-    /** Use the second Y axis on the right */
-    y2?: boolean;
-    /** Specific color */
-    color?: string;
-}
-/**
- * ChartJS controller
- */
-declare class Charts {
-    constructor();
-    /**
-     * Current palette name
-     */
-    PALETTE: string;
-    /**
-     * Predefined palettes <code>\{ name:[colors] \}</code>.
-     */
-    PALETTES: {
-        [key: string]: string[];
-    };
-    /** Bright color of the palette */
-    BRIGHT_COLOR?: string;
-    /** Dark color of the palette */
-    DARK_COLOR?: string;
-    /**
-     * Current palette of colors <br />
-     * default: <code>app.sysparams.CHART_PALETTE</code> or 'Sea'
-     */
-    COLORS: string[];
-    /** Units to format a file size */
-    readonly SIZES: (string | number)[][];
-    /**
-     * Indexed color in palette
-     * @param i Index
-     * @returns color (<code>#RRGGBB</code>)
-     */
-    getColor(i: number): string;
-    /**
-     * All palette colors
-     * @returns array of colors (<code>#RRGGBB</code>)
-     */
-    getColors(): string[];
-    /**
-     * Current palette
-     * @returns palette = list of colors
-     */
-    getPalette(): string;
-    /**
-     * Change the current palette
-     * @param name Palette name ('Sea', 'Base'...)
-     */
-    setPalette(name: string): void;
-    /**
-     * Chart JS
-     * @param ctn Container
-     * @param config From chart.js v3 config with options
-     * @param click Optional handler <code>function(chart, clickElements, dataset, elementIndex, datasetIndex)</code>
-     */
-    chart(ctn: Container, config: ChartConfiguration, click?: ChartClickHandler, ariaLabel?: string): Chart | undefined;
-    /**
-     * Destroy the charts of a container
-     * @param ctn Container
-     */
-    destroy(ctn: Container): void;
-    /**
-     * Enable the zoom on X axis by mouse drag (needs the chartjs-plugin-zoom, reset by double-click)
-     * @param config Chart config
-     */
-    zoom(config: ChartConfiguration): void;
-    /**
-     * Dark theme: black background with light texts and grid
-     * @param config Chart config
-     */
-    dark(config: ChartConfiguration): void;
-    /**
-     * Add a title and legend
-     * @param config Chart config
-     * @param title display+text
-     * @param legend display+position
-     */
-    addTitle(config: ChartConfiguration, title: TitleOptions, legend: TitleOptions): void;
-    /**
-     * Set Stacked option
-     * @param config Chart config
-     * @param stacked true to stack axis
-     */
-    stacked(config: ChartConfiguration, stacked?: boolean): void;
-    /**
-     * Apply the common scale options
-     * @param config Chart config
-     * @param p Options: `log` for a logarithmic Y axis, `zoom` to zoom on X axis by mouse drag
-     */
-    scaleOptions(config: ChartConfiguration, p: ChartParam): void;
-    /**
-     * Set the background color of chart
-     * @param config Chart config
-     * @param color background color of canvas
-     */
-    backgroundColor(config: ChartConfiguration, color: string): void;
-    /**
-     * Status count in a PIE
-     * @param ctn Container
-     * @param data Pie data
-     * @param p Optional chart.js options
-     */
-    chartStatusPie(ctn: Container, data: StatusPieData, p: ChartParam): void;
-    /**
-     * Status count in a chart line per date
-     * @param ctn Container
-     * @param data Line data
-     * @param p Optional chart.js options
-     */
-    chartStatusCount(ctn: Container, data: StatusCountData, p: ChartParam): void;
-    /**
-     * Status duration in a polar/radar/bar charts
-     * @param ctn Container
-     * @param d Duration data
-     * @param p Optional chart.js options
-     */
-    chartStatusDuration(ctn: Container, d: StatusDurationData, p: ChartParam): void;
-    /**
-     * Asysnc queue chart
-     * @param ctn Container
-     * @param hist History data
-     * @param p Options width ans height
-     */
-    chartQueueHistory(ctn: Container, hist: KeyObject, p: ChartParam): void;
-    /**
-     * Process duration in a bar chart
-     * @param ctn Container
-     * @param data Duration data
-     * @param p Optional chart.js options
-     */
-    chartStatusTerminal(ctn: Container, data: StatusTerminalData, p: ChartParam): void;
-    /**
-     * Series on a time or numeric X axis (monitoring, histories...)
-     * @param ctn Container
-     * @param series Series of points
-     * @param p Options:
-     * `title` (chart title),
-     * `xType` (`time` default or `linear`),
-     * `timeFormat` (moment format of the time ticks),
-     * `min`/`max` (X axis range),
-     * `xUnit`/`unit`/`y2unit` (units of the X, Y and second Y axis ticks),
-     * `log` (logarithmic Y axes),
-     * `stacked` (stacked Y values),
-     * `zoom` (zoom by mouse drag, default true),
-     * `legend` (default true),
-     * `dark` (dark theme),
-     * `colors` (default palette)
-     * @returns Chart
-     * @example
-     * await $factory.ChartJS();
-     * $ui.charts?.chartTimeSeries(ctn, [
-     * 	{ label: "Sessions", data: [["2026-09-24 10:00:00", 12], ["2026-09-24 11:00:00", 18]], fill: true },
-     * 	{ label: "Errors", data: [["2026-09-24 10:00:00", 1], ["2026-09-24 11:00:00", 3]], bar: true }
-     * ], { title: "Activity", timeFormat: "HH:mm", log: false });
-     */
-    chartTimeSeries(ctn: Container, series: PlotSerie[], p?: ChartParam): Chart | undefined;
-    /**
-     * Stacked bars per category
-     * @param ctn Container
-     * @param d Data: `series` (labels of series), `ticks` (categories), `data` (values per serie and category)
-     * @param p Options:
-     * `title` (chart title),
-     * `horizontal` (horizontal bars),
-     * `unit` (unit of the values),
-     * `max` (max value),
-     * `legend` (default true),
-     * `dark` (dark theme),
-     * `colors` (default palette)
-     * @returns Chart
-     * @example
-     * await $factory.ChartJS();
-     * $ui.charts?.chartBars(ctn, {
-     * 	series: ["Open", "Closed"],
-     * 	ticks: ["Jan", "Feb", "Mar"],
-     * 	data: [[10, 20, 15], [5, 8, 12]]
-     * }, { title: "Tickets", horizontal: false });
-     */
-    chartBars(ctn: Container, d: {
-        series: string[];
-        ticks: string[];
-        data: number[][];
-    }, p?: ChartParam): Chart | undefined;
-    /**
-     * Bubbles with one dataset per bubble
-     * @param ctn Container
-     * @param points Bubbles `[x, y, count, label]`
-     * @param p Options:
-     * `title` (chart title),
-     * `xUnit`/`yUnit` (units of the axes),
-     * `xLabel`/`yLabel` (labels of the values in tooltip),
-     * `colors` (default palette)
-     * @returns Chart
-     * @example
-     * await $factory.ChartJS();
-     * // [x, y, count, label]
-     * $ui.charts?.chartBubble(ctn, [[2, 5, 10, "Process A"], [4, 1, 3, "Process B"]], {
-     * 	title: "Process times", xUnit: "d", yUnit: "d"
-     * });
-     */
-    chartBubble(ctn: Container, points: [number, number, number, string][], p?: ChartParam): Chart | undefined;
-    /**
-     * Chart for crosstab
-     */
-    chartCrosstab(ctn: Container, ct: CrosstabMetadata, data: KeyObject, p?: ChartParam): void;
-    /**
-     * Format octets size to Kb/Mb/Gb/Tb
-     * @param size Size
-     */
-    size(size: string): string | undefined;
-    /**
-     * Heap chart of browser memory (LOG_UI=yes)
-     * @param ctn Container
-     * @param data Lines data <code>[\{d,u,t\},...]</code>
-     * @param p Optional chart.js options
-     */
-    chartHeapSize(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
-    /**
-     * Steps of front service (LOG_UI=yes)
-     */
-    chartServiceSteps(ctn: Container, data: KeyObject[], p: ChartParam): Chart | undefined;
-    /**
-     * Times of front service (LOG_UI=yes)
-     */
-    chartServiceTimes(ctn: Container, data: KeyObject, p: ChartParam): Chart | undefined;
-    /**
-     * Get the brightest color in the current palette
-     * @param darkest True to get the darkest one
-     * @returns A color <code>#RRGGBB</code>
-     */
-    getBrightColor(darkest?: boolean): string;
-    /**
-     * Get the lighten or darken color
-     * @param color <code>#RRGGBB</code>
-     * @param val -255..255
-     * @returns A color <code>#RRGGBB</code>
-     */
-    lightenDarkenColor(color: string, val: number): string;
-    /**
-     * Convert <code>#RRGGBB</code> to object <code>\{r,g,b,a\}</code>
-     * @param color Color <code>#RRGGBB</code>
-     * @param alpha Alpha (transparency)
-     * @returns object <code>\{r,g,b,a\}</code>
-     */
-    css2rgb(color: string, alpha?: number): RGBA;
-    /**
-     * Convert object <code>\{r,g,b\}</code> to <code>#RRGGBB</code>
-     * @param rgb Color <code>\{r,g,b\}</code>
-     * @returns Color <code>#RRGGBB</code>
-     */
-    rgb2css(rgb: RGB): string;
-    /**
-     * Convert <code>#RRGGBB</code> to string
-     * @param color Color <code>#RRGGBB</code>
-     * @param alpha Alpha (transparency)
-     * @returns string <code>'rgba(r,g,b,a)'</code>
-     */
-    css2rgba(color: string, alpha?: number): string;
-    /**
-     * Convert <code>\{r,g,b\}</code> to <code>\{h,s,v\}</code>
-     * @param color Color <code>\{r,g,b\}</code>
-     * @returns Color <code>\{h,s,v\}</code>
-     */
-    rgb2hsv(color: RGB): HSV;
-    /**
-     * Convert <code>\{h,s,v\}</code> to <code>\{r,g,b\}</code>
-     * @param hsv Color <code>\{h,s,v\}</code>
-     * @returns Color <code>\{r,g,b\}</code>
-     */
-    hsv2rgb(hsv: HSV): RGB;
-}
-
-/**
- * OCR tools (using the Tesseract.js lib) **EXPERIMENTAL**
- */
-declare class OCR {
-    /** URL of the Tesseract library */
-    readonly tessurl: string;
-    /**
-     * Extract the text of an image.
-     * @param img Image
-     * @param lang Language
-     * @returns Promise of the recognized text
-     */
-    doOCR(img: any, lang: string): Promise<any>;
-}
-
-/** Name of a color palette */
-type PaletteName = "Base" | "Pastel" | "Strong" | "Light" | "Bright" | "Mars" | "Sea" | "Berry" | "Fire" | "Choco";
-/** Parameters of a toast (see `$view.widget.toast`) */
-interface ToastParam {
-    /** Optional level */
-    level?: AlertType;
-    /** Toast body */
-    content: AnyContent;
-    /** Position `top` or `bottom` */
-    position?: string;
-    /** Align `left`, `right` or `center` */
-    align?: string;
-    /** Duration in ms (default 3000, -1 = no auto close) */
-    duration?: number;
-    /** Add an undo button */
-    undo?: boolean;
-    /** Add a pin button to keep the toast open */
-    pinable?: boolean;
-}
-/** Parameters of a scratch pad to draw on an image */
-interface ScratchPadParam {
-    /** Width */
-    width?: number;
-    /** Height */
-    height?: number;
-    /** Dialog title */
-    title?: string;
-    /** Inline pad (else in a dialog) */
-    inline?: boolean;
-    /** Image to draw on */
-    image: HTMLImageElement | JQuery;
-    /** Callback when the pad is loaded */
-    onload?: (pad: JQuery) => void;
-    /** Callback with the updated image data URL (null when removed) */
-    update: (dataURL: string | null) => void;
-}
-/** Parameters of a counter widget */
-interface CounterParam {
-    /** Object name */
-    name: string;
-    /** Object instance name */
-    instance?: string;
-    /** Optional field name to get total (or simple count) */
-    field?: string;
-    /** Object filters */
-    filters?: KeyObject;
-    /** Counter label */
-    label?: string;
-    /** Optional help title */
-    help?: string;
-    /** Background color (CSS color) */
-    bgColor?: string;
-    /** Text color (CSS color) */
-    textColor?: string;
-    /** Predefined background color grey(default)|blue|orange|red|green|purple|violet|yellow|turquoise|brown */
-    color?: string;
-    /** Icon name */
-    icon?: string;
-    /** Width (number of pixels or CSS dimension) */
-    width?: string | number;
-    /** Height (number of pixels or CSS dimension) */
-    height?: string | number;
-    /** Column span (defaults to max(3, 12 / number of objects)) */
-    colSpan?: number;
-    /** Click handler, `true` to open the list */
-    onclick?: true | JQueryHandler;
-}
-/** Parameters of a slider */
-interface SliderParam {
-    /** Input ID */
-    id?: string;
-    /** Input name */
-    name?: string;
-    /** Label */
-    label?: string;
-    /** Minimum value */
-    min?: number;
-    /** Maximum value */
-    max?: number;
-    /** Step */
-    step?: number;
-    /** Value */
-    value?: number;
-    /** Width */
-    width?: string;
-    /** Height */
-    height?: string;
-    /** Show the value */
-    showValue?: boolean;
-    /** Handler on change */
-    onchange?: JQueryHandler;
-    /** Handler on input */
-    oninput?: JQueryHandler;
-    /** Disabled */
-    disabled?: boolean;
-    /** Read-only: focusable, exposed as `aria-readonly`, every change blocked (ignored if `disabled`) */
-    readonly?: boolean;
-    /** Round or square */
-    round?: boolean;
-    /** Thin input */
-    thin?: boolean;
-}
-/**
- * Common widgets
- */
-declare class Widget {
-    /**
-     * Predefined palettes
-     * <ul>
-     * <li>Base</li>
-     * <li>Pastel</li>
-     * <li>Strong</li>
-     * <li>Light</li>
-     * <li>Bright</li>
-     * <li>Mars</li>
-     * <li>Sea</li>
-     * <li>Berry</li>
-     * <li>Fire</li>
-     * <li>Choco</li>
-     * </ul>
-     */
-    readonly PALETTES: {
-        [key: string]: string[];
-    };
-    /**
-     * Build an avatar image
-     * @param data or { login, firstname, lastname, picture (full usr_image_id document) }
-     * @returns .avatar
-     */
-    avatar(data?: UsageUser): JQuery<HTMLElement>;
-    /**
-     * Create a badge
-     * @param p value or { name, value }
-     * @returns div.badge
-     */
-    badge(p?: string | number | {
-        name?: string;
-        value?: string | number;
-    }): JQuery<HTMLElement>;
-    /**
-     * Wait dialog box
-     * @returns div.waitdlg
-     */
-    waitdlg(): JQuery<HTMLElement>;
-    /**
-     * Build a switch button on/off
-     * @param p button parameters
-     * @param p.id optional input id
-     * @param p.name input name
-     * @param p.value input initial value (default "1")
-     * @param p.onchange optional 'change' handler
-     * @param p.label optional accessible name through aria-label
-     * @param p.checked on/off ?
-     * @param p.disabled false to disable the switch
-     * @param p.round round or square?
-     * @returns span with a checkbox and a slider
-     */
-    switchButton(p: {
-        id?: string;
-        name?: string;
-        value?: string;
-        label?: string;
-        onchange?: JQueryHandler;
-        checked?: boolean;
-        disabled?: boolean;
-        round?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
-     * Build a slider
-     * @param p slider parameters
-     * @param p.id input id
-     * @param p.name input name
-     * @param p.min min value
-     * @param p.max max value
-     * @param p.step slider step
-     * @param p.value slider value
-     * @param p.width optional input width
-     * @param p.height optional input height
-     * @param p.showValue insert the value?
-     * @param p.onchange optional 'change' handler (on slider release)
-     * @param p.oninput optional 'input' handler (on slider move)
-     * @param p.disabled false to disable the slider
-     * @param p.readonly true for a focusable slider that cannot be changed
-     * @param p.round round or square?
-     * @param p.thin thin input?
-     * @returns div.slider
-     */
-    slider(p: SliderParam): JQuery<HTMLElement>;
-    /**
-     * Build a star slider (rate rendering)
-     * @param p slider parameters
-     * @param p.name input name
-     * @param p.size nb of stars, server values goes from 1 to size (0 = no star checked)
-     * @param p.value slider value
-     * @param p.disabled false to disable the slider
-     * @returns div.star-slider
-     */
-    starSlider(p: {
-        name: string;
-        size: number;
-        value?: number;
-        disabled?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
-     * Build an action control
-     * @param a action metadata
-     * @param o object
-     * @param rowId optional rowId for form/row action
-     * @param click click handler
-     * @param minified true to move the label in a tooltip
-     * @returns button or li for 'Plus' button
-     */
-    actionItem(a: Action, o: UIBusinessObject, rowId: string | null, click?: ActionHandler, minified?: boolean): JQuery<HTMLElement>;
-    /**
-     * Convert actions to buttons array
-     * @param o Business object
-     * @param rowId Optional rowId on form/row
-     * @param list List of actions as plain buttons
-     * @param plus List of actions as 'plus' button
-     * @param options Options
-     * @param options.alignRight true for right side
-     * @param options.minified true to move labels in tooltips
-     * @param options.dropUp true to drop up the 'plus' popup
-     * @param options.plusFirst true to put the plus button on first position
-     * @param options.grouped true to group plain buttons per type (print, crosstab, treeview, placemap, associate)
-     * @param options.groups additional action groups with name, icon, label, actions
-     * @returns jQuery items
-     */
-    actionItems(o: UIBusinessObject, rowId: string | null, list?: Action[] | null, plus?: Action[] | null, options?: {
-        alignRight?: boolean;
-        minified?: boolean;
-        dropUp?: boolean;
-        plusFirst?: boolean;
-        grouped?: boolean;
-        groups?: ActionGroup[];
-    }): JQuery[];
-    /**
-     * Create a searchbar
-     * @param p Options
-     * @param p.id Input id
-     * @param p.label Input aria label
-     * @param p.icon Optional icon
-     * @param p.cbk Optional callback
-     * @param p.events Input binded events
-     * @param p.collapsed Input collapsed
-     */
-    searchBar(p: {
-        id: string;
-        label: string;
-        icon?: string;
-        cbk?: JQueryHandler | null;
-        events?: string;
-        collapsed?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
-     * Action bar
-     * @param list Array of buttons (plain or plus)
-     * @param alignRight pull on the right side of container ?
-     * @returns div.actions
-     */
-    actionBar(list: JQuery[], alignRight?: boolean): JQuery | "";
-    /**
-     * Convert image to base64 (using a canvas)
-     * @param img DOM image
-     * @param mime mime type (ex: image/jpeg)
-     * @returns string = image BASE64 encoded
-     */
-    getBase64Image(img: HTMLImageElement, mime: string): string;
-    /**
-     * Build a breadcrump 'first / ... / last ones'
-     * @param items list of items : string or <code>{ label }</code>
-     * @param size size limit
-     * @param cbk click handler(index)
-     * @returns ol.breadcrumb
-     */
-    breadcrump(items: (string | NavItem)[], size: number, cbk?: (index: number) => void): JQuery<HTMLElement>;
-    /**
-     * Transform a bar with overflow button for invisible items in a dropdown
-     * @param ctn horizontal bar container (ul or div, with a limited height) with items (li/a, button or div)
-     * @param options Overflow options
-     * @param options.show bring hidden item visible at 'first' or 'last' position when clicked (always trigger a 'ui.bar.click' on bar)
-     * @param options.icon icon button (default fas/caret-square-down)
-     * @param options.count count hidden items in icon (dafault false)
-     * @returns .bar-overflow + caller must trigger 'ui.resize' when displayed to fit size
-     */
-    barOverflow(ctn: JQuery, options?: {
-        show: string;
-        icon?: string;
-        count?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
-     * Bind a completion to input
-     * @param input input or null
-     * @param limit max size of results (0 = no limit)
-     * @param search search service(cbk)
-     * @param select optional callback(data) on picking (click or enter)
-     * @param disp optional callback to display a result
-     * @param options options
-     * @param options.autoselect auto-select the single result on blur or enter (default false)
-     * @returns input
-     */
-    completion(input: JQuery | null, limit: number, search: (cbk: (rows: KeyObject[]) => void) => void, select?: null | ((data: KeyObject) => void), disp?: null | ((data: KeyObject) => string | JQuery), options?: {
-        autoselect?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
-     * Bind a completion to textarea (substitute @login)
-     * @param textarea social textarea
-     */
-    completionSocial(textarea: JQuery): JQuery<HTMLElement>;
-    /**
-     * Pillbox control with completion, deprecated use $.pillbox
-     * @deprecated 7.0
-     */
-    pillbox(div: JQuery | null, data: PillboxItem[], limit: number, maxOccurs: number, search: null | ((values: string, cbk: (r: KeyObject) => void) => void), disp: null | ((item: KeyObject) => string), lookup: null | ((add?: Callback) => void), onAdd: null | ((id: string, fn: (...p: any) => void, data: KeyObject) => void), onRemove: null | ((id: string, fn: Callback) => void), onCreate: null | ((val: string, fn: Callback) => void), onOpen: null | ((id: string) => void)): JQuery<HTMLElement> | string[];
-    /**
-     * Launch a simple calculator on input
-     * @param inp form input
-     * @param cbk callback(result)
-     * @returns input
-     */
-    calculator(inp: AnyContent, cbk?: (result: number) => void): this;
-    /**
-     * Theme picker
-     * @param themes list of themes (at list 2 themes to open the dialog)
-     * @param pick callback with selected theme
-     */
-    themePicker(themes?: Theme[], pick?: (theme: Theme) => void): void;
-    /**
-     * Theme palette preview
-     * @returns .theme-palette-preview with colors
-     */
-    palette(palette?: Palette): JQuery<HTMLElement>;
-    /**
-     * Predefined palette of colors picker
-     * @param p Parameters
-     * @param p.palette optional selected palette
-     * @param p.pick optional pick handler(palette)
-     * @param p.dropup true to dropup (default dropdown)
-     * @param p.inline true to inline the palettes (default display a dropdown button)
-     * @param p.label optional label dropdown button (default: selected palette name)
-     * @param p.icon optional icon of dropdown button
-     */
-    palettePicker(p: {
-        palette?: string;
-        pick?: (palette: string) => void;
-        dropup?: boolean;
-        inline?: boolean;
-        label?: string;
-        icon?: string;
-    }): JQuery<HTMLElement>;
-    /**
-     * Preview image in a dialog
-     * @param p
-     * @param p.url image url
-     * @param p.alt optional image alt
-     * @param p.longDesc optional image long description
-     * @param p.name optional image name
-     * @param p.zoom percent or 'fit", fitWidth' or 'fitHeight' to screen
-     * @param p.onload optional onload callback
-     */
-    previewImage(p: {
-        url: string;
-        alt?: string;
-        longDesc?: string;
-        name?: string;
-        zoom?: string | number;
-        onload?: (img: JQuery) => void;
-    }): JQuery<HTMLElement>;
-    /**
-     * Circular progress bar
-     * @param options
-     * @param options.percent percent value 0..100
-     * @param options.background center background color
-     * @param options.color center text color
-     * @param options.color1 circle color
-     * @param options.color2 circle active color
-     * @param options.duration animation duration in ms (default 2000)
-     * @param options.radius circle radius in px
-     * @param options.width circle line width in px
-     * @param options.text optional center content (""=empty, default='n%')
-     * @param options.bar optional bar selector to update value
-     */
-    circularProgressBar(options?: {
-        percent?: number;
-        background?: string;
-        color?: string;
-        color1?: string;
-        color2?: string;
-        duration?: number;
-        radius?: number;
-        width?: number;
-        text?: AnyContent;
-        bar?: string | JQuery;
-    }): JQuery<HTMLElement>;
-    /**
-     * POST/UPLOAD dialog
-     * @param e progress event from xhr
-     * @param p Optional parameters
-     * @param p.id dialog Id
-     * @param p.label dialog title
-     * @param p.after timeout in ms before opening the modal dialog (default 3s)
-     * @param p.background callback when the dialog in minified as toast (post in background)
-     */
-    postProgress(e: ProgressEvent, p?: {
-        id?: string;
-        label?: string;
-        after?: number;
-        background?: Callback;
-    }): void;
-    private _postProgress;
-    /**
-     * Toast during the export loading
-     * @param title toast title
-     * @param filename file name to download
-     * @param url url to load
-     * @param p Parameters
-     * @param p.async async URL to wait for by polling
-     * @param p.abort optional URL to abort
-     */
-    toastLoading(title: string, filename: string, url: string, p?: {
-        async?: string;
-        abort?: string;
-    }): void;
-    /**
-     * Toast dialog
-     * @param params text or an object with optional keys:
-     * `level` ('info' default, 'success', 'warning', 'error'='danger'),
-     * `content` (content message),
-     * `position` ('top' default or 'bottom'),
-     * `align` ('left', 'center' default or 'right'),
-     * `duration` (animation duration in ms, default 3000, -1 = infinity),
-     * `undo` (add a UNDO button?),
-     * `pinable` (add a push-pin button?)
-     */
-    toast(params: string | ToastParam): JQuery<HTMLElement>;
-    private toastStacks;
-    /**
-     * Display the news
-     * @param ctn container to display articles (null to display an area or a ticker bar)
-     * @param list news list from WebNews object or or <code>\{ id, title, description, date, image \}</code>
-     * @param options optional parameters
-     * @param options.template HTML template with classes to fill <code>.news-title .news-date .news-desc .news-img</code> (default Simplicite.UI.Globals.news.template)
-     * @param options.popup true to get only news to display (on logon) in a modal dialog
-     * @param options.ticker true to get only news to display on a footer ticker
-     */
-    news(ctn: AnyContainer, list?: News[], options?: {
-        template?: string;
-        popup?: boolean;
-        ticker?: boolean;
-    }): void;
-    /**
-     * Display a ticker bar
-     * @param p Optional parameters
-     * @param p.position position selector (default 'body')
-     * @param p.list list of news <code>\{ id, title, description \}</code>
-     */
-    tickerBar(p?: {
-        position?: AnyContainer;
-        list?: News[];
-    }): void;
-    /**
-     * Multi-files rendering + upload
-     * @param ctn container
-     * @param list list of documents { id, name }
-     * @param p options
-     * @param p.name component name
-     * @param p.object business object
-     * @param p.field doc field with fileAccept: string or array of permitted extensions and MIME types
-     * @param p.upload upload files allowed?
-     * @param p.download download documents?
-     * @param p.preview preview documents?
-     * @param p.remove remove documents?
-     * @param p.show 'list' default or 'boxes'
-     * @param p.toggle true to toggle list|boxes
-     * @param p.min minimum files (0 = not required)
-     * @param p.max total of permitted files (0 = no limit)
-     */
-    docUploader(ctn: JQuery, list: DocumentDB[], p: {
-        id: string;
-        name: string;
-        object: BusinessObject;
-        field: ObjectField;
-        upload?: boolean;
-        download?: boolean;
-        preview?: boolean;
-        remove?: boolean;
-        show?: "list" | "boxes";
-        toggle?: boolean;
-        min?: number;
-        max?: number;
-    }): JQuery<HTMLElement>;
-    /**
-     * Advanced notepad with activities
-     * @param p options
-     * @param p.id widget id
-     * @param p.name widget name
-     * @param p.data Content <code>{ checks:[{ title, list:[check,text]}], activities:[{ date, author, text }] }</code>
-     * @param p.readonly Read only or editable by authors
-     * @param p.popup Allows to open a popup to enlarge contents
-     * @param p.split split checklists and comments in 2 columns
-     * @param p.autosplit minimal width of container to auto-split
-     * @param p.height Optional max height
-     * @param p.change optional <code>callback({act,event})</code> when data has changed
-     */
-    notepad(p: {
-        id?: string;
-        name?: string;
-        data: string | KeyObject;
-        readonly?: boolean;
-        popup?: boolean;
-        split?: boolean;
-        autosplit?: number;
-        height?: number | string;
-        change?: (p: {
-            act?: KeyObject;
-            item?: KeyObject;
-            list?: {
-                title: string;
-                list: KeyObject[];
-            };
-            event: string;
-        }) => void;
-    }): JQuery<HTMLElement>;
-    /**
-     * Simple dialog to change the user's password
-     */
-    changePwd(): void;
-    /**
-     * Create a characters counter on input field
-     * @param input input or textarea
-     * @param p Options
-     * @param p.max Max length of input (default 100)
-     * @param p.position top or bottom (default bottom)
-     * @param p.align left or right (default left)
-     * @param p.toggle true to show/hide on focus/blur
-     */
-    charCounter(input: AnyContent, p?: {
-        max?: number;
-        position?: "bottom" | "top";
-        align?: "left" | "right";
-        toggle?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
-     * Edit a markdown text in a dialog with a preview area
-     * @param md Initial value
-     * @param cbk Callback with new value
-     */
-    editMarkdown(md: string, cbk?: (md: string) => void): JQuery<HTMLElement>;
-    /**
-     * Open a dialog to take a picture
-     * @param p
-     * @param p.title Dialog title
-     * @param p.facingMode video facing mode suggestion (selfie = 'user' or back camera = 'environment', not applicable if device has only one camera)
-     * @param p.videoWidth video width (use the media width by default without zoom)
-     * @param p.imageWidth result image width (use the media width if unspecified)
-     * @param p.imageHeight result image height (same video aspect ratio if unspecified)
-     * @returns Promise with data URL 'data:image/png;base64,...'
-     */
-    takePicture(p: {
-        title: string;
-        facingMode: string;
-        videoWidth?: number;
-        imageWidth?: number;
-        imageHeight?: number;
-    }): Promise<string>;
-    /**
-     * Simple scratch pad
-     * @param p
-     * @param p.width result image width (default 800)
-     * @param p.height result image height (default 600)
-     * @param p.title dialog title
-     * @param p.inline inline pad
-     * @param p.image source image
-     * @param p.onload callback(pad) when loaded
-     * @param p.update callback(dataURL) when signature has changed
-     */
-    scratchPad(p: ScratchPadParam): void;
-    /**
-     * Take a signature on pad
-     * @param p Options
-     * @param p.width result image width (default 400)
-     * @param p.height result image height (default 200)
-     * @param p.title dialog title
-     * @param p.inline inline pad
-     * @param p.image source image
-     * @param p.onload callback(pad) when loaded
-     * @param p.update callback(dataURL) when signature has changed
-     */
-    takeSignature(p: ScratchPadParam): void;
-    /**
-     * Scan a QRCode/barcode
-     * @param p
-     * @param p.width scanner width (default 350)
-     * @param p.height scanner height (default 0)
-     * @param p.scanWidth scan zone width (default 250)
-     * @param p.scanHeight scan zone height (default 250)
-     * @param p.aspectRatio scanner aspect ratio height (default 1.0)
-     * @param p.title dialog title
-     * @param p.applyButton display apply button? defaults to true
-     * @param p.retryButton display retyr button? defaults to true
-     * @param p.cancelButton display cancel button? defaults to true
-     * @param p.applyLabel apply label
-     * @param p.retryLabel retry button title
-     * @param p.cancelLabel cancel button title
-     * @param p.container container to inline in (no dialog in this case)
-     * @param p.id DOM id (got from container if a container is set, defaults to 'scanner')
-     * @param p.onload callback(scanner) when loaded
-     * @param p.onscan callback(scanner, text) when scan is done
-     * @param p.onapply callback(text) when scan is applied (trigger by the apply button)
-     * @param p.onretry callback() when scan is resumed (triggered by the retry button)
-     * @param p.oncancel callback() when scan is cancelled (triggered by the cancel button)
-     * @param p.onclose callback() after closing
-     */
-    scanCode(p: {
-        width?: number;
-        height?: number;
-        scanWidth?: number;
-        scanHeight?: number;
-        aspectRatio?: number;
-        title?: string;
-        applyButton?: boolean;
-        applyLabel?: string;
-        retryButton?: boolean;
-        retryLabel?: string;
-        cancelButton?: boolean;
-        cancelLabel?: string;
-        container?: JQuery;
-        id?: string;
-        onload?: Callback;
-        onscan?: (scan: Html5Qrcode | null, value: string) => void;
-        onapply?: (text: string) => void;
-        onretry?: Callback;
-        oncancel?: Callback;
-        onclose?: Callback;
-    }): void;
-    /**
-     * Display a contrast helper between 2 colors
-     * @param ctn Target container to draw the preview button with colors and contrast value
-     * @param color input of color
-     * @param bgcolor input of background color
-     */
-    contrastHelper(ctn: JQuery, color: JQuery, bgcolor: JQuery): void;
-    /**
-     * Display a shortcut
-     * @param ctn Target container
-     * @param p Options
-     * @param p.shortcuts List of shortcuts, each with `name`, `url`, `target` and `order`
-     */
-    shortcuts(ctn: JQuery, p: {
-        shortcuts: Shortcut[];
-    }): JQuery<HTMLElement>;
-    /**
-     * Display a counter
-     * @param ctn Target container
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.field Optional field name to get total (or simple count)
-     * @param p.filters Object filters
-     * @param p.label Counter label
-     * @param p.help Optional help title
-     * @param p.bgColor Background color (CSS color)
-     * @param p.textColor Text color (CSS color)
-     * @param p.color Predefined background color grey(default)|blue|orange|red|green|purple|violet|yellow|turquoise|brown
-     * @param p.icon Icon name
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (numbre of pixels or CSS dimension)
-     * @param p.onclick Click handler
-     */
-    counter(ctn: JQuery, p: CounterParam): JQuery<HTMLElement>;
-    /**
-     * Display a set of counters
-     * @param ctn Target container (if null defauts to container with options.id DOM Id)
-     * @param p Options
-     * @param p.objects Objects to display (see CounterParam for per-object properties)
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (numbre of pixels or CSS dimension)
-     * @param p.colSpan Column span (defaults to max(3, 12 / number of objects)
-     * @param p.rowClasses Optional CSS row classes (default 'row')
-     * @param p.classes Optional CSS classes to add
-     * @param p.onclick Click handler
-     */
-    counters(ctn: JQuery | null, p: {
-        id?: string;
-        objects: CounterParam[];
-        width?: string | number;
-        height?: string | number;
-        colSpan?: number;
-        rowClasses?: string;
-        classes?: string;
-        onclick?: JQueryHandler;
-    }): JQuery<HTMLElement>;
-    /**
-     * Display a carousel for a business object
-     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.subTitleField Object sub-title field
-     * @param p.descriptionField Object description filters
-     * @param p.imageField Object image field
-     * @param p.imageFieldThumbnail Object image field as thumbnail ?
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (numbre of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color))
-     * @param p.onclick Click handler
-     */
-    carousel(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        subTitleField?: string;
-        descriptionField?: string;
-        imageField?: string;
-        imageFieldThumbnail?: string;
-        id?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        addon?: AnyContent;
-        onclick?: boolean | JQueryHandler;
-    }): void;
-    /**
-     * Display a set of cards for a business object
-     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.subTitleField Object sub-title field
-     * @param p.descriptionField Object description filters
-     * @param p.statusField Object status filters
-     * @param p.imageField Object image field
-     * @param p.imageFieldThumbnail Object image field as thumbnail ?
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.rowClasses Row-level CSS classes
-     * @param p.classes Row-level additional CSS classes
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (numbre of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color))
-     * @param p.cardClasses Card-level additional CSS classes
-     * @param p.cardWidth Card width (number of pixels or CSS dimension)
-     * @param p.cardHeight Card height (numbre of pixels or CSS dimension)
-     * @param p.cardImgWidth Card image width (number of pixels or CSS dimension)
-     * @param p.cardImgHeight Card image height (numbre of pixels or CSS dimension)
-     * @param p.cardBgColor Card background color (CSS color))
-     * @param p.onclick Click handler
-     */
-    cards(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        subTitleField?: string;
-        descriptionField?: string;
-        statusField?: string;
-        imageField?: string;
-        imageFieldThumbnail?: string;
-        id?: string;
-        rowClasses?: string;
-        classes?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        cardClasses?: string;
-        cardWidth?: string | number;
-        cardHeight?: string | number;
-        cardImgWidth?: string | number;
-        cardImgHeight?: string | number;
-        cardBgColor?: string;
-        addon?: AnyContent;
-        button?: {
-            style?: string;
-            label?: string;
-            onclick?: JQueryHandler;
-        };
-        onclick?: boolean | JQueryHandler;
-    }): void;
-    /**
-     * Display an accordion set for a business object
-     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.contentField Object description filters
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.classes Row-level additional CSS classes
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (numbre of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color))
-     * @param p.onclick Click handler
-     */
-    accordion(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        contentField: string;
-        id?: string;
-        classes?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        onclick?: boolean | JQueryHandler;
-    }): void;
-    /**
-     * Display a time line set for a business object
-     * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.dateField Object title field
-     * @param p.contentField Object description filters
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.classes Row-level additional CSS classes
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (numbre of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color))
-     * @param p.onclick Click handler
-     */
-    timeline(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        dateField: string;
-        contentField: string;
-        id?: string;
-        classes?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        onclick?: boolean | JQueryHandler;
-    }): void;
-    /**
-     * Create a context menu
-     * @param _element The element that was right-clicked
-     * @param e Mouse event
-     * @param items Actions
-     */
-    contextMenu(_element: JQuery, e: JQuery.ContextMenuEvent, items: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
-}
-
-/** Item of a view addon bar */
-interface AddonBarItem {
-    /** Unique name within the host bar (data-addon + .addon-<name>) */
-    name: string;
-    /** Accessible name: mandatory, no faked buttons */
-    label: string;
-    /** Icon, see $view.icon */
-    icon?: string;
-    /** Ascending left-to-right order (default 50) */
-    weight?: number;
-    /** Click handler (ignored when 'element' is given) */
-    click?: (e: JQuery.Event) => void;
-    /** Prebuilt element (dropdown, gotoDefinition...) */
-    element?: JQuery;
-}
-/**
- * Addon bar renderer: collects the floating controls (gotodef, copylink, guides, ...)
- * of a whole view or a single view item
- */
-declare class AddonBar {
-    static enabled(): boolean;
-    /**
-     * Closest element that can host a bar
-     */
-    hostOf(el: AnyContainer): JQuery;
-    /**
-     * Get (or create) the bar for a host
-     * @param host Host container (view item, view, external object, list or form)
-     * @param create Create the bar if it does not exist?
-     */
-    bar(host: AnyContainer, create?: boolean): JQuery;
-    /**
-     * Reorder addons by ascending weight
-     */
-    sort(items: JQuery): void;
-    /**
-     * Set the bar title (host type and name)
-     * @param host bar host
-     * @param label host name
-     * @param type optional object type (View, ObjectExternal...)
-     */
-    hostTitle(host: AnyContainer, label: string, type?: string): void;
-    /**
-     * Apply the expanded/collapsed state to a toggle button
-     */
-    static toggleState(tgl: JQuery, open: boolean): void;
-    /**
-     * Add an addon to the bar
-     */
-    add(host: AnyContainer, addon: AddonBarItem): JQuery | undefined;
-    /**
-     * Remove an addon by name
-     */
-    remove(host: AnyContainer, name: string): void;
-    /**
-     * Collapse the bar when empty, bypass the toggle for a single addon
-     */
-    refresh(bar: JQuery): void;
-}
-
-/** Node of a tree view (a record and its linked lists) */
-interface TreeNode {
-    /** Node ID */
-    id?: string;
-    /** Node name */
-    name: string;
-    /** Node type */
-    type: number;
-    /** Icon name */
-    image?: string;
-    /** Class name */
-    style?: string;
-    /** Node layout */
-    layout?: string;
-    /** Html */
-    userkey?: string;
-    /** Path of the node in the tree */
-    path?: string;
-    /** Row ID of the record */
-    row_id?: string;
-    /** Object of the node: name or rights */
-    object?: string | {
-        /** Object name */
-        name: string;
-        /** Open the form */
-        form?: boolean;
-        /** Show the list */
-        list?: boolean;
-        /** Plus menu */
-        plus?: boolean;
-    };
-    /** Record values */
-    item?: RowData;
-    /** Old record values (to compare) */
-    old?: RowData;
-    /** Equ | new | upd | del */
-    diff: 0 | 1 | 2 | 3;
-    /** Linked lists */
-    links?: TreeNodeList[];
-    /** Child nodes */
-    children?: TreeNode[];
-    /** Count of children */
-    count?: number;
-    /** History of the tree */
-    history?: KeyObject[];
-    /** Root: closed paths */
-    closed?: {
-        [path: string]: boolean;
-    };
-    /** Root: objects of the tree */
-    objects?: string[];
-    /** Root: show the lists of nodes */
-    showNodeList?: boolean;
-}
-/** List of child nodes of a link, or a menu entry (process, URL, action or script) */
-interface TreeNodeList {
-    /** Object name */
-    object: string;
-    /** Icon name */
-    icon?: string;
-    /** Translated label */
-    label: string;
-    /** Path of the list in the tree */
-    path?: string;
-    /** Count of records */
-    count: number;
-    /** Page index */
-    page: number;
-    /** Max page index */
-    maxpage: number;
-    /** Nodes of the page */
-    list: TreeNode[];
-    /** Process to start */
-    process?: string;
-    /** External URL to open */
-    exturl?: string;
-    /** Action name */
-    action?: string;
-    /** Action metadata */
-    meta?: Action;
-    /** Fk */
-    field?: string;
-    /** Filters of the list */
-    filters?: KeyObject;
-    /** Script to execute */
-    script?: string;
-    /** Do not show the list of nodes */
-    nolist?: boolean;
-}
-/** Parameters of a tree view rendering */
-interface TreeParam {
-    /** Object instance name */
-    inst?: string;
-    /** Search depth */
-    depth?: number;
-    /** In menu */
-    menu?: boolean;
-    /** Or docked on left */
-    docked?: boolean;
-    /** Opened tree */
-    open?: boolean;
-    /** Distinguishes first open from reload */
-    rendered?: boolean;
-    /** Work area to display the forms */
-    work?: JQuery;
-    /** Display a record in the work area, `cbk` must be called when displayed */
-    display?: (target: Container, obj: BusinessObject, rowId: string, tv: TreeView, p: KeyObject, cbk: Callback) => void;
-    /** Load a node item on open */
-    onOpen?: (node: TreeNode, cbk: (item?: RowItem | null) => void) => void;
-    /** Load a page of a linked list */
-    onPage?: (parent: string, parentId: string, object: string, page: number, cbk: (r: KeyObject) => void) => void;
-    /** Add the tree in menu */
-    addMenu?: Callback;
-    /** Remove the tree from menu */
-    delMenu?: Callback;
-}
-/**
- * Simplicit&eacute; tree view
- */
-declare class TreeView {
-    /** Session */
-    app: Session;
-    /** Tree view name */
-    name: string;
-    /** Root node */
-    root?: TreeNode;
-    private _nodes;
-    /**
-     * Constructor
-     * @param app Ajax services
-     * @param tv Treeview metadata { id, name, root... }
-     */
-    constructor(app: Session, tv: object);
-    /**
-     * Get node definition
-     * @param id node id
-     */
-    getDefinition(id: string): TreeNode;
-    /**
-     * Node definition of object
-     * @param obj object name
-     */
-    getNode(obj: string): KeyObject | undefined;
-}
-
-/** Parameters of a menu entry click */
-interface MenuParam {
-    /** Menu item */
-    item: MenuItem;
-    /** Object name */
-    object?: string;
-    /** Workflow name */
-    workflow?: string;
-    /** Process name */
-    process?: string;
-    /** BAM name */
-    bam?: string;
-    /** Process step */
-    step?: string;
-    /** Object name of a tray */
-    tray?: string;
-    /** Field name (tray or list of states) */
-    field?: string;
-    /** Enumeration code */
-    code?: string;
-    /** Domain name */
-    domain?: string;
-    /** View name */
-    view?: string;
-    /** URL */
-    href?: string;
-    /** Target of the URL */
-    target?: LoadTarget;
-    /** Translated label */
-    label?: string;
-    /** Open in a new tab */
-    newtab?: NewTabPosition;
-}
-/** Menu item */
-interface MenuItem {
-    /** Item type */
-    type: "object" | "statusobject" | "external" | "process" | "workflow" | "domain" | "view";
-    /** Item name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Icon name */
-    icon: string;
-    /** Opened */
-    open?: boolean;
-    /** Extendable */
-    ext?: boolean;
-    /** Extended */
-    extended?: boolean;
-    /** Create right */
-    create?: boolean;
-    /** URL */
-    url?: string;
-    /** Link URL */
-    href?: string;
-    /** Target of the link */
-    target?: string;
-    /** Width */
-    width?: number | string;
-    /** Height */
-    height?: number | string;
-    /** Field name */
-    field?: string;
-    /** Has a home page */
-    hasHome?: boolean;
-    /** Home page name */
-    homePage?: string;
-    /** Is a dashboard */
-    dashboard?: boolean;
-    /** Is a widget */
-    widget?: boolean;
-    /** Has a tray */
-    tray?: boolean;
-    /** Sub-items */
-    items?: SubMenu;
-    /** Activities of a process */
-    activities?: ActivityMetadata[];
-    /** States of a status object */
-    states?: EnumItem[];
-    /** Tray fields */
-    trays?: {
-        /** Tray field name */
-        field: string;
-        /** Tray label */
-        label: string;
-    }[];
-    /** Lists of states per field */
-    lists?: {
-        /** Field name */
-        field: string;
-        /** Field label */
-        label: string;
-        /** States of the field */
-        items: EnumItem[];
-    }[];
-    /** Position of the menu (`T` = top, else left) */
-    menu_position?: string;
-}
-/** Main menu */
-type MainMenu = MenuItem[];
-/** Sub menu */
-type SubMenu = MenuItem[];
-/** Menu settings */
-interface MenuSettings {
-    /** Top menu */
-    top: {
-        /** Top menu is active */
-        active: boolean;
-    };
-    /** Left menu */
-    left: {
-        /** Left menu is active */
-        active: boolean;
-        /** Collapse mode */
-        collapse: "icons-static" | "icons-expand" | "none";
-        /** Search box in menu */
-        searchable: boolean;
-    };
-}
-/**
- * Main menu rendering
- */
-declare class Menu {
-    /** #menu.left-sidebar */
-    container?: Container;
-    /** .main-nav-toggle */
-    navToggle?: JQuery;
-    /** Ul.main-menu role=menu */
-    menu?: JQuery;
-    /** Last focused item */
-    _focus?: JQuery;
-    /** Timer of the status refresh */
-    statusTimer?: number;
-    /** Default value to default behavior */
-    leftMinified: string;
-    /** Menu settings (default values iso v6.3) */
-    menuSettings: MenuSettings;
-    /**
-     * Main menu
-     */
-    getMenu(): JQuery<HTMLElement>;
-    /**
-     * Menu (left/top) Settings (either from sys_param or default values)
-     */
-    getMenuSettings(): MenuSettings;
-    /**
-     * Init menus (left,top)
-     */
-    init(): void;
-    private item;
-    private toggle;
-    private itemTop;
-    /** Element by id, as a JQuery set */
-    private byId;
-    /** Counter of the ids linking toggles to their controlled lists */
-    topMenuId: number;
-    private hasSubMenu;
-    private contextMenu;
-    private click;
-    /**
-     * Init the top menu (horizontal with dropdowns)
-     * - Click to open dropdowns
-     * - Click to open flyout sub-menus (no hover)
-     * - Keyboard navigation support
-     * - Flyouts detached to body to avoid clipping
-     */
-    initTopMenu(items: MenuItem[], menuSettings: MenuSettings["top"]): void;
-    /**
-     * Init the main menu (on left), use the ui.clickMenu handler
-     */
-    initLeftMenu(items: MenuItem[], menuSettings: MenuSettings["left"]): void;
-    /**
-     * Select one menu item
-     */
-    selectMenu(a: JQuery, menu?: JQuery | null): JQuery;
-    /**
-     * Focus the last selected item or first item
-     */
-    focus(): void;
-    /**
-     * hover effect when minified
-     * @param b false to remove effect
-     */
-    hover(b: boolean): void;
-    /**
-     * Menu navigation with Arrow keys
-     */
-    keydown(el: HTMLElement, e: JQuery.Event): void;
-    /**
-     * Accordion effect
-     */
-    accordion(el: JQuery): void;
-    /**
-     * Is menu minimized on the left side ?
-     */
-    isMenuMin(): boolean | undefined;
-    /**
-     * Is menu maximized on the left side ?
-     */
-    isMenuMax(): boolean;
-    /**
-     * Minimize the menu on the left side
-     * <ul>
-     * <li>displays only domain icons</li>
-     * <li>popup the sub-menus over the screen</li>
-     * <ul>
-     */
-    menuMin(): void;
-    /**
-     * Maximize the menu on the left side
-     * <ul>
-     * <li>displays domain icons and labels</li>
-     * <li>accordion sub-menus</li>
-     * <ul>
-     */
-    menuMax(): void;
-    /**
-     * Hide a sub-menu
-     * @param m menu item (li element with .sub-menu child)
-     */
-    subMenuMin(m: JQuery): void;
-    /**
-     * Show a sub-menu
-     * @param m menu item (li element with .sub-menu child)
-     */
-    subMenuMax(m: JQuery): void;
-    /**
-     * Toggle the main menu on the left side
-     * @param e optional event
-     * @param sign positive:show, negative:hide
-     */
-    menuToggle(e?: JQuery.Event | KeyboardEvent | null, sign?: number): void;
-    /**
-     * Set the toggle button state (aria-expanded and icon)
-     * @param expanded true if menu is expanded, false if minimized
-     */
-    private setToggleState;
-    /**
-     * Start a timer to update enum counters
-     */
-    startRefreshStatus(): void;
-    /** Refresh of status counters has been started */
-    private statusStarted;
-    /**
-     * Pause the timer to update visible status counters (page hidden)
-     */
-    pauseRefreshStatus(): void;
-    /**
-     * Restart and refresh the status counters if they were paused (page restored)
-     */
-    resumeRefreshStatus(): void;
-    /**
-     * Stop the timer to update visible status counters
-     */
-    stopRefreshStatus(): void;
-    /**
-     * Update the visible enum counter
-     * @param object object name or menu item or sub-menu
-     * @param field enum field name
-     * @param code enum code
-     */
-    updateStatusBadge(object: string | JQuery, field?: string, code?: string): false | Promise<boolean | JQuery<HTMLElement>> | undefined;
-    private badge;
-    /**
-     * Update all status and enum counters of a given menu
-     * @param m sub menu
-     */
-    updateStatusBadges(m: JQuery): void;
-    /**
-     * Process incoming data from SSE event enumCounters
-     * @param d data
-     */
-    onEnumCounters(d: KeyObject): void;
-    /**
-     * Display a tree view in the menu.
-     * @param ctn Container
-     * @param o Business object
-     * @param id Root row ID
-     * @param tv Tree definition
-     * @param p Tree parameters
-     * @param cbk Optional callback when displayed
-     */
-    treeview(ctn: Container, o: BusinessObject, id: string, tv: TreeNode, p: TreeParam, cbk?: Callback): Window & typeof globalThis;
-    /**
-     * Update the badge of the notifications shortcut.
-     * @param n Notifications data (`incoming` to shake the bell)
-     */
-    updateNotificationBadge(n: KeyObject): void;
-    /**
-     * Filter menu
-     */
-    filterMenu(): void;
-    /**
-     * Open a top menu dropdown
-     */
-    openTopDropdown(mi: JQuery): void;
-    /**
-     * Close a top menu dropdown
-     */
-    closeTopDropdown(mi: JQuery): void;
-    /**
-     * Expand/collapse an expandable entry (enum group) of a dropdown or flyout
-     * - expanding one collapses its siblings (accordion)
-     */
-    toggleSub(btn: JQuery, open?: boolean): void;
-    /**
-     * Collapse all the expanded entries (enum groups) within a scope
-     */
-    collapseSubs(scope: JQuery): void;
-    /**
-     * Close all top menus
-     */
-    closeAllTopMenus(): void;
-    /**
-     * Open a flyout submenu
-     */
-    openTopFlyout(li: JQuery): void;
-    /**
-     * Close a flyout menu
-     */
-    closeTopFlyout(li: JQuery): void;
-    /**
-     * Keyboard navigation for top menu
-     * - Left/Right: between top entries, open/close flyouts, expand/collapse enum groups
-     * - Up/Down/Home/End: through the visible entries of the current dropdown/flyout
-     */
-    keydownTopMenu(el: HTMLElement, e: JQuery.Event, openFlyout?: (li: JQuery) => void, closeFlyout?: (li: JQuery) => void, getFlyoutForLi?: (li: JQuery) => JQuery | null): void;
-    /**
-     * Append flyout to body & position it (no clipping)
-     */
-    positionFlyout(li: JQuery, fm: JQuery): void;
-}
-
-/**
- * Type of a view item:
- * `L` login, `D` date, `T` time, `C` enumeration code, `S` search list, `F` filters,
- * `E` external object, `I` image, `G` graph chart, `X` crosstab, `P` link, `Z` print template,
- * `N` index search, `W` news, `U` shortcuts, `V` tree view, `B` sub-view
- */
-type ViewItemType = typeof ViewType[keyof typeof ViewType];
-/** Data given to the external object of a view item */
-interface ViewItemContentData {
-    /** External object name */
-    extobject?: string;
-    /** Translated label */
-    label?: string;
-    /** Translated help */
-    help?: string;
-    /** Values */
-    fields?: KeyObject;
-}
-/** Content of a view item (depends on its type) */
-interface ViewItemContent {
-    /** Translated label */
-    label?: string;
-    /** Name (external object, crosstab, tree view...) */
-    name?: string;
-    /** Image source */
-    src?: string;
-    /** URL */
-    url?: string;
-    /** External object name */
-    ext?: string;
-    /** Code */
-    code?: string;
-    /** Crosstab name */
-    crosstab?: string;
-    /** Search name */
-    search?: string;
-    /** Print template name */
-    print?: string;
-    /** CT options */
-    options?: KeyObject;
-    /** CT meta */
-    meta?: KeyObject;
-    /** External object data */
-    data?: ViewItemContentData;
-    /** Object name */
-    object?: string;
-    /** Object instance name */
-    inst?: string;
-    /** Field name */
-    field?: string;
-    /** Specific rendering */
-    spec?: string;
-    /** Fixed filters */
-    filters?: KeyObject;
-    /** Vertical rendering */
-    vertical?: boolean;
-    /** Compact rendering */
-    compact?: boolean;
-    /** Show a date period */
-    period?: boolean;
-    /** Treeview Id */
-    id?: string;
-    /** Root Id of treeview */
-    rowId?: string;
-    /** Tree view depth (default 2) */
-    depth?: number;
-}
-/** Item of a view */
-interface ViewItem {
-    /** Item row ID */
-    id?: string;
-    /** Position of the item in the view template */
-    pos?: number;
-    /** Item type */
-    type?: ViewItemType;
-    /** Collapsed */
-    collapsed?: boolean;
-    /** Show the title */
-    title?: boolean;
-    /** Translated label */
-    label?: string;
-    /** Item content */
-    content?: string | ViewItemContent;
-    /** Item container */
-    div?: Container;
-    /** Tab area of the item */
-    _tabArea?: number;
-    /** Index of the item in its tabs */
-    _tabIndex?: number;
-}
-/** Parameters of a view display (see `$ui.displayView`) */
-type ViewParam = {
-    /** True on main/domain home view (to get home instance of objects) */
-    home?: boolean;
-    /** When view has a parent object */
-    parent?: BusinessObject;
-    /** false to hide the permalink button */
-    useCopyLink?: boolean;
-    /** Edit mode */
-    edit?: boolean;
-    /** Optional before load callback */
-    beforeload?: (ctn: Container, view?: View) => void;
-    /** Optional onload callback */
-    onload?: (ctn: Container, view?: View) => void;
-    /** Optional unload callback */
-    onunload?: (ctn: Container, view?: View) => void;
-} & NavParam;
-/**
- * View
- */
-declare class View {
-    /** View row ID */
-    id?: string;
-    /** View name */
-    name: string;
-    /** Translated label */
-    label: string;
-    /** Show the title */
-    title?: boolean;
-    /** Icon name */
-    icon?: string;
-    /** View items */
-    items: ViewItem[];
-    /** Cacheable view */
-    cacheable?: boolean;
-    /** Visible view */
-    visible?: boolean;
-    /** Inlined view (link displayed in the form) */
-    inline?: boolean;
-    /** Related business object */
-    object?: BusinessObject;
-    /** Home page view */
-    home: boolean;
-    /** URL */
-    url?: string;
-    /** Home position */
-    item?: string;
-    /** Guides to play on display */
-    guides?: GuideMetadata[];
-    /** Owner row ID */
-    ownerId?: string;
-    /** Owner name */
-    ownerName?: string;
-    /** Link: child object name */
-    target?: string;
-    /** Link: reference field name */
-    reference?: string;
-    /** Name sanitized */
-    fullname: string;
-    /** Session */
-    app: Session;
-    /** UI data */
-    ui?: KeyObject;
-    /** View template */
-    uiTemplate?: string | JQuery;
-    /** Moved in the template */
-    moved?: boolean;
-    /** View container */
-    div?: Container;
-    /** Tab index of the view */
-    _tab?: number;
-    /** Unique DOM ID */
-    domId?: string;
-    /** Unique DOM ID of the tab label */
-    linkTabId?: string;
-    /**
-     * Constructor
-     * @param app Ajax services
-     * @param view Field metadata
-     * @param obj Optional related business object
-     */
-    constructor(app: Session, view: KeyObject, obj?: BusinessObject);
-    /**
-     * Get an item of the view.
-     * @param n Item position
-     * @returns The item or undefined
-     */
-    getItem(n: number): ViewItem | undefined;
-}
-
-/** Status metrics cached in the object context: last params and last rendered metrics */
-interface ContextMetrics {
-    /** From date (YYYY-MM-DD) */
-    fromDate?: string;
-    /** To date (YYYY-MM-DD) */
-    toDate?: string;
-    /** Group by period: 1=hour, 2=day, 3=week, 4=month, 5=quarter, 6=semester, 7=year */
-    period?: number | string;
-    /** Palette name */
-    palette?: string;
-    /** Last rendered metrics element, kept to be restored as is by the navigation */
-    view?: JQuery;
-    /** Container of the rendered metrics */
-    ctn?: HTMLElement;
-}
-/** Filter input of the status metrics: visible, hidden or `read` only */
-type StatusMetricsInput = boolean | "read";
-/** Elements to show in the status metrics (all visible by default) */
-interface StatusMetricsShow {
-    /** Show the count per status */
-    count?: boolean;
-    /** Show the duration per status */
-    duration?: boolean;
-    /** Show the status history */
-    history?: boolean;
-    /** Show the terminal status per duration */
-    terminal?: boolean;
-    /** Show the palette picker */
-    palette?: boolean;
-    /** Use the status colors (no palette picker) */
-    statusColor?: boolean;
-    /** Period selector */
-    period?: StatusMetricsInput;
-    /** From date input */
-    fromDate?: StatusMetricsInput;
-    /** To date input */
-    toDate?: StatusMetricsInput;
-}
-/** Parameters of the status metrics */
-interface StatusMetricsParam {
-    /** Palette name in `Simplicite.UI.Charts.PALETTE` (ex 'sea', 'mars'...) */
-    palette?: string;
-    /** Data groupment 1:hour, 2:day, 3:week, 4:month, 5:quarter, 6:semester, 7:year */
-    period?: number | string;
-    /** Search data from this date YYYY-MM-DD */
-    fromDate?: string;
-    /** Search data to this date YYYY-MM-DD */
-    toDate?: string;
-    /** Show options */
-    show?: StatusMetricsShow;
-    /** Restore the last metrics as is without backend call (used by the navigation), otherwise a new search is done */
-    restore?: boolean;
-}
-/** Parameters of the status metrics display */
-type StatusMetricsDisplayParam = StatusMetricsParam & NavParam & {
-    /** Before loading */
-    beforeload?: (ctn: Container, obj: UIBusinessObject) => void;
-    /** When loaded */
-    onload?: (ctn: Container, obj: UIBusinessObject) => void;
-    /** When unloaded */
-    onunload?: (ctn: Container, obj: UIBusinessObject) => void;
-};
-/** Metrics data from the `bamMetric` service (charts are present when requested in the show options) */
-interface StatusMetricsData {
-    /** Objects as [code, label], null when no data */
-    objects?: [string, string][] | null;
-    /** Count per status */
-    pie?: StatusPieData;
-    /** Count per status and date */
-    count?: StatusCountData;
-    /** Duration per status */
-    duration?: StatusDurationData;
-    /** Terminal status durations */
-    term?: StatusTerminalData;
-}
-/** State model metrics rendering (charts per status) */
-declare class StatusMetrics {
-    /**
-     * State model charts
-     * @param ctn Container
-     * @param obj Business object
-     * @param data Metrics from service
-     * @param params Options: palette, period, dates and elements to show
-     * @returns The metrics element, undefined when there is nothing to display
-     */
-    static display(ctn: AnyContainer, obj: BusinessObject, data: StatusMetricsData, params?: StatusMetricsParam): JQuery | undefined;
-}
-
-/**
- * Board and view rendering
- */
-declare class Board {
-    /**
-     * Navigation rendering
-     * @param ctn Optional container to find the .nav
-     * @param nav Navigator
-     */
-    displayNav(ctn: AnyContainer, nav: UINavigator): this;
-    /**
-     * Hide navigation
-     * @param ctn Optional container to find the .nav
-     */
-    hideNav(ctn: AnyContainer): this;
-    /**
-     * Display a view of items (i.e. home, plain view or part of form)
-     * @param ctn container
-     * @param v view metadata <code>\{ name, visible, template, ...\}</code>
-     * @param p options <code>\{ parent, home, lazy, edit \}</code>
-     * @param cbk callback when displayed
-     */
-    display(ctn: Container, v: View, p?: ViewParam, cbk?: Callback): this;
-    /**
-     * Display user's dashboards
-     * @param ctn container
-     * @param data list of user views + perm + groups
-     * @param p options
-     * @param cbk callback when displayed
-     */
-    dashboards(ctn: Container, data: KeyObject, p: KeyObject, cbk?: (div: JQuery) => void): void;
-    /** Current dashbord view to display */
-    selectedDashboard?: View;
-    /**
-     * State model charts
-     * @deprecated moved to `StatusMetrics.display`
-     */
-    statusMetrics(ctn: AnyContainer, obj: BusinessObject, data: StatusMetricsData, params?: StatusMetricsParam): this;
-    /**
-     * Version check
-     * @param ctn Target container
-     * @param options
-     * @param options.silent Do not display message in case of check error?
-     * @param options.addon Optional addon content
-     */
-    versionCheck(ctn: Container | string, options?: {
-        addon?: AnyContent;
-        silent?: boolean;
-    }): void;
-    /**
-     * Display the About dialog
-     */
-    about(): this;
-    /**
-     * System informations rendering
-     * @param ctn Container
-     * @param data Informations
-     * @param fn action callback
-     * @param cache Clear cache only or full form
-     */
-    sysinfo(ctn: Container, data: KeyObject, fn: (action: string, param?: string | null) => void, cache?: boolean): this;
-    /**
-     * Models picker and creation
-     * @param ctn Container
-     * @param params options { embedded }
-     */
-    modeler(ctn: Container, params?: KeyObject): Promise<this>;
-    /**
-     * import/export application with modules
-     */
-    moduleApp(action: string, obj: BusinessObject, service: (p: ModuleAjax, started: TrackerCallback) => void): void;
-    /** Delete module rendering */
-    moduleDelete(ctn: AnyContainer, module: BusinessObject, service: CallableFunction): this;
-    /**
-     * Check if the easter egg is allowed
-     * @param name entry name in SIM_EASTER_EGGS: true or 'devmode' only
-     * @param egg optional JS egg name to load
-     * @param jsfile resource name to install the game
-     * @returns true if allowed
-     */
-    easterEgg(name: string, egg?: string, jsfile?: string): boolean;
-    /** Load and launch the easter egg */
-    loadEasterEgg(egg: string, jsfile: string): Promise<void>;
-}
-
-/** Parameters of the bulk update form */
-type UpdateFormParam = {
-    /** Title */
-    title?: string;
-    /** Object instance name */
-    inst?: string;
-    /** Save button handler */
-    onsave?: (ctn: Container, o: BusinessObject, cbk?: Callback) => void;
-    /** Close button handler */
-    onclose?: (ctn: Container, o: BusinessObject) => void;
-    /** Hook when displayed */
-    onload?: (ctn: Container, o: BusinessObject) => void;
-    /** Hook when removed */
-    onunload?: (ctn: Container, o: BusinessObject) => void;
-} & NavParam;
-/**
- * Bulk update rendering
- */
-declare class Update {
-    /**
-     * Display the bulk update form
-     * @param ctn container
-     * @param o object
-     * @param p optional parameters
-     * @param cbk optional callback
-     */
-    display(ctn: Container, o: BusinessObject, p: UpdateFormParam, cbk?: Callback): this;
-}
-
-/** Parameters of an external object page */
-interface ExternalParam {
-    /** Title */
-    title?: string;
-    /** Help */
-    help?: string;
-    /** Icon name */
-    icon?: string;
-    /** HTML content */
-    html: string;
-    /** External object metadata */
-    metadata?: ExternalMetadata;
-    /** Stylesheets to load */
-    css?: string[];
-    /** Scripts to load */
-    js?: string[];
-}
-/**
- * External object rendering
- */
-declare class External {
-    /**
-     * Display the external object
-     * @param ctn container
-     * @param p optional parameters { title, icon, html, metadata }
-     * @param cbk optional callback
-     */
-    display(ctn: Container, p: ExternalParam, cbk: (div: JQuery) => void): this;
-}
-
-/** Callback with the picked color, `apply` = false to restore the old color on cancel */
-type ColorPickerHandler = (color: string, apply?: boolean) => void;
-/** Color with its lighter and darker shades */
-interface ColorSet {
-    /** Base color */
-    color: string;
-    /** Lighter shades */
-    lighters: string[];
-    /** Darker shades */
-    darkers: string[];
-}
-/** Colors of a palette */
-type PaletteColors = ColorSet[];
-/**
- * Color picker widget (based on https://seballot.github.io/spectrum)
- */
-declare class ColorPicker {
-    /** Container */
-    ctn: Container;
-    /** Color input */
-    input: JQuery;
-    /** Callback with the picked color */
-    callback?: ColorPickerHandler;
-    /** Dialog */
-    dlg?: JQuery;
-    /** Color before picking */
-    oldColor: string;
-    /** Picked color */
-    newColor?: string;
-    /** Empty color on optional field */
-    allowEmpty: boolean;
-    /** From field rendering */
-    allowAlpha: boolean;
-    /** Only RGB colors (no names) */
-    onlyRgb: boolean;
-    /** Current selected theme with colors */
-    static theme?: string;
-    /** Colors of the current theme */
-    static themeSet?: PaletteColors;
-    /** Pre-loaded colors per theme name */
-    static themePalettes: KeyHash<JQuery>;
-    constructor(ctn: Container, input: JQuery, cbk?: ColorPickerHandler);
-    private toString;
-    /**
-     * Open the color picker
-     * @param dropdown display as dropdown or dialog box
-     */
-    open(dropdown: boolean): void;
-    /** Close the picker and notify the picked color (or restore the old one on cancel) */
-    close(): void;
-    /** Get the theme palette */
-    palTheme(t: Theme): JQuery<HTMLElement> | undefined;
-    /** Themes picker to change the master palette */
-    listThemes(ctn: JQuery): "" | undefined;
-    /**
-     * Build the color sets of a theme palette.
-     * @param theme Theme name
-     * @param pal Optional palette (default palette of the theme)
-     */
-    static buildColorSets(theme: string, pal?: Palette): void;
-    private static palPrepare;
-}
-
-/**
- * Parameters of the XML import service (IMPORTXML, IMPORTZIP or IMPORTADP)
- */
-type ImportXMLParams = {
-    /** Data file in the multi-part POST */
-    file?: {
-        file: File;
-        name: string;
-        id: string;
-    };
-    /** Data file location */
-    url?: string;
-    /** Adapter name */
-    adapter?: string;
-    /** Adapter parameters: param1=1;param2=2 */
-    param?: string;
-    /** XML data */
-    data?: string;
-    /** Parallel import of the data */
-    async?: boolean;
-    /** Stop the import on the first error */
-    stoponerror?: boolean;
-};
-/**
- * Import data rendering
- */
-declare class Import {
-    /** Template of a Simplicite XML import file */
-    readonly XML_SIMPLICITE: string;
-    private help;
-    /**
-     * Import XML interface
-     * @param ctn Container
-     * @param data
-     * @param send callback to post data
-     */
-    display(ctn: Container, data: {
-        help?: AnyContent;
-        adapters?: string[];
-        adapter?: string;
-    }, send: (data: ImportXMLParams) => void): void;
-    /**
-     * Import CSV interface
-     * @param ctn Container
-     * @param data objects and help
-     * @param send callback to post data
-     */
-    displayCSV(ctn: Container, data: {
-        help?: AnyContent;
-        objects?: string[];
-    }, send: (data: KeyObject) => void): void;
-}
-
-/** Records to merge */
-interface MergeParam {
-    /** array of row IDs to merge */
-    ids: string[];
-}
-/** Parameters of a merge save */
-type MergeSaveParam = MergeParam & {
-    /** true to check only (isMergeEnable) */
-    check?: boolean;
-    /** index per field to preserve */
-    item?: object;
-    /** indexes per link to preserve */
-    links?: object;
-    /** optional limited link Ids per link and indexes to preserve */
-    linkIds?: object;
-    /** indexes per meta-object to preserve */
-    metaobj?: object;
-};
-/**
- * Merge object rendering
- */
-declare class Merge {
-    /**
-     * Display the merge form of records.
-     * @param ctn Container
-     * @param obj Business object
-     * @param items Records to merge
-     * @param save Save handler
-     * @param close Close handler
-     */
-    display(ctn: Container, obj: BusinessObject, items: RowDataMeta[], save?: (p: MergeSaveParam) => void, close?: Callback, cbk?: Callback): void;
-}
-
-/** Parameters of the BAM dashboard */
-interface BamParam {
-    /** Begin date */
-    begin?: string;
-    /** End date */
-    end?: string;
-    /** Period 1:hour, 2:day, 3:week, 4:month, 5:quarter, 6:semester, 7:year */
-    period?: number | string;
-}
-/** Business Activity Monitoring (BAM) rendering */
-declare class Bam {
-    private ctn;
-    private head?;
-    private _baseURL;
-    private _tab;
-    private _metrics;
-    private _cols;
-    private _log10;
-    private _colors;
-    private _fdate?;
-    private static singleton?;
-    /**
-     * Render the BAM dashboard.
-     * @param metrics Array of other available metrics {key,label}
-     * @param params begin, end, period
-     */
-    static render(metrics: KeyObject[], params?: BamParam): Promise<void>;
-    /**
-     * Render the BAM dashboard
-     * @param metrics Array of other available metrics {key,label}
-     * @param params begin, end, period
-     */
-    display(metrics: KeyObject[], params?: BamParam): void;
-    /**
-     * Display a tab: 0 = status, 1 = activities and processes, else a metric.
-     * @param tab Optional tab index (default current tab)
-     */
-    displayTab(tab?: number): void;
-    /** Reload with the selected dates, period and palette */
-    reload(): void;
-    /**
-     * Shift the period.
-     * @param s Shift (-1 = backward, 1 = forward)
-     */
-    shift(s: number): void;
-    /**
-     * Add a metric tab.
-     * @param k Metric key (`o<object>` or `p<process>`)
-     */
-    addTab(k: string): void;
-    /**
-     * Remove a metric tab.
-     * @param k Metric key (`o<object>` or `p<process>`)
-     */
-    delTab(k: string): void;
-    private _getMetric;
-    private _call;
-    private _onBamActivity;
-    private _onBamProcess;
-    private _onBamStatus;
-    private _onBamMetric;
-    /**
-     * Draw a chart in a container with error handling
-     * @param div Container id
-     * @param draw Drawing function
-     * @param error Error message prefix
-     */
-    private _plot;
-    private _plotProcessPie;
-    private _plotProcessLag;
-    private _plotProcessDate;
-    private _plotProcessUser;
-    private _plotStatusPie;
-    private _plotStatusDate;
-    private _plotStatusDuration;
-    private _plotStatusTerm;
-    /**
-     * Convert a period format of the server (strftime) to a moment format
-     * @param format Format as `%a %e-%b`, `%Y-%m`...
-     */
-    private _timeFormat;
-}
-
-/**
- * ZIP files editor
- */
-declare class ZIP {
-    /**
-     * Display the content of a ZIP document.
-     * @param ctn Container
-     * @param doc ZIP document
-     * @param zip Loaded ZIP
-     * @param p Optional parameters (`readonly`)
-     */
-    display(ctn: Container, doc: DocumentDB, zip: JSZip, p?: {
-        readonly?: boolean;
-    }): void;
-}
-
-/**
- * Treeview rendering
- */
-declare class Tree {
-    /**
-     * Object treeview rendering
-     * @param ctn container
-     * @param o business object (where o.item is a tree)
-     * @param id row Id
-     * @param tv treeview definition { name }
-     * @param p options
-     * @param cbk optional callback
-     */
-    display(ctn: Container, o: BusinessObject, id: string, tv: TreeNode, p: TreeParam, cbk?: Callback): this;
-    /**
-     * Filter tree
-     */
-    filterTree(this: HTMLElement): void;
-}
-
-/** Timesheet service parameters */
-interface TimesheetData {
-    /** Action (`save` or undefined to read) */
-    action?: string;
-    /** Timesheet name */
-    name: string;
-    /** Resource row ID */
-    resId?: string;
-    /** Start date of the range */
-    start?: string;
-    /** End date of the range */
-    end?: string;
-    /** Grid data to save */
-    data?: KeyObject;
-    /** Swap inputs and resources */
-    swap?: boolean;
-    /** Go to today */
-    today?: boolean;
-    /** Show all the lines */
-    showall?: boolean;
-    /** Shift the period backward (-1) or forward (1) */
-    shift?: TimesheetShift;
-    /** Gantt name */
-    gantt?: string;
-}
-/** Totals of a timesheet line */
-interface TimesheetTotal {
-    /** Total */
-    total: number;
-    /** Sub-total */
-    subtotal: number;
-    /** Workload */
-    workload: number;
-}
-/** Line of a timesheet (N,N assignment between 2 resources) */
-interface TimesheetLine {
-    /** N,N row_id */
-    id: string;
-    /** Resource 1 */
-    id1: string;
-    /** Label of resource 1 */
-    label1: string;
-    /** Resource 2 */
-    id2: string;
-    /** Label of resource 2 */
-    label2: string;
-    /** Group index */
-    groupby: number;
-    /** Begin date of the assignment */
-    begin: string;
-    /** End date of the assignment */
-    end: string;
-    /** Input values per date key */
-    inputs: {
-        [key: string]: string[];
-    };
-    /** Totals */
-    totals: TimesheetTotal[];
-    /** Status field */
-    sfield?: ObjectField;
-    /** Status value */
-    status?: string;
-}
-/** Period (column) of a timesheet */
-interface TimesheetPeriod {
-    /** Date key */
-    key: string;
-    /** Day label */
-    day: string;
-    /** Open day */
-    open?: boolean;
-    /** Read only */
-    read?: boolean;
-}
-/** Shift backward (-1) or forward (1) */
-type TimesheetShift = 1 | -1;
-/** Timesheet metadata and handlers */
-interface TimesheetMetadata {
-    /** Container */
-    ctn: Container;
-    /** Timesheet row ID */
-    id: string;
-    /** Timesheet name */
-    name: string;
-    /** Period type (`D` = day, `W` = week, `Y` = year) */
-    type: "D" | "W" | "Y";
-    /** Read only timesheet */
-    readOnly?: boolean;
-    /** Allow inputs in the past */
-    backward?: boolean;
-    /** Show the sheet */
-    useSheet?: boolean;
-    /** Use a chart */
-    useChart?: boolean;
-    /** Show the chart */
-    showChart?: boolean;
-    /** Swap inputs and resources */
-    swapInput?: boolean;
-    /** Show all the lines */
-    showall?: boolean;
-    /** Start date */
-    start?: string;
-    /** End date */
-    end?: string;
-    /** Go to today */
-    today?: boolean;
-    /** Shift of the period */
-    shift?: TimesheetShift;
-    /** Assign N,N object name */
-    assign: string;
-    /** Object of root resource 1 or 2 */
-    object: UIBusinessObject;
-    /** Row ID of resource 1 */
-    id1?: string;
-    /** Object of resource 1 */
-    obj1?: string;
-    /** Field of resource 1 */
-    field1: string;
-    /** Row ID of resource 2 */
-    id2?: string;
-    /** Object of resource 2 */
-    obj2?: string;
-    /** Field of resource 2 */
-    field2: string;
-    /** Lines */
-    lines: TimesheetLine[];
-    /** Status values */
-    status: EnumItem[];
-    /** Input fields */
-    inputs: ObjectField[];
-    /** Periods (columns) */
-    periods: TimesheetPeriod[];
-    /** Groups */
-    groups: number[];
-    /** Chart */
-    chart?: Chart;
-    /** Save the timesheet */
-    save: (cbk?: Callback) => void;
-    /** Close the timesheet */
-    close: Callback;
-    /** Redraw the timesheet */
-    redraw?: Callback;
-    /** Read the grid data */
-    read?: () => KeyObject;
-    /** Swap inputs and resources */
-    swap?: Callback;
-    /** Go to today */
-    showToday?: Callback;
-    /** Add a line */
-    add?: Callback;
-    /** Open a record */
-    open?: (obj: string, id: string, form: boolean) => void;
-    /** Shift the period */
-    onshift: (sign: number) => void;
-}
-/** Timesheet data from the server */
-interface TimesheetParam {
-    /** Timesheet metadata */
-    ts: TimesheetMetadata;
-    /** Messages */
-    msg?: MessageJSON[];
-}
-/** Timesheet display options */
-type TimesheetOptions = NavParam & {
-    /** Hook before loading */
-    beforeload?: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => void;
-    /** Hook when displayed */
-    onload?: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => void;
-    /** Hook when removed */
-    onunload?: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => void;
-};
-/** Gantt data */
-interface TimesheetGanttData {
-    /** Periods */
-    period: TimesheetPeriod[];
-    /** TODO */
-    meta: KeyObject;
-    /** TODO */
+declare class DiagramCaption extends DiagramElement {
+    padding: number;
+    border?: JSVG;
+    t?: JSVG;
     data: KeyObject;
-}
-/** Gantt display options */
-type TimesheetGanttParam = {
-    /** Object instance name */
-    inst?: string;
-    /** Start date */
-    start?: string;
-    /** End date */
-    end?: string;
-} & NavParam;
-/**
- * Timesheet rendering
- */
-declare class Timesheet {
+    constructor(desktop: DiagramDesktop, data: KeyObject);
     /**
-     * Display a timesheet.
-     * @param ctn Container
-     * @param obj Business object
-     * @param t Timesheet data
-     * @param cbk Optional callback when displayed
+     * Draw caption within hook onDrawCaption(caption, display)
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
      */
-    display(ctn: Container, obj: BusinessObject, t: TimesheetParam, cbk?: Callback): void;
+    draw(): void;
     /**
-     * Read form data
-     * field name => assign id => period key: value
+     * Display the default caption with model data
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
      */
-    private read;
+    display(): void;
     /**
-     * Bulk transition
+     * Set/Get size of caption
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
      */
-    private transition;
+    size(w?: number, h?: number): Size;
     /**
-     * Format float
+     * Bind caption
+     * @function
+     * @memberOf Simplicite.Diagram.Caption
      */
-    private format;
-    private grid;
-    private fixed;
-    /** Generated colors per resource label */
-    _colors: KeyString;
-    /**
-     * Generate a color to resource label
-     */
-    private color;
-    /**
-     * Resource chart
-     */
-    private chart;
-    /**
-     * Gantt chart
-     */
-    displayGantt(ctn: Container, obj: BusinessObject, tsName: string, data: TimesheetGanttData, upd?: (p: KeyObject, cbk: (err: MessageJSON) => void) => void, cbk?: Callback): void;
-}
-
-/**
- * Trays rendering
- */
-declare class UITray {
-    /**
-     * Display the trays form
-     * @param ctn container
-     * @param div optional div.tray to fill
-     * @param trays list of trays with items
-     * @param p optional parameters
-     * @param cbk optional callback
-     */
-    display(ctn: Container, div: JQuery, trays: TrayColumn[], p: {
-        cls?: string;
-        findItem?: (e: JQuery.Event) => JQuery | undefined;
-        getItemId?: (item: JQuery) => string;
-        getTrayName?: (tray: JQuery) => string;
-    }, cbk?: Callback): this;
-}
-
-/**
- * UI Action
- */
-declare class UIAction extends UIComponent<Action> {
-    /** business object */
-    obj: UIBusinessObject;
-    /**
-     * UI Action
-     * @param ctn container
-     * @param obj object
-     * @param action Action metadata
-     */
-    constructor(ctn: Container, obj: UIBusinessObject, action: Action);
-    /**
-     * Bind a 'click' on button
-     * @param handler related handler
-     */
-    click(handler: JQueryHandler): JQuery<HTMLElement> | undefined;
-    /**
-     * Enable/Disable the action
-     * @param enabled false to disable
-     */
-    enable(enabled: boolean): this;
-    /**
-     * Show/Hide the action
-     * @param vis visibility ? false to hide
-     */
-    visible(vis: boolean): this;
-}
-
-/** Parameters of an area rendering */
-interface AreaParam {
-    /** To parse the area definition on display */
-    parse?: boolean;
-    /** Read only area, or only editable cells */
-    readonly?: boolean | "editcell";
-    /** Null = no actions, undefined = from metadata */
-    formActions?: Action[] | null;
-    /** Null = no actions, undefined = from metadata */
-    plusActions?: Action[] | null;
-    /** In a workflow */
-    workflow?: boolean;
-    /** Show extended fields */
-    isExtended?: boolean;
-    /** Index to identify fields by row */
-    index?: string;
-    /** Area in a tab */
-    tabNum?: number;
-    /** Current active tabs */
-    formTab?: KeyObject;
-    /** Optional final save on ENTER */
-    saveBtn?: JQuery;
-    /** Area in form */
-    showViews?: ShowViewsMode;
-    /** Count of visible views */
-    visView?: number;
-    /** In a search area */
-    search?: boolean;
-    /** Readonly filters */
-    fixedFilters?: KeyObject;
-    /** Promises to wait before the end of rendering (see `$ui.addPromise`) */
-    promises?: Promise<unknown>[];
-}
-declare class UIArea extends UIComponent<Area, AreaParam> {
-    /** Business object */
-    obj: UIBusinessObject;
-    /** Area body */
-    body: Container;
-    /** Tabs container */
-    tabs?: Container;
-    /** Current tab */
-    tab?: Container;
-    constructor(ctn: Container, obj: UIBusinessObject, area: Area);
-    /**
-     * Show/Hide the area
-     * @param vis visibility ? false to hide
-     */
-    visible(vis: boolean, slide?: boolean): this;
-    /**
-     * Render the area
-     * @param options
-     * @param options.parse
-     */
-    render(options?: AreaParam): JQuery;
-    /**
-     * Display a template with components substitution
-     * @param d The container to fill
-     * @param template Optional template to re-apply
-     * @param options Form options
-     * @param options.parse Parse the full template
-     * @param options.readonly true to insert readonly fields, or "editcell" to edit only editbale fields by cell
-     * @param options.formActions Main actions
-     * @param options.plusActions Extended actions
-     * @param options.isExtended Extended form?
-     * @param options.search in a search area?
-     * @param options.formTab Selected tabs index
-     * @param options.saveBtn Optional Save button after last ENTER
-     */
-    display(d: Container, template: string | JQuery | null, options?: AreaParam): void;
-    /**
-     * Build a field
-     */
-    field(f: ObjectField, disp: FieldDisplay, p: AreaParam): string | JQuery<HTMLElement> | undefined;
-    /**
-     * Build a field with ENTER handler
-     */
-    static formField(ctn: Container, obj: UIBusinessObject, f: ObjectField, disp: FieldDisplay, p?: {
-        readonly?: boolean | string;
-        index?: string;
-        saveBtn?: JQuery;
-        promises?: Promise<unknown>[];
-    }): string | JQuery<HTMLElement> | undefined;
-    /**
-     * Show/hide tabs/panels containing something visible
-     * @param slide Slide effect?
-     */
-    visibleAreas(slide?: boolean): void;
-    /**
-     * Show/hide a view and parent panels
-     * @param el target element
-     * @param view optional view
-     * @param vis show or hide
-     * @param slide slide effect?
-     */
-    visibleView(el: HTMLElement, view?: View, vis?: boolean, slide?: boolean): void;
-    /**
-     * Object Views and Links
-     * @param div append links to the container
-     * @param p form context
-     */
-    displayViews(div: JQuery, p: AreaParam): void;
-    /**
-     * Display a link or view related to object
-     * @param div container to fill
-     * @param v view metadata
-     * @param l or 0,n link
-     * @param p optional form context to add a promise
-     */
-    displayLink(div: JQuery, v: View, l?: Link | null, p?: AreaParam): void;
-    /**
-     * Add a counter in the tab label
-     */
-    countRef(v: View, div: JQuery, list?: BusinessObject): void;
-}
-
-/** Rendering options of a view */
-interface UIViewParam extends Pick<ViewParam, "parent" | "home" | "edit" | "useCopyLink"> {
-    /** Load tabs content in lazy mode / on click (default true) */
-    lazy?: boolean;
-}
-/** Filters of a view (period and object filters) */
-interface ViewFilter {
-    /** Show a date period */
-    period?: boolean;
-    /** Start date of the period */
-    periodFromDate?: string;
-    /** End date of the period */
-    periodToDate?: string;
-    /** Metadata */
-    meta?: KeyObject;
-    /** Filters per object field */
-    filters?: {
-        /** Object name */
-        object: string;
-        /** Field name */
-        field: string;
-        /** Filter value */
-        filter: string;
-    }[];
-    /** Vertical rendering */
-    vertical?: boolean;
-    /** Compact rendering */
-    compact?: boolean;
-}
-/**
- * UI View
- */
-declare class UIView extends UIComponent<View, UIViewParam> {
-    /**
-     * UI View
-     * @param ctn container
-     * @param def View metadata
-     */
-    constructor(ctn: Container, def: View);
-    /**
-     * Display a view of items in container (i.e. home, plain view or part of form)
-     * @param options options
-     * @param options.parent parent object when the view belongs to a form
-     * @param options.home is a home view?
-     * @param options.lazy load tabs content in lazy mode / on click (default true)
-     * @param options.edit edit mode for gridstack
-     * @param options.useCopyLink add the copy link addon?
-     * @param cbk optional callback when rendered
-     */
-    render(options?: UIViewParam, cbk?: Callback): JQuery;
-    /**
-     * Display the view filters
-     * @param ctn Container of view
-     * @param div Container of filters
-     * @param options Filters definition
-     * @param options.period Show a date period?
-     * @param options.periodFromDate optional min date filter
-     * @param options.periodToDate optional max date filter
-     * @param options.meta all meta-data with search fields
-     * @param options.filters optional list of object/field/filter
-     * @param cbk Optional callback
-     */
-    renderFilters(ctn: Container, div: Container, options: ViewFilter, cbk?: Callback): JQuery<HTMLElement>;
-    /**
-     * Show/Hide the view
-     * @param vis visibility ? false to hide
-     * @param slide optional slide effect
-     */
-    visible(vis: boolean, slide?: boolean): this;
-    /**
-     * Grid stack rendering
-     * @param ctn View container
-     * @param el Element .grid-stack
-     * @param edit true to edit the view
-     * @param options Gridstack options (cellHeight, mode, removable, staticGrid, acceptWidgets...) and the grid DOM id
-     */
-    grid(ctn: Container, el: HTMLElement, edit?: boolean, options?: GridStackOptions & {
-        id?: string;
-    }): Promise<void>;
-}
-
-/**
- * UI Field Boolean
- */
-declare class UIFieldBoolean extends UIField {
-    /**
-     * Get all inputs related to field
-     * @param checked search only checked input ?
-     * @returns field UI elements (input, select...)
-     */
-    find(checked: boolean): JQuery;
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Draw the UI input
-     */
-    drawInput(): JQuery;
-    /**
-     * Draw the search field
-     * @param filter Filter
-     * @param options Options
-     * @param options.searchby Search by field of list header
-     * @param options.search Search handler
-     * @param options.readonly Read-only search (fixed filter)
-     */
-    drawSearch(filter: string, options?: DrawSearchOptions): JQuery;
-}
-
-/**
- * UI Field color
- * - draw a preview area and a color picker based on spectrum
- * - trigger event 'ui.preview.color' on input field to preview the color
- */
-declare class UIFieldColor extends UIField {
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-}
-
-/**
- * UI Field Date time
- */
-declare class UIFieldDateTime extends UIField {
-    /**
-     * Init field components (with flatpickr as date picker)
-     */
-    init(p?: FormParam | ListParam): this;
-    /**
-     * Get the flatpickr instance
-     */
-    getDatePicker(): Instance;
-    /**
-     * Destroy the flatpickr instance
-     */
-    destroy(p?: FormParam | ListParam): this;
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-    /**
-     * Render the search field (with datetime picker)
-     * @param filter Filter
-     * @param options Options
-     * @param options.searchby Search by field of list header
-     * @param options.search search handler
-     */
-    renderSearch(filter: string, options?: {
-        searchby?: boolean;
-        search?: Callback;
-    }): JQuery;
-    /**
-     * A11Y: append the typed format hint below a search element and describe its input(s) with it
-     * @param el Search element
-     * @param inputs Inputs to describe (none = unchanged element)
-     * @param searchby Search by field of list header
-     * @returns The element wrapped with its hint
-     */
-    private searchHint;
-    /**
-     * Icon button of a date/time input.
-     * @param type Field type or icon name
-     * @param ariaLabel Accessible label
-     * @param click Handler on click
-     * @returns The button
-     */
-    static icon(type: number | string, ariaLabel: string, click: JQueryHandler): JQuery<HTMLElement>;
-    /**
-     * Convert a server side date 'YYYY-MM-DD HH:MI:SS' to Date
-     * @param v A date or datetime or null or a filter %
-     * @returns Date or undefined if not a date
-     */
-    toDate(v?: string | null): Date | undefined;
-    /**
-     * Manage change event to set min/maxDate
-     * @param ctn Container
-     * @param dp Date picker instance
-     * @param field Field name to bind onchange
-     * @param value Optional date value YYYY-MM-DD HH:MI:SS
-     * @param prop property minDate or maxDate to set to picker
-     * @param read readonly?
-     */
-    changeDate(ctn: Container, dp: Instance | undefined, field: string, value: string, prop: "minDate" | "maxDate", read: boolean): void;
-    /**
-     * Date picker parameters (based on flatpickr options)
-     */
-    dpParam(type: number, lang: string, df: string, rdg?: string, autoopen?: string | boolean): Options;
-    /**
-     * Get a datepicker input-group
-     * @param ctn optional container to append the picker (default is the input-group)
-     * @param options options
-     * @param options.input optional input element (create one if not specified)
-     * @param options.type $ui.TYPE_DATE (default) or $ui.TYPE_DATETIME or $ui.TYPE_TIME
-     * @param options.rendering optional field rendering
-     * @param options.autoopen true to open the picker on click
-     * @param options.clear true to add a clear button
-     * @returns input group with input and buttons
-     */
-    static datePicker(ctn: Container | null, options?: {
-        input?: JQuery;
-        type?: number;
-        rendering?: string;
-        autoopen?: boolean;
-        clear?: boolean;
-        label?: string;
-    }): JQuery<HTMLElement>;
-    /**
-     * Build datetime picker parameters (based on flatpickr options)
-     */
-    static datePickerParam(type: number, lang: string, dateformat: string, rdg?: string, autoopen?: string | boolean): Options;
-    /**
-     * Human-readable input format hint for typed date entry:
-     * a fixed sample formatted with the field's own display formatter (same as draw()),
-     * so the hint always matches the user date format and the field rendering (Y|M|D|H|I|S)
-     */
-    private formatHint;
-}
-
-/**
- * UI Field Date
- */
-declare class UIFieldDate extends UIFieldDateTime {
-}
-
-/**
- * UI Field Time
- */
-declare class UIFieldTime extends UIFieldDateTime {
-}
-
-/**
- * UI Field Document
- */
-declare class UIFieldDocument extends UIField {
-    /**
-     * Get all inputs related to field
-     * @returns field UI elements (input, select...)
-     */
-    find(_checked: boolean): JQuery;
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Draw the UI controls
-     */
-    draw(p?: FieldParam): JQuery;
-}
-
-/**
- * UI Field Image
- */
-declare class UIFieldImage extends UIFieldDocument {
-}
-
-/**
- * UI Field Integer
- */
-declare class UIFieldInt extends UIField {
-    /**
-     * Get all inputs related to field
-     * @param checked search only checked radio in case of stars rendering ?
-     * @returns field UI elements (input, select...)
-     */
-    find(checked: boolean): JQuery;
-    /**
-     * Init field components
-     */
-    init(p?: FormParam | ListParam): this;
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery<HTMLElement>;
-    /**
-     * Unit addon as real text, linked to the input
-     * @param inp Input
-     * @param rdg Rendering
-     * @param unit Unit text
-     */
-    private unitAddon;
-    /**
-     * Draw the search field
-     * @param filter Filter
-     * @param options Options
-     * @param options.searchby Search by field of list header
-     * @param options.search Search handler
-     * @param options.readonly Read-only search (fixed filter)
-     */
-    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
-}
-
-/**
- * UI Field Float
- */
-declare class UIFieldFloat extends UIFieldInt {
-}
-
-/**
- * UI Field Big decimal
- */
-declare class UIFieldBigDecimal extends UIFieldInt {
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Init field components
-     */
-    init(): this;
-}
-
-/**
- * UI Field email
- */
-declare class UIFieldEmail extends UIField {
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-}
-
-/**
- * UI Field Enum
- */
-declare class UIFieldEnum extends UIField {
-    /**
-     * Get all inputs related to field
-     * @param checked search only checked input ?
-     * @returns field UI elements (input, select...)
-     */
-    find(checked?: boolean): JQuery;
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Load and redraw the list of values
-     * @param lov List of values name
-     * @param cbk Optional callback(response)
-     */
-    setList(lov: string, cbk: (r: KeyObject) => void): this;
-    /**
-     * Init field components
-     */
-    init(p?: FormParam | ListParam): this;
-    /**
-     * Destroy field components
-     */
-    destroy(p?: FormParam | ListParam): this;
-    /**
-     * Transform radios/checks into columns
-     * @param inp Input
-     * @param n number of columns
-     * @param vertical vertical?
-     */
-    cols(inp: JQuery, n: number, vertical: boolean): void;
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-    /**
-     * Draw the search field (enum and enum-multi)
-     * @param filter Filter codes to display: array of codes or separated by ';' or expression "is null", "is not null", "in ('a','b') or is null"
-     * @param options Options
-     * @param options.searchby Search by field of list header
-     * @param options.search Search handler
-     * @param options.readonly Read-only search (fixed filter)
-     */
-    drawSearch(filter?: string | string[], options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
-    /**
-     * Render the value with item icon / colored tag
-     * @param v field value (enum code)
-     * @param item optional item on list / with icon, tag, color, bgcolor, hideLabel (default use definition of field)
-     * @returns div.enum
-     */
-    renderValue(v: FieldValue, item?: EnumItem): string | JQuery;
-}
-
-/**
- * UI Field Enum multiple
- */
-declare class UIFieldEnumMulti extends UIFieldEnum {
-    /**
-     * Get all inputs related to field
-     * @param checked search only checked input ?
-     * @returns field UI elements (input, select...)
-     */
-    find(checked?: boolean): JQuery;
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (Array of codes, or separated with ';')
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Init field components
-     */
-    init(p?: FormParam | ListParam): this;
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-    /**
-     * Add event handlers for select/unselect all functionality
-     * @param inp input element
-     * @param rdg rendering mode
-     */
-    addSelectAllHandlers(inp: JQuery, rdg?: string): void;
-    /**
-     * Render the value with item icon / colored tag
-     * @param v field values (enum codes)
-     * @returns ul.enum
-     */
-    renderValue(v: FieldValue): string | JQuery;
-}
-
-/**
- * UI Field geo coords
- */
-declare class UIFieldGeoCoords extends UIField {
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-    /**
-     * Helper to pick the coordinates of the search filter on a map
-     * @param f object field
-     * @param input search input to assist
-     */
-    searchHelper(f: ObjectField, input: JQuery): void;
-}
-
-/**
- * UI Field HTML
- */
-declare class UIFieldHtml extends UIField {
-    constructor(ctn: Container, obj: UIBusinessObject | null, f: ObjectField, index?: string);
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Init field components
-     * @param p context parameters of the form or the list
-     */
-    init(p?: FormParam | ListParam): this;
-    /**
-     * Destroy field components
-     */
-    destroy(p?: FormParam | ListParam): this;
-    /**
-     * Draw the UI controls
-     */
-    drawInput(): JQuery;
-}
-
-/**
- * UI Field ID
- */
-declare class UIFieldId extends UIField {
-    /**
-     * Draw the search field
-     * @param filter Filter
-     */
-    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
-}
-
-/**
- * UI Field Long string
- */
-declare class UIFieldLongString extends UIField {
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Init field components (ace or grid)
-     * @param p context parameters of the form or the list
-     */
-    init(p?: FormParam | ListParam): this;
-    /**
-     * Destroy field components (ace editor)
-     */
-    destroy(p?: FormParam | ListParam): this;
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-}
-
-/**
- * UI Field Notepad
- */
-declare class UIFieldNotepad extends UIField {
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value (service syntax)
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Init field components
-     */
-    init(p?: FormParam | ListParam): this;
-    /**
-     * Draw the UI input
-     */
-    drawInput(): JQuery;
-}
-
-/**
- * UI Field Meta-object
- */
-declare class UIFieldObject extends UIField {
-    /**
-     * Get the UI value converted to service
-     * @returns the service value
-     */
-    val(): FieldValue | undefined;
-    /**
-     * Set a service value to UI and to the field of object
-     * @param v Value "object:row_id" or \{ object, row_id, optional parent \}
-     * @returns itself
-     */
-    val(v: FieldValue): this;
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-    /**
-     * Draw the search field
-     * @param filter Filter
-     * @param options Options
-     * @param options.searchby Search by field of list header
-     * @param options.search Search handler
-     * @param options.readonly Read-only search (fixed filter)
-     */
-    drawSearch(filter: string, options?: DrawSearchOptions): JQuery | FieldSearch | FieldSearch[];
-}
-
-/**
- * UI Field phone num
- */
-declare class UIFieldPhoneNum extends UIField {
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-}
-
-/**
- * UI Field regexp
- */
-declare class UIFieldRegexp extends UIField {
-}
-
-/**
- * UI Field URL
- */
-declare class UIFieldUrl extends UIField {
-    /**
-     * Draw the UI controls
-     */
-    draw(): JQuery;
-}
-
-/**
- * Simplicite Ajax session / model layer, with the legacy static constants (Simplicite.Ajax.CONTEXT_CREATE...)
- */
-declare const Ajax: typeof Session & typeof AppConstants & AjaxNamespace;
-/**
- * Classes of the `Simplicite.UI.View` namespace (typed by UIViewNamespace, see namespaces.ts)
- * @hidden
- */
-declare const ViewClasses: {
-    /** `Simplicite.UI.View.Bootstrap5`: alias of the `Bootstrap5` class */
-    Bootstrap5: typeof Bootstrap5;
-    /** `Simplicite.UI.View.Main`: alias of the `UIViewer` class */
-    Main: typeof UIViewer;
-    /** `Simplicite.UI.View.Widget`: alias of the `Widget` class */
-    Widget: typeof Widget;
-    /** `Simplicite.UI.View.Addons`: alias of the `AddonBar` class */
-    Addons: typeof AddonBar;
-    /** `Simplicite.UI.View.Menu`: alias of the `Menu` class */
-    Menu: typeof Menu;
-    /** `Simplicite.UI.View.Board`: alias of the `Board` class */
-    Board: typeof Board;
-    /** `Simplicite.UI.View.List`: alias of the `List` class */
-    List: typeof List;
-    /** `Simplicite.UI.View.Form`: alias of the `Form` class */
-    Form: typeof Form;
-    /** `Simplicite.UI.View.Search`: alias of the `Search` class */
-    Search: typeof Search;
-    /** `Simplicite.UI.View.Update`: alias of the `Update` class */
-    Update: typeof Update;
-    /** `Simplicite.UI.View.Social`: alias of the `Social` class */
-    Social: typeof Social;
-    /** `Simplicite.UI.View.Color`: alias of the `UIColor` class */
-    Color: typeof UIColor;
-    /** `Simplicite.UI.View.ColorPicker`: alias of the `ColorPicker` class */
-    ColorPicker: typeof ColorPicker;
-    /** `Simplicite.UI.View.Crosstab`: alias of the `Crosstab` class */
-    Crosstab: typeof Crosstab;
-    /** `Simplicite.UI.View.External`: alias of the `External` class */
-    External: typeof External;
-    /** `Simplicite.UI.View.Import`: alias of the `Import` class */
-    Import: typeof Import;
-    /** `Simplicite.UI.View.Merge`: alias of the `Merge` class */
-    Merge: typeof Merge;
-    /** `Simplicite.UI.View.Bam`: alias of the `Bam` class */
-    Bam: typeof Bam;
-    /** `Simplicite.UI.View.StatusMetrics`: alias of the `StatusMetrics` class */
-    StatusMetrics: typeof StatusMetrics;
-    /** `Simplicite.UI.View.ZIP`: alias of the `ZIP` class */
-    ZIP: typeof ZIP;
-    /** `Simplicite.UI.View.Tree`: alias of the `Tree` class */
-    Tree: typeof Tree;
-    /** `Simplicite.UI.View.Prefs`: alias of the `Prefs` class */
-    Prefs: typeof Prefs;
-    /** `Simplicite.UI.View.Timesheet`: alias of the `Timesheet` class */
-    Timesheet: typeof Timesheet;
-    /** `Simplicite.UI.View.IndexSearch`: alias of the `IndexSearch` class */
-    IndexSearch: typeof IndexSearch;
-    /** `Simplicite.UI.View.Tray`: alias of the `UITray` class */
-    Tray: typeof UITray;
-    /** `Simplicite.UI.View.Component`: alias of the `UIComponent` class */
-    Component: typeof UIComponent;
-    /** `Simplicite.UI.View.UIAction`: alias of the `UIAction` class */
-    UIAction: typeof UIAction;
-    /** `Simplicite.UI.View.UIArea`: alias of the `UIArea` class */
-    UIArea: typeof UIArea;
-    /** `Simplicite.UI.View.UIView`: alias of the `UIView` class */
-    UIView: typeof UIView;
-    /** `Simplicite.UI.View.UIField`: alias of the `UIField` class */
-    UIField: typeof UIField;
-    /** `Simplicite.UI.View.UIFieldBoolean`: alias of the `UIFieldBoolean` class */
-    UIFieldBoolean: typeof UIFieldBoolean;
-    /** `Simplicite.UI.View.UIFieldColor`: alias of the `UIFieldColor` class */
-    UIFieldColor: typeof UIFieldColor;
-    /** `Simplicite.UI.View.UIFieldDate`: alias of the `UIFieldDate` class */
-    UIFieldDate: typeof UIFieldDate;
-    /** `Simplicite.UI.View.UIFieldDateTime`: alias of the `UIFieldDateTime` class */
-    UIFieldDateTime: typeof UIFieldDateTime;
-    /** `Simplicite.UI.View.UIFieldTime`: alias of the `UIFieldTime` class */
-    UIFieldTime: typeof UIFieldTime;
-    /** `Simplicite.UI.View.UIFieldDocument`: alias of the `UIFieldDocument` class */
-    UIFieldDocument: typeof UIFieldDocument;
-    /** `Simplicite.UI.View.UIFieldImage`: alias of the `UIFieldImage` class */
-    UIFieldImage: typeof UIFieldImage;
-    /** `Simplicite.UI.View.UIFieldFloat`: alias of the `UIFieldFloat` class */
-    UIFieldFloat: typeof UIFieldFloat;
-    /** `Simplicite.UI.View.UIFieldInt`: alias of the `UIFieldInt` class */
-    UIFieldInt: typeof UIFieldInt;
-    /** `Simplicite.UI.View.UIFieldBigDecimal`: alias of the `UIFieldBigDecimal` class */
-    UIFieldBigDecimal: typeof UIFieldBigDecimal;
-    /** `Simplicite.UI.View.UIFieldEmail`: alias of the `UIFieldEmail` class */
-    UIFieldEmail: typeof UIFieldEmail;
-    /** `Simplicite.UI.View.UIFieldEnum`: alias of the `UIFieldEnum` class */
-    UIFieldEnum: typeof UIFieldEnum;
-    /** `Simplicite.UI.View.UIFieldEnumMulti`: alias of the `UIFieldEnumMulti` class */
-    UIFieldEnumMulti: typeof UIFieldEnumMulti;
-    /** `Simplicite.UI.View.UIFieldGeoCoords`: alias of the `UIFieldGeoCoords` class */
-    UIFieldGeoCoords: typeof UIFieldGeoCoords;
-    /** `Simplicite.UI.View.UIFieldHtml`: alias of the `UIFieldHtml` class */
-    UIFieldHtml: typeof UIFieldHtml;
-    /** `Simplicite.UI.View.UIFieldId`: alias of the `UIFieldId` class */
-    UIFieldId: typeof UIFieldId;
-    /** `Simplicite.UI.View.UIFieldLongString`: alias of the `UIFieldLongString` class */
-    UIFieldLongString: typeof UIFieldLongString;
-    /** `Simplicite.UI.View.UIFieldNotepad`: alias of the `UIFieldNotepad` class */
-    UIFieldNotepad: typeof UIFieldNotepad;
-    /** `Simplicite.UI.View.UIFieldObject`: alias of the `UIFieldObject` class */
-    UIFieldObject: typeof UIFieldObject;
-    /** `Simplicite.UI.View.UIFieldPhoneNum`: alias of the `UIFieldPhoneNum` class */
-    UIFieldPhoneNum: typeof UIFieldPhoneNum;
-    /** `Simplicite.UI.View.UIFieldRegexp`: alias of the `UIFieldRegexp` class */
-    UIFieldRegexp: typeof UIFieldRegexp;
-    /** `Simplicite.UI.View.UIFieldUrl`: alias of the `UIFieldUrl` class */
-    UIFieldUrl: typeof UIFieldUrl;
-};
-/**
- * Simplicite UI / rendering classes
- */
-declare const UI: {
-    /** `Simplicite.UI.Globals`: default UI options */
-    Globals: typeof Globals;
-    /** `Simplicite.UI.Engine`: alias of the `UIEngine` class */
-    Engine: typeof UIEngine;
-    /** `Simplicite.UI.Navigator`: alias of the `UINavigator` class */
-    Navigator: typeof UINavigator;
-    /** `Simplicite.UI.Util`: alias of the `UIUtil` class */
-    Util: typeof UIUtil;
-    /** `Simplicite.UI.Loader`: alias of the `UILoader` class */
-    Loader: typeof UILoader;
-    /** `Simplicite.UI.Factory`: alias of the `Factory` class */
-    Factory: typeof Factory;
-    /** `Simplicite.UI.BusinessObject`: alias of the `UIBusinessObject` class */
-    BusinessObject: typeof UIBusinessObject;
-    /** `Simplicite.UI.BusinessProcess`: alias of the `UIBusinessProcess` class */
-    BusinessProcess: typeof UIBusinessProcess;
-    /** `Simplicite.UI.ExternalObject`: alias of the `UIExternalObject` class */
-    ExternalObject: typeof UIExternalObject;
-    /** `Simplicite.UI.SyncQueue`: alias of the `SyncQueue` class */
-    SyncQueue: typeof SyncQueue;
-    /** `Simplicite.UI.Workflow`: alias of the `Workflow` class */
-    Workflow: typeof Workflow;
-    /** `Simplicite.UI.Calendar`: alias of the `Calendar` class */
-    Calendar: typeof UICalendar;
-    /** `Simplicite.UI.Firebase`: alias of the `Firebase` class */
-    Firebase: typeof Firebase;
-    /** `Simplicite.UI.WebPush`: alias of the `WebPush` class */
-    WebPush: typeof WebPush;
-    /** `Simplicite.UI.Tray`: alias of the `Tray` class */
-    Tray: typeof Tray;
-    /** `Simplicite.UI.OCR`: alias of the `OCR` class */
-    OCR: typeof OCR;
-    /** `Simplicite.UI.Map`: alias of the `Map` class */
-    Map: typeof UIMap;
-    /** `Simplicite.UI.Charts`: alias of the `Charts` class */
-    Charts: typeof Charts;
-    /** `Simplicite.UI.Guide`: alias of the `Guide` class */
-    Guide: typeof Guide;
-    /** `Simplicite.UI.Speech`: alias of the `Speech` class */
-    Speech: typeof Speech;
-    /** UI viewers, renderers and components (`Simplicite.UI.View`) */
-    View: UIViewNamespace;
-    /**
-     * Business object class definitions with front hooks
-     */
-    BusinessObjects: KeyBusinessObjectHook;
-    /**
-     * Object hooks: <code>Simplicite.UI.hooks['myObject'] = function(obj, cbk) \{\}</code>
-     */
-    hooks: KeyObjectHook;
-    /**
-     * External object class definitions with front hooks
-     */
-    ExternalObjects: KeyExternalObject;
-    /**
-     * Business process class definitions with front hooks
-     */
-    BusinessProcesses: KeyBusinessProcessHook;
-    /**
-     * Object contraints: <code>Simplicite.UI.constraints['myObject'] = function(ctn, obj, elt, index, context, cbk) \{\}</code>
-     */
-    constraints: KeyConstraint;
-    /**
-     * Predefined colors
-     */
-    CSSColors: CSSColors[];
-    /**
-     * Icons meta-data
-     */
-    icons: IconsMetadata;
-};
-
-/**
- * Factory singleton
- */
-declare const $factory: Factory;
-/**
- * Console
- */
-declare const $console: Console;
-/**
- * UI main navigator
- */
-declare const $nav: UINavigator;
-/**
- * Global bootstrap tools
- */
-declare const $tools: Bootstrap5;
-/**
- * UI Viewer
- */
-declare const $view: UIViewer;
-/**
- * UI global singleton
- */
-declare const $ui: UIEngine;
-/**
- * Session singleton
- */
-declare const $app: Session;
-/**
- * Grant singleton
- */
-declare const $grant: Grant;
-
-declare type Translate = (code: string, plural?: boolean) => string;
-declare global {
-    interface Window {
-        $factory: Factory;
-        $app: Session;
-        $grant: Grant;
-        $ui: UIEngine;
-        $view: UIViewer;
-        $tools: Bootstrap5;
-        $console: Console;
-        $root: string;
-        $nav: UINavigator;
-        $T: Translate;
-    }
-    var $root: string;
-    const $T: Translate;
-}
-
-/** Global `Simplicite` namespace */
-interface SimpliciteInterface {
-    /** Back-end constants */
-    Globals: BackendConstants;
-    /** Application: instance of session */
-    Application: Session;
-    /** Model classes: Session, Grant, BusinessObject, BusinessProcess... */
-    Ajax: typeof Ajax;
-    /** UI rendering classes */
-    UI: typeof UI;
-}
-declare global {
-    interface Window {
-        Simplicite: SimpliciteInterface;
-    }
-}
-
-/**
- * API tester
- * @class
- */
-declare class APITester {
-    apiTestReady(): void;
-    apiTestCall(logout?: boolean): void;
-    apiTestData(): void;
-    apiMethod(): void;
-    apiOption(opt: string, b: number): void;
-    apiTestURL(): void;
-    apiTestFilter(): void;
+    bind(el: JSVG): void;
 }
 
 type UndoRedoAction = "nm" | // move element(s)
@@ -13700,13 +13108,17 @@ declare class UIRenderMaker {
     }, cbk?: (zip: string) => void): void;
     /**
      * Load and display the modeler
-     * @param _ctn Container to append the map to
+     * @param ctn Optional container to dock the modeler (ignored in popup or hidden mode),
+     * default null = docked in a new tab on the right side or opened in a new window
      * @param modelId Model row ID
      * @param options Options <code>\{ docked, popup \}</code>
      * @example
+     * // New tab on the right side
      * $ui.displayModeler(null, modelId, { docked: true });
+     * // In a specific container
+     * $ui.displayModeler(ctn, modelId);
      */
-    displayModeler(_ctn: AnyContainer, modelId: string, options?: ModelParam): Promise<void>;
+    displayModeler(ctn: AnyContainer, modelId: string, options?: ModelParam): Promise<void>;
     /**
      * User feedback
      * @example
@@ -14351,22 +13763,30 @@ declare class Factory {
     /**
      * Set the root location.
      * @param root Root URL
+     * @example
+     * $factory.setRoot("/app");
      */
     setRoot(root: string): void;
     /**
      * Get the root path of the application (context root)
      * @returns string
+     * @example
+     * const root = $factory.getRootPath();
      */
     getRootPath(): string;
     /**
      * Get the path to the local distribution in /scripts
      * @returns string
+     * @example
+     * const dist = $factory.getDistPath();
      */
     getDistPath(): string;
     /**
      * Evaluate a JavaScript source string in the global scope,
      * like a &lt;script&gt; tag (top-level var/function declarations become globals).
      * @param src JavaScript source
+     * @example
+     * $factory.globalEval("var myGlobal = 1;");
      */
     globalEval(src: string): void;
     /**
@@ -14392,14 +13812,18 @@ declare class Factory {
      * @param part.target optional selector to append the "HTML" part
      * @param part.silent true for no logging (not found 404)
      * @param part.force ignore the local cache
+     * @example
+     * await $factory.loadPart({ name: "myPart", url: "/my/part.html", target: "#myTarget" } as LoadPart);
      */
     loadPart(part: string | LoadPart): Promise<void>;
     /**
      * Load HTML/JS/CSS resources
      * @param list list of parts [{ name, url, type, target }] or urls
      * @param ordered ordered loading of each part? true by default
+     * @example
+     * $factory.loadParts(["/my/script.js", "/my/style.css"]);
      */
-    loadParts(list: LoadPart[] | string[], ordered?: boolean): Promise<void> | Promise<KeyObject> | Promise<PromiseSettledResult<void>[]>;
+    loadParts(list: LoadPart[] | string[], ordered?: boolean): Promise<KeyObject> | Promise<void> | Promise<PromiseSettledResult<void>[]>;
     /**
      * Browser cache per revision
      */
@@ -14412,6 +13836,8 @@ declare class Factory {
      * @param part.silent true for no logging (not found 404)
      * @param part.force ignore the local cache
      * @param part.id optional link id (to append to head or replace)
+     * @example
+     * $factory.loadCSS("/my/style.css").then(() => $console.log("loaded"));
      */
     loadCSS(part: string | LoadPart): Promise<void>;
     /**
@@ -14419,6 +13845,8 @@ declare class Factory {
      * @param p Parameters
      * @param p.url script location
      * @param p.silent true for no logging (not found 404)
+     * @example
+     * $factory.loadResource({ url: "/my/template.html" } as LoadPart).then(html => $console.log(html));
      */
     loadResource(p: LoadPart): Promise<string>;
     /**
@@ -14428,11 +13856,15 @@ declare class Factory {
      * @param part.encoding optional, default 'UTF-8'
      * @param part.silent true for no logging (not found 404)
      * @param part.force ignore the local cache
+     * @example
+     * $factory.loadScript("/my/script.js").then(() => $console.log("loaded"));
      */
     loadScript(part: string | LoadPart): Promise<void>;
     /**
      * Ordered loading of JS/CSS scripts
      * @param list list of scripts URL (js or css)
+     * @example
+     * $factory.loadScripts(["/my/first.js", "/my/second.js"]);
      */
     loadScripts(list: (string | LoadPart)[]): Promise<KeyObject>;
     /**
@@ -14445,8 +13877,10 @@ declare class Factory {
      * @param p.silent true for no logging (not found 404)
      * @param p.force ignore the local cache
      * @returns Promise
+     * @example
+     * $factory.load(["/my/script.js"]);
      */
-    load(p: LoadPart | LoadPart[] | string[]): Promise<void> | Promise<KeyObject>;
+    load(p: LoadPart | LoadPart[] | string[]): Promise<KeyObject> | Promise<void>;
     private part;
     private _bootstrap?;
     private _quill?;
@@ -14466,34 +13900,54 @@ declare class Factory {
     private _mermaid?;
     private _mustache?;
     private _terminal?;
-    /** Reset the cached libraries options (highlight styles, editor options) */
+    /**
+     * Reset the cached libraries options (highlight styles, editor options)
+     * @example
+     * $factory.reset();
+     */
     reset(): void;
     /**
      * Bootstrap loader
+     * @example
+     * $factory.Bootstrap().then(b => $console.log(b));
      */
     Bootstrap(): Promise<typeof BootstrapLib>;
     /**
      * JQuery loader
+     * @example
+     * $factory.JQuery().then(() => $console.log("loaded"));
      */
     JQuery(): Promise<void>;
     /**
      * Quill loader to avoid direct (non ESM) import.
+     * @example
+     * $factory.Quill().then(Q => $console.log(Q));
      */
     Quill(): Promise<typeof Quill>;
     /**
      * Quill constructor (when loaded first)
+     * @example
+     * await $factory.Quill();
+     * const editor = $factory.quill("#myEditor", { theme: "snow" });
      */
     quill(container: HTMLElement | string, options?: QuillOptions): Quill;
     /**
      * Flatpickr loader to avoid direct (non ESM) import.
+     * @example
+     * $factory.Flatpickr().then(f => $console.log(f));
      */
     Flatpickr(): Promise<typeof flatpickr>;
     /**
      * flatpickr constructor (when loaded first)
+     * @example
+     * await $factory.Flatpickr();
+     * const picker = $factory.flatpickr(t[0]);
      */
     flatpickr(selector: Node, config?: Options): Instance;
     /**
      * moment loader
+     * @example
+     * $factory.Moment().then(m => $console.log(m));
      */
     Moment(): Promise<typeof moment>;
     /**
@@ -14503,39 +13957,56 @@ declare class Factory {
      * @param language Optional language
      * @param strict Strict parsing
      * @returns Moment date
+     * @example
+     * await $factory.Moment();
+     * const d = $factory.moment("2026-10-09", "YYYY-MM-DD");
      */
     moment(inp?: moment.MomentInput, format?: moment.MomentFormatSpecification, language?: string, strict?: boolean): moment.Moment;
     /**
      * Load the select box component (see https://select2.org)
+     * @example
+     * $factory.Select2().then(() => $console.log("loaded"));
      */
     Select2(): Promise<void>;
     /**
      * Load highlight tool
      * @param options Options
      * @param options.styles Styles (defaults to <code>default</code>)
+     * @example
+     * $factory.Highlight({ styles: "github" }).then(h => $console.log(h));
      */
     Highlight(options?: {
         styles?: string;
     }): Promise<typeof hljs>;
     /**
      * Load marked plugin
+     * @example
+     * $factory.Marked().then(m => $console.log(m));
      */
     Marked(): Promise<typeof marked>;
     /**
      * Calendar loading from FULLCALENDAR_LIBS or /scripts/fullcalendar.
      * <code>FULLCALENDAR_VERSION</code> is ignored = forced to 5
+     * @example
+     * $factory.Calendar().then(c => $console.log(c));
      */
     Calendar(): Promise<typeof Calendar$1>;
     /**
      * Load HTML QR code plugin
+     * @example
+     * $factory.Html5Qrcode().then(q => $console.log(q));
      */
     Html5Qrcode(): Promise<typeof Html5Qrcode>;
     /**
      * Load Signature pad plugin
+     * @example
+     * $factory.SignaturePad().then(s => $console.log(s));
      */
     SignaturePad(): Promise<typeof SignaturePad>;
     /**
      * Load GridStack plugin
+     * @example
+     * $factory.GridStack().then(g => $console.log(g));
      */
     GridStack(): Promise<typeof GridStack>;
     /**
@@ -14554,51 +14025,75 @@ declare class Factory {
     JQPlot(): Promise<void>;
     /**
      * Load Leaflet
+     * @example
+     * $factory.Leaflet().then(l => $console.log(l));
      */
     Leaflet(iconUrl?: string, shadowUrl?: string): Promise<typeof L$1>;
     /**
      * Load JS beautify
+     * @example
+     * $factory.Beautify().then(b => $console.log(b));
      */
     Beautify(): Promise<typeof js_beautify>;
     /**
      * Load GZip tools
+     * @example
+     * $factory.JSZip().then(z => $console.log(z));
      */
     JSZip(): Promise<ZIPTools>;
     /**
      * Load spectrum Color picker
+     * @example
+     * $factory.ColorPicker().then(() => $console.log("loaded"));
      */
     ColorPicker(): Promise<void>;
     /**
      * Load mermaid tools
+     * @example
+     * $factory.Mermaid().then(m => $console.log(m));
      */
     Mermaid(): Promise<typeof mermaid>;
     /**
      * Load Mustache template parser
+     * @example
+     * $factory.Mustache().then(m => $console.log(m));
      */
     Mustache(): Promise<typeof mustache>;
     /**
      * Load Terminal (XTerm.js)
+     * @example
+     * $factory.XTerm().then(x => $console.log(x));
      */
     XTerm(): Promise<typeof Terminal>;
     /**
      * Load Swagger UI.
      * @returns Promise of the `SwaggerUIBundle`
+     * @example
+     * $factory.SwaggerUI().then(s => $console.log(s));
      */
     SwaggerUI(): Promise<any>;
     /**
      * Load Ace editor
+     * @example
+     * $factory.AceEditor().then(a => $console.log(a));
      */
     AceEditor(): Promise<any>;
     /**
      * Load ace-diff component
+     * @example
+     * $factory.AceDiff().then(a => $console.log(a));
      */
     AceDiff(): Promise<void>;
     /**
      * Load Typescript libraries
+     * @example
+     * $factory.TypeScript().then(ts => $console.log(ts));
      */
     TypeScript(): Promise<any>;
     /**
      * Load simplicite maker bundle: API tester, Modeler, Monitoring, Code editor/LSP, Theme editor...
+     * @example
+     * $factory.SimpliciteMaker().then(m => $console.log(m));
      */
     SimpliciteMaker(): Promise<typeof SimpliciteMaker>;
 }
@@ -14867,17 +14362,23 @@ declare class UIUtil extends Legacy {
      * @param vals list of argument values
      * @param scope optional scope (`this` of the script), default window
      * @param async asynchronous call (default false)
+     * @example
+     * const r = $ui.eval("return a + b;", ["a", "b"], [1, 2]); // 3
      */
     eval(script: string, args?: string[], vals?: unknown[], scope?: object, async?: boolean): unknown;
     /**
      * Random string
      * @param len Length
      * @returns Random string of specified length
+     * @example
+     * const s = $ui.randomString(8);
      */
     randomString(len: number): string;
     /**
      * Random DOM ID
      * @returns Random unique element id in document
+     * @example
+     * const id = $ui.randomDomId();
      */
     randomDomId(): string;
     private _domIdSeq;
@@ -14885,10 +14386,14 @@ declare class UIUtil extends Legacy {
      * Unique DOM ID
      * @param id id value to suffix to be unique
      * @returns The id itself if unique in page, otherwise the id with a suffix `id-<max+1>`
+     * @example
+     * const id = $ui.uniqueDomId("my-input");
      */
     uniqueDomId(id: string): string;
     /**
      * Reset the uniqueDomId() sequence
+     * @example
+     * $ui.resetUniqueDomIds();
      */
     resetUniqueDomIds(): void;
     /**
@@ -14896,21 +14401,30 @@ declare class UIUtil extends Legacy {
      * @param n number
      * @param p toFixed precision digits
      * @returns ex n=37215 p=1 returns 37.2k / n=2398123 p=2 returns 2.40M
+     * @example
+     * $ui.compactNumber(37215, 1); // "37.2k"
+     * $ui.compactNumber(2398123, 2); // "2.40M"
      */
     compactNumber(n?: number, p?: number): string;
     /**
      * Test if the service is lost (call HTTP 0)
+     * @example
+     * const lost = $ui.isServiceLost(new Error("HTTP 0"));
      */
     isServiceLost(err?: Error | string | MessageFromBack): boolean;
     /**
      * Read a cookie
      * @param name cookie name
+     * @example
+     * const v = $ui.readCookie("myCookie");
      */
     readCookie(name: string): string | null | undefined;
     /**
      * Don't ask again a question
      * @param p question parameters
      * @returns true when a stored response has been applied, a function to store the response, or false
+     * @example
+     * const r = $ui.dontAskAgain({ name: "myQuestion" } as DontAskAgainParam);
      */
     dontAskAgain(p: DontAskAgainParam): boolean | ((action: string) => void);
     /**
@@ -14938,43 +14452,71 @@ declare class UIUtil extends Legacy {
      * Get the media size
      * @param w viewport width
      * @returns media size
+     * @example
+     * const size = $ui.mediaSize(window.innerWidth);
      */
-    mediaSize(w: number): 768 | 992 | 1200 | 576;
+    mediaSize(w: number): number;
     /** @ignore */
     _mediaSize: number;
     /**
-     * Is the media a mobile ?
+     * Get the media width
+     * @param ctn optional container (ex: splitted work-area), default or not yet rendered = viewport
+     * @returns container width or viewport media size
+     * @example
+     * const w = $ui.mediaWidth(ctn);
      */
-    isMediaMobile(): boolean;
+    mediaWidth(ctn?: JQuery): number;
+    /**
+     * Is the media a mobile ?
+     * @param ctn optional container to check its width instead of the viewport
+     * @example
+     * if ($ui.isMediaMobile()) ctn.addClass("my-mobile");
+     */
+    isMediaMobile(ctn?: JQuery): boolean;
     /**
      * Is the media a tablet ?
+     * @param ctn optional container to check its width instead of the viewport
+     * @example
+     * const tablet = $ui.isMediaTablet(ctn);
      */
-    isMediaTablet(): boolean;
+    isMediaTablet(ctn?: JQuery): boolean;
     /**
      * Is the media a desktop ?
+     * @param ctn optional container to check its width instead of the viewport
+     * @example
+     * const desktop = $ui.isMediaDesktop(ctn);
      */
-    isMediaDesktop(): boolean;
+    isMediaDesktop(ctn?: JQuery): boolean;
     /**
      * Open one object definition if granted
      * @param name Object name (Field...)
      * @param id Object id
      * @param btn true to get only a button access
+     * @example
+     * $ui.gotoDefinition("Field", "12");
      */
     gotoDefinition(name: string, id: string, btn?: boolean): JQuery<HTMLElement> | null | undefined;
     /**
      * Translate short keys
      * @param keys Ctrl+Shift+Alt+Left...
+     * @example
+     * const label = $ui.keysLabel("Ctrl+Shift+Left", "FRA");
      */
     keysLabel(keys: string, lang?: string): string;
     /**
      * Set visible field messages and returns other/head messages
      * @param messages Backend messages <code>code:text#level[#field]</code> (or json object)
      * @param obj Optional object to affect message when #field matches
+     * @example
+     * // Set the messages on the fields and get the others
+     * const others = $ui.dispatchMessages(msgs, obj);
      */
     dispatchMessages(messages?: MessageAny[], obj?: BusinessObject): MessageJSON[] | null;
     /**
      * Concat all backend messages
      * @param r response with message or messages
+     * @example
+     * const list = $ui.concatMessages("MY_ERROR");
      */
     concatMessages(r: string | MessageFromBack): MessageAny[];
     /**
@@ -14983,6 +14525,8 @@ declare class UIUtil extends Legacy {
      * @param name Action name
      * @param list List of actions
      * @param plus List of 'plus' actions
+     * @example
+     * const act = $ui.findAction(obj, "MyObjSendOrder", obj.metadata.actions);
      */
     findAction(o: BusinessObject, name: string, list?: Action[] | null, plus?: Action[] | null): Action | null;
     /**
@@ -14992,6 +14536,8 @@ declare class UIUtil extends Legacy {
      * @param output Base64 (default) | ArrayBuffer | File
      * @param progress Optional progress callback(loaded, total, percent)
      * @param limit optional size limit (Mo) 0:no error or null=MAX_UPLOAD_SIZE
+     * @example
+     * $ui.readFile(t, (r: unknown) => $console.log(r));
      */
     readFile(file: Container | HTMLInputElement | File, cbk: (file: {
         id?: string;
@@ -15004,6 +14550,8 @@ declare class UIUtil extends Legacy {
      * Get icon from the file name
      * @param name File name
      * @param regular True to get regular icon or solid
+     * @example
+     * const icon = $ui.getFileIcon("report.pdf");
      */
     getFileIcon(name: string, regular?: boolean): JQuery<HTMLElement>;
     /**
@@ -15011,18 +14559,24 @@ declare class UIUtil extends Legacy {
      * @param buffer Image as bytes
      * @param onload Optional callback
      * @returns Image
+     * @example
+     * const img = $ui.decodeImage(new ArrayBuffer(8), () => $console.log("loaded"));
      */
     decodeImage(buffer: ArrayBuffer, onload?: ((this: GlobalEventHandlers, ev: Event) => void) | null): HTMLImageElement | null;
     /**
      * Convert SVG string to Image
      * @param data SVG image string (XML)
      * @returns Image
+     * @example
+     * const img = $ui.decodeSVGImage("<svg xmlns=\"http://www.w3.org/2000/svg\"/>");
      */
     decodeSVGImage(data: string, onload?: ((this: GlobalEventHandlers, ev: Event) => void) | null): HTMLImageElement | null;
     /**
      * Get the mouse/touch position <code>\{x,y\}</code> on screen
      * @param e Mouse or touch event
      * @param offset Optional offset <code>\{left,top\}</code> to substract
+     * @example
+     * t.on("mousemove", e => $console.log($ui.mousePos(e)));
      */
     mousePos(e: JQuery.Event, offset?: {
         left: number;
@@ -15032,6 +14586,8 @@ declare class UIUtil extends Legacy {
      * Is UI point into the div?
      * @param pos x,y position
      * @param div rectanglet
+     * @example
+     * const inside = $ui.isInside({ x: 10, y: 20 }, t);
      */
     isInside(pos: {
         x: number;
@@ -15051,6 +14607,9 @@ declare class UIUtil extends Legacy {
     /**
      * Resize window handler
      * @param force True to force a full redraw
+     * @example
+     * // After a change of layout
+     * $ui.resize(true);
      */
     resize(force?: boolean): UIEngine;
     /**
@@ -15058,18 +14617,27 @@ declare class UIUtil extends Legacy {
      * @param p context parameters with array of promises
      * @param f a promise or a function(resolve, reject)
      * @returns the array of promises
+     * @example
+     * const p: PromisesParam = {};
+     * $ui.addPromise(p, ok => setTimeout(ok, 100));
+     * $ui.waitPromises(p).then(() => $console.log("done"));
      */
     addPromise(p: PromisesParam | undefined, f: Promise<unknown> | ((ok: (x?: unknown) => void, ko?: (x?: unknown) => void) => void)): Promise<unknown>[] | undefined;
     /**
      * Append a promise to wait for all async images (exclude sized .icon by css)
      * @param p context parameters with array of promises
      * @param ctn images container
+     * @example
+     * const p: PromisesParam = {};
+     * $ui.addImagesPromise(p, ctn);
      */
     addImagesPromise(p: PromisesParam | undefined, ctn: Container): void;
     /**
      * Wait for all async images (exclude sized .icon by css)
      * @param ctn images container
      * @returns Promise resolved when all images are loaded or not
+     * @example
+     * $ui.waitImagesPromise(ctn).then(() => $console.log("images loaded"));
      */
     waitImagesPromise(ctn: Container): Promise<unknown[]>;
     /**
@@ -15077,6 +14645,10 @@ declare class UIUtil extends Legacy {
      * @param p context parameters with array of promises
      * @param timeout optional timeout in ms
      * @returns Promise resolved when all contextual promises are settled and removed
+     * @example
+     * const p: PromisesParam = {};
+     * // Resolved after 5s at the latest
+     * $ui.waitPromises(p, 5000);
      */
     waitPromises(p: PromisesParam, timeout?: number): Promise<unknown>;
     /**
@@ -15085,6 +14657,8 @@ declare class UIUtil extends Legacy {
      * @param timeout optional timeout in ms
      * @param ex any exception
      * @returns Promise resolved when p is resolved or rejected on timeout
+     * @example
+     * $ui.timeoutPromise(myLongTask(), 5000, "Too long").catch(e => $console.log(e));
      */
     timeoutPromise(p: Promise<unknown>, timeout?: number, ex?: unknown): Promise<unknown>;
     /** Prefix of the Simplicite CSS variables */
@@ -15094,6 +14668,8 @@ declare class UIUtil extends Legacy {
      * @param name Variable name (prefixed or not)
      * @param el Element (default applied to body)
      * @returns Variable value
+     * @example
+     * const color = $ui.getCSSVariable("primary");
      */
     getCSSVariable(name: string, el?: HTMLElement): string;
     /**
@@ -15101,17 +14677,49 @@ declare class UIUtil extends Legacy {
      * @param name Variable name (prefixed or not)
      * @param el Element (default applied to body)
      * @param val Value (undefined = remove)
+     * @example
+     * $ui.setCSSVariable("primary", "#0066cc");
+     * // Remove it
+     * $ui.setCSSVariable("primary");
      */
     setCSSVariable(name: string, val?: string | undefined, el?: HTMLElement): void;
     /**
      * Theme of the code editor, depending on the light/dark mode.
      * @returns Theme name
+     * @example
+     * const theme = $ui.getEditorTheme();
      */
     getEditorTheme(): any;
     /** Public ace options from ACE_OPTIONS */
     editorOptions?: KeyObject;
-    /** Load Ace options */
+    /**
+     * Load Ace options
+     * @example
+     * $ui.loadOptions();
+     */
     loadOptions(): KeyObject;
+}
+
+/**
+ * Action with its UI component always set (see $view.getAction).
+ * Only a type: `ui` is set by `getAction`, the other members when the action is rendered.
+ * @example
+ * const x: UIObjectAction | undefined = $ui.getUIAction(ctn, obj, "MyObjSendOrder");
+ * x?.ui.enable(false);
+ * const el = x?.element;
+ */
+interface UIObjectAction extends Action {
+    /** UI action component */
+    ui: UIAction;
+    /** Displayed outside the actions bar (form template or list row): not rendered again in the bar */
+    moved?: boolean;
+    /** DOM element of the action */
+    element?: Container;
+    /**
+     * Alias of `element` for the action rendered as a `<button>`, not set on an item of the "plus" menu
+     * @deprecated Use `element`
+     */
+    button?: JQuery;
 }
 
 /**
@@ -15134,6 +14742,648 @@ declare class UIWorkflow {
     activity(ctn: Container, w: BusinessProcess, af: ActivityFile, p: ProcessParam, cbk?: Callback): void;
 }
 
+/** Legacy 6.3: 2 parts splitter */
+interface SplitPart {
+    /** Content */
+    content?: Container | string;
+    /** Resizable part */
+    resizable?: boolean;
+    /** Height */
+    height?: string;
+    /** Width */
+    width?: string;
+    /** Collapsible part */
+    collapsible?: boolean;
+    /** Collapsed part */
+    collapsed?: boolean;
+    /** Width of the splitter */
+    splitWidth?: string;
+    /** Height of the splitter */
+    splitHeight?: string;
+}
+/** Target work area to load a content */
+type LoadTargetArea = 'work_tab' | 'work_left' | 'work_right' | 'work_top' | 'work_bottom';
+/** Options of a work area */
+interface WorkAreaOptions {
+    /** Work area ID */
+    id?: number;
+    /** TODO */
+    noSplit?: boolean;
+}
+/** Context menu of a work tab */
+interface WorkTabContextMenu {
+    /** Detach to a new window */
+    detach?: boolean;
+    /** Close the tab */
+    close?: boolean;
+}
+/** Workarea size when splitted */
+interface WorkAreaSize {
+    /** optional area width in px or rem (only applies on horizontal split) */
+    width?: number | string;
+    /** optional area height in px or rem (only applies on vertical split) */
+    height?: number | string;
+}
+/** Serializable tab infos */
+interface WorkTabInfos {
+    /** required tab label */
+    title: string;
+    /** unique name to find the tab when requested with unique=true */
+    name: string;
+    /** unique tab? default true = if a tab with the same name already exists, activate it instead of creating a new one */
+    unique?: boolean;
+    /** can move the tab, default true */
+    draggable?: boolean;
+    /** add a close button to tab, default true */
+    closeable?: boolean;
+    /** optional context menu to detach/close (default all), false = no context menu */
+    contextmenu?: WorkTabContextMenu | false;
+    /** add a .desk with navigation into container */
+    navigation?: true | number;
+    /** specific external URL from loadURL */
+    url?: string;
+}
+/** New tab options */
+type WorkTabOptions = WorkTabInfos & WorkAreaSize & {
+    /** new 'tab' or position: 'left','top','right' or 'bottom' */
+    position?: NewTabPosition;
+    /** open in top-level area (default true, false = open in caller area) */
+    toplevel?: boolean;
+};
+type WorkTab = WorkTabInfos & WorkAreaSize & {
+    id: number;
+    nav?: NavItem[];
+    active?: boolean;
+};
+interface WorkTabs {
+    tabs: WorkTab[];
+}
+interface WorkAreas {
+    vertical?: true;
+    areas: WorkAreaItem[];
+}
+interface WorkAreaItem {
+    content: WorkAreas | WorkTabs;
+    id?: number;
+    width?: string;
+    height?: string;
+}
+type WorkAreaSettings = WorkTabs | WorkAreas;
+/**
+ * Tools to split the work area
+ */
+declare class UISplitter {
+    private worktabId;
+    private navId;
+    private defaultWorkArea;
+    /** Work area min size */
+    readonly MIN_SIZE = 300;
+    private autoSave;
+    private lastSaved;
+    private saveKeyMulti;
+    private saveKeyMono;
+    private restoreKey;
+    /**
+     * Init splitter #work for media desktop only
+     * @param scope current user scope
+     * @example
+     * $view.splitter.init();
+     */
+    init(scope?: Scope): void;
+    /**
+     * Allows UI to be splittable. Preserved in localStorage.
+     * @param enable optional to enable/disable
+     * @returns true if the UI is splittable
+     * @example
+     * const on = ($view.splitter.constructor as typeof UISplitter).enabled();
+     */
+    static enabled(enable?: boolean): boolean;
+    /**
+     * Is splitted mode enabled?
+     * @returns true if user is allowed to split work-areas
+     * @example
+     * const on = $view.splitter.isEnabled();
+     */
+    isEnabled(): boolean;
+    /**
+     * Build the WORKAREA sysparam save key
+     * - "WORKAREA-SPLIT <scope> <login>" for the multi work-area (splitted) mode
+     * - "WORKAREA-MONO <scope> <login>" for the single work-area mode
+     * so that each scope / user / mode keeps and restores its own saved layout.
+     * @param multi true for the multi work-area
+     * @param login current user login (switched user or current login)
+     * @param scope optional current user scope
+     * @returns the suffixed key, e.g. "WORKAREA-SPLIT myscope johndoe"
+     */
+    private saveKeyName;
+    /**
+     * Build the user preference key to restore the work-areas on the current scope
+     * @param login current user login (switched user or current login)
+     * @param scope optional current user scope
+     * @returns the suffixed key, e.g. "WORKAREA-RESTORE myscope johndoe"
+     */
+    private restoreKeyName;
+    /**
+     * User preference to restore the saved work-areas on the next load (current scope),
+     * preserved in the user's parameter "WORKAREA-RESTORE <scope> <login>" (default true).
+     * When disabled, the saved states are cleared and the home page is always displayed.
+     * @param enable optional to enable/disable
+     * @returns true if the work-areas are restored on the next load
+     * @example
+     * const restored = $view.splitter.restore();
+     * $view.splitter.restore(false);
+     */
+    restore(enable?: boolean): boolean;
+    /**
+     * Unset the legacy sysparams saved before
+     * (to be removed in a future beta release)
+     */
+    private static removeLegacyKeys;
+    /**
+     * Scope preference to enable/disable the splitter mode,
+     * preserved in localStorage key <code>splitter_\<scope\></code>
+     * @param enabled true to enable, false to disable or undefined to get the current preference
+     * @returns the current preference or null
+     * @example
+     * const pref = ($view.splitter.constructor as typeof UISplitter).localPreference();
+     */
+    static localPreference(scope?: Scope, enabled?: boolean): string | null;
+    /**
+     * Allows user to switch between 2 modes: mono work-area / multi work-areas
+     * @param switchable optional to enable/disable
+     * @returns true if the mode is switchable
+     * @example
+     * const can = ($view.splitter.constructor as typeof UISplitter).switchable();
+     */
+    static switchable(switchable?: boolean): boolean;
+    /**
+     * Switch button to change the splitter mode
+     * @example
+     * ctn.append($view.splitter.switchButton() || "");
+     */
+    switchButton(): JQuery<HTMLElement>;
+    /**
+     * Button to enable/disable the restore of the work-areas on the next load
+     * @example
+     * ctn.append($view.splitter.restoreButton() || "");
+     */
+    restoreButton(): JQuery<HTMLElement>;
+    /**
+     * Switch the splitter mode
+     * @param enabled optional to force/abandon the splitted mode or toggle the mode by default
+     * @param home optional to display the home page after switching mode (default true)
+     */
+    switch(enabled?: boolean, home?: boolean): void;
+    /**
+     * Switch from single work area to multiple work areas (splitter mode).
+     * Creates a first default, non-closeable "home" tab then replaces the legacy #work content.
+     */
+    private singleToMultiple;
+    /**
+     * Switch from multiple work areas back to single (legacy 6.3) mode.
+     * Preserves the first desk and its navigation, resets all id increments,
+     * closes all other tabs, then wraps the result in a legacy .split container.
+     */
+    private multipleToSingle;
+    /**
+     * Load user's parameter WORKAREA and rebuild the UI
+     * @param settings optional settings to load instead of user's parameter
+     * @returns true if the UI has been rebuilt with saved settings
+     * @example
+     * const loaded = $view.splitter.load();
+     */
+    load(settings?: WorkAreaSettings | NavItem[]): boolean;
+    /**
+     * Rebuild the UI with WORKAREA settings
+     * @example
+     * $view.splitter.build($view.splitter.jsonTree());
+     */
+    build(settings: WorkAreaSettings): void;
+    /**
+     * Save the current state (nav stack or work-areas tree) into user's parameter
+     * What happens on the next load, per work-area mode x exit type:
+     *
+     *   exit type            | mode arg | single work-area | multi work-area
+     *   ---------------------|----------|------------------|-----------------
+     *   logout (Quit)        | "logout" | home page        | restore
+     *   clear cache          | "logout" | home page        | restore
+     *   change user          | "switch" | home page        | restore
+     *   change scope         | "switch" | home page        | restore
+     *   change language      | "save"   | restore          | restore
+     *   reload / F5          | (none)*  | restore          | restore
+     *
+     *   - "restore"   = the saved state is persisted and rebuilt on next load
+     *   - "home page" = the saved state is cleared ("empty"), the default home is shown
+     *   - multi work-area mode always restores because the key is per scope + login, so a
+     *     user/scope switch finds its own layout again when coming back to it
+     *   - every "restore" case is conditioned by the user preference WORKAREA-RESTORE on the
+     *     current scope (see restore()): when disabled, the state is always cleared ("empty")
+     *   * reload / F5 does not call save() explicitly: it relies on the auto-save
+     *     (saveRequest, on every nav change) having kept the parameter up to date
+     *
+     * @param mode "save" (default, incl. auto-save, page reload and language change) persists
+     *        the current state; "logout" (explicit logout or cache clear) and "switch" (user or
+     *        scope switch) drop it in single work-area mode so the next login lands on the home
+     *        page, but still persist it in multi work-area mode
+     * @example
+     * await $view.splitter.save();
+     */
+    save(mode?: "save" | "logout" | "switch"): Promise<void>;
+    /**
+     * Auto-save request into user's parameter WORKAREA.
+     * @example
+     * $view.splitter.saveRequest();
+     */
+    saveRequest(): void;
+    /**
+     * Tree of areas and navigations
+     * @example
+     * const tree = $view.splitter.jsonTree();
+     */
+    jsonTree(): WorkAreaSettings;
+    /**
+     * Simple request for a new tab or a new split area.
+     * @param options Tab options
+     * @param caller The element that triggered the request
+     * @returns the new container to display the content (.content or .work-area-content) or null to use default work-area
+     * @example
+     * const content = $view.splitter.request({ name: "myTab", title: "My tab" }, ctn);
+     */
+    request(options: WorkTabOptions, caller?: AnyContainer): JQuery | null;
+    /**
+     * Create a desk with a new navigation including 2 parts: .nav-stack and .content
+     * @param ctn container (specific or .work-tab-content)
+     * @param content optional HTML content to display
+     * @param navId optional restored nav Id (default incremental)
+     * @returns .desk.nav-container
+     * @example
+     * const desk = $view.splitter.createDeskNavigator(ctn);
+     */
+    createDeskNavigator(ctn: JQuery, content?: Container | null, navId?: number): JQuery;
+    /**
+     * Create a work-area with a tabs of desks
+     * @param options Work area options
+     * @param tabOptions optional tab options to create a first tab with a desk
+     * @param content optional content to insert in the new area
+     * @returns .work-area
+     * @example
+     * const newArea = $view.splitter.createWorkArea();
+     */
+    createWorkArea(options?: WorkAreaOptions, tabOptions?: WorkTabOptions, content?: JQuery): JQuery<HTMLElement>;
+    /**
+     * Add a tab to .work-tab
+     * @param worktab Optional existing work tabs (default use the first tabs)
+     * @param options Tab options
+     * @param content optional content to insert
+     * @example
+     * $view.splitter.appendTab(null, { name: "myTab", title: "My tab" });
+     */
+    appendTab(worktab: JQuery | null, options?: WorkTabOptions, content?: JQuery): {
+        tab: JQuery<HTMLElement>;
+        tabpane: JQuery<HTMLElement>;
+    };
+    /**
+     * Get the work tab content of a tab
+     * @param tab tab anchor .nav-link or .nav-item
+     * @returns .work-tab-content
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * const content = tab && $view.splitter.getWorkTabContent(tab);
+     */
+    getWorkTabContent(tab: JQuery): JQuery | undefined;
+    /**
+     * Get the desk content of a tab
+     * @param el the .nav-link or a container
+     * @returns desk .content for rendering if exists (or directly the .work-tab-content when the tab has no navigation)
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * const content = tab && $view.splitter.getDeskContent(tab);
+     */
+    getDeskContent(el: JQuery): JQuery<HTMLElement>;
+    /**
+     * Find a tab in all work-areas
+     * @param name Optional tab name to find
+     * @returns .nav-link if found
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     */
+    findTab(name?: string): JQuery | undefined;
+    /**
+     * Get a tab of related element
+     * @param el any content element inside the .work-tab-pane
+     * @returns .nav-link of the related tab if exists
+     * @example
+     * const tab = $view.splitter.getTabOfElement(ctn);
+     */
+    getTabOfElement(el?: AnyContainer): JQuery | undefined;
+    /**
+     * Get the tab container of element
+     * @param el Element inside the .work-tab
+     * @returns .work-tab if exists
+     * @example
+     * const tabs = $view.splitter.getWorkTab(ctn);
+     */
+    getWorkTab(el?: AnyContainer): JQuery | undefined;
+    /**
+     * Get the work-area of element
+     * @param el Element inside the .work-area
+     * @returns .work-area if exists
+     * @example
+     * const area = $view.splitter.getWorkArea(ctn);
+     */
+    getWorkArea(el?: AnyContainer): JQuery | undefined;
+    /**
+     * Set the options for a work tab
+     * @param el tab anchor .nav-link or .nav-item
+     * @param options the options to store in a.data("worktab")
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * $view.splitter.setTabOptions(tab, { name: "myTab", title: "My tab" });
+     */
+    setTabOptions(el?: JQuery, options?: WorkTabOptions): void;
+    /**
+     * Update the options for a work tab from navigation data
+     * @param el Element
+     * @param label the label of the navigation item
+     * @param name optional (unique) name of the navigation item
+     * @param url optional URL of the navigation item
+     * @example
+     * $view.splitter.updateTabOptions(ctn, "New label", "myTab");
+     */
+    updateTabOptions(el?: AnyContainer, label?: string, name?: string, url?: string): void;
+    /**
+     * Update the tab label
+     * @param el any content element inside the .work-tab-pane (or .nav-link or .nav-item)
+     * @param label New label
+     * @example
+     * $view.splitter.setTabLabel(ctn, "New label");
+     */
+    setTabLabel(el?: AnyContainer, label?: string): void;
+    /**
+     * Activate a tab
+     * @param el any content element inside the .work-tab-pane
+     * @example
+     * $view.splitter.activateTab(ctn);
+     */
+    activateTab(el: AnyContainer): JQuery | undefined;
+    /**
+     * Activate the first work-area tab
+     * @example
+     * $view.splitter.activateFirstTab();
+     */
+    activateFirstTab(): JQuery | undefined;
+    /**
+     * Get the first work-area content: #work0 (or default #work if no enabled)
+     * @param activate activate the first tab to show the content?
+     * @example
+     * const work = $view.splitter.getDefaultWorkContent(true);
+     */
+    getDefaultWorkContent(activate?: boolean): JQuery;
+    /**
+     * Move a tab in a new work-area
+     * @param tab tab .nav-link to move
+     * @param workArea target workarea to split
+     * @param pos position for the tab content top/left/right/bottom
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * const area = $view.splitter.getWorkArea(ctn);
+     * if (tab && area) $view.splitter.moveTabToWorkArea(tab, area, "right");
+     */
+    moveTabToWorkArea(tab: JQuery, workArea: JQuery, pos: Position): void;
+    /**
+     * Move a tab in other tab
+     * @param tab tab .nav-link to move
+     * @param targetTab target tab
+     * @param pos place the tab on the 'left' or the 'right' of the target tab
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * const target = $view.splitter.findTab("otherTab");
+     * if (tab && target) $view.splitter.moveTabToTab(tab, target, "left");
+     */
+    moveTabToTab(tab: JQuery, targetTab: JQuery, pos: 'left' | 'right'): void;
+    /**
+     * Get the navigation of a tab
+     * @param tab tab anchor .nav-link or .nav-item
+     * @returns the tab navigator if the tab has a navigation
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * const nav = tab && $view.splitter.getTabNavigator(tab);
+     */
+    getTabNavigator(tab: JQuery): UINavigator | undefined;
+    /**
+     * Can the tab navigation be detached in a new window?
+     * Not the default work-area (not closeable) which receives new contents
+     * @param tab tab .nav-link
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * const can = tab && $view.splitter.isDetachable(tab);
+     */
+    isDetachable(tab: JQuery): boolean;
+    /**
+     * Detach the navigation of a tab in a new window, then close the tab
+     * @param tab tab .nav-link to detach
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * if (tab) $view.splitter.detachTab(tab);
+     */
+    detachTab(tab: JQuery): void;
+    /**
+     * Restore a detached navigation in the new window (see detachTab)
+     * @param ctn container of the new desk
+     * @param key localStorage key of the serialized navigation
+     * @example
+     * // In the new window: the key is given by detachTab
+     * $view.splitter.attachNavigator(ctn, "myStorageKey");
+     */
+    attachNavigator(ctn: JQuery, key: string): void;
+    /**
+     * Close a tab if can close
+     * @param tab .nav-link to close
+     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
+     * @param activatePrevious activate the previous tab if exists? default true
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * if (tab) await $view.splitter.closeTab(tab);
+     */
+    closeTab(tab: JQuery, checkCanClose?: boolean, activatePrevious?: boolean): Promise<void>;
+    /**
+     * Remove a content and its tab
+     * @param el any content element inside the .work-tab-pane
+     * @param checkCanClose check can close the tab content? default true. false = only destroy the content
+     * @example
+     * $view.splitter.remove(ctn);
+     */
+    remove(el: AnyContainer, checkCanClose?: boolean): void;
+    /**
+     * Close a content: back to the previous page of its navigation if any,
+     * otherwise remove its tab when it is in a work tab, otherwise only close the content
+     * @param el content element (inside a .work-tab-pane or not)
+     * @example
+     * // Close the current content, ex: after detaching it in a popup
+     * $view.splitter.close(ctn);
+     */
+    close(el: AnyContainer): void;
+    /**
+     * Close all tabs if can close
+     * @param checkCanClose check can close the tab contents?
+     * @example
+     * await $view.splitter.closeAll();
+     */
+    closeAll(checkCanClose?: boolean): Promise<void>;
+    /**
+     * Remove a tab of a work-area
+     * ZZZ not public: use closeTab to destroy the content first
+     * @param tab the .nav-link to remove
+     * @param prev click on previous (or next) tab if exists
+     */
+    private removeTab;
+    /**
+     * Remove a work-area and its children
+     * @param workarea .work-area to remove
+     * @example
+     * const area = $view.splitter.getWorkArea(ctn);
+     * if (area) await $view.splitter.removeWorkArea(area);
+     */
+    removeWorkArea(workarea: JQuery): Promise<void>;
+    private refreshTimer;
+    /**
+     * Refresh container when moved/splitted/resized
+     * @param ctn container with events ui.resize and ui.zoom
+     * @param resize true to force a resizing
+     * @example
+     * $view.splitter.refresh(ctn);
+     */
+    refresh(ctn: JQuery, resize?: boolean): void;
+    /**
+     * Create a .work-area and/or assign a split direction
+     * @param workarea optional .work-area to (re)assign (default returns a new one)
+     * @param vertical optional, true to split vertically, false to split horizontally
+     * @param children optional list of .work-area to append
+     * @example
+     * const newArea = $view.splitter.workArea();
+     */
+    workArea(workarea?: JQuery | null, vertical?: boolean, children?: JQuery[]): JQuery;
+    /**
+     * Split a work-area
+     * @param workarea .work-area to split (default the root one)
+     * @param pos insert at position left/right/top/bottom
+     * @param tabOptions tab options
+     * @param content optional content to insert in the new area
+     * @returns newArea and content
+     * @example
+     * $view.splitter.splitWorkArea(null, "right", { name: "myTab", title: "My tab" });
+     */
+    splitWorkArea(workarea: JQuery | null, pos: Position | undefined, tabOptions: WorkTabOptions, content?: JQuery): {
+        /** New work-area */
+        newArea: JQuery;
+        /** Content of the new work-area */
+        content: JQuery;
+    };
+    /**
+     * Convert a CSS size value to pixels.
+     * Supports plain numbers (treated as px), "rem" units (1rem = 16px),
+     * and "%" relative to the total #work width.
+     * @param value Size as a number (px) or a CSS string ("300px", "20rem", "50%")
+     * @returns Equivalent size in pixels
+     */
+    private toPixel;
+    /**
+     * Resize a work area (and its next area) in a horizontal split
+     * @param workarea workarea to resize
+     * @param width width in pixels or in rem (or in % of the #work)
+     * @example
+     * const area = $view.splitter.getWorkArea(ctn);
+     * if (area) $view.splitter.setWidth(area, "40%");
+     */
+    setWidth(workarea: JQuery, width: number | string, store?: boolean): void;
+    /**
+     * Resize a work area (and its next area) in a vertical split
+     * @param workarea workarea to resize
+     * @param height height in pixels or in rem (or in % of the #work)
+     * @example
+     * const area = $view.splitter.getWorkArea(ctn);
+     * if (area) $view.splitter.setHeight(area, 300);
+     */
+    setHeight(workarea: JQuery, height: number | string, store?: boolean): void;
+    /**
+     * Resize a work area (and its next area) in the split direction
+     * @param workarea workarea to resize
+     * @param horizontal or vertical
+     * @param size new size in pixels (fit to parent size if unset)
+     * @param save save preference?
+     * @example
+     * const area = $view.splitter.getWorkArea(ctn);
+     * if (area) $view.splitter.setSize(area, true, 400);
+     */
+    setSize(workarea: JQuery, horizontal: boolean, size: number, save?: boolean): void;
+    /**
+     * Resize all work areas to fit 100% of the container
+     * @param workarea container
+     * @example
+     * const area = $view.splitter.getWorkArea(ctn);
+     * if (area) $view.splitter.fitSize(area);
+     */
+    fitSize(workarea: JQuery): void;
+    /**
+     * Create context menu to request for the new tab position
+     * @param el Right clicked element
+     * @param e Context menu event
+     * @param request callback with requested position
+     * @param items optional previous menu items
+     * @example
+     * t.on("contextmenu", e => {
+     * 	$view.splitter.contextMenu(t, e, pos => $console.log(pos));
+     * });
+     */
+    contextMenu(el: JQuery, e: JQuery.ContextMenuEvent, request?: (pos: NewTabPosition) => void, items?: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
+    /**
+     * Add a context menu on follow link to open the target in a new tab or side
+     * @param title Tab title
+     * @param fl FollowLink definition with object and rowId to open the form
+     * @param el Caller element to bind the context menu
+     * @example
+     * const f = obj.getField("myObjCustomerId");
+     * if (f?.followLink) $view.splitter.followLinkContextMenu("Customer", f.followLink, t);
+     */
+    followLinkContextMenu(title: string, fl: FollowLink, el: JQuery): void;
+    /**
+     * Stop event and return mouse position
+     */
+    private xy;
+    /**
+     * Drag & drop separator to resize sibling areas
+     */
+    private dragSeparator;
+    /**
+     * Drag & drop tab
+     */
+    private dragTab;
+    /**
+     * Split the container in 2 parts (any previous split is removed).
+     * @param ctnr container
+     * @param pos position left|right|top|bottom, default 'top'
+     * @param options optional parameters or content
+     * @param options.content content to add at position
+     * @param options.resizable can resize content ?
+     * @param options.height optional content height
+     * @param options.width optional content width (in rem, px, %)
+     * @param options.collapsible can collapse content ?
+     * @param options.collapsed collapsed by default ?
+     * @param options.splitWidth optional split width (default 100%, may be "auto" to let the scroll-x to parent element)
+     * @param options.splitHeight optional split height (default 100%, may be "auto" to let the scroll-y to parent element)
+     * @example
+     * $view.splitter.splitPart(ctn, "right", t);
+     */
+    splitPart(ctnr: AnyContainer, pos: Position, options: SplitPart | JQuery): void;
+    /**
+     * Remove the splitted content
+     * @param ctn container with splitted contents
+     * @example
+     * $view.splitter.unsplitPart(ctn);
+     */
+    unsplitPart(ctn: string | Container): void;
+}
+
 interface A11yLevel {
     audit: boolean;
     score: number;
@@ -15146,7 +15396,7 @@ interface A11yLevel {
 declare class A11y {
     private static readonly KEY;
     private static readonly THEME_KEY;
-    private static readonly THEME;
+    private static readonly DEFAULT_THEME;
     private static overrides?;
     /**
      * Restore a11y mode from local preference into $ui.options.a11y.enabled.
@@ -15187,12 +15437,26 @@ declare class A11y {
      */
     static applies(elt: string): boolean;
     /**
-     * Store the current theme (to restore it on disable) then apply the high contrast one.
-     * The theme is persisted server-side by $ui.setTheme, so the previous one is kept in localStorage.
+     * Theme name configured by the "theme" key of ACCESSIBILITY_OVERRIDE
+     * (the high contrast one by default, empty for none)
      */
-    private static applyHighContrast;
+    private static configuredTheme;
+    /**
+     * Theme imposed by a11y mode for the current user.
+     * Undefined when a11y mode is off, when the "theme" key of ACCESSIBILITY_OVERRIDE is empty
+     * or when the configured theme does not exist for the user.
+     * @returns the theme name to apply
+     */
+    static theme(): string | undefined;
+    /**
+     * Store the current theme (to restore it on disable) then apply the a11y one.
+     * The theme is persisted server-side by $ui.setTheme, so the previous one is kept in localStorage.
+     * @param name theme to apply
+     */
+    private static applyTheme;
     /**
      * Set back the theme stored before high contrast was applied
+     * <br>When nothing is remembered but the theme is still the a11y one, the user's theme preference is reset to the default one
      */
     private static restoreTheme;
     /**
@@ -15561,7 +15825,7 @@ declare class UIViewer {
      * @param url Or optional URL to load in iframe .frame-wrapper
      * @param cbk Optional callback
      * @param options Optional options
-     * @param options.title Title of the iframe (RGAA 2.1), default: label of the current navigation item, else the URL
+     * @param options.title Title of the iframe, default: label of the current navigation item, else the URL
      * @example
      * // HTML content
      * $view.setContent(ctn, "<h1>Hello</h1>");
@@ -15654,18 +15918,28 @@ declare class UIViewer {
     trigger(target: string | JQuery, event: string, data: any[]): void;
     /**
      * Get field definition with UI extension
+     * - same rendered input = same component: its context is kept (ex: handlers when the field is redrawn)
+     * - otherwise a new component is created, and set as field.ui until the next call on this field
      * @param ctn Parent container where the field is displayed
      * @param obj Business object
      * @param field name or field
      * @param index Optional list index
      * @param silent true to ignore message 'unknown field'
-     * @returns The field with field.ui = component implementation of Simplicite.UI.View.UIField
+     * @returns The field with field.ui = component implementation of Simplicite.UI.View.UIField, or an empty object without ui if the field is unknown
      * @example
      * // In a form hook: field with its UI interface (same as $ui.getUIField)
-     * const f: ObjectField = $view.getField(ctn, obj, "myObjCode");
-     * f.ui?.updatable(false);
+     * const f = $view.getField(ctn, obj, "myObjCode");
+     * f.ui.change(() => f.ui.val());
+     * // Same input = same component: the handler above is kept by this redraw
+     * $view.getField(ctn, obj, "myObjCode").ui.updatable(false);
+     * // Component of a list row
+     * const r = $view.getField(ctn, obj, "myObjCode", rowId);
+     * r.ui.val("new value");
+     * // Optional field: no error message and no ui if the field is unknown
+     * const u = $view.getField(ctn, obj, "myObjOption", null, true);
+     * u.ui?.visible(false);
      */
-    getField(ctn: AnyContainer, obj?: BusinessObject | null, field?: string | ObjectField, index?: string | null, silent?: boolean): ObjectField;
+    getField(ctn: AnyContainer, obj?: BusinessObject | null, field?: string | ObjectField, index?: string | null, silent?: boolean): UIObjectField;
     /**
      * Get UI extended action
      * @param ctn Container
@@ -15674,9 +15948,9 @@ declare class UIViewer {
      * @param silent true to ignore message 'unknown action'
      * @returns The action with action.ui = instance of Simplicite.UI.View.UIAction
      * @example
-     * $view.getAction(ctn, obj, "MyObjSendOrder")?.ui?.visible(false);
+     * $view.getAction(ctn, obj, "MyObjSendOrder")?.ui.visible(false);
      */
-    getAction(ctn: AnyContainer, obj: UIBusinessObject, action: string | Action, silent?: string): Action | undefined;
+    getAction(ctn: AnyContainer, obj: UIBusinessObject, action: string | Action, silent?: string): UIObjectAction | undefined;
     /**
      * Get UI extended view
      * @param ctn Container
@@ -15685,9 +15959,9 @@ declare class UIViewer {
      * @param silent true to ignore message 'unknown view'
      * @returns The view with view.ui = instance of Simplicite.UI.View.UIView
      * @example
-     * const v: View | undefined = $view.getView(ctn, obj, "MyObjView");
+     * const v: UIObjectView | undefined = $view.getView(ctn, obj, "MyObjView");
      */
-    getView(ctn: AnyContainer, obj: BusinessObject | null, view: string | View, silent?: boolean): View | undefined;
+    getView(ctn: AnyContainer, obj: BusinessObject | null, view: string | View, silent?: boolean): UIObjectView | undefined;
     /**
      * Get UI extended area
      * @param ctn Container
@@ -15696,9 +15970,9 @@ declare class UIViewer {
      * @param silent true to ignore message 'unknown area'
      * @returns The area with area.ui = instance of Simplicite.UI.View.UIArea
      * @example
-     * $view.getArea(ctn, obj, "MyObjDelivery")?.ui?.visible(false);
+     * $view.getArea(ctn, obj, "MyObjDelivery")?.ui.visible(false);
      */
-    getArea(ctn: AnyContainer, obj: UIBusinessObject, area: string | number | Area, silent?: boolean): Area | undefined;
+    getArea(ctn: AnyContainer, obj: UIBusinessObject, area: string | number | Area, silent?: boolean): UIObjectArea | undefined;
     /**
      * Show the loading spinner (widget waitdlg)
      * @param ctn optional container (full body if undefined or #work area if null)
@@ -15779,572 +16053,2300 @@ declare class UIViewer {
     private readonly waveSVG;
 }
 
-/** User of a record (concurrent usage) */
-interface UsageUser {
-    /** User row ID */
-    userId?: string;
-    /** User login */
-    login?: string;
-    /** First name */
-    firstname?: string;
-    /** Last name */
-    lastname?: string;
-    /** Avatar image URL */
-    image?: string;
-    /** Avatar image document */
-    picture?: DocumentDB;
-    /** Usage ID */
-    usageId?: string;
-}
-/** Application scope (multi-apps) */
-interface Scope {
-    /** Scope name */
-    scope: string;
-    /** Icon name */
-    icon: string;
-    /** Logo URL */
-    logo: string;
-    /** Translated label */
-    label: string;
-    /** Home URL */
-    url: string;
-    /** Unique | multiple | switchable */
-    workarea: "1" | "M" | "S";
-}
+type DiagramModelers = {
+    [modeId: string]: DiagramModeler;
+};
+type DiagramWindows = {
+    [modeId: string]: Window;
+};
+type ModelParam = {
+    docked?: boolean;
+    popup?: boolean;
+    hidden?: boolean;
+    sync?: boolean;
+    fetch?: boolean;
+    module?: string;
+    nodes?: DiagramNode[];
+};
 /**
- * Action visibility:
- * - `L`: list
- * - `F`: row item + form
- * - `A`: list + row item + form
- * - `O`: form only
- * - `I`: row item only
- * - `B`: list + form only
- * - `H`: hidden
+ * Diagrams controller
+ * @class
  */
-type ActionType = "L" | "F" | "A" | "O" | "I" | "B" | "H";
-/** Button level (style) */
-type ActionLevel = "primary" | "secondary" | "default" | "info" | "success" | "warning" | "danger" | "action" | "transition" | "plus" | "icon" | "extend";
-/** Button size */
-type ActionSize = 'xs' | 'sm' | 'md' | 'lg' | 'icon';
-/** Action of an object, a list, a row or a form */
-interface Action {
-    /** Mandatory name */
-    name: string;
-    /** Action row ID */
-    id?: string;
-    /** Visibility type */
-    type?: ActionType;
-    /** Container of the action */
-    container?: Container;
-    /** Translated label */
+declare class DiagramEngine {
+    readonly models: DiagramModelers;
+    readonly windows: DiagramWindows;
+    /** SVG styles */
+    styles?: string;
+    constructor();
+    /**
+     * Open a SVG diagram
+     * @function
+     */
+    private openSVG;
+    /**
+     * Open a diagram
+     * @param {string} modelId model row ID
+     * @param {Object} options <code>\{ name, docked, hidden, sync \}</code>
+     * @param {function} cbk optional callback(model)
+     * @param {jQuery} ctn optional container to dock the diagram (default new tab on right side or new window)
+     * @function
+     */
+    open(modelId: string, options?: ModelParam, cbk?: (model: DiagramModeler) => void, ctn?: JQuery): void;
+    /**
+     * Detach diagram from Parent/Popup window
+     * @param {string} modelId model row ID
+     * @param {boolean} dock true to dock diagram on parent window, false to open a new window
+     * @function
+     */
+    detach(modelId: string, dock: boolean): void;
+    /**
+     * Save a diagram
+     * @param {string} modelId model row ID
+     * @param {function} cbk optional callback
+     * @function
+     */
+    save(modelId: string, cbk?: Callback): void;
+    /**
+     * Close a diagram
+     * @param {string} modelId model row ID
+     * @param {boolean} confirm false to auto-save
+     * @function
+     */
+    close(modelId: string, confirm?: boolean): void;
+    /**
+     * Update models with incoming object
+     * @function
+     */
+    update(obj: string | BusinessObject, id: string, action: string): void;
+    /**
+     * Notify UI events (CRUD on objects)
+     * @function
+     */
+    notify(e: NotifyObject): void;
+    /**
+     * Helper to create a new SVG business model, user must have access to ModelTemplate (read) and Model (create).
+     * @param {string} template Model template name
+     * @param {string} name     Model name
+     * @param {Object} options  Model options
+     * @param {boolean} options.docked true to dock the model on the main page (default new window)
+     * @param {boolean} options.hidden true to hide the model in a silent mode
+     * @param {Array}   options.nodes  optional array of nodes to insert <code>\{ object, id, template, x, y \}</code>
+     * @param {boolean} options.fetch  true to fetch related nodes
+     * @param {boolean} options.module Optional module Id or name
+     * @param {function} cbk Callback(diagram)
+     * @function
+     */
+    create(template: string, name: string, options: ModelParam, cbk: (diagram: DiagramModeler) => void): void;
+    /**
+     * Models picker and creation
+     * @param {jQuery} ctn Container
+     * @param {Object} params options { embedded }
+     * @function
+     */
+    picker(ctn: Container, params?: KeyObject): void;
+}
+
+/** Server and client information sent with a feedback */
+interface FeedbackData {
+    /** Browser */
+    browser: {
+        /** User agent */
+        userAgent: string;
+    };
+    /** User */
+    user: {
+        /** Login */
+        login: string;
+        /** Language */
+        lang: string;
+        /** Email */
+        email?: string;
+        /** Responsibilities */
+        resp: string;
+    };
+    /** Application */
+    app: {
+        /** Name */
+        name: string;
+        /** Version */
+        version: string;
+    };
+    /** Platform */
+    platform: {
+        /** Name */
+        name: string;
+        /** Version */
+        version: string;
+        /** Build */
+        build: string;
+        /** Encoding */
+        encoding: string;
+    };
+    /** Server */
+    server: {
+        /** Vendor */
+        vendor: string;
+        /** Version */
+        version: string;
+        /** Database driver */
+        dbdriver: string;
+        /** Date */
+        date: string;
+    };
+    /** Java */
+    java: {
+        /** Vendor */
+        vendor: string;
+        /** Version */
+        version: string;
+    };
+    /** Operating system */
+    os: {
+        /** Name */
+        name: string;
+        /** Version */
+        version: string;
+        /** Architecture */
+        archi: string;
+    };
+}
+/** Feedback to send */
+interface FeedbackParam {
+    /** Email */
+    fbk_email: string;
+    /** Type: `Q` question, `R` change request, `D` defect, `F` fatal */
+    fbk_type: string;
+    /** Description */
+    fbk_desc: string;
+    /** Base64 screen image */
+    screen?: string;
+}
+/** Feedback dialog with an annotated screenshot */
+declare class Feedback {
+    /** Width of the screenshot */
+    readonly WIDTH = 1024;
+    private ctn?;
+    private dlg?;
+    private screen?;
+    /** Open the feedback */
+    open(): this;
+    /** When feedback popup is loaded */
+    ready(): this;
+    /** Close the popup */
+    close(): this;
+    /** Send data and close */
+    send(): this;
+    /** Hide/Show the screenshot */
+    hide(): this;
+    /** Crop a part of screen */
+    crop(): this;
+    /** Highlight a part of screen */
+    light(): this;
+    /** Mask a part of screen */
+    mask(): this;
+    /** Clear canvas */
+    reset(): this;
+    /** Toggle edit buttons */
+    toggle(id?: string): this;
+    /** Edit mode 1=crop, 2=highlight, 3=mask */
+    getMode(): 0 | 1 | 2 | 3;
+    /** Show/Hide edit buttons */
+    showEditButtons(vis: boolean): void;
+    /** Canvas management */
+    drawCanvas(screen?: string): this;
+    /**
+     * Build the content of the dialog.
+     * @returns The dialog content
+     */
+    getContent(): JQuery<HTMLElement>;
+}
+
+/** Load URL target = same as lov SHC_TARGET to open a shortcut */
+type LoadTarget = 'frame_work' | '_blank' | '_top' | '_popup' | LoadTargetArea;
+/** LoadURL options */
+type LoadParam = NavParam & {
+    /** Optional target _blank, _top or _popup */
+    target?: LoadTarget;
+    /** Width of the element */
+    width?: string;
+    /** Height of the element */
+    height?: string;
+    /** Optional label to display in nav/dialog/download */
     label?: string;
-    /** Show the label with the icon */
-    showLabel?: boolean;
-    /** Icon name */
-    icon?: string;
-    /** Translated help */
-    help?: string;
-    /** Custom action (not a generic one) */
-    custom?: boolean;
-    /** Executed on the back-end (else pure front URL or binded hook) */
-    backend?: boolean;
-    /** Action is granted */
-    enabled?: boolean;
-    /** Action is disabled */
-    disabled?: boolean;
-    /** In plus button */
-    plus?: boolean;
-    /** Close dialog on click */
-    close?: boolean;
-    /** Reload the form when the confirm dialog is canceled */
-    reloadOnCancel?: boolean;
-    /** Primary button */
-    primary?: boolean;
-    /** Primary | secondary... */
-    level?: ActionLevel;
-    /** Additional CSS class(es) */
-    style?: string;
-    /** Xs, sm... */
-    size?: ActionSize;
-    /** Background color */
-    background?: string;
-    /** Text color */
-    color?: string;
-    /** Background color from the enumeration item */
-    enumBackground?: string;
-    /** Text color from the enumeration item */
-    enumColor?: string;
-    /** Visible on form */
-    formVisible?: boolean;
-    /** Visible on list */
-    listVisible?: boolean;
-    /** Visible on row item */
-    listItemVisible?: boolean;
-    /** Count of rows to apply (2 = all rows when none selected) */
-    countRows?: boolean;
-    /** URL of a front action */
-    url?: string;
+    /** Optional name for the external object */
+    name?: string;
+    /** Optional object of action */
+    object?: string | BusinessObject;
+    /** Optional instance of object */
+    inst?: string;
+    /** Optional object row ID (form/row action) */
+    rowId?: string;
+    /** Optional object item (form/row action) */
+    item?: RowItem | null;
+    /** Optional data of external object (extobject, fields) */
+    data?: KeyObject;
+    /** Optional related action */
+    action?: string | Action;
+    /** Optional flag to inline content */
+    noiframe?: boolean;
+    /** Controller of the download, set by loadURL: call `controller.abort()` to stop the client side call */
+    abortController?: AbortController;
+    /** Optional reader(content-type, attach, filename, blob, defaultReader, cbk, status) to override default download into container */
+    reader?: (contenttype: string, attach: boolean, filename: string, blob: Blob, defaultReader: (ct: string, _att: boolean, filename: string, res: File) => void, cbk?: Callback, status?: number) => void;
+};
+/**
+ * UI Loader tool
+ */
+declare class UILoader extends UIUtil {
+    /**
+     * Common file extension icon
+     */
+    readonly FILE_ICONS: KeyString;
+    /** Feedback instance */
+    feedback?: Feedback;
+    /** Disconnected translation */
+    labelDisconnected?: string;
+    /** Web news (popup and footer ticker) */
+    readonly news: WebNews;
+    /** Main navigator */
+    readonly nav: UINavigator;
+    /**
+     * Mime type to file extension
+     */
+    readonly MIME_EXT: KeyString;
+    constructor();
+    /**
+     * When page is loaded: load user rights, menu, texts and engine.<br />
+     * Then call the main page service.
+     * @param options some globals options to override
+     * @example
+     * // Standalone page: load the rights, texts and engine, then display the home page
+     * $(document).ready(() => $ui.ready($app, "bootstrap5", { useMainParts: true }));
+     */
+    ready(app: Session, engine: string, options?: Partial<typeof Globals>): Promise<void>;
+    private prepareBookmarks;
+    /**
+     * Set the Ajax APIs
+     * @param app Simplicite.Ajax instance
+     */
+    setAjax(app: Session): UIEngine;
+    /**
+     * Returns the local client Id from local storage.
+     * Used to identify the client in session and to change user on server-side in god mode.
+     * @example
+     * const id: string = $ui.clientId();
+     */
+    clientId(): string;
+    /**
+     * Open the user session with authtoken
+     * @param params options
+     * @param params.scope optional user scope or home view
+     * @param params.clientId optional clientId (local storage to change users)
+     * @returns Session infos
+     * @example
+     * const s: KeyObject = await $ui.session({ scope: "MyScope" });
+     */
+    session(params?: {
+        scope?: string;
+        clientId?: string;
+    }): Promise<KeyObject>;
+    /**
+     * Default logout: confirm (with text CONFIRM_LOGOUT) and save session before quit
+     * @param params logout parameters
+     * @param params.confirm true to confirm the logout
+     * @param params.url optional new location URL
+     * @param params.login optional user login to switch session
+     * @param params.token optional user token to switch session
+     * @example
+     * // Ask the confirmation, then logout
+     * $ui.logout({ confirm: true });
+     * // Logout and go to a URL
+     * $ui.logout({ url: "/ext/MyLandingPage" });
+     */
+    logout(params: {
+        confirm?: boolean;
+        url?: string;
+        login?: string;
+        token?: string;
+    }): void;
+    /**
+     * Default quit is a session logout
+     * @param params logout parameters
+     * @param params.url optional new location URL to change scope
+     * @param params.login optional user login to change user
+     * @example
+     * $ui.quit({ url: "https://www.simplicite.io" });
+     */
+    quit(params?: {
+        url?: string;
+        login?: string;
+    }): UIEngine;
+    /**
+     * Save the session
+     * @param mode "save" (default, e.g. language change) keeps the current layout / nav;
+     *        "logout" (explicit logout or cache clear) and "switch" (user or scope switch) drop it
+     *        in single work-area mode so the next login lands on the home page, but keep it per
+     *        scope + login in multi work-area mode, to be restored on return
+     * @example
+     * await $ui.saveSession();
+     */
+    saveSession(mode?: "save" | "logout" | "switch"): Promise<void>;
+    /**
+     * Load the Rendering engine
+     * @param name extended engine name (forced to bootstrap5)
+     */
+    loadEngine(name: string): Promise<void>;
+    /**
+     * Bind the server-side events (SSE): open `$ui.sse`, then trigger `ui.sse.bound` on document.
+     *
+     * Custom events are pushed by the back-end, ex in the `postSave` hook of an object:
+     * <pre>
+     * public String postSave() {
+     * 	// values read now: the message is sent later by the SSE dispatcher thread
+     * 	JSONObject data = new JSONObject()
+     * 		.put("object", getName())
+     * 		.put("rowId", getRowId())
+     * 		.put("status", getFieldValue("myOrdStatus"))
+     * 		.put("by", getGrant().getLogin());
+     * 	new SSEMessage.Builder()
+     * 		.event("myOrderSaved")
+     * 		.message(data)
+     * 		.toObjectReaders(getName()) // only users who can read the object
+     * 		.cluster(true) // also the users of the other nodes
+     * 		.build()
+     * 		.push();
+     * 	return null;
+     * }
+     * </pre>
+     * or with a simple text: `ServerSideEvent.push("myOrderSaved", "text", userId)` sends `{ "msg": "text" }`.
+     *
+     * The front receives the JSON as text in `e.data`, with the server `time` added.
+     * - `$ui.sse` is undefined when SSE are disabled (`USE_SSE`), outside the UI gateway or without EventSource support
+     * - the connection is rebuilt on a server `reset` or when the page is restored from the browser cache:
+     * a listener for the whole session must be added on `ui.sse.bound` (each new connection) and on `ui.ready` (the first connection is opened before)
+     * - the event is sent to all the tabs of each recipient, filter the data if needed
+     * @returns false when SSE are not available
+     * @example
+     * // Listener for the whole session: the same function is not added twice on a connection
+     * const onOrderSaved = (e: MessageEvent) => $ui.toast(JSON.parse(e.data).status);
+     * const listen = () => $ui.sse?.addEventListener("myOrderSaved", onOrderSaved);
+     * $(document).on("ui.ready ui.sse.bound", listen);
+     * @example
+     * // Listener of an open form, in the front class of the object
+     * class MyOrder extends Simplicite.UI.BusinessObject {
+     * 	private onSaved?: (e: MessageEvent) => void;
+     * 	onLoadForm(ctn: Container, obj: UIBusinessObject, p: FormParam) {
+     * 		this.onSaved = (e: MessageEvent) => {
+     * 			const d = JSON.parse(e.data); // { object, rowId, status, by, time }
+     * 			if (d.rowId == obj.getRowId() && d.by != $grant.getLogin())
+     * 				$ui.toast({ type: "warning", content: `Updated by ${d.by}: ${d.status}` });
+     * 		};
+     * 		$ui.sse?.addEventListener("myOrderSaved", this.onSaved);
+     * 	}
+     * 	onUnloadForm(ctn: Container, obj: UIBusinessObject, p: FormParam) {
+     * 		if (this.onSaved)
+     * 			$ui.sse?.removeEventListener("myOrderSaved", this.onSaved);
+     * 	}
+     * }
+     */
+    bindEventSource(): boolean;
+    /**
+     * Websocket handler for partial clear cache
+     * @param d <code>\{ object, name \}</code>
+     * @ignore
+     */
+    private onClearCache;
+    /**
+     * System clear cache
+     * @param action Action <code>cc|dc|gc</code> for server, all sessions or granted user
+     * @example
+     * // Clear the cache of the current user
+     * $ui.clearCache("gc");
+     */
+    clearCache(action: string): Promise<void>;
+    /**
+     * SSE handler for object usage
+     * @param d <code>\{ object, action, emitter \}</code>
+     * @ignore
+     */
+    private onActionObject;
+    /**
+     * SSE handler for internal notification
+     * @param n <code>\{ count, message, incoming, userId \}</code>
+     * @ignore
+     */
+    private onNotif;
+    /**
+     * Default keydown handler
+     * <br>CTRL-S : trigger "ui.key.ctrls" to all "js-ctrl-s" elements
+     * <br>ESCAPE : in order of priority close dialog, blur field (remove focus), or back in navigation
+     * <br>SHIFT-LEFT/RIGHT : navigation between list items
+     * <br>ALT-H : back to the home page
+     * <br>ALT-M : focus last visited menu item
+     * <br>ALT-W : wide screen = toggle menu
+     * <br>ALT-B : open the bookmarks dialog
+     * <br>ALT-F : focus the global searchbox
+     * <br>ALT-L : focus the first list row
+     * <br>ALT-N : focus the next area/panel
+     * @param e Key event
+     */
+    private keydown;
+    /**
+     * Displays all site parts:
+     * <ul>
+     * <li>Create main div</li>
+     * <li>load only options.resources if specified</li>
+     * <li>load part MAIN/HEADER/FOOTER/MENU/WORK when options.useMainParts=true</li>
+     * <li>load STYLES + SCRIPT resources of disposition or object</li>
+     * </ul>
+     */
+    main(cbk: Callback): Promise<void>;
+    /**
+     * Load the FOOTER_ADDON if exists
+     */
+    footerAddon(): void;
+    /**
+     * Load the text and monospace fonts and override the related CSS variables
+     * @param font text font (a plain name = assume a google font), none = default font of the theme CSS
+     * @param mfont monospace font
+     * @example
+     * // Google font for texts, default monospace font
+     * $ui.setFonts("Roboto");
+     */
+    setFonts(font?: Font | string | null, mfont?: Font | string | null): Promise<[void, void]>;
+    /**
+     * Change the current CSS theme
+     * @param base 'light' or 'dark' reboot
+     * @param theme theme name to load (vars + addon styles)
+     * @example
+     * $ui.setTheme("dark");
+     * $ui.setTheme("light", "MyTheme");
+     */
+    setTheme(base?: ThemeBase, theme?: string): Promise<void>;
+    /**
+     * Add keys shortcuts to document
+     * @param keys Pair of ('ctrl' | 'shift' | 'alt') + letter or char-code = callback or shortcut definition
+     * @example
+     * $ui.addShortcuts({
+     * 	"ctrl+shift+h": () => $ui.displayHome(),
+     * 	"alt+d": { name: "MyDoc", label: "Documentation", url: "https://docs.simplicite.io", target: "_blank" }
+     * });
+     */
+    addShortcuts(keys: ShortcutKeys): void;
+    /**
+     * Open the URL in a new window
+     * @param url URL to open
+     * @param target Optional, default <code>'_blank'</code>
+     * @example
+     * $ui.openURL("https://www.simplicite.io");
+     */
+    openURL(url: string, target?: string): void;
+    /**
+     * Open the url in a separate window with the UI engine
+     * @param url URL to load in a new window
+     * @param options Detach options
+     * @param options.name Optional window name (default detachurl)
+     * @param options.width Optional window width in px (default 1200)
+     * @param options.height Optional window height in px (default 700)
+     * @param options.top Optional window top in px (default 0)
+     * @param options.left Optional window left in px (default 0) (default 0)
+     * @param options.full True to load the main parts (menu, header... default load the URL in div.main without parts)
+     * @returns new window
+     * @example
+     * // Open an external object in a new window
+     * $ui.detachURL($app.getExternalObjectURL("MyExternalObject"), { width: 800, height: 600 });
+     */
+    detachURL(url: string, options?: {
+        name?: string;
+        width?: number;
+        height?: number;
+        top?: number;
+        left?: number;
+        full?: boolean;
+    }): Window | null;
+    /**
+     * Call periodically to check if the response is completed
+     * @param ctn Container to load the URL
+     * @param url URL to launch the asynchronous task on server side, and be polled with a check parameter periodically, must respond 202 while the task is not completed
+     * @param params Optional parameters for loadURL
+     * @param pgs Optional progress callback(message)
+     * @returns Promise when loaded, or catch when stopped (no reason) or failed (with an error)
+     * @example
+     * // Launch a long task and poll until done
+     * $ui.waitForURL(ctn, myTaskURL, {}, (msg: string | ArrayBuffer | null) => $console.log("progress", msg));
+     */
+    waitForURL(ctn: Container, url: string, params?: LoadParam, pgs?: (msg: string | ArrayBuffer | null) => void): Promise<void>;
+    /**
+     * Load URL in a container: wrap the URL to specific controllers (list, form...) or call the back-end thru ajax
+     * @param ctn Container to load the URL (default is #work)
+     * @param url URL to load
+     * @param options Contextual parameters
+     * @param cbk Optional callback when loaded
+     * @example
+     * // Display an external object in the work area
+     * $ui.loadURL(null, $app.getExternalObjectURL("MyExternalObject"));
+     */
+    loadURL(ctn: AnyContainer, url: string, options?: LoadParam | null, cbk?: Callback): this;
+    getUIObject(obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
+    getUIObject(object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
+    getNavObject(ctn: AnyContainer, obj: string | BusinessObject, cbk?: (obj: UIBusinessObject) => void, params?: KeyObject): Promise<UIBusinessObject>;
+    getNavObject(ctn: AnyContainer, object: string | BusinessObject, inst?: string | null | ((obj: UIBusinessObject) => void), cbk?: ((obj: UIBusinessObject) => void) | KeyObject, params?: KeyObject): Promise<UIBusinessObject>;
+    /**
+     * Generate the instance name within the component navigator.
+     * Returns the common instance name on main navigation, otherwise add a suffix ex: the_ajax_(name)_nav(id)
+     * @param c Component
+     * @param obj Object name or BusinessObject
+     * @param inst Optional instance name, default = <code>the_ajax_(name)</code>
+     * @example
+     * const inst: string = $ui.getNavInstanceName(ctn, "MyObject"); // the_ajax_MyObject on the main navigation
+     */
+    getNavInstanceName(c: AnyContainer, obj: string | BusinessObject, inst?: string): string;
+    /** Web push service, loaded on demand */
+    _webpush?: WebPush;
+    /**
+     * WebPush service
+     * @example
+     * $ui.webpush();
+     */
+    webpush(data?: WebPushData): WebPush;
+    /** Firebase service, loaded on demand */
+    _firebase?: Firebase;
+    /**
+     * Firebase service wrapper
+     * @param data Service data, with optional keys:
+     * `config` (init web browser to receive notification),
+     * `token` (add the device token to FIREBASE_TOKENS on server side),
+     * `tap` (incoming notification has been tapped by user?),
+     * `body` (optional received message),
+     * `title` (optional message title),
+     * `from` (optional message origin),
+     * `message` (message to send on server-side),
+     * `to` (recipients `{ users:[], groups:[] }` or `'all'` users)
+     * @example
+     * // Send a notification to groups thru the server
+     * $ui.firebase({ message: "New order", to: { users: [], groups: ["MY_SALES"] } });
+     */
+    firebase(data?: FirebaseServiceData): Firebase;
+    /**
+     * Firebase default handler when a message is received thru FCM or worker.
+     * @param m Message or notification, with optional keys:
+     * `notification` (optional embedded message with title and body),
+     * `body` (message body),
+     * `title` (optional title),
+     * `priority` (optional priority `'high'|'normal'|'low'`),
+     * `data` (optional pairs of key-value, may be present on top of message, e.g. `object` and `rowId`),
+     * `tap` (foreground or background),
+     * `icon` (optional icon),
+     * `color` (optional color)
+     */
+    onMessageReceived(m: FirebaseMessage): void;
+    /** Internal: editor options */
+    _editor?: KeyObject;
+    /**
+     * Load local code editor
+     */
+    loadLocalEditor(): Promise<KeyObject>;
+    /**
+     * Load Simplicite standalone client lib
+     * @param cbk optional callback
+     * @example
+     * $ui.loadSimpliciteClient(() => $console.log("client lib loaded"));
+     */
+    loadSimpliciteClient(cbk?: Callback): UIEngine;
+    /**
+     * Load metadata of font icons
+     * @param cbk optional callback(meta)
+     * @example
+     * $ui.loadFontsMeta((meta: IconsMetadata) => $console.log(meta));
+     */
+    loadFontsMeta(cbk?: (meta: IconsMetadata) => void): UIEngine;
+    /**
+     * Load the diagram engine
+     * @example
+     * await $ui.loadDiagramEngine();
+     */
+    loadDiagramEngine(): Promise<DiagramEngine>;
+    private _speech?;
+    /**
+     * Load the speech engine
+     * @example
+     * const speech: Speech = $ui.loadSpeech();
+     */
+    loadSpeech(): Speech;
+    private _ocr?;
+    /**
+     * Load the OCR tools
+     * @example
+     * $ui.loadOCR(() => $console.log("OCR ready"));
+     */
+    loadOCR(cbk?: CallableFunction): void;
+    /**
+     * UI monitoring
+     * @param ctn Container to monitor
+     * @param params Parameters or action
+     * @param params.action Action name (get, meta, search, display...) if unset: save and stop monitoring in the container
+     * @param params.service UI service name (displayForm...)
+     * @param params.target Target name (object, view, process...)
+     * @param params.ui Front or Ajax call
+     * @example
+     * // Start tracing a custom service (a service is required on the first call)
+     * $ui.monitor(ctn, { action: "display", service: "MyService", target: "MyObject", ui: true });
+     * $ui.monitor(ctn, { action: "onload", ui: true });
+     * // No action: save the trace and stop
+     * $ui.monitor(ctn);
+     */
+    monitor(ctn: AnyContainer | null, params?: string | {
+        action: string;
+        service?: string;
+        target?: string;
+        ui?: boolean;
+    }): UIEngine | undefined;
+    /**
+     * Loading page with status
+     */
+    splash(status: boolean | string): void;
+    /**
+     * Top Simplicite window
+     * @example
+     * const topUI: Window = $ui.getTop();
+     */
+    getTop(): Window & typeof globalThis;
+}
+
+/** Parameters of a menu entry click */
+interface MenuParam {
+    /** Menu item */
+    item: MenuItem;
+    /** Object name */
+    object?: string;
+    /** Workflow name */
+    workflow?: string;
+    /** Process name */
+    process?: string;
+    /** BAM name */
+    bam?: string;
+    /** Process step */
+    step?: string;
+    /** Object name of a tray */
+    tray?: string;
+    /** Field name (tray or list of states) */
+    field?: string;
+    /** Enumeration code */
+    code?: string;
+    /** Domain name */
+    domain?: string;
+    /** View name */
+    view?: string;
+    /** URL */
+    href?: string;
     /** Target of the URL */
     target?: LoadTarget;
-    /** Fields to confirm */
-    fields?: ObjectField[];
-    /** Parameters to send */
-    params?: KeyObject;
-    /** Ask a confirmation */
-    confirm?: boolean;
-    /** Javascript expression to evaluate before confirmation */
-    confirmExpr?: string;
-    /** HTML template of the confirm dialog */
-    confirmUI?: string;
-    /** State model transition name */
-    transition?: string;
-    /** Target state of the transition */
-    toState?: string;
-    /** Parent object context */
-    parent?: ParentObject;
-    /** Element of the action */
-    element?: Container;
-    /** Business object */
-    object?: BusinessObject;
-    /** Row ID */
-    rowId?: string | null;
-    /** UI action component */
-    ui?: UIAction;
-    /** Moved in template */
-    moved?: boolean;
-    /** Related DOM button */
-    button?: JQuery;
-    /** Binded click */
-    callback?: ActionHandler | JQueryHandler;
+    /** Translated label */
+    label?: string;
+    /** Open in a new tab */
+    newtab?: NewTabPosition;
 }
-/** Action of a state model transition */
-type Transition = Action & {
-    /** Background color of the target state */
-    enumBackground?: string;
-    /** Text color of the target state */
-    enumColor?: string;
-};
-/** Group of actions in a dropdown */
-interface ActionGroup {
-    /** Group name */
+/** Menu item */
+interface MenuItem {
+    /** Item type */
+    type: "object" | "statusobject" | "external" | "process" | "workflow" | "domain" | "view";
+    /** Item name */
     name: string;
-    /** Icon name */
-    icon?: string;
     /** Translated label */
     label: string;
-    /** Show the label with the icon */
-    showLabel?: boolean;
-    /** Action names of the group */
-    actions?: string[];
-}
-/** Where to open a new tab: a tab or a split position */
-type NewTabPosition = "tab" | Position;
-/**
- * Generic Action handler
- */
-type ActionHandler = (action: Action, obj: UIBusinessObject, rowid?: string | null) => void;
-/**
- * Generic action handlers binded per action name
- */
-interface ActionHandlers {
-    /** Handlers are enabled */
-    enabled: boolean;
-    /** List of handlers */
-    handlers?: ActionHandler[];
-}
-/** Google parameters */
-interface GoogleParam {
-    /** Google API key */
-    GOOGLE_API_KEY: string;
-}
-/** Theme palette */
-interface Palette {
-    /** Palette name */
-    name?: string;
-    /** Header */
-    primary?: string;
-    /** Title */
-    secondary?: string;
-    /** Background */
-    base?: string;
-    /** Text */
-    text?: string;
-    /** Accent */
-    accent?: string;
-}
-/** Theme */
-interface Theme {
-    /** Theme row ID */
-    id: string;
-    /** Theme name */
-    name: string;
-    /** Base theme */
-    base: 'light' | 'dark';
-    /** Theme palette */
-    palette?: Palette;
-    /** Text font */
-    font?: Font;
-    /** Monospace font */
-    monospaceFont?: Font;
-}
-/** Developer options */
-interface DevOptions {
-    /** ES version of JSHint */
-    jshintESVersion: number;
-    /** URL of the Javadoc */
-    javadocLocation: string;
-    /** URL of the JSDoc */
-    jsdocLocation: string;
-    /** Language Server Protocol options */
-    LSP?: {
-        /** LSP is enabled */
-        enabled?: boolean;
-        /** LSP is initialized */
-        isInitialized?: boolean;
-        /** LSP client */
-        languageClient?: any;
-        /** Delay before writing the file */
-        writeFileDelay: number;
-        /** Active session */
-        activeSession: string;
-        /** LSP server */
-        server: null | {
-            /** Server URL */
-            url: string;
-            /** Server module loader */
-            module: () => Promise<KeyObject>;
-            /** Language mode */
-            modes: "java";
-            /** Connection type */
-            type: "socket";
-            /** Web socket */
-            socket: WebSocket;
-        };
-        /** Snippets enabled */
-        snippetsEnabled: boolean;
-        /** LSP state */
-        state: {
-            /** State title */
-            title: "off";
-            /** Update the state title */
-            update: (title: string) => void;
-        };
-    };
-}
-/**
- * Simplicit&eacute; user's grant
- */
-declare class Grant {
-    /** Session */
-    app: Session;
-    /** Application version */
-    version?: string;
-    /** Platform version */
-    sysversion?: string;
-    /** Platform build date */
-    sysversiondate?: string;
-    /** Application title */
-    title?: string;
-    /** User login */
-    login: string;
-    /** User ID */
-    userid: string;
-    /** Email address */
-    email?: string;
-    /** First name */
-    firstname?: string;
-    /** Last name */
-    lastname?: string;
-    /** Picture */
-    picture?: DocumentDB;
-    /** User filters ID */
-    filterId?: string;
-    /** Login of the user connected as another user */
-    connectAs?: string;
-    /** Allow to change user */
-    changeUser?: boolean;
-    /** Allow to change password */
-    changePwd?: boolean;
-    /** Granted applications (scopes) */
-    apps?: Scope[];
-    /** Current scope name */
-    scopeName?: string;
-    /** Current scope */
-    scope?: Scope;
-    /** Home page */
-    home?: string;
-    /** Current disposition */
-    disposition?: string;
-    /** Current icons set */
-    iconset?: string;
-    /** Current theme */
-    theme?: Theme;
-    /** Granted themes in scope */
-    themes?: Theme[];
-    /** Colored themes for designer only */
-    allThemes?: Theme[];
-    /** Accessibility mode */
-    a11y?: boolean;
-    /** Language */
-    lang: string;
-    /** Preferred language */
-    langpref?: string;
-    /** All languages */
-    langs?: {
-        /** Language code (ENU, FRA...) */
-        lang: string;
-        /** Language label */
+    /** Icon name */
+    icon: string;
+    /** Opened */
+    open?: boolean;
+    /** Extendable */
+    ext?: boolean;
+    /** Extended */
+    extended?: boolean;
+    /** Create right */
+    create?: boolean;
+    /** URL */
+    url?: string;
+    /** Link URL */
+    href?: string;
+    /** Target of the link */
+    target?: string;
+    /** Width */
+    width?: number | string;
+    /** Height */
+    height?: number | string;
+    /** Field name */
+    field?: string;
+    /** Has a home page */
+    hasHome?: boolean;
+    /** Home page name */
+    homePage?: string;
+    /** Is a dashboard */
+    dashboard?: boolean;
+    /** Is a widget */
+    widget?: boolean;
+    /** Has a tray */
+    tray?: boolean;
+    /** Sub-items */
+    items?: SubMenu;
+    /** Activities of a process */
+    activities?: ActivityMetadata[];
+    /** States of a status object */
+    states?: EnumItem[];
+    /** Tray fields */
+    trays?: {
+        /** Tray field name */
+        field: string;
+        /** Tray label */
         label: string;
     }[];
-    /** Date format */
-    dateformat: string;
-    /** UTC offset */
-    utc?: string;
-    /** Timezone */
-    usertz?: boolean;
-    /** Number format */
-    numformat?: FieldNumFormat;
-    /** Font */
-    font?: string;
-    /** Styles */
-    styles?: boolean;
-    /** Monitoring access */
-    monitoring?: boolean;
-    /** Minimum rows per page */
-    minrows?: number;
-    /** Maximum rows per page */
-    maxrows?: number;
-    /** Show the object About dialog */
-    objectAbout?: boolean;
-    /** Use the document preview */
-    useDocPreview?: boolean;
-    /** Use the HTML editor */
-    htmleditor?: boolean;
-    /** Code editor theme in light mode */
-    codeEditorThemeLight?: string;
-    /** Code editor theme in dark mode */
-    codeEditorThemeDark?: string;
-    /** Shortcuts preferences (`SHORTCUT_PREFS`) */
-    shortcutPrefs?: KeyObject;
-    /** Left menu collapsed */
-    menuCollapsed?: boolean;
-    /** Poi.. */
-    libs?: {
-        [key: string]: boolean;
+    /** Lists of states per field */
+    lists?: {
+        /** Field name */
+        field: string;
+        /** Field label */
+        label: string;
+        /** States of the field */
+        items: EnumItem[];
+    }[];
+    /** Position of the menu (`T` = top, else left) */
+    menu_position?: string;
+}
+/** Main menu */
+type MainMenu = MenuItem[];
+/** Sub menu */
+type SubMenu = MenuItem[];
+/** Menu settings */
+interface MenuSettings {
+    /** Top menu */
+    top: {
+        /** Top menu is active */
+        active: boolean;
     };
-    /** User responsibilities */
-    responsibilities?: string[];
-    /** Available import adapters */
-    adapters?: KeyObject[];
-    /** Granted objects */
-    objects?: KeyObject;
-    /** Shortcuts */
-    shortcuts?: Shortcut[];
-    /** Main menu */
-    menu?: MainMenu;
+    /** Left menu */
+    left: {
+        /** Left menu is active */
+        active: boolean;
+        /** Collapse mode */
+        collapse: "icons-static" | "icons-expand" | "none";
+        /** Search box in menu */
+        searchable: boolean;
+    };
+}
+/**
+ * Main menu rendering
+ */
+declare class Menu {
+    /** #menu.left-sidebar */
+    container?: Container;
+    /** .main-nav-toggle */
+    navToggle?: JQuery;
+    /** Ul.main-menu role=menu */
+    menu?: JQuery;
+    /** Last focused item */
+    _focus?: JQuery;
+    /** Timer of the status refresh */
+    statusTimer?: number;
+    /** Default value to default behavior */
+    leftMinified: string;
+    /** Menu settings (default values iso v6.3) */
+    menuSettings: MenuSettings;
+    /**
+     * Main menu
+     * @example
+     * const menu = $view.menu.getMenu();
+     */
+    getMenu(): JQuery<HTMLElement>;
+    /**
+     * Menu (left/top) Settings (either from sys_param or default values)
+     * @example
+     * const settings = $view.menu.getMenuSettings();
+     */
+    getMenuSettings(): MenuSettings;
+    /**
+     * Init menus (left,top)
+     * @example
+     * $view.menu.init();
+     */
+    init(): void;
+    private item;
+    private toggle;
+    private itemTop;
+    /** Element by id, as a JQuery set */
+    private byId;
+    /** Counter of the ids linking toggles to their controlled lists */
+    topMenuId: number;
+    private hasSubMenu;
+    private contextMenu;
+    private click;
+    /**
+     * Init the top menu (horizontal with dropdowns)
+     * - Click to open dropdowns
+     * - Click to open flyout sub-menus (no hover)
+     * - Keyboard navigation support
+     * - Flyouts detached to body to avoid clipping
+     * @example
+     * // Called by init
+     * $view.menu.initTopMenu([], $view.menu.getMenuSettings().top);
+     */
+    initTopMenu(items: MenuItem[], menuSettings: MenuSettings["top"]): void;
+    /**
+     * Init the main menu (on left), use the ui.clickMenu handler
+     * @example
+     * // Called by init
+     * $view.menu.initLeftMenu([], $view.menu.getMenuSettings().left);
+     */
+    initLeftMenu(items: MenuItem[], menuSettings: MenuSettings["left"]): void;
+    /**
+     * Select one menu item
+     * @example
+     * $view.menu.selectMenu(t);
+     */
+    selectMenu(a: JQuery, menu?: JQuery | null): JQuery;
+    /**
+     * Focus the last selected item or first item
+     * @example
+     * $view.menu.focus();
+     */
+    focus(): void;
+    /**
+     * hover effect when minified
+     * @param b false to remove effect
+     * @example
+     * $view.menu.hover(false);
+     */
+    hover(b: boolean): void;
+    /**
+     * Menu navigation with Arrow keys
+     * @example
+     * t.on("keydown", e => $view.menu.keydown(t[0], e));
+     */
+    keydown(el: HTMLElement, e: JQuery.Event): void;
+    /**
+     * Accordion effect
+     * @example
+     * $view.menu.accordion(t);
+     */
+    accordion(el: JQuery): void;
+    /**
+     * Is menu minimized on the left side ?
+     * @example
+     * const min = $view.menu.isMenuMin();
+     */
+    isMenuMin(): boolean | undefined;
+    /**
+     * Is menu maximized on the left side ?
+     * @example
+     * const max = $view.menu.isMenuMax();
+     */
+    isMenuMax(): boolean;
+    /**
+     * Minimize the menu on the left side
+     * <ul>
+     * <li>displays only domain icons</li>
+     * <li>popup the sub-menus over the screen</li>
+     * <ul>
+     * @example
+     * $view.menu.menuMin();
+     */
+    menuMin(): void;
+    /**
+     * Maximize the menu on the left side
+     * <ul>
+     * <li>displays domain icons and labels</li>
+     * <li>accordion sub-menus</li>
+     * <ul>
+     * @example
+     * $view.menu.menuMax();
+     */
+    menuMax(): void;
+    /**
+     * Hide a sub-menu
+     * @param m menu item (li element with .sub-menu child)
+     * @example
+     * $view.menu.subMenuMin(t);
+     */
+    subMenuMin(m: JQuery): void;
+    /**
+     * Show a sub-menu
+     * @param m menu item (li element with .sub-menu child)
+     * @example
+     * $view.menu.subMenuMax(t);
+     */
+    subMenuMax(m: JQuery): void;
+    /**
+     * Toggle the main menu on the left side
+     * @param e optional event
+     * @param sign positive:show, negative:hide
+     * @example
+     * $view.menu.menuToggle();
+     * // Force to show
+     * $view.menu.menuToggle(null, 1);
+     */
+    menuToggle(e?: JQuery.Event | KeyboardEvent | null, sign?: number): void;
+    /**
+     * Set the toggle button state (aria-expanded and icon)
+     * @param expanded true if menu is expanded, false if minimized
+     */
+    private setToggleState;
+    /**
+     * Start a timer to update enum counters
+     * @example
+     * $view.menu.startRefreshStatus();
+     */
+    startRefreshStatus(): void;
+    /** Refresh of status counters has been started */
+    private statusStarted;
+    /**
+     * Pause the timer to update visible status counters (page hidden)
+     * @example
+     * $view.menu.pauseRefreshStatus();
+     */
+    pauseRefreshStatus(): void;
+    /**
+     * Restart and refresh the status counters if they were paused (page restored)
+     * @example
+     * $view.menu.resumeRefreshStatus();
+     */
+    resumeRefreshStatus(): void;
+    /**
+     * Stop the timer to update visible status counters
+     * @example
+     * $view.menu.stopRefreshStatus();
+     */
+    stopRefreshStatus(): void;
+    /**
+     * Update the visible enum counter
+     * @param object object name or menu item or sub-menu
+     * @param field enum field name
+     * @param code enum code
+     * @example
+     * $view.menu.updateStatusBadge("MyObject", "myObjStatus", "OPEN");
+     */
+    updateStatusBadge(object: string | JQuery, field?: string, code?: string): false | Promise<boolean | JQuery<HTMLElement>> | undefined;
+    private badge;
+    /**
+     * Update all status and enum counters of a given menu
+     * @param m sub menu
+     * @example
+     * $view.menu.updateStatusBadges(t);
+     */
+    updateStatusBadges(m: JQuery): void;
+    /**
+     * Process incoming data from SSE event enumCounters
+     * @param d data
+     * @example
+     * // Data of the SSE event
+     * $view.menu.onEnumCounters(item);
+     */
+    onEnumCounters(d: KeyObject): void;
+    /**
+     * Display a tree view in the menu.
+     * @param ctn Container
+     * @param o Business object
+     * @param id Root row ID
+     * @param tv Tree definition
+     * @param p Tree parameters
+     * @param cbk Optional callback when displayed
+     * @example
+     * // Tree definition and parameters are given by the object service
+     * $view.menu.treeview(ctn, obj, rowId, {} as TreeNode, {} as TreeParam);
+     */
+    treeview(ctn: Container, o: BusinessObject, id: string, tv: TreeNode, p: TreeParam, cbk?: Callback): Window & typeof globalThis;
+    /**
+     * Update the badge of the notifications shortcut.
+     * @param n Notifications data (`incoming` to shake the bell)
+     * @example
+     * $view.menu.updateNotificationBadge({ count: 3, incoming: true });
+     */
+    updateNotificationBadge(n: KeyObject): void;
+    /**
+     * Filter menu
+     * @example
+     * $view.menu.filterMenu();
+     */
+    filterMenu(): void;
+    /**
+     * Open a top menu dropdown
+     * @example
+     * $view.menu.openTopDropdown(t);
+     */
+    openTopDropdown(mi: JQuery): void;
+    /**
+     * Close a top menu dropdown
+     * @example
+     * $view.menu.closeTopDropdown(t);
+     */
+    closeTopDropdown(mi: JQuery): void;
+    /**
+     * Expand/collapse an expandable entry (enum group) of a dropdown or flyout
+     * - expanding one collapses its siblings (accordion)
+     * @example
+     * $view.menu.toggleSub(btn);
+     */
+    toggleSub(btn: JQuery, open?: boolean): void;
+    /**
+     * Collapse all the expanded entries (enum groups) within a scope
+     * @example
+     * $view.menu.collapseSubs(t);
+     */
+    collapseSubs(scope: JQuery): void;
+    /**
+     * Close all top menus
+     * @example
+     * $view.menu.closeAllTopMenus();
+     */
+    closeAllTopMenus(): void;
+    /**
+     * Open a flyout submenu
+     * @example
+     * $view.menu.openTopFlyout(t);
+     */
+    openTopFlyout(li: JQuery): void;
+    /**
+     * Close a flyout menu
+     * @example
+     * $view.menu.closeTopFlyout(t);
+     */
+    closeTopFlyout(li: JQuery): void;
+    /**
+     * Keyboard navigation for top menu
+     * - Left/Right: between top entries, open/close flyouts, expand/collapse enum groups
+     * - Up/Down/Home/End: through the visible entries of the current dropdown/flyout
+     */
+    keydownTopMenu(el: HTMLElement, e: JQuery.Event, openFlyout?: (li: JQuery) => void, closeFlyout?: (li: JQuery) => void, getFlyoutForLi?: (li: JQuery) => JQuery | null): void;
+    /**
+     * Append flyout to body & position it (no clipping)
+     * @example
+     * $view.menu.positionFlyout(t, c);
+     */
+    positionFlyout(li: JQuery, fm: JQuery): void;
+}
+
+/**
+ * Generic progess handler for XHR call
+ */
+type ProgressHandler = (this: XMLHttpRequestUpload, ev: ProgressEvent<XMLHttpRequestEventTarget>) => void;
+/** JSON message */
+interface MessageJSON {
+    /** Level: `E` error, `W` warning, `I` info... */
+    level?: string;
+    /** Label */
+    label?: string;
+    /** Error message */
+    error?: boolean;
+    /** Message code */
+    code?: string;
+    /** Message text */
+    text?: string;
+    /** Related field name */
+    field?: string;
+    /** URL to redirect */
+    redirect?: string;
+    /** Javascript to execute */
+    javascript?: string;
+    /** Message parameters */
+    params?: {
+        /** Suggested value */
+        suggest?: string;
+    };
+    /** Call to actions */
+    actions?: Action[];
+}
+/**
+ * Plain text message
+ * - "message"
+ * - "code:text#level#field..."
+ * - "javascript: ..."
+ * - "redirect: ..."
+ */
+type MessageText = string;
+/** Plain text message "code:text#level#field..." or JSON */
+type MessageAny = MessageText | MessageJSON;
+/** Messages per rowId on list */
+interface MessagesPerRow {
+    [rowId: string]: MessageAny[];
+}
+/** Save list returns per rowId */
+interface MessageSaveRows {
+    /** Messages per row ID */
+    messages?: MessagesPerRow;
+    /** Errors per row ID */
+    errors?: MessagesPerRow;
+}
+/** Back-end message(s) */
+interface MessageFromBack {
+    /** Message level */
+    level?: number | string;
+    /** Single message from action/save/delete */
+    message?: MessageAny;
+    /** Multiple messages from validate */
+    messages?: MessageAny[];
+    /** Description */
+    description?: string;
+    /** Details */
+    details?: string | object;
+    /** HTTP status */
+    status?: number;
+}
+/** Generic response from server */
+interface CallResponse {
+    /** Service name or "error" */
+    type: string;
+    /** Service response */
+    response: any;
+    /** Error flag */
+    error?: boolean;
+}
+/** JSON for module service */
+interface ModuleAjax {
+    /** Module row ID */
+    row_id?: string;
+    /** Delete flag */
+    del?: string;
+    /** Confirmation flag */
+    confirm?: boolean;
+    /** Application name */
+    application?: string;
+    /** Method */
+    method?: string;
+    /** Format */
+    format?: string;
+    /** Exploded format */
+    exploded?: boolean;
+}
+/** Session typed with the legacy constants (see AppConstants) */
+declare const SessionBase: new () => Readonly<typeof AppConstants>;
+/**
+ * Simplicit&eacute; Session to application.
+ * @example
+ * // Using within the generic UI
+ * const app: Session = $app;
+ * // Application root: "" (or "/myapp" if not deployed as root, or an absolute base URL)
+ * // Using user thru the UI gateway (e.g. within a custom disposition)
+ * const uiApp: Session = new Simplicite.Ajax("/myapp");
+ * // Using public user thru the public UI gateway (e.g. from a public web site)
+ * const publicApp: Session = new Simplicite.Ajax("/myapp", "uipublic");
+ * // Using website user thru the API gateway (e.g. from a custom frontend)
+ * const apiApp: Session = new Simplicite.Ajax("https://myhost/myapp", "api", "myuser", "mypassword");
+ */
+declare class Session extends SessionBase {
+    /** Alias `Simplicite.Ajax.Grant` (6.3 compat) */
+    static Grant: typeof Grant;
+    /** Alias `Simplicite.Ajax.BusinessObject` (6.3 compat) */
+    static BusinessObject: typeof BusinessObject;
+    /** Alias `Simplicite.Ajax.BusinessProcess` (6.3 compat) */
+    static BusinessProcess: typeof BusinessProcess;
+    /** Alias `Simplicite.Ajax.ExternalObject` (6.3 compat) */
+    static ExternalObject: typeof ExternalObject;
+    /** Alias `Simplicite.Ajax.ObjectField` (6.3 compat) */
+    static ObjectField: typeof ObjectField;
+    /** Alias `Simplicite.Ajax.TreeView` (6.3 compat) */
+    static TreeView: typeof TreeView;
+    /** Alias `Simplicite.Ajax.View` (6.3 compat) */
+    static View: typeof View;
+    /** Alias `Simplicite.Ajax.SyncQueue` (6.3 compat) */
+    static SyncQueue: typeof SyncQueue;
+    /** Internal: error logs are active */
+    private _errorActive;
+    /** Internal: warning logs are active */
+    private _warningActive;
+    /** Internal: info logs are active */
+    private _infoActive;
+    /** Internal: debug logs are active */
+    private _debugActive;
+    /** Internal: application root */
+    private _approot;
+    /** Internal: base URL */
+    private _baseURL;
+    /** Internal: gateway (`ui`, `uipublic`, `api`...) */
+    private _gateway;
+    /** Internal: login service URL */
+    private _loginURL?;
+    /** Internal: logout service URL */
+    private _logoutURL?;
+    /** Internal: application service URL */
+    private _appURL?;
+    /** Internal: object service URL */
+    private _objURL?;
+    /** Internal: process service URL */
+    private _pcsURL?;
+    /** Internal: external object service URL */
+    private _extURL?;
+    /** Internal: I/O service URL */
+    private _ioURL?;
+    /** Internal: document service URL */
+    private _documentURL?;
+    /** Internal: content service URL */
+    private _contentURL?;
+    /** Internal: resource service URL */
+    private _resourceURL?;
+    /** Internal: login of the API gateway */
+    private _login?;
+    /** Internal: password of the API gateway */
+    private _password?;
+    /** Internal: session timeout */
+    private _timeout;
+    /** Internal: session has expired */
+    private _expired;
+    /** Internal: browser tab ID */
+    private _clientTabId?;
+    /** Internal: cache of business objects */
+    private _businessObjectsCache;
+    /** Internal: cache of business processes */
+    private _businessProcessCache;
+    /**
+     * Session has expired (unauthorized response)
+     * @example
+     * if ($app.expired) $console.log("Session expired");
+     */
+    get expired(): boolean;
+    /**
+     * Application root
+     * @example
+     * const root = $app.approot;
+     */
+    get approot(): string;
+    /**
+     * Base URL
+     * @example
+     * const url = $app.baseURL;
+     */
+    get baseURL(): string;
+    /**
+     * Application service URL
+     * @example
+     * const url = $app.appURL;
+     */
+    get appURL(): string | undefined;
+    /**
+     * Object service URL
+     * @example
+     * const url = $app.objURL;
+     */
+    get objURL(): string | undefined;
+    /**
+     * Process service URL
+     * @example
+     * const url = $app.pcsURL;
+     */
+    get pcsURL(): string | undefined;
+    /**
+     * I/O service URL
+     * @example
+     * const url = $app.ioURL;
+     */
+    get ioURL(): string | undefined;
+    /**
+     * User login name of the API gateway
+     * @example
+     * const login = $app.userName;
+     */
+    get userName(): string | undefined;
+    /**
+     * Info logs are active
+     * @example
+     * if ($app.infoActive) $app.info("Done");
+     */
+    get infoActive(): boolean;
+    /**
+     * Warning logs are active
+     * @example
+     * if ($app.warningActive) $app.warning("Check the value");
+     */
+    get warningActive(): boolean;
+    /**
+     * Debug logs are active
+     * @example
+     * if ($app.debugActive) $app.debug("value: " + rowId);
+     */
+    get debugActive(): boolean;
+    /** Session ID */
+    sessionId?: string;
+    /** Authentication token */
+    authToken?: string;
+    /** Expiry date of the token */
+    authTokenExpiryDate?: Date;
+    /** Expiry delay of the token */
+    authTokenExpiryIn?: string;
+    /** Application information */
+    appinfo: KeyObject;
+    /** Application version */
+    version?: string;
+    /** Platform revision */
+    revision?: string;
+    /** Ajax key */
+    ajaxkey?: string;
+    /** User grant */
+    grant?: Grant;
     /** System parameters */
     sysparams: KeyObject;
     /** Translated texts */
-    texts?: KeyObject;
-    /** Bookmarks */
-    bookmarks?: Bookmarks;
-    /** Dashboards */
-    dashboard?: object;
-    /** Guides */
-    guides?: KeyObject;
-    /** Resources location */
-    resources?: string;
-    /** Google parameters */
-    google?: GoogleParam;
-    /** Developer options */
-    dev?: DevOptions;
+    texts?: KeyString;
+    /** Main menu */
+    menu?: MainMenu;
+    /** News */
+    news: KeyObject[];
+    /** Fulltext index metadata */
+    indexMetadata?: IndexMetadata;
+    /** Loaded views by name */
+    views: {
+        [key: string]: View;
+    };
     /**
-     * Constructor
-     * @param app Ajax services
+     * Without parameter for the global $app (initialized later)
+     * @param approot Application root (either "/&lt;context root&gt;" or an absolute base URL)
+     * @param gateway Gateway type to use :
+     * <ul>
+     * <li>1 or &quot;ui&quot;: Authenticated UI gateway (default)</li>
+     * <li>2 or &quot;uipublic&quot; : Public UI gateway</li>
+     * <li>4 or &quot;api&quot; : API gateway</li>
+     * </ul>
+     * @param login User's login (not required for UI gateways)
+     * @param password User's password (not required for UI gateways)
      */
-    constructor(app: Session);
+    constructor(approot?: string, gateway?: string, login?: string, password?: string);
     /**
-     * Init
-     * @param grant User rights meta-data
-     */
-    init(grant: KeyObject): void;
-    /**
-     * Get user ID
-     */
-    getUserID(): string;
-    /**
-     * Get user login
-     */
-    getLogin(): string;
-    /**
-     * Get user language
-     */
-    getLang(): string;
-    /**
-     * Get user email
-     */
-    getEmail(): string;
-    /**
-     * Get user first name
-     */
-    getFirstName(): string;
-    /**
-     * Get user last name
-     */
-    getLastName(): string;
-    /**
-     * Get user full name
-     */
-    getFullName(): string;
-    /**
-     * Check if user has responsibility on specified group
-     * @param group Group name
+     * Initialize Ajax contexts
+     * @param approot Application root (either "/&lt;context root&gt;" or an absolute base URL)
+     * @param gateway Gateway type to use :
+     * <ul>
+     * <li>1 or &quot;ui&quot;: Authenticated UI gateway (default)</li>
+     * <li>2 or &quot;uipublic&quot; : Public UI gateway</li>
+     * <li>4 or &quot;api&quot; : API gateway</li>
+     * </ul>
+     * @param login User's login (not required for UI gateways)
+     * @param password User's password (not required for UI gateways)
      * @example
+     * // Usually done by the platform
+     * app.init("/app");
+     */
+    init(approot: string, gateway?: string, login?: string, password?: string): void;
+    /**
+     * Get type from type label
+     * @param name Type label from the <code>TYPES</code> constant)
+     * @returns Type (one of <code>TYPE_*</code> contants)
+     * @example
+     * const t = $app.getType("Date");
+     */
+    getType(name: string): number;
+    /**
+     * Set timeout
+     * @param timeout Timeout (seconds)
+     * @example
+     * $app.setTimeout(60);
+     */
+    setTimeout(timeout: number): void;
+    /**
+     * Get timeout
+     * @returns Timeout
+     * @example
+     * const seconds = $app.getTimeout();
+     */
+    getTimeout(): number;
+    /**
+     * Is Windows Internet Explorer?
+     * @returns True if is Windows Internet Explorer
+     * @example
+     * const ie = $app.isWinIE();
+     */
+    isWinIE(): boolean;
+    /**
+     * Get Windows Internet Explorer version
+     * @returns Version
+     * @example
+     * const v = $app.winIEVersion();
+     */
+    winIEVersion(): number;
+    /**
+     * Is Firefox?
+     * @returns True if is Firefox
+     * @example
+     * const ff = $app.isFirefox();
+     */
+    isFirefox(): boolean;
+    /**
+     * Is WebKit?
+     * @returns True if is WebKit
+     * @example
+     * const wk = $app.isWebkit();
+     */
+    isWebkit(): boolean;
+    /**
+     * Set gateway and credentials
+     * @param gateway Gateway (one of <code>GATEWAY_*</code> constants)
+     * @param login Login
+     * @param password Password
+     * @example
+     * // Usually done by the platform
+     * $app.setGateway($app.GATEWAY_API, "mylogin", "mypassword");
+     */
+    setGateway(gateway?: number | string, login?: string, password?: string): void;
+    /**
+     * Get gateway
+     * @returns Gateway (one of <code>GATEWAY_*</code> constants)
+     * @example
+     * const gateway = $app.getGateway();
+     */
+    getGateway(): string;
+    /**
+     * Error handler
+     * @param err Error message or error object
+     * @param e Optional catched error
+     * @example
+     * $app.error("Unable to load");
+     * try { JSON.parse("{"); } catch (e) { $app.error("Wrong data", e); }
+     */
+    error(err: string | MessageFromBack, e?: unknown): void;
+    /**
+     * Warning handler
+     * @param msg Message
+     * @param e Optional catched error
+     * @example
+     * $app.warning("Check the value");
+     */
+    warning(msg: string, e?: unknown): void;
+    /**
+     * Info handler
+     * @param msg Message
+     * @example
+     * $app.info("Done");
+     */
+    info(msg: string): void;
+    /**
+     * Debug handler
+     * @param msg Message
+     * @example
+     * $app.debug("value: " + rowId);
+     */
+    debug(msg: string): void;
+    /**
+     * Mark the session as expired (see the `expired` getter): the background calls are stopped
+     * @example
+     * $app.setExpired();
+     */
+    setExpired(): void;
+    /**
+     * Handler when session has expired on server side, by default throws HTTP 401 in console.
+     * It can be overridden to return on the logon form in a UI context.
+     * @example
+     * // Override the handler
+     * app.onExpiredSession = () => { window.location.href = "/"; };
+     */
+    onExpiredSession(): void;
+    /**
+     * JSON message
+     * @param level Error level
+     * @param message Error message
+     * @param details Error details
+     * @example
+     * const err = $app.getStandardError("E", "Unable to load", "Details");
+     */
+    getStandardError(level: number | string, message: string, details: string | object): {
+        /** Error level */
+        level: number | string;
+        /** Error message */
+        message: string;
+        /** Error details */
+        details: string | object;
+    };
+    /**
+     * Get the message in error
+     * @param err with message, messages or description
+     * @example
+     * obj.save(item).catch((err: MessageFromBack) => $ui.alert({
+     * 	type: "error",
+     * 	content: String($app.getErrorMessage(err))
+     * }));
+     */
+    getErrorMessage(err: string | MessageFromBack): MessageAny | undefined;
+    /**
+     * Set default global error handler active or inactive.
+     * @param active Active status
+     * @example
+     * $app.setErrorHandlerActive(false);
+     */
+    setErrorHandlerActive(active: boolean): void;
+    /**
+     * Change default global error handler.
+     * @param errorHandler Error handler function
+     * @example
+     * $app.setErrorHandler((m, e) => $console.error(String(m), e));
+     */
+    setErrorHandler(errorHandler: (m: string | MessageFromBack, e?: unknown) => void): void;
+    /**
+     * Set default global warning handler active or inactive.
+     * @param active Active status
+     * @example
+     * $app.setWarningHandlerActive(false);
+     */
+    setWarningHandlerActive(active: boolean): void;
+    /**
+     * Change default global warning handler.
+     * @param warningHandler Warning handler function
+     * @example
+     * $app.setWarningHandler(m => $console.warn(m));
+     */
+    setWarningHandler(warningHandler: (m: string, e?: unknown) => void): void;
+    /**
+     * Set default global information handler active or inactive.
+     * @param active Active status
+     * @example
+     * $app.setInfoHandlerActive(false);
+     */
+    setInfoHandlerActive(active: boolean): void;
+    /**
+     * Change default global information handler.
+     * @param infoHandler Information handler function
+     * @example
+     * $app.setInfoHandler(m => $console.info(m));
+     */
+    setInfoHandler(infoHandler: (m: string) => void): void;
+    /**
+     * Set default global debug handler active or inactive.
+     * @param active Active status
+     * @example
+     * $app.setDebugHandlerActive(true);
+     */
+    setDebugHandlerActive(active: boolean): void;
+    /**
+     * Change default global debug handler.
+     * @param debugHandler Debug handler function
+     * @example
+     * $app.setDebugHandler(m => $console.log(m));
+     */
+    setDebugHandler(debugHandler: (m: string) => void): void;
+    /**
+     * Convert a textual backend message to json { code, text, level, field, label, error }
+     * or technical statement { redirect } or { javascript }
+     * <ul>
+     * <li>code: message code</li>
+     * <li>text: optional contextual details</li>
+     * <li>level: 'I'nfo, 'W'arning, 'E'rror, 'F'atal</li>
+     * <li>field: optional field name of message</li>
+     * <li>label: default text to display in user language</li>
+     * <li>error: true when level is fatal or error</li>
+     * <li>params: optional parameter key/value (suggest)</li>
+     * <li>actions: optional call to actions</li>
+     * </ul>
+     * @param msg formatted backend message JSON or 'code:text#level#field#param:value' or 'redirect:url' or 'javascript:code'
+     * @example
+     * const m = $app.messageToJson("MY_ERROR");
+     * $console.log(m.code, m.level, m.text);
+     */
+    messageToJson(msg: MessageAny): MessageJSON;
+    /** @ignore */
+    _url(url?: string, tokenAsParam?: boolean): string;
+    /** @ignore */
+    _ajaxkey(key?: string | null): string;
+    /**
+     * Identify the client tab
+     * @param id optional Id to force the value (null to remove)
+     * @returns tab unique Id
+     * @example
+     * const tab = $app.clientTabId();
+     */
+    clientTabId(id?: string): string;
+    /**
+     * Random string
+     * @param len Length
+     * @returns Random string of specified length
+     * @example
+     * const s = $app.randomString(8);
+     */
+    randomString(len: number): string;
+    /**
+     * Returns local data URL (e.g. suitable for src of img tags).
+     * @param doc Document with mime type and base64 image or thumbnail
+     * @param thumb Return document thumbnail?
+     * @example
+     * // Image document inlined in the record
+     * const item: KeyObject = await obj.get(rowId, { inlineDocs: ["myObjImage"] });
+     * $("<img/>").attr("src", $app.dataURL(item.myObjImage) || "").appendTo(ctn);
+     */
+    dataURL(doc: {
+        mime?: string;
+        thumbnail?: string;
+        content?: string;
+    }, thumb?: boolean): string | undefined;
+    /**
+     * Returns the URL of a document.
+     * @param object Document with `object`, `field`, `rowId` and `docId`
+     * @example
+     * const url = $app.documentURL(doc);
+     */
+    documentURL(object: DocumentDB): string;
+    /**
+     * Returns the URL of a document.
+     * @param object Object name
+     * @param field Field name
+     * @param rowId Object record row ID
+     * @param docId Document ID (can be omitted then a lookup is done on record matching rowId)
+     * @param cdisp Disposition: attachment or inline (defaults to inline)
+     * @example
+     * const url: string = $app.documentURL("MyObject", "myObjDocument", rowId);
+     * $("<a/>").attr("href", url).text($T("DOWNLOAD")).appendTo(ctn);
+     */
+    documentURL(object: string, field: string, rowId: string, docId?: string, cdisp?: string): string;
+    /**
+     * Returns image URL.
+     * @param object Object name
+     * @param field Field name
+     * @param rowId Object record row ID
+     * @param docId Document ID
+     * @param thumb Return thumbnail image
+     * @example
+     * // Thumbnail of an image field
+     * const src: string = $app.imageURL("MyObject", "myObjImage", rowId, docId, true);
+     * $("<img/>").attr("src", src).appendTo(ctn);
+     */
+    imageURL(object: string, field: string, rowId: string, docId: string, thumb?: boolean): string;
+    /**
+     * Returns content URL.
+     * @param file Content file name
+     * @example
+     * const url = $app.contentURL("my-file.pdf");
+     */
+    contentURL(file: string): string;
+    /**
+     * Returns disposition resource URL.
+     * @param code Resource code
+     * @param type Resource type (IMG=image (default), ICO=Icon, CSS=stylesheet, JS=Javascript, HTML=HTML)
+     * @example
+     * const url = $app.dispositionResourceURL("MY_LOGO", "IMG");
+     */
+    dispositionResourceURL(code: string, type: string): string;
+    /**
+     * Returns resource URL.
+     * @param resId Resource ID (e.g. taken from business object or external object resources list in metadata)
+     * @example
+     * const url = $app.resourceURL("12");
+     */
+    resourceURL(resId: string): string;
+    /**
+     * Returns Object resource URL.
+     * @param code Resource code
+     * @param type Resource type (IMG=image (default), ICO=Icon, CSS=stylesheet, JS=Javascript, HTML=HTML)
+     * @param object Object name: ObjectInternal or ObjectExternal (for Disposition use dispositionResourceURL)
+     * @param objId Object row ID (not the resource row ID)
+     * @example
+     * const url = $app.getResourceURL("MY_CSS", "CSS", "ObjectInternal");
+     */
+    getResourceURL(code: string, type: string, object?: string, objId?: string, nologs?: boolean): string;
+    /**
+     * Returns Static resource URL
+     * @param path
+     * @example
+     * const url = $app.getStaticRootResourceURL("/images/logo.png");
+     */
+    getStaticRootResourceURL(path: string): string;
+    /**
+     * Icon URL
+     * @param name Resource icon name
+     * @example
+     * const url = $app.getIconURL("my-icon");
+     */
+    getIconURL(name: string): string;
+    /**
+     * Internal: log a deprecation warning.
+     * @param exception Deprecated feature
+     * @param message Message to log
+     * @param outdated true to log as an error
+     */
+    _deprecated(exception?: string, message?: string, outdated?: boolean): void;
+    static deprecated(exception?: string, message?: string, outdated?: boolean): void;
+    /**
+     * Internal: warn when a callback function is passed instead of using the returned Promise.
+     * @param arg Argument to check
+     */
+    _deprecCall(arg: unknown): void;
+    /**
+     * Legacy call parameter URL encoded
+     * @ignore
+     */
+    _callParams(data: KeyObject | null): string;
+    /**
+     * Call parameter
+     * @returns FormData
+     * @ignore
+     */
+    _callFormData(data: KeyObject | null): FormData;
+    /** @ignore */
+    _callAuth(login: string, password: string): string;
+    /** @ignore */
+    _credentials(xhr: XMLHttpRequest): void;
+    /**
+     * Authorization headers of the session (for XHR or fetch)
+     * @ignore
+     */
+    _authHeaders(): KeyString;
+    /** @ignore */
+    _call(url: string, params: KeyObject | null, callback?: (r: CallResponse) => void, scope?: object, progress?: ProgressHandler): void;
+    /**
+     * Promise of the raw service response (never rejected)
+     * @ignore
+     */
+    _callRaw(url: string, params: KeyObject | string | null, progress?: ProgressHandler): Promise<CallResponse>;
+    /**
+     * Promise of the service response, rejected with the error response
+     * @ignore
+     */
+    _callAsync(url: string, params: KeyObject | string | null, progress?: ProgressHandler): Promise<any>;
+    /** @ignore */
+    _callResponse(xhr: XMLHttpRequest, callback?: (r: CallResponse) => void, scope?: object): any;
+    /**
+     * Internal import service: read the first lines of a URL
+     * @param url URL to read
+     * @param params Optional parameters posted to a local URL
+     * @param maxLines Max number of lines
+     * @returns Promise of the first lines, rejected on error or timeout
+     * @ignore
+     */
+    _readLines(url: string, params: KeyObject, maxLines: number): Promise<string[]>;
+    /**
+     * Loads application info data.
+     * @example
+     * const info = await $app.getAppInfo();
+     */
+    getAppInfo(): Promise<object>;
+    /**
+     * Loads system info data.
+     * @example
+     * $app.getSysInfo().then(info => $console.log(info));
+     */
+    getSysInfo(): Promise<object>;
+    /**
+     * Loads grant data.
+     * @param params Optional parameters
+     * @param params.inlinePicture Inline picture (false if absent or undefined)
+     * @param params.web true to load UI stuff
+     * @param params.texts true to TEXTs
+     * @example
+     * // User rights are already loaded in the UI
      * if ($grant.hasResponsibility("MY_GROUP")) {
      * 	// ...
      * }
+     * // Reload them from the server
+     * $app.getGrant().then((grant: Grant) => $console.log(grant.login));
      */
-    hasResponsibility(group: string): boolean;
+    getGrant(params?: {
+        inlinePicture?: boolean;
+        web?: boolean;
+        texts?: boolean;
+    }): Promise<Grant>;
     /**
-     * Is user an ADMIN or a DESIGNER ?
+     * Set password.
+     * @param password Password
+     * @example
+     * await $app.setPassword("myNewPassword");
      */
-    isAdmin(): boolean;
+    setPassword(password: string): Promise<object>;
     /**
-     * Get a session parameter from server-side
+     * Loads basic user data (login, name, email, picture).
+     * @param login User login
+     * @param params Optional parameters
+     * @param params.inlinePicture Inline picture (false if absent or undefined)
+     * @example
+     * const user: KeyObject = await $app.getUserInfo($grant.login, { inlinePicture: true });
+     */
+    getUserInfo(login: string, params?: {
+        inlinePicture?: boolean;
+    }): Promise<object>;
+    /**
+     * Change user's language
+     * @param lang language code (FRA, ENU...)
+     * @param params Optional parameters
+     * @param params.pref Update also the preferred language
+     * @example
+     * await $app.changeLang("FRA", { pref: true });
+     */
+    changeLang(lang: string, params?: {
+        pref?: boolean;
+    }): Promise<boolean>;
+    /**
+     * Loads menu data.
+     * @example
+     * const menu = await $app.getMenu();
+     */
+    getMenu(): Promise<KeyObject>;
+    /**
+     * Get alls granted crosstabs
+     * @example
+     * $app.getCrosstabs().then(list => $console.log(list.map(c => c.name)));
+     */
+    getCrosstabs(): Promise<CrosstabMetadata[]>;
+    /**
+     * Get alls granted external objects
+     * @param widget only UI widgets?
+     * @example
+     * $app.getExternalObjects(true).then(list => $console.log(list));
+     */
+    getExternalObjects(widget: boolean): Promise<ExternalMetadata>;
+    /**
+     * Loads view definition.
+     * @param name View name
+     * @param params Optional parameters
+     * @param params.home Optional for home or panel instance (default true to get home object instances)
+     * @example
+     * const view = await $app.getView("MyView");
+     * $console.log(view.items.length);
+     */
+    getView(name: string, params?: {
+        home?: boolean;
+    }): Promise<View>;
+    /**
+     * Upgrade view raw JSON into View instance and set the cache
+     * @param name View name
+     * @param view View definition
+     * @example
+     * const view = $app.setView("MyView", { name: "MyView", items: [] });
+     */
+    setView(name: string, view: KeyObject | View): View;
+    /**
+     * Treeview services
+     * @param name Treeview name
+     * @param params Optional parameters
+     * @param params.service metadata (default), page, getmenu, addmenu, delmenu
+     * @param params.object optional object name
+     * @param params.rowid optional object rowId
+     * @param params.child child object of page service
+     * @param params.page page number of page service
+     * @example
+     * $app.treeview("MyTreeview", { service: "metadata" }).then(t => $console.log(t));
+     */
+    treeview(name: string, params?: {
+        service?: string;
+        object?: string;
+        rowid?: string;
+        child?: string;
+        page?: number;
+    }): Promise<KeyObject[]>;
+    /**
+     * Loads system parameters.
+     * @example
+     * const params = await $app.getSysParams();
+     */
+    getSysParams(): Promise<object>;
+    /**
+     * Get system parameter value.
+     * @param name System parameter name
+     * @param params Optional parameters
+     * @param params.force Force read system parameter value from the database?
+     * @example
+     * $app.getSysParam("MY_SYSTEM_PARAM").then((value: string) => {
+     * 	// ...
+     * });
+     * // Force the reading from the database
+     * const value: string = await $app.getSysParam("MY_SYSTEM_PARAM", { force: true });
+     */
+    getSysParam(name: string, params?: {
+        force?: boolean;
+    }): Promise<string>;
+    /**
+     * Set a user system parameter.
      * @param name Parameter name
+     * @param value Parameter value (if undefined parameter is unset)
+     * @param save Save parameter in user parameters (if undefined parameter is not saved)
      * @example
-     * const value: string = await $grant.getParameter("MY_SESSION_PARAM");
+     * // Set a user parameter for the session only
+     * $app.setSysParam("MY_USER_PARAM", "value");
+     * // Set and save it in the user parameters
+     * $app.setSysParam("MY_USER_PARAM", "value", true);
      */
-    getParameter(name: string): Promise<string>;
+    setSysParam(name: string, value?: string, save?: boolean): Promise<string>;
     /**
-     * Set a session parameter to server-side
-     * @param name Parameter name
-     * @param value Parameter value
+     * Loads texts.
+     * @example
+     * const texts = await $app.getTexts();
      */
-    setParameter(name: string, value: string): Promise<string>;
+    getTexts(): Promise<object>;
     /**
-     * Get text alias (constraint usage)
-     * @param code text code
-     * @param plural look for the plural label
+     * Get a field definition.
+     * @param name Field name
+     * @example
+     * $app.getField("myObjCode").then(f => $console.log(f));
      */
-    getText(code: string, plural?: boolean): string;
+    getField(name: string): Promise<object>;
     /**
-     * Get text alias (constraint usage)
-     * @param code text code
-     * @param plural look for the plural label
+     * Get a list of value.
+     * @param name List of values name
+     * @example
+     * $app.getListOfValues("MY_LIST").then(l => $console.log(l));
      */
-    T(code: string, plural?: boolean): string;
+    getListOfValues(name: string): Promise<object>;
     /**
-     * Get object wrapper
-     * @param inst instance name
-     * @param name object name
+     * Get instance of business object.
+     * @example
+     * // app is a Simplicite.Ajax instance
+     * const obj: UIBusinessObject = app.getBusinessObject("MyObject");
+     * // other instance of obj
+     * const tmp: UIBusinessObject = app.getBusinessObject("MyObject", "tmpObj");
+     * @param obj Object name or business object
+     * @param inst Optional instance name (default main instance: the_ajax_&lt;object name&gt;)
      */
-    getObject(inst: string, name: string): BusinessObject;
+    getBusinessObject(obj: string | BusinessObject, inst?: string): UIBusinessObject;
     /**
-     * Get main object wrapper
-     * @param obj object name
+     * Remove objects from cache
+     * @param obj Object name or business object
+     * @example
+     * $app.clearCache("MyObject");
+     * $app.clearCache(obj);
      */
-    getMainObject(obj: string): BusinessObject;
+    clearCache(obj: string | BusinessObject): void;
     /**
-     * Get home object wrapper
-     * @param obj object name
+     * Get a new business process.
+     * @example
+     * // app is a Simplicite.Ajax instance
+     * const pcs: BusinessProcess = app.getBusinessProcess("MyProcess");
+     * @param name Business process name
      */
-    getHomeObject(obj: string): BusinessObject;
+    getBusinessProcess(name: string): BusinessProcess;
     /**
-     * Get temporary object wrapper
-     * @param obj object name
+     * Returns true if value is <code>1|true|yes|y</code>
+     * @param value parameter value
+     * @returns Is value true?
+     * @example
+     * $app.isTrue("yes"); // true
+     * $app.isTrue("0"); // false
      */
-    getTmpObject(obj: string): BusinessObject;
+    isTrue(value: unknown): boolean;
     /**
-     * Get panel wrapper
-     * @param obj object name
-     * @param fk optional foreign-key name
+     * Returns true if value is <code>0|false|no|n</code>
+     * @param value parameter value
+     * @returns Is value false?
+     * @example
+     * $app.isFalse("no"); // true
+     * $app.isFalse("1"); // false
      */
-    getPanelObject(obj: string, fk: string): BusinessObject;
+    isFalse(value: unknown): boolean;
     /**
-     * Get merge wrapper
-     * @param obj object name
+     * Get text value. Same as global <code>$T</code>
+     * @param code Text code
+     * @param plural True to get the plural value if known
+     * @returns Text value
+     * @example
+     * const t = Simplicite.Ajax.getText("SAVE");
      */
-    getMergeObject(obj: string): BusinessObject;
+    static getText(code: string, plural?: boolean, texts?: KeyString): string;
     /**
-     * Get merge panel wrapper
-     * @param obj object name
-     * @param fk optional foreign-key name
+     * Get text value.
+     * @param code Text code
+     * @param plural True to get the plural value if known
+     * @returns Text value
+     * @example
+     * // Translated text (same as $T(code) and $app.T(code))
+     * const label: string = $app.getText("MY_TEXT_CODE");
+     * // Plural value of a "singular|plural" text
+     * const days: string = $app.getText("DAY", true);
      */
-    getMergePanelObject(obj: string, fk: string): BusinessObject;
+    getText(code: string, plural?: boolean, texts?: KeyString): string;
     /**
-     * Get reference object wrapper
-     * @param obj object name
+     * Get text value (alias to <code>getText</code>).
+     * @param code Text code
+     * @param plural True to get the plural value if known
+     * @returns Text value
+     * @example
+     * const label: string = $app.T("MY_TEXT_CODE");
+     * // or with the global shorthand
+     * const label2: string = $T("MY_TEXT_CODE");
      */
-    getRefObject(obj: string): BusinessObject;
+    T: (code: string, plural?: boolean, texts?: KeyString) => string;
     /**
-     * Get datamap object wrapper
-     * @param obj object name
+     * Loads news.
+     * @param params Optional parameters
+     * @param params.count Return news count only (false if absent or undefined)
+     * @param params.inlineImages Inline news image (false if absent or undefined, not taken into account if count is true)
+     * @example
+     * const news = await $app.getNews({ inlineImages: true });
      */
-    getDataMapObject(obj: string): BusinessObject;
+    getNews(params?: {
+        count?: boolean;
+        inlineImages?: boolean;
+    }): Promise<object>;
     /**
-     * Get object label
-     * @param name object or name
+     * Loads external object definition.
+     * @param name External object name
+     * @example
+     * const ext = await $app.getExternalObject("MyExternalObject");
      */
-    objectLabel(name: string | BusinessObject): string;
+    getExternalObject(name: string): Promise<ExternalMetadata>;
     /**
-     * JS class for UI usage
+     * External object URL.
      * @param name Object name
-     */
-    getUIObjectClass(name: string): typeof UIBusinessObject;
-    /**
-     * JS class for UI usage
-     * @param name Object name
-     * @param js Class script
-     */
-    setUIObjectClass(name: string, js: string): void;
-    /**
-     * Check access to object
-     * @param name object or name
-     * @param prop optional property to check 'c'=create 'u'=update 'd'=delete 'i'=indexable
-     */
-    checkAccess(name: string | BusinessObject, prop?: string): boolean;
-    /**
-     * Can access/read object
-     * @param name object or name
+     * @param params Optional parameters (object or string)
+     * @param embedded True to get a relative URL, false to get the full http URL (loadURL will create an iframe)
      * @example
-     * if ($grant.accessObject("MyObject"))
-     * 	$ui.displayList(null, "MyObject");
+     * // Display an external object in the work area
+     * $ui.loadURL(null, $app.getExternalObjectURL("MyExternalObject", { param1: "value" }));
      */
-    accessObject(name: string | BusinessObject): boolean;
+    getExternalObjectURL(name: string, params?: string | object, embedded?: boolean): string;
     /**
-     * Add access/read object
-     * @param name object or name
-     */
-    addAccessObject(name: string | BusinessObject): void;
-    /**
-     * Can create object
-     * @param name object or name
+     * Search from index.
+     * @param request Index search request string
+     * <ul>
+     * <li>simple text with wildcards and operators</li>
+     * <li>in:domain:xxx[:all] = to get recent objects in a specific domain 'xxx', 'all' or by default those updated by the user</li>
+     * <li>in:docs:obj1[;obj2;obj3...] text = to search the text in joined documents of listed objects</li>
+     * </ul>
+     * @param params Optional parameters
+     * @param params.inlineDocs Inline documents (false if absent or undefined, can be a boolean or an array of document fields to inline) ?
+     * @param params.inlineThumbs Inline image documents thumbnails (false if absent or undefined) ?
+     * @param params.inlineObjs Inline objects fields items (false if absent or undefined, can be a boolean or an array of object fields to inline) ?
+     * @param params.metadata gets the search engine metadata <code>{ indexed:[{name,label},...], withDocs:[{name,label},...] }</code>
+     * @param params.useFilter apply user preference INDEX_OBJ_FILTER to limit search
      * @example
-     * if ($grant.accessCreate("MyObject"))
-     * 	$ui.displayForm(null, "MyObject", $app.DEFAULT_ROW_ID, { nav: "add" });
+     * const results = await $app.indexsearch("my text");
      */
-    accessCreate(name: string | BusinessObject): boolean;
+    indexsearch(request: string, params?: InlineParam & {
+        metadata?: boolean;
+        useFilter?: boolean;
+    }): Promise<KeyObject[]>;
     /**
-     * Can update object
-     * @param name object or name
+     * Bookmark service
+     * @param method show, add, delete, toggle
+     * @param params method parameters data or show
      * @example
-     * const editable: boolean = $grant.accessUpdate("MyObject");
+     * const list = await $app.bookmark("show");
      */
-    accessUpdate(name: string | BusinessObject): boolean;
+    bookmark(method: string, params?: {
+        data?: object;
+        show?: boolean | string;
+    }): Promise<KeyObject>;
     /**
-     * Can delete object
-     * @param name object or name
+     * Dashboard service
+     * @param method list | delete | rename
+     * @param params method parameters
+     * @example
+     * const list = await $app.dashboard("list");
      */
-    accessDelete(name: string | BusinessObject): boolean;
+    dashboard(method: string, params?: KeyObject): Promise<KeyObject>;
     /**
-     * Get filtered objects on index search
+     * User guide service
+     * @param method tour
+     * @param params method parameters
+     * @example
+     * const r = await $app.guide("tour", { name: "MyTour" });
      */
-    getIndexFilteredObjects(cbk: (list: string[]) => void): void;
+    guide(method: string, params?: {
+        name?: string;
+        step?: string;
+        usageId?: string;
+        tour?: KeyObject;
+    }): Promise<KeyObject>;
     /**
-     * Set filtered objects on index search
+     * Social post service.
+     * @param params Optional parameters
+     * @param params.counters true to get counters without posts
+     * @param params.object Optional object name
+     * @param params.rowId Optional row ID
+     * @param params.page Optional page to search, -1=no search
+     * @param params.activity true to include activity message
+     * @param params.level optional level filter
+     * @param params.audit to list audit message only
+     * @param params.del true to delete the post (default the service upsert the post)
+     * @param params.like Optional true to like, false to unlike
+     * @param params.status Optional status to update
+     * @param params.follow true to get follow counters
+     * @param post optional post to save or delete <code>{ id, userId, message, pub, object, rowId }</code>
+     * @example
+     * $app.social({ counters: true }).then(r => $console.log(r));
      */
-    setIndexFilteredObjects(list: string[], cbk: Callback): void;
+    social(params: {
+        counters?: boolean;
+        object?: string;
+        rowId?: string;
+        page?: number;
+        activity?: boolean;
+        level?: string;
+        audit?: boolean;
+        auditAction?: string;
+        del?: boolean;
+        like?: boolean;
+        status?: string;
+        follow?: boolean;
+    }, post?: object): Promise<KeyObject>;
+    /**
+     * Social follow service.
+     * @param params parameters
+     * @param params.method follow|unfollow|accept|deny|search
+     * @param params.param related userId or search request
+     * @param params.object optional User object to use
+     * @param params.all optional to search all authors or not
+     * @example
+     * $app.follow({ method: "search", param: "john" }).then(r => $console.log(r));
+     */
+    follow(params?: {
+        method: string | null;
+        param?: string | null;
+        object?: string;
+        all?: boolean;
+    }): Promise<KeyObject>;
+    /**
+     * Firebase service to send mobile notification
+     * @param data Parameters
+     * @param data.title Optional title
+     * @param data.message Message body
+     * @param data.to <code>\{users, groups\}</code> list of logins or groups, or <code>'all'</code> to notify all users
+     * @param data.token Optional refresh device token
+     * @param data.oldtoken Optional previous token to remove
+     * @example
+     * $app.firebase({ title: "Hello", message: "New order" }).then(r => $console.log(r));
+     */
+    firebase(data: {
+        title?: string;
+        message?: string;
+        to?: FirebaseRecipients;
+        token?: string;
+        oldtoken?: string;
+    }): Promise<object>;
+    /**
+    TODO
+    */
+    webpush(data: object): Promise<object>;
+    /**
+     * Syntax service: will return an object with the results
+     * @param data parameters
+     * @param data.type type of syntax service: field
+     * @param data.objectid object id for field name
+     * @param data.value value to validate or transform
+     * @example
+     * $app.syntax({ type: "field", objectid: objectId, value: "[VALUE:myObjCode]" }).then(r => $console.log(r));
+     */
+    syntax(data: {
+        type: string;
+        objectid: string;
+        value: any;
+        refobjectid?: string;
+    }): Promise<KeyObject>;
+    /**
+     * Palette service
+     * @example
+     * $app.palette().then(list => $console.log(list));
+     */
+    palette(): Promise<Palette[]>;
+    /**
+     * Module services
+     * @param params parameters
+     * @param params.row_id Module row ID
+     * @param params.del Deletion action <code>start|status</code>
+     * @param params.confirm Confirm deletion?</li>
+     * @param params.application or Application name
+     * @param params.method import, export, status
+     * @param params.format export to xml or json
+     * @param params.exploded exploded files in export?
+     * @example
+     * $app.module({ row_id: moduleId } as ModuleAjax).then(r => $console.log(r));
+     */
+    module(params: ModuleAjax): Promise<KeyObject>;
+    /**
+     * Session init (retrieves server side session identifier and auth token).
+     * @param authToken Auth token to (re)use (in case of persistent tokens)
+     * @param params Optional parameters
+     * @param params.scope Optional session scope
+     * @param params.clientId Optional client Id
+     * @example
+     * const s = await $app.session("myAuthToken");
+     */
+    session(authToken: string, params?: {
+        scope?: string;
+        clientId?: string;
+    }): Promise<KeyObject>;
+    /**
+     * Login (same as session()).
+     * @param authToken Auth token to (re)use (in case of persistent tokens)
+     * @param params Optional parameters
+     * @param params.scope Optional session scope
+     */
+    login: (authToken: string, params?: {
+        scope?: string;
+        clientId?: string;
+    }) => Promise<KeyObject>;
+    /**
+     * Logout (in case of a persistent token it is deleted)
+     * @example
+     * await $app.logout();
+     */
+    logout(): Promise<object>;
+    /**
+     * Monitoring service
+     * @param m Monitoring service or plain JSON object to store
+     * @param params Optional parameters <code>\{ session \}</code>
+     * @param cbk Optional callback for response
+     * @example
+     * $app.monitor("metrics", {}, rows => $console.log(rows));
+     */
+    monitor(m: string | object, params?: object, cbk?: (r: KeyObject[]) => void): void;
+    /**
+     * Parse a date value into a Javascript Date
+     * @param v Date value (<code>YYYY-MM-DD</code>)
+     * @returns Javascript date
+     * @example
+     * const d = $app.parseDateValue("2026-10-09");
+     */
+    parseDateValue(v: string): Date;
+    /**
+     * Parse a date time value into a Javascript Date
+     * @param v Date time value (<code>YYYY-MM-DD HH:mm:ss</code>)
+     * @returns Javascript date
+     * @example
+     * const d = $app.parseDateTimeValue("2026-10-09 14:05:30");
+     */
+    parseDateTimeValue(v: string): Date;
+    /**
+     * Parse a Javascript Date into a date value
+     * @param d Javascript date
+     * @returns Date value (<code>YYYY-MM-DD</code>)
+     * @example
+     * $app.toDateValue(new Date(2026, 9, 9)); // "2026-10-09"
+     */
+    toDateValue(d: Date): string;
+    /**
+     * Parse a Javascript Date into a time value
+     * @param d Javascript date
+     * @returns Time value (<code>HH:mm:ss</code>)
+     * @example
+     * $app.toTimeValue(new Date(2026, 9, 9, 14, 5, 30)); // "14:05:30"
+     */
+    toTimeValue(d: Date): string;
+    /**
+     * Parse a Javascript Date into a date time value
+     * @param d Javascript date
+     * @returns Date time value (<code>YYYY-MM-DD HH-mm-ss</code>)
+     * @example
+     * const s = $app.toDateTimeValue(new Date(2026, 9, 9, 14, 5, 30));
+     */
+    toDateTimeValue(d: Date): string;
+    /**
+     * Encode a string to base64
+     * @param s Input string
+     * @returns Base64-encoded string
+     * @example
+     * $app.base64Encode("hello"); // "aGVsbG8="
+     */
+    base64Encode(s: string): string;
+    /**
+     * Encode an array buffer (such as got from a local file read) to to base64
+     * @param b Array buffer
+     * @returns Base64-encoded string
+     * @example
+     * const s = $app.base64EncodeArrayBuffer(new TextEncoder().encode("hello").buffer);
+     */
+    base64EncodeArrayBuffer(b: ArrayBuffer): string;
+    /**
+     * Decode a base64 string to string
+     * @param s Base64-encoded string
+     * @returns Decoded string
+     * @example
+     * $app.base64Decode("aGVsbG8="); // "hello"
+     */
+    base64Decode(s: string): string;
+    /**
+     * Checks if a value is empty
+     * @param x Value
+     * @example
+     * $app.isEmpty(""); // true
+     * $app.isEmpty("a"); // false
+     */
+    isEmpty(x: unknown): boolean;
 }
 
 /** Document stored in database (document or image field value) */
@@ -16546,8 +18548,6 @@ declare class ObjectField {
     }[];
     /** Number format */
     numformat?: FieldNumFormat;
-    /** Big decimal value */
-    bigdec?: string;
     /** Rendering metrics */
     metrics?: FieldMetrics;
     /** Label of the true value */
@@ -16643,10 +18643,6 @@ declare class ObjectField {
     speechRecognition?: boolean;
     /** Speech synthesis */
     speechSynthesis?: boolean;
-    /** Related action in confirm dialog */
-    inAction?: Action;
-    /** Related external object in widget settings */
-    inExternal?: ExternalObject;
     /** Referenced field? */
     ref?: boolean;
     /** Foreign-key? */
@@ -16659,8 +18655,6 @@ declare class ObjectField {
     refObject?: string;
     /** Ref user key label */
     refUserKey?: string;
-    /** User key of the referenced record */
-    foreignUserKey?: string;
     /** Meta-objects that can be referenced */
     refMetaObjects?: {
         /** Object name */
@@ -16684,26 +18678,23 @@ declare class ObjectField {
     oldv: FieldValue;
     /** Field message to display */
     m?: MessageAny;
-    /** UI rendering */
+    /**
+     * UI rendering of field
+     * - optional here: set by $ui.getUIField or $view.getField
+     * - mandatory in the UIObjectField type returned by these methods (except for an unknown field)
+     * - last component got on this field: use the row ID to get the one of a list row
+     * @example
+     * // No component before getting the UI field
+     * const f = obj.getField("myObjField1");
+     * f?.ui?.val("new value");
+     * // Component of the form field
+     * const uf = $ui.getUIField(ctn, obj, "myObjField1");
+     * uf.ui.updatable(false);
+     * // Component of a list row
+     * const rf = $ui.getUIField(ctn, obj, "myObjField1", rowId);
+     * rf.ui.val("new value");
+     */
     ui?: UIField;
-    /** If moved in the template/area */
-    moved?: boolean;
-    /** Column <th> id */
-    _thId?: string;
-    /** Optional transition name */
-    _tran?: string;
-    /** Input field of the foreign key to redraw */
-    _refInputField?: ObjectField;
-    /** Ace params */
-    _editor?: KeyObject;
-    /** Ace params for long string */
-    _ace?: KeyObject;
-    /** Grid params */
-    _grid?: GridEditorParam;
-    /** For timesheet from default value */
-    periodMax?: number;
-    /** Quill params */
-    _quillParams?: KeyHash<QuillOptions>;
     /**
      * Constructor
      * @param app Ajax services
@@ -16715,10 +18706,18 @@ declare class ObjectField {
      * Get label of field type
      * @param type optional type (default this type)
      * @param cc optional Camel case (default lower case)
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const label = f.typeLabel(); // "string"
+     * const cls = "UIField" + f.typeLabel(f.type, true); // "UIFieldString"
      */
     typeLabel(type?: number, cc?: boolean): string;
     /**
      * Eval formula when value starts with the equals sign "=3*5+2", ignore syntax error
+     * @example
+     * const f = obj.getField("myObjAmount")!;
+     * f.evalCalc("=3*5+2"); // 17
+     * f.evalCalc("12"); // "12", not a formula
      */
     evalCalc(v: string): string;
     /**
@@ -16726,12 +18725,19 @@ declare class ObjectField {
      * @param v value YYYY-MM-DD
      * @param df user date format
      * @param r optional rendering Y|M|D|H|I|S
+     * @example
+     * const f = obj.getField("myObjDate")!;
+     * f.dateToUI("2026-10-09", "DD/MM/YYYY"); // "09/10/2026"
      */
     dateToUI(v?: string | null, df?: string, r?: string): string;
     /**
      * Convert the time to UI format
      * @param v value HH:MI:SS
      * @param r optional rendering Y|M|D|H|I|S
+     * @example
+     * const f = obj.getField("myObjTime")!;
+     * f.timeToUI("14:05:30"); // "14:05:30"
+     * f.timeToUI("14:05:30", "I"); // "14:05"
      */
     timeToUI(v: string, r?: string): string;
     /**
@@ -16740,13 +18746,20 @@ declare class ObjectField {
      * @param dmin optional date min filter
      * @param dmax optional date max filter
      * @param g grant
+     * @example
+     * const f = obj.getField("myObjDate")!;
+     * // Text of the current filter of a column, with the texts of the grant
+     * const text = f.filterLabel("", "2026-01-01", "2026-12-31", $grant);
      */
     filterLabel(flt: string, dmin: string, dmax: string, g: Grant): string;
     /**
      * Convert the datetime to UI format
      * @param v value YYYY-MM-DD HH:MI:SS or ISO-8601
-     * @param df datetime format DD/MM/YYYY HH:MI:SS or MM/DD/YYYY HH:MI:SS
+     * @param df user date format, DD/MM/YYYY or MM/DD/YYYY (without the time)
      * @param r optional rendering Y|M|D|H|I|S
+     * @example
+     * const f = obj.getField("myObjDatetime")!;
+     * f.datetimeToUI("2026-10-09 14:05:30", "DD/MM/YYYY"); // "09/10/2026 14:05:30"
      */
     datetimeToUI(v: string, df?: string, r?: string): string;
     /**
@@ -16755,28 +18768,45 @@ declare class ObjectField {
      * @param lang user language (FRA, ENU) or number format (SC, DC, CD)
      * @param prec precision (ex: 5)
      * @param num simple number = no thousand separator
+     * @example
+     * const f = obj.getField("myObjAmount")!;
+     * f.formatFloat("1234567.8", "FRA", 5); // "1 234 567,80000"
+     * f.formatFloat("1234567.8", "ENU", 5); // "1,234,567.80000"
      */
     formatFloat(v: string | number, lang?: string | FieldNumFormat, prec?: number, num?: boolean): string;
     /**
      * Convert UI date to service format YYYY-MM-DD
      * @param v date from UI format
      * @param df user date format
+     * @example
+     * const f = obj.getField("myObjDate")!;
+     * f.toServiceDate("09/10/2026", "DD/MM/YYYY"); // "2026-10-09"
      */
     toServiceDate(v: string, df?: string): string;
     /**
      * Convert UI time to service format HH:MM:SS
      * @param v time from UI rendering
+     * @example
+     * const f = obj.getField("myObjTime")!;
+     * f.toServiceTime("14:05"); // "14:05:00"
      */
     toServiceTime(v: string): string;
     /**
      * Convert service date to ISO-8601 when user has a specific timezone (exclude timestamp fields)
      * @param v datetime YYYY-MM-DD HH:MM:SS
+     * @example
+     * const f = obj.getField("myObjDatetime")!;
+     * // With a user time zone +02:00: "2026-10-09T14:05:30+02:00"
+     * const v = f.tz("2026-10-09 14:05:30");
      */
     tz(v: string): string;
     /**
      * Convert UI datetime to service format YYYY-MM-DD HH:MI:SS (or ISO-8601 with user time zone)
      * @param v datetime from UI format
      * @param df user date format
+     * @example
+     * const f = obj.getField("myObjDatetime")!;
+     * f.toServiceDatetime("09/10/2026 14:05:30", "DD/MM/YYYY"); // "2026-10-09 14:05:30"
      */
     toServiceDatetime(v: string, df?: string): string;
     /**
@@ -16784,11 +18814,18 @@ declare class ObjectField {
      * FRA or SC: "1 234 567,80808080808" - ENU or CD: "1,234,567.80808080808" - DC 1.234.567,80808080808 => "1234567.80808080808"
      * @param v UI value
      * @param lang user language (FRA, ENU) or number format (SC, CD, DC)
+     * @example
+     * const f = obj.getField("myObjAmount")!;
+     * f.toServiceFloat("1 234 567,8", "FRA"); // "1234567.8"
      */
     toServiceFloat(v: string, lang?: string): string | null;
     /**
      * Convert the date value to javascript Date
      * @param v service date YYYY-MM-DD or datetime YYYY-MM-DD HH:MI:SS
+     * @example
+     * const f = obj.getField("myObjDate")!;
+     * f.getDate("2026-10-09")?.getDate(); // 9
+     * f.getDate("2026-02-30"); // null
      */
     getDate(v: string): Date | null;
     /**
@@ -16801,16 +18838,26 @@ declare class ObjectField {
      * Convert javascript Date to service value
      * @param dt Date
      * @returns YYYY-MM-DD or YYYY-MM-DD HH:MI:SS when field is a datetime
+     * @example
+     * const f = obj.getField("myObjDate")!;
+     * f.convertDate(new Date(2026, 9, 9)); // "2026-10-09"
      */
     convertDate(dt: Date): string | undefined;
     /**
      * Test if YYYY-MM-DD exists ?
      * @param v date
+     * @example
+     * const f = obj.getField("myObjDate")!;
+     * f.isDate("2026-02-28"); // true
+     * f.isDate("2026-02-30"); // false
      */
     isDate(v: string): boolean;
     /**
      * Test if YYYY-MM-DD HH:MI:SS exists ?
      * @param v datetime
+     * @example
+     * const f = obj.getField("myObjDatetime")!;
+     * f.isDatetime("2026-10-09 14:05:30"); // true
      */
     isDatetime(v: string): boolean;
     /**
@@ -16818,6 +18865,12 @@ declare class ObjectField {
      * @param v Backend value to display in user language (default is current value)
      * @param rendering true to apply the rendering
      * @returns the text to display, or the texts of a multiple value (empty string when no value)
+     * @example
+     * const f = obj.getField("myObjStatus")!;
+     * // Label of the current code in the language of the user
+     * const label = f.displayValue();
+     * // With the rendering: "1 234,50 €"...
+     * const amount = obj.getField("myObjAmount")?.displayValue("1234.5", true);
      */
     displayValue(v?: FieldValue, rendering?: boolean): string | string[];
     /**
@@ -16833,179 +18886,306 @@ declare class ObjectField {
     /**
      * Convert displayed value to service format
      * @param v Front-end value
+     * @example
+     * const f = obj.getField("myObjDate")!;
+     * // Value typed in the UI to the value of the service
+     * const v = f.toService("09/10/2026");
      */
     toService(v: string): string | number | boolean | null;
     /**
      * Get or set the service value
      * @param v Optional service value to set
      * @param old Copy value into old value?
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const v = f.value();
+     * f.value("ABC");
+     * // Also as the old value: not seen as changed
+     * f.value("ABC", true);
      */
     value(v?: FieldValue, old?: boolean): FieldValue;
     /**
      * Get the service value
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const v = f.getValue();
      */
     getValue(): FieldValue;
     /**
      * Set the service value
      * @param v Optional service value to set
      * @param old Copy value into old value?
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * f.setValue("ABC");
      */
     setValue(v: FieldValue, old?: boolean): void;
     /**
      * Get or set the old service value
      * @param v Optional value to set
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const old = f.oldvalue();
+     * f.oldvalue("ABC");
      */
     oldvalue(v?: FieldValue): FieldValue;
     /**
      * Get the service old value
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const old = f.getOldValue();
      */
     getOldValue(): FieldValue;
     /**
      * Set the service old value
      * @param v Optional service value to set
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * f.setOldValue("ABC");
      */
     setOldValue(v: FieldValue): void;
     /**
      * Get value as percentage value
      * @param v optional value
      * @param t optional type (Simplicite.TYPE_INT, Simplicite.TYPE_FLOAT or Simplicite.TYPE_BIGDECIMAL)
+     * @example
+     * const f = obj.getField("myObjRate")!;
+     * // Decimal rate: "0.5" is 50, an integer is already a percentage
+     * f.percentage("0.5"); // 50
      */
     percentage(v?: string, t?: number): number;
     /**
      * Compare old and current value
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * if (f.hasChanged()) $console.log("from", f.oldvalue(), "to", f.value());
      */
     hasChanged(): boolean;
     /**
      * UI message to display on field
      * @param msg Optional message to set
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const m = f.message();
+     * f.message("Wrong code");
      */
     message(msg?: MessageAny): MessageAny | undefined;
     /**
      * Test if value is empty (or null/undefined, or empty array or not a number)
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * if (f.isEmpty()) f.value("ABC");
      */
     isEmpty(): boolean;
     /**
      * Test if value is true or equals to "1"
+     * @example
+     * const f = obj.getField("myObjActive")!;
+     * const active = f.isTrue(); // true when the value is "1"
      */
     isTrue(): boolean;
     /**
      * Test if value or multi-enum contains a code
      * @param code list code
+     * @example
+     * const f = obj.getField("myObjColors")!;
+     * // Code in a multi-enum
+     * const red = f.contains("RED");
      */
     contains(code: string): boolean;
     /**
      * Test if the field is visible on list
      * @param obj optional object to test if foreign-key is also visible
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * // With the object: also tests the foreign key of a referenced field
+     * const visible = f.isVisibleOnList(obj);
      */
     isVisibleOnList(obj?: BusinessObject | null): boolean;
     /**
      * Test if the field is visible on form
      * @param obj optional object to test if foreign-key is also visible
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * // With the object: also tests the foreign key of a referenced field
+     * const visible = f.isVisibleOnForm(obj);
      */
     isVisibleOnForm(obj?: BusinessObject | null): boolean;
     /**
      * Test if the field is hidden
      * @param obj optional object to test if foreign-key is also visible
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const hidden = f.isHidden(obj);
      */
     isHidden(obj?: BusinessObject): boolean;
     /**
      * Test if the field is forbidden
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const forbidden = f.isForbidden();
      */
     isForbidden(): boolean;
     /**
      * Change visibility
      * @param vis true=both, false=hidden, or Simplicite.VIS_BOTH | VIS_HIDDEN | VIS_FORM | VIS_LIST
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * // Metadata only: use f.ui.visible to update the screen
+     * f.setVisible($app.VIS_FORM);
      */
     setVisible(vis: boolean | number): void;
     /**
      * Set the field updatable
      * @param upd updatable ? true/false or Simplicite.UPD_READ_ONLY|ALWAYS|FORM_ONLY|LIST_ONLY
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * // Metadata only: use f.ui.updatable to update the screen
+     * f.setUpdatable(false);
      */
     setUpdatable(upd: boolean | number): void;
     /**
      * Test if the field is updatable
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const upd = f.isUpdatable();
      */
     isUpdatable(): boolean;
     /**
      * isUpdatable alias
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const upd = f.isUpdatableOnForm();
      */
     isUpdatableOnForm(): boolean;
     /**
      * isUpdatable alias
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const upd = f.isUpdatableOnList();
      */
     isUpdatableOnList(): boolean;
     /**
      * Is the field a timestamp (created_by, created_dt, updated_by or updated_dt)
+     * @example
+     * obj.getField("updated_dt")?.isTimestamp(); // true
      */
     isTimestamp(): boolean;
     /**
      * Is a document or image?
+     * @example
+     * const f = obj.getField("myObjDocument")!;
+     * const file = f.isFile();
      */
     isFile(): boolean;
     /**
      * Is a document?
+     * @example
+     * const f = obj.getField("myObjDocument")!;
+     * const doc = f.isDoc();
      */
     isDoc(): boolean;
     /**
      * Is an image?
+     * @example
+     * const f = obj.getField("myObjImage")!;
+     * const img = f.isImage();
      */
     isImage(): boolean;
     /**
      * Test if the field is required
      * @param obj optional object to test if foreign-key is also required
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * // With the object: a referenced field is required when its foreign key is
+     * const req = f.isRequired(obj);
      */
     isRequired(obj?: BusinessObject | null): boolean;
     /**
      * Is a functional Id?
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const key = f.isFunctId();
      */
     isFunctId(): boolean;
     /**
      * Is a foreign key? (reference field belonging to object)
+     * @example
+     * const f = obj.getField("myObjCustomerId")!;
+     * const fk = f.isForeignKey();
      */
     isForeignKey(): boolean;
     /**
      * Referenced/Belongs to other object?
+     * @example
+     * const f = obj.getField("myObjCustomerName")!;
+     * const ref = f.isReferenced();
      */
     isReferenced(): boolean;
     /**
      * Search the list code of a translated value
+     * @example
+     * const f = obj.getField("myObjStatus")!;
+     * const code = f.getCodeFromValue("Open");
      */
     getCodeFromValue(v: string): string | null;
     /**
      * Get the list item by code (or value)
      * @param c search by code
      * @param v or search by value if c is null
+     * @example
+     * const f = obj.getField("myObjStatus")!;
+     * // Item of the current value, of a code, of a label
+     * const item = f.getEnumItem();
+     * const color = f.getEnumItem("OPEN")?.bgcolor;
+     * const byLabel = f.getEnumItem(null, "Open");
      */
     getEnumItem(c?: string | null, v?: string | null): EnumItem | undefined;
     /**
      * Field label in user language
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const label = f.getDisplay();
      */
     getDisplay(): string;
     /**
      * Apply a function to all referenced fields
      * @param obj Object
      * @param fn function to apply to all referenced fields
+     * @example
+     * const f = obj.getField("myObjCustomerId")!;
+     * f.applyToReferences(obj, r => $console.log(r.name));
      */
     applyToReferences(obj: BusinessObject, fn: (f: ObjectField) => void): void;
     /**
      * Is the field filtered?
      * @param v optional value to test (default use current object filter)
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const filtered = f.isFiltered();
      */
     isFiltered(v?: string): boolean;
     /**
      * Is the filter an expression?
      * @param v optional value to test (default use current object filter)
      * @returns true if the filter is an expression
+     * @example
+     * const f = obj.getField("myObjCode")!;
+     * const expr = f.isFilterExpr();
      */
     isFilterExpr(v?: string): boolean;
     /**
      * Convert UI wildcard filter to service LIKE pattern
      * @param s UI filter
+     * @example
+     * Simplicite.Ajax.ObjectField.convertWildcardToService("ab*"); // "ab%"
      */
     static convertWildcardToService(s: string | null): string;
     /**
      * Convert service LIKE pattern to UI wildcard filter
      * @param s Service filter
+     * @example
+     * Simplicite.Ajax.ObjectField.convertWildcardToUI("ab%"); // "ab*"
      */
     static convertWildcardToUI(s: string | null): string;
 }
@@ -17293,22 +19473,10 @@ interface Area {
     uiTemplate?: string;
     /** Field names of the area */
     fields?: string[];
-    /** Front: area title <th> id (list with area titles) */
-    _areaId?: string;
     /** Compact rendering */
     compact?: boolean;
-    /** Position of the tabs */
-    tabsPosition?: string;
-    /** Show the tab labels */
-    tabsLabel?: boolean;
     /** UI area component */
     ui?: UIArea;
-    /** Area container */
-    div?: Container;
-    /** Tab index of the area */
-    _tab?: number;
-    /** Index of the area in its tabs */
-    _tabIndex?: number;
 }
 /** Link to a child object */
 interface Link {
@@ -18011,18 +20179,26 @@ declare class BusinessObject {
     constructor(app: Session, objName: string, objInstName?: string);
     /**
      * Gets Id from meta data.
+     * @example
+     * const id = obj.getId();
      */
     getId(): string | undefined;
     /**
      * Gets name from meta data.
+     * @example
+     * const name = obj.getName();
      */
     getName(): string;
     /**
      * Gets instance name from meta data.
+     * @example
+     * const inst = obj.getInstance(); // "the_ajax_MyObject"
      */
     getInstance(): string;
     /**
      * Gets instance name from meta data (alias to getInstance).
+     * @example
+     * const inst = obj.getInstanceName();
      */
     getInstanceName(): string;
     /**
@@ -18036,54 +20212,87 @@ declare class BusinessObject {
     isMainInstance(): boolean;
     /**
      * Is panel instance?
+     * @example
+     * // Instance named "panel_...": list of a parent form
+     * const panel = obj.isPanelInstance();
      */
     isPanelInstance(): boolean;
     /**
      * Is reference selection instance?
+     * @example
+     * // Instance named "ref_...": selection of a reference
+     * const ref = obj.isRefInstance();
      */
     isRefInstance(): boolean;
     /**
      * Is datamap selection instance?
+     * @example
+     * // Instance named "datamap_..."
+     * const dm = obj.isDataMapInstance();
      */
     isDataMapInstance(): boolean;
     /**
      * Is home instance?
+     * @example
+     * // Instance named "home_..."
+     * const home = obj.isHomeInstance();
      */
     isHomeInstance(): boolean;
     /**
      * Is ajax instance?
+     * @example
+     * // Instance name containing "ajax_"
+     * const ajax = obj.isAjaxInstance();
      */
     isAjaxInstance(): boolean;
     /**
      * Is temporary instance?
+     * @example
+     * // Instance named "tmp_..."
+     * const tmp = obj.isTmpInstance();
      */
     isTmpInstance(): boolean;
     /**
      * Is process instance?
+     * @example
+     * // Instance named "bpm_..."
+     * const pcs = obj.isProcessInstance();
      */
     isProcessInstance(): boolean;
     /**
      * Are metadata loaded ?
+     * @example
+     * if (!obj.isLoaded()) await obj.getMetaData();
      */
     isLoaded(): string | undefined;
     /**
      * Gets label from meta data (is undefined as long as meta data are not loaded using `getMetaData()`).
      * @param plural Get plural label if defined
+     * @example
+     * const label = obj.getLabel();
+     * const plural = obj.getLabel(true);
      */
     getLabel(plural?: boolean): string | undefined;
     /**
      * Gets context help from meta data (is undefined as long as meta data are not loaded using `getMetaData()`).
 
+     * @example
+     * const help = obj.getHelp();
      */
     getHelp(): string | undefined;
     /**
      * Gets fields array from meta data (is undefined as long as meta data are not loaded using `getMetaData()`).
+     * @example
+     * const updatable = obj.getFields().filter(f => f.isUpdatable()).map(f => f.name);
      */
     getFields(): ObjectField[];
     /**
      * Gets an Object Field
      * @param field Field name or metadata
      * @param data Optional contextual data { value, message }
+     * @example
+     * // The field with a value and a message
+     * const f = obj.getObjectField("myObjCode", { value: "ABC", message: "" });
      */
     getObjectField(field: string | ObjectField, data?: {
         value: string;
@@ -18091,21 +20300,29 @@ declare class BusinessObject {
     }): ObjectField | undefined;
     /**
      * Gets links array from meta data (is undefined as long as meta data are not loaded using `getMetaData()`).
+     * @example
+     * const links = obj.getLinks();
      */
     getLinks(): Link[];
     /**
      * Gets a link definition.
      * @param object Referenced object or name
      * @param field Foreign key field or name
+     * @example
+     * const link = obj.getLink("MyChild", "myChildParentId");
      */
     getLink(object: string | KeyObject, field: string | ObjectField): Link | undefined;
     /**
      * Gets views array from meta data (is undefined as long as meta data are not loaded using `getMetaData()`).
+     * @example
+     * const views = obj.getViews();
      */
     getViews(): View[];
     /**
      * Gets a view definition.
      * @param name View name
+     * @example
+     * const view = obj.getView("MyObjView");
      */
     getView(name: string): View | undefined;
     /**
@@ -18121,6 +20338,8 @@ declare class BusinessObject {
     /**
      * Gets the field index in object
      * @param name Field name or Field
+     * @example
+     * const i = obj.getFieldIndex("myObjCode");
      */
     getFieldIndex(name: string | ObjectField): number | undefined;
     /**
@@ -18144,28 +20363,45 @@ declare class BusinessObject {
     setFieldValue(name: string | ObjectField, val: FieldValue, id?: string): void;
     /**
      * Get old field value shorthand
+     * @example
+     * const old = obj.getFieldOldValue("myObjCode");
+     * // Of a row of the current list
+     * const rowOld = obj.getFieldOldValue("myObjCode", rowId);
      */
     getFieldOldValue(name: string | ObjectField, id?: string): FieldValue | null;
     /**
      * Set old field value shorthand
+     * @example
+     * obj.setFieldOldValue("myObjCode", "ABC");
      */
     setFieldOldValue(name: string | ObjectField, val: FieldValue, id?: string): FieldValue;
     /**
      * Get the root field of reference, null when field belongs to object
      * @param field Field or name
+     * @example
+     * // Foreign key of a referenced field
+     * const fk = obj.getRootField("myObjCustomerName");
      */
     getRootField(field: string | ObjectField): ObjectField | undefined;
     /**
      * Get user-key fields
+     * @example
+     * const keys = obj.getUserKeyFields().map(f => f.name);
      */
     getUserKeyFields(): ObjectField[];
     /**
      * Get foreign-key fields
+     * @example
+     * const fks = obj.getForeignKeys().map(f => f.refObject);
      */
     getForeignKeys(): ObjectField[];
     /**
      * Get URL of first image field
      * @param item optional item (use field values if unset)
+     * @example
+     * // Of the current record, or of a row
+     * const url = obj.getImageURL();
+     * const urlOfRow = obj.getImageURL(item);
      */
     getImageURL(item?: KeyObject): string | undefined;
     /**
@@ -18173,102 +20409,155 @@ declare class BusinessObject {
      * @param item values per field name, default: current item
      * @param old true to copy values into old values ?
      * @param id optional list index/rowId
+     * @example
+     * obj.setValues({ myObjCode: "ABC", myObjName: "My name" });
+     * // Also as old values: not seen as changed
+     * obj.setValues(item, true);
      */
     setValues(item: RowItem, old?: boolean, id?: string): void;
     /**
      * Gets the current item
      * @param id Optional index/rowId to get data+meta in current list
+     * @example
+     * const current = obj.getItem();
+     * const row = obj.getItem(rowId);
      */
     getItem(id?: string): RowItem | undefined;
     /**
      * Gets the current item index
      * @param id index/rowId to look in current list
+     * @example
+     * const i = obj.getItemIndex(rowId);
      */
     getItemIndex(id: string): number;
     /**
      * Add item to list
      * @param item list item
      * @param index optional creation index 00 01...
+     * @example
+     * obj.addItem({ myObjCode: "ABC" }, "00");
      */
     addItem(item: RowData, index?: string): void;
     /**
      * Remove item from list
      * @param id index/rowId in current list
+     * @example
+     * obj.removeItem(rowId);
      */
     removeItem(id: string): boolean | undefined;
     /**
      * reset values (item into fields)
      * @param old true to reset old values
+     * @example
+     * obj.resetValues();
+     * // Also the old values
+     * obj.resetValues(true);
      */
     resetValues(old?: boolean): void;
     /**
      * Get values (fields into item)
+     * @example
+     * const values = obj.getValues();
+     * $console.log(values.myObjCode);
      */
     getValues(): RowData;
     /**
      * Get old values
+     * @example
+     * const old = obj.getOldValues();
      */
     getOldValues(): RowData;
     /**
      * Gets row Id field name from meta data (is undefined as long as meta data are not loaded using `getMetaData()`).
+     * @example
+     * const n = obj.getRowIdFieldName(); // "row_id"
      */
     getRowIdFieldName(): string;
     /**
      * Gets row Id field from meta data (returns undefined if row Id field name is undefined).
+     * @example
+     * const f = obj.getRowIdField();
      */
     getRowIdField(): ObjectField | undefined;
     /**
      * Gets value from list for specified code (returns undefined if code is not in list).
      * @param list List metadata (typically from a field metadata)
      * @param code Code
+     * @example
+     * const f = obj.getField("myObjStatus");
+     * const label = f?.listOfValues && obj.getListValue(f.listOfValues, "OPEN");
      */
     getListValue(list: EnumItem[], code: string): string | undefined;
     /**
      * Store parent object in panel instance `{ name, inst, field, rowId, object`}
+     * @example
+     * obj.setParent({ name: "MyParent", inst: "the_ajax_MyParent", field: "myObjParentId", rowId } as ParentObject);
      */
     setParent(parent: ParentObject): void;
     /**
      * Get parent object
+     * @example
+     * const parent = obj.getParent();
      */
     getParent(): ParentObject | undefined;
     /**
      * Get parent business object of panel instance
+     * @example
+     * const parent = obj.getParentObject();
      */
     getParentObject(): BusinessObject | null | undefined;
     /**
      * Get foreign key of panel instance
+     * @example
+     * const fk = obj.getParentObjectRefField();
      */
     getParentObjectRefField(): string | null;
     /**
      * Is new record?
+     * @example
+     * if (obj.isNew()) obj.setFieldValue("myObjStatus", "DRAFT");
      */
     isNew(): boolean;
     /**
      * Is copied record?
+     * @example
+     * if (obj.isCopied()) obj.setFieldValue("myObjCode", "");
      */
     isCopied(): string | false | undefined;
     /**
      * Get display label
+     * @example
+     * const label = obj.getDisplay();
      */
     getDisplay(): string | undefined;
     /**
      * Is child of?
+     * @example
+     * const child = obj.isChildOf("MyParent", "myObjParentId");
      */
     isChildOf(parent: string, ref?: string): boolean | undefined;
     /**
      * Is panel of?
+     * @example
+     * const panel = obj.isPanelOf("MyParent");
      */
     isPanelOf(parent: string, ref?: string): boolean | undefined;
     /**
      * Is referenced from?
+     * @example
+     * const ref = obj.isReferencedFrom("MyParent", "myParentObjId");
      */
     isReferencedFrom(parent: string, ref?: string): boolean | undefined;
     /**
      * Is data-mapped from?
+     * @example
+     * const dm = obj.isDataMappedFrom("MyParent");
      */
     isDataMappedFrom(parent: string): boolean | undefined;
     /**
      * Get status field
+     * @example
+     * const status = obj.getStatusField()?.value();
      */
     getStatusField(): ObjectField | undefined;
     /**
@@ -18283,26 +20572,37 @@ declare class BusinessObject {
     /**
      * Get transition definition
      * @param name Transition name
+     * @example
+     * const tr = obj.getTransition("MyObjStatus-DRAFT-SENT");
      */
     getTransition(name: string): Transition | undefined;
     /**
      * Get area definition
      * @param n Area position
+     * @example
+     * const area = obj.getArea(1);
      */
     getArea(n: number): Area | undefined;
     /**
      * Remove area in metadata if position exists
      * @param n Area position
+     * @example
+     * obj.removeArea(2);
      */
     removeArea(n: number): void;
     /**
      * Get field area definition
      * @param n Area name or position
+     * @example
+     * const byName = obj.getFieldArea("MyObject-1");
+     * const byNumber = obj.getFieldArea(1);
      */
     getFieldArea(n: number | string): Area | undefined;
     /**
      * Get crosstab definition
      * @param name Crosstab name
+     * @example
+     * const ct = obj.getCrosstab("MyCrosstab");
      */
     getCrosstab(name: string): CrosstabMetadata | undefined;
     /**
@@ -18313,6 +20613,9 @@ declare class BusinessObject {
      * Set crosstab definition
      * @param name Crosstab name
      * @param meta Crosstab metadata
+     * @example
+     * const ct = obj.getCrosstab("MyCrosstab");
+     * if (ct) obj.setCrosstab("MyCrosstab", ct);
      */
     setCrosstab(name: string, meta: CrosstabMetadata): void;
     /**
@@ -18322,45 +20625,68 @@ declare class BusinessObject {
     /**
      * Get placemap definition
      * @param name Placemap name
+     * @example
+     * const pm = obj.getPlacemap("MyPlacemap");
      */
     getPlacemap(name: string): Placemap | undefined;
     /**
      * Get agenda definition
      * @param name Agenda name
+     * @example
+     * const agenda = obj.getAgenda("MyAgenda");
      */
     getAgenda(name: string): Agenda | undefined;
     /**
      * Get print definition
      * @param name Print template name
+     * @example
+     * const prt = obj.getPrintTemplate("MyPrint");
      */
     getPrintTemplate(name: string): PrintTemplate | undefined;
     /**
      * Gets list of values field value from code (returns code if not found or not a list of value field)
      * @param field Field
      * @param code Field code
+     * @example
+     * const f = obj.getField("myObjStatus");
+     * const label = f && obj.getValueForCode(f, "OPEN");
      */
     getValueForCode(field: ObjectField, code: string): string;
     /**
      * Gets current item row Id value (returns undefined if not current item is loaded).
+     * @example
+     * const id = obj.getRowId();
      */
     getRowId(): string;
     /**
      * Sets current item row Id value.
+     * @example
+     * obj.setRowId(rowId);
      */
     setRowId(rowId: string): void;
     /**
      * Checks whether a field is the row ID field.
      * @param f Field meta data
+     * @example
+     * const f = obj.getField("row_id");
+     * const isId = f && obj.isRowIdField(f);
      */
     isRowIdField(f: ObjectField): boolean;
     /**
      * Checks whether a field is a timestamp field.
      * @param f Field meta data
+     * @example
+     * const f = obj.getField("updated_dt");
+     * const isTs = f && obj.isTimestampField(f);
      */
     isTimestampField(f: ObjectField): boolean;
     /**
      * Is object filtered ?
      * @param exclude Optional filters to ignore `{ fieldname: value`}
+     * @example
+     * const filtered = obj.isFiltered();
+     * // Ignoring the foreign key of the parent
+     * const byUser = obj.isFiltered({ myObjParentId: rowId });
      */
     isFiltered(exclude?: KeyObject): boolean;
     /**
@@ -18373,14 +20699,20 @@ declare class BusinessObject {
     resetFilters(): void;
     /**
      * Is object ordered ?
+     * @example
+     * const ordered = obj.isOrdered();
      */
     isOrdered(): boolean;
     /**
      * Reset orders (not filters)
+     * @example
+     * obj.resetOrders();
      */
     resetOrders(): void;
     /**
      * Reset group by fields
+     * @example
+     * obj.resetGroupByFields();
      */
     resetGroupByFields(): void;
     /**
@@ -18402,6 +20734,8 @@ declare class BusinessObject {
     /**
      * Get crosstab cubes (data)
      * @param name Crosstab name
+     * @example
+     * const cubes = await obj.getCrosstabCubes("MyCrosstab");
      */
     getCrosstabCubes(name: string): Promise<any>;
     /**
@@ -18416,6 +20750,8 @@ declare class BusinessObject {
      * @param lov Current linked list name
      * @param params Options
      * @param params.all Get all linked values when value is empty
+     * @example
+     * const list = await obj.getLinkedList("myObjCountry", "FR", "myObjCity", "");
      */
     getLinkedList(field: string, value: string, target: string, lov: string, params?: {
         all?: boolean;
@@ -18424,6 +20760,8 @@ declare class BusinessObject {
      * Set a new list to field
      * @param field Enum field name
      * @param list List name to load
+     * @example
+     * await obj.setList("myObjCity", "MY_CITIES_FR");
      */
     setList(field: string | ObjectField, list: string): Promise<KeyObject>;
     /**
@@ -18431,18 +20769,26 @@ declare class BusinessObject {
      * @param field Field name or field object
      * @param value Value (defaults to the field's current value)
      * @returns CSS class(es), empty string when none applies
+     * @example
+     * const css = await obj.getStyle("myObjAmount", "1200");
      */
     getStyle(field: string | ObjectField, value?: string): Promise<string>;
     /**
      * Select row(s)
      * @param sel selected = `all`, `page`, `none` or specific row IDs (single or array or semicolon-separated)
      * @param params `{ replace: boolean`}
+     * @example
+     * const all = await obj.selectRow("all");
+     * const ids = await obj.selectRow([rowId], { replace: true });
      */
     selectRow(sel: ListSelection, params?: {
         replace?: boolean;
     }): Promise<string[]>;
     /**
      * Invoke method (unsupported on client side)
+     * @example
+     * // Always false on client side
+     * obj.invokeMethod();
      */
     invokeMethod(): boolean;
     /**
@@ -18504,6 +20850,8 @@ declare class BusinessObject {
      * Loads item for designated row ID for delete (equivalent to a get done with the delete init context `Simplicite.Ajax.CONTEXT_DELETE`).
      * @param rowId Row ID, mandatory
      * @param params Optional parameters (same as for get function)
+     * @example
+     * obj.getForDelete(rowId, {}).then(item => $console.log(item));
      */
     getForDelete(rowId: string, params: GetParam): Promise<KeyObject>;
     /**
@@ -18514,6 +20862,9 @@ declare class BusinessObject {
      * Populate item (e.g. after getForCreate and after having set foreign keys)
      * @param item Item to be populated, optional (if absent current item is used)
      * @param params Optional parameters
+     * @example
+     * // After setting a foreign key on a new record
+     * const row = await obj.populate({ myObjCustomerId: customerId });
      */
     populate(item?: KeyObject, params?: GetParam): Promise<KeyObject>;
     /**
@@ -18527,6 +20878,8 @@ declare class BusinessObject {
      * @param params.targetId target row Id (move service)
      * @param params.before true to insert before the target (move service)
      * @returns Promise
+     * @example
+     * obj.reorder("myObjOrder", "move", { ids: [rowId], targetId: "12", before: true });
      */
     reorder(field: string, service: string, params?: {
         type?: string;
@@ -18540,6 +20893,8 @@ declare class BusinessObject {
      * @param params Optional parameters
      * @param params.context Init context (normally `Simplicite.Ajax.CONTEXT_SEARCH` constant), optional
      * @param params.reset Reset filters, optional
+     * @example
+     * const filters = await obj.getFilters({ reset: true });
      */
     getFilters(params?: {
         context?: number;
@@ -18548,6 +20903,8 @@ declare class BusinessObject {
     /**
      * Loads current filters for search (equivalent to a getFilters done with the search init context `Simplicite.Ajax.CONTEXT_SEARCH`).
      * @param params Optional parameters
+     * @example
+     * obj.getFiltersForSearch().then(filters => $console.log(filters));
      */
     getFiltersForSearch(params?: {
         context?: number;
@@ -18559,6 +20916,8 @@ declare class BusinessObject {
      * `fromDate` (optional date min YYYY-MM-DD applied on the object period or the first date field, excluding timestamp),
      * `toDate` (optional date max YYYY-MM-DD applied on the object period or the first date field, excluding timestamp),
      * or any field name to filter (may not exist in object).
+     * @example
+     * obj.applyFilters({ myObjStatus: "OPEN", fromDate: "2026-01-01", toDate: "2026-12-31" });
      */
     applyFilters(filters: KeyObject): void;
     /** Search overload to list data and metadata */
@@ -18590,22 +20949,30 @@ declare class BusinessObject {
      * Search and loads search result items for list (equivalent to a search done with the list init context `Simplicite.Ajax.CONTEXT_LIST`)
      * @param filters Filters to be applied, optional (if absent, current filters are used)
      * @param params Optional parameters
+     * @example
+     * obj.searchForList({ myObjStatus: "OPEN" }).then(rows => $console.log(rows));
      */
     searchForList(filters?: KeyObject, params?: SearchAjax): Promise<KeyObject[]>;
     /**
      * Search and loads search result items for panel list (equivalent to a search done with the list init context `Simplicite.Ajax.CONTEXT_PANELLIST`)
      * @param filters Filters to be applied, optional (if absent, current filters are used)
      * @param params Optional parameters
+     * @example
+     * obj.searchForPanelList({ myObjParentId: rowId }).then(rows => $console.log(rows));
      */
     searchForPanelList(filters?: KeyObject, params?: SearchAjax): Promise<KeyObject[]>;
     /**
      * Gets item in the current list
      * @param i index
+     * @example
+     * const first = obj.getListItem(0);
      */
     getListItem(i: number): KeyObject | undefined;
     /**
      * Gets the position in current list, -1 if not found
      * @param rowId row Id to find
+     * @example
+     * const pos = obj.getListPos(rowId);
      */
     getListPos(rowId: string): number;
     /**
@@ -18637,6 +21004,8 @@ declare class BusinessObject {
      * @param params.context optional context
      * @param params.parent optional parent `\{ name, inst, field, rowId \`} to search references
      * @param params.filters optional linkmap filters to limit search
+     * @example
+     * const results = await obj.indexsearch("my text");
      */
     indexsearch(request?: string, params?: {
         context?: number;
@@ -18715,6 +21084,8 @@ declare class BusinessObject {
      * @param params Optional parameters
      * @param params.transition optional transition name
      * @param params.progress Optional progress callback
+     * @example
+     * obj.updateAll({ myObjStatus: "CLOSED" }).then(r => $console.log(r));
      */
     updateAll(item: KeyObject, params?: {
         transition?: string;
@@ -18722,21 +21093,30 @@ declare class BusinessObject {
     }): Promise<KeyObject>;
     /**
      * Deletes all selected items
+     * @example
+     * obj.deleteAll().then(r => $console.log(r));
      */
     deleteAll(): Promise<KeyObject>;
     /**
      * Service to merge items
      * @param data merge data
+     * @example
+     * // Usually called by the merge dialog: here to check only if the merge is enabled
+     * obj.merge({ check: true } as MergeSaveParam).then(r => $console.log(r));
      */
     merge(data: MergeSaveParam): Promise<KeyObject>;
     /**
      * Timesheet service
      * @param data timesheet data `{ action, name, resId, start, end`}
+     * @example
+     * obj.timesheet({ name: "MyTimesheet", resId: rowId, start: "2026-01-01", end: "2026-01-31" }).then(r => $console.log(r));
      */
     timesheet(data: TimesheetData): Promise<KeyObject>;
     /**
      * Preferences service
      * @param prefs optional preferences to save `{ list, search, actions`}
+     * @example
+     * const prefs = await obj.preferences();
      */
     preferences(prefs?: {
         list?: object;
@@ -18745,6 +21125,8 @@ declare class BusinessObject {
     }): Promise<KeyObject>;
     /**
      * Gets the long help
+     * @example
+     * obj.help().then(r => $console.log(r));
      */
     help(): Promise<KeyObject>;
     /**
@@ -18759,6 +21141,8 @@ declare class BusinessObject {
      * @param params.zgraph optional graph (or multiple zgraph_name)
      * @param params.zwidth optional graph width
      * @param params.zheight optional graph height
+     * @example
+     * const data = await obj.crosstab("MyCrosstab", { myObjStatus: "OPEN" });
      */
     crosstab(ctb: string, filters?: KeyObject, params?: CrosstabParam): Promise<CrosstabData>;
     /**
@@ -18790,6 +21174,8 @@ declare class BusinessObject {
      * @param params Optional parameters
      * @param params.all Apply template to all items matching current filters (false by default, which means apply template only to current item) ?
      * @param params.mailing Apply template individually to all items matching current filter (false by default) ?
+     * @example
+     * obj.print("MyPrint", { all: true });
      */
     print(prt: string, params?: {
         all?: boolean;
@@ -18799,22 +21185,30 @@ declare class BusinessObject {
      * Calls an object place map and loads places data
      * @param pcm Place map name
      * @param filters Optional filters to apply (if absent, current filters are used)
+     * @example
+     * obj.placemap("MyPlacemap", { myObjStatus: "OPEN" }).then(pm => $console.log(pm));
      */
     placemap(pcm: string, filters?: KeyObject): Promise<Placemap>;
     /**
      * Sets (or remove) an object parameter and loads it back
      * @param name Parameter name
      * @param value Parameter value (unset if null)
+     * @example
+     * await obj.setParameter("MY_PARAM", "value");
      */
     setParameter(name: string, value?: string | null): Promise<any>;
     /**
      * Remove an object parameter
      * @param name Parameter name
+     * @example
+     * await obj.removeParameter("MY_PARAM");
      */
     removeParameter(name: string): Promise<any>;
     /**
      * Loads an object parameter
      * @param name Parameter name
+     * @example
+     * const v = await obj.getParameter("MY_PARAM");
      */
     getParameter(name: string): Promise<any>;
     /**
@@ -18822,34 +21216,51 @@ declare class BusinessObject {
      * @param name Parameter key name
      * @param value Optional value (to get or set, null to delete)
      * @returns local value
+     * @example
+     * obj.localParameter("myKey", 12);
+     * const v = obj.localParameter("myKey");
+     * // null to delete it
+     * obj.localParameter("myKey", null);
      */
     localParameter(name: string, value?: unknown | null): any;
     /**
      * Remove a local parameter in object instance
      * @param name Parameter key name
      * @returns local value
+     * @example
+     * const v = obj.removeLocalParameter("myKey");
      */
     removeLocalParameter(name: string): any;
     /**
      * Initialize the local parameters `this.locals.hasChanged` and `this.locals.hasChangedFields`
+     * @example
+     * obj.initChangedFields();
      */
     initChangedFields(): void;
     /**
      * Add a field when has changed
      * @param f field or name
      * @param id optional id (edit list)
+     * @example
+     * obj.addChangedField("myObjCode");
+     * // In an edit list
+     * obj.addChangedField("myObjCode", rowId);
      */
     addChangedField(f: string | ObjectField, id?: string): void;
     /**
      * Remove a field when has not changed
      * @param f field or name
      * @param id optional id (edit list)
+     * @example
+     * obj.removeChangedField("myObjCode");
      */
     removeChangedField(f: string | ObjectField, id?: string): void;
     /**
      * Trigger the has changed flag
      * @param v optional to set the hasChanged value (true when the array of `this.locals.hasChangedFields` is not empty)
      * @returns the local parameter `this.locals.hasChanged`
+     * @example
+     * if (obj.hasChanged()) $console.log(obj.localParameter("hasChangedFields"));
      */
     hasChanged(v?: boolean | string[]): any;
     /**
@@ -18860,6 +21271,8 @@ declare class BusinessObject {
      * @param params.max Optional max size, default 15
      * @param params.context Optional context `CONTEXT_SEARCH` or `CONTEXT_UPDATE`
      * @param params.values Optional current fields values
+     * @example
+     * const rows = await obj.completion("myObjCode", "AB", { max: 10 });
      */
     completion(field: string, req: string, params?: {
         max?: number;
@@ -18870,6 +21283,8 @@ declare class BusinessObject {
      * Predefined search service (of user's private searches, public searches are protected)
      * @param method `"create" | "update" | "delete" | "select"`
      * @param ps Predefined search to save `{ id, name, filters`}
+     * @example
+     * const saved = await obj.predefSearch("create", { name: "Open", filters: { myObjStatus: "OPEN" } });
      */
     predefSearch(method: string, ps: PredefSearch): Promise<PredefSearch>;
     /**
@@ -18882,6 +21297,8 @@ declare class BusinessObject {
      * @param parentId parent object Id
      * @param ids selected Ids to associate to parent
      * @param item optional item for N,N data
+     * @example
+     * await obj.associate({ parent: "MyParent", parentRefField: "myObjParentId" }, rowId, ["12", "13"]);
      */
     associate(def: {
         parent: string;
@@ -18891,1366 +21308,1045 @@ declare class BusinessObject {
     }, parentId: string, ids: string[], item?: KeyObject): Promise<KeyObject>;
 }
 
-/** Parameters of the fulltext index search */
-type IndexParam = NavParam & {
-    /** Optional title */
-    title?: string;
-    /** Optional object name */
-    object?: string;
-    /** Optional domain */
-    domain?: string;
-};
-/** Parameters of a place map display */
-type MapParam = NavParam & {
-    /** Optional display mode */
-    mode?: string;
-    /** Optional object name */
-    obj?: string;
-    /** Optional instance name */
-    inst?: string;
-    /** Optional placemap */
-    placemap?: string;
-    /** Optional coordinates */
-    coords?: string;
-    /** Optional move handler */
-    onMove?: (lat: string, lng: string) => void;
-};
-/**
- * UI rendering, part of the UI engine `$ui` (see UIEngine): views: home page, views and dashboards, index search, crosstabs, tree views, calendars, timesheets, metrics, maps, trays, workflows, site map
- */
-declare class UIRenderView {
-    /**
-     * Home page
-     * @param ctn Container
-     * @param options Options <code>\{ nav, showNav \}</code>
-     * @param cbk Optional callback
-     * @example
-     * $ui.displayHome();
-     * // with the navigation bar
-     * $ui.displayHome(null, { nav: "new", showNav: true });
-     */
-    displayHome(ctn?: AnyContainer, options?: NavParam | null, cbk?: Callback): void;
-    /**
-     * Display a view
-     * @param ctn Container
-     * @param view View definition or name
-     * @param options View options
-     * @param cbk Optional callback
-     * @example
-     * // Display the view MyView in the work area
-     * $ui.displayView(null, "MyView", {
-     * 	onload: (ctn: Container, view?: View) => $console.log("loaded", view?.name)
-     * });
-     */
-    displayView(ctn: AnyContainer, view: View | string, options?: ViewParam, cbk?: (ctn?: Container, view?: View) => void): void;
-    /**
-     * Display the user dashboard
-     * @param ctn Container
-     * @param view Optional dashboard name / null = overview
-     * @param options View options
-     * @param options.beforeload Optional before load callback
-     * @param options.onload Optional onload callback
-     * @param options.onunload Optional unload callback
-     * @param cbk Optional callback
-     * @example
-     * // Dashboard overview
-     * $ui.displayDashboard(null);
-     * // A named dashboard
-     * $ui.displayDashboard(null, "MyDashboard", { onload: () => $console.log("loaded") });
-     */
-    displayDashboard(ctn: AnyContainer, view?: string | null, options?: {
-        beforeload?: Callback;
-        onload?: (ctn: Container, view?: View) => void;
-        onunload?: (ctn: Container, view?: View) => void;
-    }, cbk?: (ctn?: Container, view?: View) => void): void;
-    /**
-     * Crosstab
-     * @param ctn Container
-     * @param object Name or Object
-     * @param name Crosstab name
-     * @param options Options <code>\{ inst, filters, options, nav, showNav \}</code>
-     * @param cbk Optional callback
-     * @example
-     * // Crosstab "MyObjCrosstab" filtered on the year
-     * $ui.displayCrosstab(null, "MyObject", "MyObjCrosstab", {
-     * 	nav: "add",
-     * 	filters: { myObjYear: "2026" }
-     * });
-     */
-    displayCrosstab(ctn: AnyContainer, object: string | BusinessObject, name: string, options?: CrosstabNavParam, cbk?: Callback): void;
-    /**
-     * Index search form
-     * @param ctn Container
-     * @param options Options
-     * @param cbk Optional callback
-     * @example
-     * $ui.displayIndex(null, { title: "Search", nav: "add" });
-     */
-    displayIndex(ctn?: AnyContainer, options?: IndexParam | null, cbk?: Callback): void;
-    /**
-     * Session index
-     * @param ctn Container for result
-     * @example
-     * $ui.displayIndexSearchSession($("#result"));
-     */
-    displayIndexSearchSession(ctn: AnyContainer): void;
-    /**
-     * Index search in domain
-     * @param ctn Container for result
-     * @param domain Domain name
-     * @param filter Optional filter
-     * @param all False to limit search to objects updated by the user
-     * @param options Options <code>\{ object, nav, showNav \}</code>
-     * @example
-     * // Records of the domain updated by the user
-     * $ui.displayIndexSearchDomain($("#result"), "MyDomain", "", false);
-     */
-    displayIndexSearchDomain(ctn: Container, domain: string, filter?: string, all?: boolean, options?: IndexParam): void;
-    /**
-     * Index search in documents
-     * @param ctn Container for result
-     * @param req User request
-     * @param list Array of objects with documents
-     * @param options Options <code>\{ object, nav, showNav \}</code>
-     * @example
-     * $ui.displayIndexSearchDocs($("#result"), "contract", ["MyContract", "MyInvoice"]);
-     */
-    displayIndexSearchDocs(ctn: Container, req: string, list: string[], options?: IndexParam): void;
-    /**
-     * Index search result
-     * @param ctn Container
-     * @param req User request (see Simplicite.Ajax.indexsearch service)
-     * @param options Options <code>\{ object, nav, showNav \}</code>
-     * @param cbk Optional callback
-     * @example
-     * // Full-text search limited to an object
-     * $ui.displayIndexSearch(null, "dupont", { object: "MyCustomer", nav: "add" });
-     */
-    displayIndexSearch(ctn: AnyContainer, req: string, options?: IndexParam, cbk?: Callback): void;
-    /**
-     * Display a tree view
-     * @param ctn Optional container
-     * @param object Root object
-     * @param rowId Row ID of the record
-     * @param name Treeview name
-     * @param options Optional parameters <code>\{ inst, depth, display, menu, docked, onOpen, addMenu, delMenu, onPage \}</code>
-     * @param options.inst optional instance name (default <code>tree_ajax_[tvname]_[object]</code>)
-     * @param options.depth Max deep search (default <code>2</code>)
-     * @param options.menu Add the tree in main menu (default open in container)
-     * @param options.docked Open tree in left dock (default open in container)
-     * @param options.display Optional to override default menu.treeview renderer
-     * @param options.onOpen Optional open node handler <code>function(n,cbk)</code>
-     * @param options.addMenu Optional add to menu handler
-     * @param options.delMenu Optional remove from menu handler
-     * @param options.onPage Optional add page handler
-     * @param cbk Optional callback
-     * @example
-     * // Tree view of a record docked on the left
-     * $ui.displayTreeView(null, "MyObject", rowId, "MyObjTree", { depth: 3, docked: true });
-     */
-    displayTreeView(ctn: AnyContainer, object: string | BusinessObject, rowId: string, name: string, options?: TreeParam, cbk?: Callback): void;
-    /**
-     * Timesheet of object
-     * @param ctn Container
-     * @param object Resource object 1 or 2, or panel instance of assign object
-     * @param rowId Optional resource row ID
-     * @param tsName Timesheet name
-     * @param options Options
-     * @param cbk Optional callback
-     * @example
-     * $ui.displayTimesheet(null, "MyResource", rowId, "MyTimesheet", {
-     * 	nav: "add",
-     * 	onload: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => $console.log("loaded", ts)
-     * });
-     */
-    displayTimesheet(ctn: AnyContainer, object: string | BusinessObject, rowId: string, tsName: string, options?: TimesheetOptions, cbk?: Callback): void;
-    /**
-     * Gantt diagram based on timesheet data
-     * @param ctn Container
-     * @param object Assignment object
-     * @param tsName Timesheet name
-     * @param params Options
-     * @param cbk Optional callback
-     * @example
-     * // Gantt of the assignments over a period
-     * $ui.displayGantt(null, "MyAssignment", "MyTimesheet", { start: "2026-01-01", end: "2026-03-31" });
-     */
-    displayGantt(ctn: AnyContainer, object: string | BusinessObject, tsName: string, params?: TimesheetGanttParam, cbk?: Callback): void;
-    /**
-     * Calendar rendering
-     * @param ctn Container
-     * @param object Name or Business object
-     * @param agenda Agenda name
-     * @param params Options
-     * @param cbk Optional callback
-     * @example
-     * $ui.displayCalendar(null, "MyMeeting", "MyMeetingAgenda", { nav: "add" });
-     */
-    displayCalendar(ctn: AnyContainer, object: string | BusinessObject, agenda: string, params?: KeyObject | null, cbk?: (obj: UIBusinessObject, agd: Agenda, p: KeyObject) => void): void;
-    /**
-     * Status metrics
-     * @param c Container
-     * @param object Name or Business object
-     * @param params Options, with optional keys:
-     * `fromDate` (from date search YYYY-MM-DD, default 1 week ago or obj.locals.ui.metrics.fromDate),
-     * `toDate` (to date search YYYY-MM-DD, default today or obj.locals.ui.metrics.toDate),
-     * `period` (group by period: 1=hour, 2=day, 3=week, 4=month, 5=quarter, 6=semester, 7=year / default 2=day or obj.locals.ui.metrics.period),
-     * `palette` (palette name, default sysparam CHART_PALETTE or obj.locals.ui.metrics.palette),
-     * `show` (options to show/hide elements, all visible by default: `count`, `duration`, `history`, `terminal`, `palette`, `statusColors` as booleans, and `period`/`fromDate`/`toDate` as true|false or 'read')
-     * @param cbk Optional callback
-     * @example
-     * // Duration per status by week, without the palette selector
-     * $ui.displayStatusMetrics(null, "MyObject", {
-     * 	fromDate: "2026-01-01",
-     * 	period: 3,
-     * 	show: { palette: false }
-     * });
-     */
-    displayStatusMetrics(c: AnyContainer, object: string | BusinessObject, params?: StatusMetricsDisplayParam, cbk?: Callback): void;
-    /**
-     * Trays based on a state model
-     * @param ctn Container
-     * @param obj Name or Business object
-     * @param field Optional enum name (default is the status field)
-     * @param options Optional parameters
-     * @param cbk Optional callback
-     * @example
-     * // Trays on the status field
-     * $ui.displayTray(null, "MyObject");
-     * // Trays on another enumeration
-     * $ui.displayTray(null, "MyObject", "myObjPriority");
-     */
-    displayTray(ctn: AnyContainer, obj: string | BusinessObject, field?: string, options?: KeyObject, cbk?: Callback): void;
-    /**
-     * Map service.
-     * Loads object data to pass to the map renderer.
-     * Can be a single object or multi-object
-     * @param ctn Container to append the map to
-     * @param params Options
-     * @example
-     * // Records of a place map
-     * $ui.displayMap(null, { mode: "placemap", obj: "MyStore", placemap: "MyStoreMap", nav: "add" });
-     * // One point
-     * $ui.displayMap($("#map", ctn), { mode: "point", coords: "48.8566;2.3522" });
-     */
-    displayMap(ctn: AnyContainer, params: MapParam): void;
-    /**
-     * Workflow wrapper
-     * @param ctn Container
-     * @param wkf Business process or name
-     * @param action Action <code>start|abort|lock|unlock|validate|cancel|back|list</code>
-     * @param options Optional activity <code>\{ step \}</code>
-     * @param cbk Optional callback
-     * @example
-     * // Start a process
-     * $ui.displayWorkflow(null, "MyProcess", "start");
-     * // Resume an activity
-     * $ui.displayWorkflow(null, "MyProcess", "list", { step: "MyProcess-ACT1" });
-     */
-    displayWorkflow(ctn: AnyContainer, wkf: string | BusinessProcess | null, action?: ProcessActionType, options?: ProcessParam, cbk?: Callback): void;
-    /**
-     * Display the site map (plan du site) in the work area.
-     * @example
-     * $ui.displaySitemap();
-     */
-    displaySitemap(ctn?: AnyContainer): UIEngine;
+/** User of a record (concurrent usage) */
+interface UsageUser {
+    /** User row ID */
+    userId?: string;
+    /** User login */
+    login?: string;
+    /** First name */
+    firstname?: string;
+    /** Last name */
+    lastname?: string;
+    /** Avatar image URL */
+    image?: string;
+    /** Avatar image document */
+    picture?: DocumentDB;
+    /** Usage ID */
+    usageId?: string;
 }
-
-/** Fulltext index metadata */
-interface IndexMetadata {
-    /** Objects with indexed documents */
-    withDocs: ObjectMetadata[];
+/** Application scope (multi-apps) */
+interface Scope {
+    /** Scope name */
+    scope: string;
+    /** Icon name */
+    icon: string;
+    /** Logo URL */
+    logo: string;
+    /** Translated label */
+    label: string;
+    /** Home URL */
+    url: string;
+    /** Unique | multiple | switchable */
+    workarea: "1" | "M" | "S";
 }
 /**
- * Index search rendering
+ * Action visibility:
+ * - `L`: list
+ * - `F`: row item + form
+ * - `A`: list + row item + form
+ * - `O`: form only
+ * - `I`: row item only
+ * - `B`: list + form only
+ * - `H`: hidden
  */
-declare class IndexSearch {
-    /** current tab */
-    private tab;
-    /** user request */
-    private req;
-    /** selected domain */
-    private domain;
-    private domainFilter?;
-    /** selected objects with docs */
-    private docs;
-    /** index search result */
-    readonly searchResult: JQuery<HTMLElement>;
-    /** domain search result */
-    readonly domResult: JQuery<HTMLElement>;
-    /** doc search result */
-    readonly docResult: JQuery<HTMLElement>;
-    /** session history */
-    readonly histResult: JQuery<HTMLElement>;
-    /** Search button */
-    button?: JQuery;
-    /** Search button DOM ID */
-    private searchButtonId?;
-    /** Hide the current searches */
-    private save;
-    /** Init the current searches */
-    private init;
-    /**
-     * Index search form
-     * @param ctn container
-     * @param md search metadata
-     * @param md.withDocs List of business objects with documents
-     * @param p optional parameters
-     */
-    form(ctn: Container, md?: IndexMetadata, p?: IndexParam): void;
-    /**
-     * Search result rendering in a grid
-     * @param ctn container
-     * @param req user request
-     * @param result search result
-     * @param p optional parameters
-     * @param p.msg TEXT code or message
-     * @param p.layout grid layout (masonry, float, inline, article)
-     */
-    result(ctn: Container, req: string, result: KeyObject, p: {
-        msg?: string;
-        layout?: string;
-    }, cbk?: Callback): void;
-    /**
-     * Filter dialog to pick some objects from user's menu
-     * @param list list of selected objects (all if empty)
-     * @param indexable true to list indexable objects only
-     * @param cbk callback(list) with selected objects
-     */
-    filterDialog(list: string[], indexable: boolean, cbk?: (list?: string[]) => void): void;
-    /**
-     * Init index search widget
-     * @param ctn div.searchbox container
-     */
-    searchBox(ctn: JQuery): void;
-    private easterEgg;
-    private handleSearchInput;
-    /**
-     * Move the virtual cursor in the listbox (APG combobox pattern)
-     * @param input the combobox input
-     * @param $items the option items collection
-     * @param idx target index, or -1 to clear the selection
-     */
-    private setActive;
-}
-
-/**
- * Generic progess handler for XHR call
- */
-type ProgressHandler = (this: XMLHttpRequestUpload, ev: ProgressEvent<XMLHttpRequestEventTarget>) => void;
-/** JSON message */
-interface MessageJSON {
-    /** Level: `E` error, `W` warning, `I` info... */
-    level?: string;
-    /** Label */
+type ActionType = "L" | "F" | "A" | "O" | "I" | "B" | "H";
+/** Button level (style) */
+type ActionLevel = "primary" | "secondary" | "default" | "info" | "success" | "warning" | "danger" | "action" | "transition" | "plus" | "icon" | "extend";
+/** Button size */
+type ActionSize = 'xs' | 'sm' | 'md' | 'lg' | 'icon';
+/** Action of an object, a list, a row or a form */
+interface Action {
+    /** Mandatory name */
+    name: string;
+    /** Action row ID */
+    id?: string;
+    /** Visibility type */
+    type?: ActionType;
+    /** Container of the action */
+    container?: Container;
+    /** Translated label */
     label?: string;
-    /** Error message */
-    error?: boolean;
-    /** Message code */
-    code?: string;
-    /** Message text */
-    text?: string;
-    /** Related field name */
-    field?: string;
-    /** URL to redirect */
-    redirect?: string;
-    /** Javascript to execute */
-    javascript?: string;
-    /** Message parameters */
-    params?: {
-        /** Suggested value */
-        suggest?: string;
-    };
-    /** Call to actions */
-    actions?: Action[];
-}
-/**
- * Plain text message
- * - "message"
- * - "code:text#level#field..."
- * - "javascript: ..."
- * - "redirect: ..."
- */
-type MessageText = string;
-/** Plain text message "code:text#level#field..." or JSON */
-type MessageAny = MessageText | MessageJSON;
-/** Messages per rowId on list */
-interface MessagesPerRow {
-    [rowId: string]: MessageAny[];
-}
-/** Save list returns per rowId */
-interface MessageSaveRows {
-    /** Messages per row ID */
-    messages?: MessagesPerRow;
-    /** Errors per row ID */
-    errors?: MessagesPerRow;
-}
-/** Back-end message(s) */
-interface MessageFromBack {
-    /** Message level */
-    level?: number | string;
-    /** Single message from action/save/delete */
-    message?: MessageAny;
-    /** Multiple messages from validate */
-    messages?: MessageAny[];
-    /** Description */
-    description?: string;
-    /** Details */
-    details?: string | object;
-    /** HTTP status */
-    status?: number;
-}
-/** Generic response from server */
-interface CallResponse {
-    /** Service name or "error" */
-    type: string;
-    /** Service response */
-    response: any;
-    /** Error flag */
-    error?: boolean;
-}
-/** JSON for module service */
-interface ModuleAjax {
-    /** Module row ID */
-    row_id?: string;
-    /** Delete flag */
-    del?: string;
-    /** Confirmation flag */
+    /** Show the label with the icon */
+    showLabel?: boolean;
+    /** Icon name */
+    icon?: string;
+    /** Translated help */
+    help?: string;
+    /** Custom action (not a generic one) */
+    custom?: boolean;
+    /** Executed on the back-end (else pure front URL or binded hook) */
+    backend?: boolean;
+    /** Action is granted */
+    enabled?: boolean;
+    /** Action is disabled */
+    disabled?: boolean;
+    /** In plus button */
+    plus?: boolean;
+    /** Close dialog on click */
+    close?: boolean;
+    /** Reload the form when the confirm dialog is canceled */
+    reloadOnCancel?: boolean;
+    /** Primary button */
+    primary?: boolean;
+    /** Primary | secondary... */
+    level?: ActionLevel;
+    /** Additional CSS class(es) */
+    style?: string;
+    /** Xs, sm... */
+    size?: ActionSize;
+    /** Background color */
+    background?: string;
+    /** Text color */
+    color?: string;
+    /** Background color from the enumeration item */
+    enumBackground?: string;
+    /** Text color from the enumeration item */
+    enumColor?: string;
+    /** Visible on form */
+    formVisible?: boolean;
+    /** Visible on list */
+    listVisible?: boolean;
+    /** Visible on row item */
+    listItemVisible?: boolean;
+    /** Count of rows to apply (2 = all rows when none selected) */
+    countRows?: boolean;
+    /** URL of a front action */
+    url?: string;
+    /** Target of the URL */
+    target?: LoadTarget;
+    /** Fields to confirm */
+    fields?: ObjectField[];
+    /** Parameters to send */
+    params?: KeyObject;
+    /** Ask a confirmation */
     confirm?: boolean;
-    /** Application name */
-    application?: string;
-    /** Method */
-    method?: string;
-    /** Format */
-    format?: string;
-    /** Exploded format */
-    exploded?: boolean;
+    /** Javascript expression to evaluate before confirmation */
+    confirmExpr?: string;
+    /** HTML template of the confirm dialog */
+    confirmUI?: string;
+    /** State model transition name */
+    transition?: string;
+    /** Target state of the transition */
+    toState?: string;
+    /** Parent object context */
+    parent?: ParentObject;
+    /** Business object */
+    object?: BusinessObject;
+    /** Row ID */
+    rowId?: string | null;
+    /** UI action component */
+    ui?: UIAction;
+    /** Binded click */
+    callback?: ActionHandler | JQueryHandler;
 }
-/** Session typed with the legacy constants (see AppConstants) */
-declare const SessionBase: new () => Readonly<typeof AppConstants>;
+/** Action of a state model transition */
+type Transition = Action & {
+    /** Background color of the target state */
+    enumBackground?: string;
+    /** Text color of the target state */
+    enumColor?: string;
+};
+/** Group of actions in a dropdown */
+interface ActionGroup {
+    /** Group name */
+    name: string;
+    /** Icon name */
+    icon?: string;
+    /** Translated label */
+    label: string;
+    /** Show the label with the icon */
+    showLabel?: boolean;
+    /** Action names of the group */
+    actions?: string[];
+}
+/** Where to open a new tab: a tab or a split position */
+type NewTabPosition = "tab" | Position;
 /**
- * Simplicit&eacute; Session to application.
- * @example
- * // Using within the generic UI
- * const app: Session = $app;
- * // Application root: "" (or "/myapp" if not deployed as root, or an absolute base URL)
- * // Using user thru the UI gateway (e.g. within a custom disposition)
- * const uiApp: Session = new Simplicite.Ajax("/myapp");
- * // Using public user thru the public UI gateway (e.g. from a public web site)
- * const publicApp: Session = new Simplicite.Ajax("/myapp", "uipublic");
- * // Using website user thru the API gateway (e.g. from a custom frontend)
- * const apiApp: Session = new Simplicite.Ajax("https://myhost/myapp", "api", "myuser", "mypassword");
+ * Generic Action handler
  */
-declare class Session extends SessionBase {
-    /** Alias `Simplicite.Ajax.Grant` (6.3 compat) */
-    static Grant: typeof Grant;
-    /** Alias `Simplicite.Ajax.BusinessObject` (6.3 compat) */
-    static BusinessObject: typeof BusinessObject;
-    /** Alias `Simplicite.Ajax.BusinessProcess` (6.3 compat) */
-    static BusinessProcess: typeof BusinessProcess;
-    /** Alias `Simplicite.Ajax.ExternalObject` (6.3 compat) */
-    static ExternalObject: typeof ExternalObject;
-    /** Alias `Simplicite.Ajax.ObjectField` (6.3 compat) */
-    static ObjectField: typeof ObjectField;
-    /** Alias `Simplicite.Ajax.TreeView` (6.3 compat) */
-    static TreeView: typeof TreeView;
-    /** Alias `Simplicite.Ajax.View` (6.3 compat) */
-    static View: typeof View;
-    /** Alias `Simplicite.Ajax.SyncQueue` (6.3 compat) */
-    static SyncQueue: typeof SyncQueue;
-    /** Internal: error logs are active */
-    private _errorActive;
-    /** Internal: warning logs are active */
-    private _warningActive;
-    /** Internal: info logs are active */
-    private _infoActive;
-    /** Internal: debug logs are active */
-    private _debugActive;
-    /** Internal: application root */
-    private _approot;
-    /** Internal: base URL */
-    private _baseURL;
-    /** Internal: gateway (`ui`, `uipublic`, `api`...) */
-    private _gateway;
-    /** Internal: login service URL */
-    private _loginURL?;
-    /** Internal: logout service URL */
-    private _logoutURL?;
-    /** Internal: application service URL */
-    private _appURL?;
-    /** Internal: object service URL */
-    private _objURL?;
-    /** Internal: process service URL */
-    private _pcsURL?;
-    /** Internal: external object service URL */
-    private _extURL?;
-    /** Internal: I/O service URL */
-    private _ioURL?;
-    /** Internal: document service URL */
-    private _documentURL?;
-    /** Internal: content service URL */
-    private _contentURL?;
-    /** Internal: resource service URL */
-    private _resourceURL?;
-    /** Internal: login of the API gateway */
-    private _login?;
-    /** Internal: password of the API gateway */
-    private _password?;
-    /** Internal: session timeout */
-    private _timeout;
-    /** Internal: session has expired */
-    private _expired;
-    /** Internal: browser tab ID */
-    private _clientTabId?;
-    /** Internal: cache of business objects */
-    private _businessObjectsCache;
-    /** Internal: cache of business processes */
-    private _businessProcessCache;
-    /** Session has expired (unauthorized response) */
-    get expired(): boolean;
-    /** Application root */
-    get approot(): string;
-    /** Base URL */
-    get baseURL(): string;
-    /** Application service URL */
-    get appURL(): string | undefined;
-    /** Object service URL */
-    get objURL(): string | undefined;
-    /** Process service URL */
-    get pcsURL(): string | undefined;
-    /** I/O service URL */
-    get ioURL(): string | undefined;
-    /** User login name of the API gateway */
-    get userName(): string | undefined;
-    /** Info logs are active */
-    get infoActive(): boolean;
-    /** Warning logs are active */
-    get warningActive(): boolean;
-    /** Debug logs are active */
-    get debugActive(): boolean;
-    /** Session ID */
-    sessionId?: string;
-    /** Authentication token */
-    authToken?: string;
-    /** Expiry date of the token */
-    authTokenExpiryDate?: Date;
-    /** Expiry delay of the token */
-    authTokenExpiryIn?: string;
-    /** Application information */
-    appinfo: KeyObject;
+type ActionHandler = (action: Action, obj: UIBusinessObject, rowid?: string | null) => void;
+/**
+ * Generic action handlers binded per action name
+ */
+interface ActionHandlers {
+    /** Handlers are enabled */
+    enabled: boolean;
+    /** List of handlers */
+    handlers?: ActionHandler[];
+}
+/** Google parameters */
+interface GoogleParam {
+    /** Google API key */
+    GOOGLE_API_KEY: string;
+}
+/** Theme palette */
+interface Palette {
+    /** Palette name */
+    name?: string;
+    /** Header */
+    primary?: string;
+    /** Title */
+    secondary?: string;
+    /** Background */
+    base?: string;
+    /** Text */
+    text?: string;
+    /** Accent */
+    accent?: string;
+}
+/** Theme */
+interface Theme {
+    /** Theme row ID */
+    id: string;
+    /** Theme name */
+    name: string;
+    /** Base theme */
+    base: 'light' | 'dark';
+    /** Theme palette */
+    palette?: Palette;
+    /** Text font */
+    font?: Font;
+    /** Monospace font */
+    monospaceFont?: Font;
+}
+/** Developer options */
+interface DevOptions {
+    /** ES version of JSHint */
+    jshintESVersion: number;
+    /** URL of the Javadoc */
+    javadocLocation: string;
+    /** URL of the JSDoc */
+    jsdocLocation: string;
+    /** Language Server Protocol options */
+    LSP?: {
+        /** LSP is enabled */
+        enabled?: boolean;
+        /** LSP is initialized */
+        isInitialized?: boolean;
+        /** LSP client */
+        languageClient?: any;
+        /** Delay before writing the file */
+        writeFileDelay: number;
+        /** Active session */
+        activeSession: string;
+        /** LSP server */
+        server: null | {
+            /** Server URL */
+            url: string;
+            /** Server module loader */
+            module: () => Promise<KeyObject>;
+            /** Language mode */
+            modes: "java";
+            /** Connection type */
+            type: "socket";
+            /** Web socket */
+            socket: WebSocket;
+        };
+        /** Snippets enabled */
+        snippetsEnabled: boolean;
+        /** LSP state */
+        state: {
+            /** State title */
+            title: "off";
+            /** Update the state title */
+            update: (title: string) => void;
+        };
+    };
+}
+/**
+ * Simplicit&eacute; user's grant
+ */
+declare class Grant {
+    /** Session */
+    app: Session;
     /** Application version */
     version?: string;
-    /** Platform revision */
-    revision?: string;
-    /** Ajax key */
-    ajaxkey?: string;
-    /** User grant */
-    grant?: Grant;
+    /** Platform version */
+    sysversion?: string;
+    /** Platform build date */
+    sysversiondate?: string;
+    /** Application title */
+    title?: string;
+    /** User login */
+    login: string;
+    /** User ID */
+    userid: string;
+    /** Email address */
+    email?: string;
+    /** First name */
+    firstname?: string;
+    /** Last name */
+    lastname?: string;
+    /** Picture */
+    picture?: DocumentDB;
+    /** User filters ID */
+    filterId?: string;
+    /** Login of the user connected as another user */
+    connectAs?: string;
+    /** Allow to change user */
+    changeUser?: boolean;
+    /** Allow to change password */
+    changePwd?: boolean;
+    /** Granted applications (scopes) */
+    apps?: Scope[];
+    /** Current scope name */
+    scopeName?: string;
+    /** Current scope */
+    scope?: Scope;
+    /** Home page */
+    home?: string;
+    /** Current disposition */
+    disposition?: string;
+    /** Current icons set */
+    iconset?: string;
+    /** Current theme */
+    theme?: Theme;
+    /** Granted themes in scope */
+    themes?: Theme[];
+    /** Colored themes for designer only */
+    allThemes?: Theme[];
+    /** Accessibility mode */
+    a11y?: boolean;
+    /** Language */
+    lang: string;
+    /** Preferred language */
+    langpref?: string;
+    /** All languages */
+    langs?: {
+        /** Language code (ENU, FRA...) */
+        lang: string;
+        /** Language label */
+        label: string;
+    }[];
+    /** Date format */
+    dateformat: string;
+    /** UTC offset */
+    utc?: string;
+    /** Timezone */
+    usertz?: boolean;
+    /** Number format */
+    numformat?: FieldNumFormat;
+    /** Font */
+    font?: string;
+    /** Styles */
+    styles?: boolean;
+    /** Monitoring access */
+    monitoring?: boolean;
+    /** Minimum rows per page */
+    minrows?: number;
+    /** Maximum rows per page */
+    maxrows?: number;
+    /** Show the object About dialog */
+    objectAbout?: boolean;
+    /** Use the document preview */
+    useDocPreview?: boolean;
+    /** Use the HTML editor */
+    htmleditor?: boolean;
+    /** Code editor theme in light mode */
+    codeEditorThemeLight?: string;
+    /** Code editor theme in dark mode */
+    codeEditorThemeDark?: string;
+    /** Shortcuts preferences (`SHORTCUT_PREFS`) */
+    shortcutPrefs?: KeyObject;
+    /** Left menu collapsed */
+    menuCollapsed?: boolean;
+    /** Poi.. */
+    libs?: {
+        [key: string]: boolean;
+    };
+    /** User responsibilities */
+    responsibilities?: string[];
+    /** Available import adapters */
+    adapters?: KeyObject[];
+    /** Granted objects */
+    objects?: KeyObject;
+    /** Shortcuts */
+    shortcuts?: Shortcut[];
+    /** Main menu */
+    menu?: MainMenu;
     /** System parameters */
     sysparams: KeyObject;
     /** Translated texts */
-    texts?: KeyString;
-    /** Main menu */
-    menu?: MainMenu;
-    /** News */
-    news: KeyObject[];
-    /** Fulltext index metadata */
-    indexMetadata?: IndexMetadata;
-    /** Loaded views by name */
-    views: {
-        [key: string]: View;
-    };
+    texts?: KeyObject;
+    /** Bookmarks */
+    bookmarks?: Bookmarks;
+    /** Dashboards */
+    dashboard?: object;
+    /** Guides */
+    guides?: KeyObject;
+    /** Resources location */
+    resources?: string;
+    /** Google parameters */
+    google?: GoogleParam;
+    /** Developer options */
+    dev?: DevOptions;
     /**
-     * Without parameter for the global $app (initialized later)
-     * @param approot Application root (either "/&lt;context root&gt;" or an absolute base URL)
-     * @param gateway Gateway type to use :
-     * <ul>
-     * <li>1 or &quot;ui&quot;: Authenticated UI gateway (default)</li>
-     * <li>2 or &quot;uipublic&quot; : Public UI gateway</li>
-     * <li>4 or &quot;api&quot; : API gateway</li>
-     * </ul>
-     * @param login User's login (not required for UI gateways)
-     * @param password User's password (not required for UI gateways)
+     * Constructor
+     * @param app Ajax services
      */
-    constructor(approot?: string, gateway?: string, login?: string, password?: string);
+    constructor(app: Session);
     /**
-     * Initialize Ajax contexts
-     * @param approot Application root (either "/&lt;context root&gt;" or an absolute base URL)
-     * @param gateway Gateway type to use :
-     * <ul>
-     * <li>1 or &quot;ui&quot;: Authenticated UI gateway (default)</li>
-     * <li>2 or &quot;uipublic&quot; : Public UI gateway</li>
-     * <li>4 or &quot;api&quot; : API gateway</li>
-     * </ul>
-     * @param login User's login (not required for UI gateways)
-     * @param password User's password (not required for UI gateways)
-     */
-    init(approot: string, gateway?: string, login?: string, password?: string): void;
-    /**
-     * Get type from type label
-     * @param name Type label from the <code>TYPES</code> constant)
-     * @returns Type (one of <code>TYPE_*</code> contants)
-     */
-    getType(name: string): number;
-    /**
-     * Set timeout
-     * @param timeout Timeout (seconds)
-     */
-    setTimeout(timeout: number): void;
-    /**
-     * Get timeout
-     * @returns Timeout
-     */
-    getTimeout(): number;
-    /**
-     * Is Windows Internet Explorer?
-     * @returns True if is Windows Internet Explorer
-     */
-    isWinIE(): boolean;
-    /**
-     * Get Windows Internet Explorer version
-     * @returns Version
-     */
-    winIEVersion(): number;
-    /**
-     * Is Firefox?
-     * @returns True if is Firefox
-     */
-    isFirefox(): boolean;
-    /**
-     * Is WebKit?
-     * @returns True if is WebKit
-     */
-    isWebkit(): boolean;
-    /**
-     * Set gateway and credentials
-     * @param gateway Gateway (one of <code>GATEWAY_*</code> constants)
-     * @param login Login
-     * @param password Password
-     */
-    setGateway(gateway?: number | string, login?: string, password?: string): void;
-    /**
-     * Get gateway
-     * @returns Gateway (one of <code>GATEWAY_*</code> constants)
-     */
-    getGateway(): string;
-    /**
-     * Error handler
-     * @param err Error message or error object
-     * @param e Optional catched error
-     */
-    error(err: string | MessageFromBack, e?: unknown): void;
-    /**
-     * Warning handler
-     * @param msg Message
-     * @param e Optional catched error
-     */
-    warning(msg: string, e?: unknown): void;
-    /**
-     * Info handler
-     * @param msg Message
-     */
-    info(msg: string): void;
-    /**
-     * Debug handler
-     * @param msg Message
-     */
-    debug(msg: string): void;
-    /**
-     * Mark the session as expired (see the `expired` getter): the background calls are stopped
-     */
-    setExpired(): void;
-    /**
-     * Handler when session has expired on server side, by default throws HTTP 401 in console.
-     * It can be overridden to return on the logon form in a UI context.
-     */
-    onExpiredSession(): void;
-    /**
-     * JSON message
-     * @param level Error level
-     * @param message Error message
-     * @param details Error details
-     */
-    getStandardError(level: number | string, message: string, details: string | object): {
-        /** Error level */
-        level: number | string;
-        /** Error message */
-        message: string;
-        /** Error details */
-        details: string | object;
-    };
-    /**
-     * Get the message in error
-     * @param err with message, messages or description
+     * Init
+     * @param grant User rights meta-data
      * @example
-     * obj.save(item).catch((err: MessageFromBack) => $ui.alert({
-     * 	type: "error",
-     * 	content: String($app.getErrorMessage(err))
-     * }));
+     * // Usually done by the platform at logon
+     * $grant.init({ login: "jdoe", lang: "ENU" });
      */
-    getErrorMessage(err: string | MessageFromBack): MessageAny | undefined;
+    init(grant: KeyObject): void;
     /**
-     * Set default global error handler active or inactive.
-     * @param active Active status
-     */
-    setErrorHandlerActive(active: boolean): void;
-    /**
-     * Change default global error handler.
-     * @param errorHandler Error handler function
-     */
-    setErrorHandler(errorHandler: (m: string | MessageFromBack, e?: unknown) => void): void;
-    /**
-     * Set default global warning handler active or inactive.
-     * @param active Active status
-     */
-    setWarningHandlerActive(active: boolean): void;
-    /**
-     * Change default global warning handler.
-     * @param warningHandler Warning handler function
-     */
-    setWarningHandler(warningHandler: (m: string, e?: unknown) => void): void;
-    /**
-     * Set default global information handler active or inactive.
-     * @param active Active status
-     */
-    setInfoHandlerActive(active: boolean): void;
-    /**
-     * Change default global information handler.
-     * @param infoHandler Information handler function
-     */
-    setInfoHandler(infoHandler: (m: string) => void): void;
-    /**
-     * Set default global debug handler active or inactive.
-     * @param active Active status
-     */
-    setDebugHandlerActive(active: boolean): void;
-    /**
-     * Change default global debug handler.
-     * @param debugHandler Debug handler function
-     */
-    setDebugHandler(debugHandler: (m: string) => void): void;
-    /**
-     * Convert a textual backend message to json { code, text, level, field, label, error }
-     * or technical statement { redirect } or { javascript }
-     * <ul>
-     * <li>code: message code</li>
-     * <li>text: optional contextual details</li>
-     * <li>level: 'I'nfo, 'W'arning, 'E'rror, 'F'atal</li>
-     * <li>field: optional field name of message</li>
-     * <li>label: default text to display in user language</li>
-     * <li>error: true when level is fatal or error</li>
-     * <li>params: optional parameter key/value (suggest)</li>
-     * <li>actions: optional call to actions</li>
-     * </ul>
-     * @param msg formatted backend message JSON or 'code:text#level#field#param:value' or 'redirect:url' or 'javascript:code'
-     */
-    messageToJson(msg: MessageAny): MessageJSON;
-    /** @ignore */
-    _url(url?: string, tokenAsParam?: boolean): string;
-    /** @ignore */
-    _ajaxkey(key?: string | null): string;
-    /**
-     * Identify the client tab
-     * @param id optional Id to force the value (null to remove)
-     * @returns tab unique Id
-     */
-    clientTabId(id?: string): string;
-    /**
-     * Random string
-     * @param len Length
-     * @returns Random string of specified length
-     */
-    randomString(len: number): string;
-    /**
-     * Returns local data URL (e.g. suitable for src of img tags).
-     * @param doc Document with mime type and base64 image or thumbnail
-     * @param thumb Return document thumbnail?
+     * Get user ID
      * @example
-     * // Image document inlined in the record
-     * const item: KeyObject = await obj.get(rowId, { inlineDocs: ["myObjImage"] });
-     * $("<img/>").attr("src", $app.dataURL(item.myObjImage) || "").appendTo(ctn);
+     * const id = $grant.getUserID();
      */
-    dataURL(doc: {
-        mime?: string;
-        thumbnail?: string;
-        content?: string;
-    }, thumb?: boolean): string | undefined;
+    getUserID(): string;
     /**
-     * Returns the URL of a document.
-     * @param object Document with `object`, `field`, `rowId` and `docId`
-     */
-    documentURL(object: DocumentDB): string;
-    /**
-     * Returns the URL of a document.
-     * @param object Object name
-     * @param field Field name
-     * @param rowId Object record row ID
-     * @param docId Document ID (can be omitted then a lookup is done on record matching rowId)
-     * @param cdisp Disposition: attachment or inline (defaults to inline)
+     * Get user login
      * @example
-     * const url: string = $app.documentURL("MyObject", "myObjDocument", rowId);
-     * $("<a/>").attr("href", url).text($T("DOWNLOAD")).appendTo(ctn);
+     * const login = $grant.getLogin();
      */
-    documentURL(object: string, field: string, rowId: string, docId?: string, cdisp?: string): string;
+    getLogin(): string;
     /**
-     * Returns image URL.
-     * @param object Object name
-     * @param field Field name
-     * @param rowId Object record row ID
-     * @param docId Document ID
-     * @param thumb Return thumbnail image
+     * Get user language
      * @example
-     * // Thumbnail of an image field
-     * const src: string = $app.imageURL("MyObject", "myObjImage", rowId, docId, true);
-     * $("<img/>").attr("src", src).appendTo(ctn);
+     * const fr = $grant.getLang() == "FRA";
      */
-    imageURL(object: string, field: string, rowId: string, docId: string, thumb?: boolean): string;
+    getLang(): string;
     /**
-     * Returns content URL.
-     * @param file Content file name
-     */
-    contentURL(file: string): string;
-    /**
-     * Returns disposition resource URL.
-     * @param code Resource code
-     * @param type Resource type (IMG=image (default), ICO=Icon, CSS=stylesheet, JS=Javascript, HTML=HTML)
-     */
-    dispositionResourceURL(code: string, type: string): string;
-    /**
-     * Returns resource URL.
-     * @param resId Resource ID (e.g. taken from business object or external object resources list in metadata)
-     */
-    resourceURL(resId: string): string;
-    /**
-     * Returns Object resource URL.
-     * @param code Resource code
-     * @param type Resource type (IMG=image (default), ICO=Icon, CSS=stylesheet, JS=Javascript, HTML=HTML)
-     * @param object Object name: ObjectInternal or ObjectExternal (for Disposition use dispositionResourceURL)
-     * @param objId Object row ID (not the resource row ID)
-     */
-    getResourceURL(code: string, type: string, object?: string, objId?: string, nologs?: boolean): string;
-    /**
-     * Returns Static resource URL
-     * @param path
-     */
-    getStaticRootResourceURL(path: string): string;
-    /**
-     * Icon URL
-     * @param name Resource icon name
-     */
-    getIconURL(name: string): string;
-    /**
-     * Internal: log a deprecation warning.
-     * @param exception Deprecated feature
-     * @param message Message to log
-     * @param outdated true to log as an error
-     */
-    _deprecated(exception?: string, message?: string, outdated?: boolean): void;
-    static deprecated(exception?: string, message?: string, outdated?: boolean): void;
-    /**
-     * Internal: warn when a callback function is passed instead of using the returned Promise.
-     * @param arg Argument to check
-     */
-    _deprecCall(arg: unknown): void;
-    /**
-     * Legacy call parameter URL encoded
-     * @ignore
-     */
-    _callParams(data: KeyObject | null): string;
-    /**
-     * Call parameter
-     * @returns FormData
-     * @ignore
-     */
-    _callFormData(data: KeyObject | null): FormData;
-    /** @ignore */
-    _callAuth(login: string, password: string): string;
-    /** @ignore */
-    _credentials(xhr: XMLHttpRequest): void;
-    /**
-     * Authorization headers of the session (for XHR or fetch)
-     * @ignore
-     */
-    _authHeaders(): KeyString;
-    /** @ignore */
-    _call(url: string, params: KeyObject | null, callback?: (r: CallResponse) => void, scope?: object, progress?: ProgressHandler): void;
-    /**
-     * Promise of the raw service response (never rejected)
-     * @ignore
-     */
-    _callRaw(url: string, params: KeyObject | string | null, progress?: ProgressHandler): Promise<CallResponse>;
-    /**
-     * Promise of the service response, rejected with the error response
-     * @ignore
-     */
-    _callAsync(url: string, params: KeyObject | string | null, progress?: ProgressHandler): Promise<any>;
-    /** @ignore */
-    _callResponse(xhr: XMLHttpRequest, callback?: (r: CallResponse) => void, scope?: object): any;
-    /**
-     * Internal import service: read the first lines of a URL
-     * @param url URL to read
-     * @param params Optional parameters posted to a local URL
-     * @param maxLines Max number of lines
-     * @returns Promise of the first lines, rejected on error or timeout
-     * @ignore
-     */
-    _readLines(url: string, params: KeyObject, maxLines: number): Promise<string[]>;
-    /**
-     * Loads application info data.
-     */
-    getAppInfo(): Promise<object>;
-    /**
-     * Loads system info data.
-     */
-    getSysInfo(): Promise<object>;
-    /**
-     * Loads grant data.
-     * @param params Optional parameters
-     * @param params.inlinePicture Inline picture (false if absent or undefined)
-     * @param params.web true to load UI stuff
-     * @param params.texts true to TEXTs
+     * Get user email
      * @example
-     * // User rights are already loaded in the UI
+     * const email = $grant.getEmail();
+     */
+    getEmail(): string;
+    /**
+     * Get user first name
+     * @example
+     * const first = $grant.getFirstName();
+     */
+    getFirstName(): string;
+    /**
+     * Get user last name
+     * @example
+     * const last = $grant.getLastName();
+     */
+    getLastName(): string;
+    /**
+     * Get user full name
+     * @example
+     * const name = $grant.getFullName();
+     */
+    getFullName(): string;
+    /**
+     * Check if user has responsibility on specified group
+     * @param group Group name
+     * @example
      * if ($grant.hasResponsibility("MY_GROUP")) {
      * 	// ...
      * }
-     * // Reload them from the server
-     * $app.getGrant().then((grant: Grant) => $console.log(grant.login));
      */
-    getGrant(params?: {
-        inlinePicture?: boolean;
-        web?: boolean;
-        texts?: boolean;
-    }): Promise<Grant>;
+    hasResponsibility(group: string): boolean;
     /**
-     * Set password.
-     * @param password Password
-     */
-    setPassword(password: string): Promise<object>;
-    /**
-     * Loads basic user data (login, name, email, picture).
-     * @param login User login
-     * @param params Optional parameters
-     * @param params.inlinePicture Inline picture (false if absent or undefined)
+     * Is user an ADMIN or a DESIGNER ?
      * @example
-     * const user: KeyObject = await $app.getUserInfo($grant.login, { inlinePicture: true });
+     * const admin = $grant.isAdmin();
      */
-    getUserInfo(login: string, params?: {
-        inlinePicture?: boolean;
-    }): Promise<object>;
+    isAdmin(): boolean;
     /**
-     * Change user's language
-     * @param lang language code (FRA, ENU...)
-     * @param params Optional parameters
-     * @param params.pref Update also the preferred language
-     */
-    changeLang(lang: string, params?: {
-        pref?: boolean;
-    }): Promise<boolean>;
-    /**
-     * Loads menu data.
-     */
-    getMenu(): Promise<KeyObject>;
-    /**
-     * Get alls granted crosstabs
-     */
-    getCrosstabs(): Promise<CrosstabMetadata[]>;
-    /**
-     * Get alls granted external objects
-     * @param widget only UI widgets?
-     */
-    getExternalObjects(widget: boolean): Promise<ExternalMetadata>;
-    /**
-     * Loads view definition.
-     * @param name View name
-     * @param params Optional parameters
-     * @param params.home Optional for home or panel instance (default true to get home object instances)
-     */
-    getView(name: string, params?: {
-        home?: boolean;
-    }): Promise<View>;
-    /**
-     * Upgrade view raw JSON into View instance and set the cache
-     * @param name View name
-     * @param view View definition
-     */
-    setView(name: string, view: KeyObject | View): View;
-    /**
-     * Treeview services
-     * @param name Treeview name
-     * @param params Optional parameters
-     * @param params.service metadata (default), page, getmenu, addmenu, delmenu
-     * @param params.object optional object name
-     * @param params.rowid optional object rowId
-     * @param params.child child object of page service
-     * @param params.page page number of page service
-     */
-    treeview(name: string, params?: {
-        service?: string;
-        object?: string;
-        rowid?: string;
-        child?: string;
-        page?: number;
-    }): Promise<KeyObject[]>;
-    /**
-     * Loads system parameters.
-     */
-    getSysParams(): Promise<object>;
-    /**
-     * Get system parameter value.
-     * @param name System parameter name
-     * @param params Optional parameters
-     * @param params.force Force read system parameter value from the database?
-     * @example
-     * $app.getSysParam("MY_SYSTEM_PARAM").then((value: string) => {
-     * 	// ...
-     * });
-     * // Force the reading from the database
-     * const value: string = await $app.getSysParam("MY_SYSTEM_PARAM", { force: true });
-     */
-    getSysParam(name: string, params?: {
-        force?: boolean;
-    }): Promise<string>;
-    /**
-     * Set a user system parameter.
+     * Get a session parameter from server-side
      * @param name Parameter name
-     * @param value Parameter value (if undefined parameter is unset)
-     * @param save Save parameter in user parameters (if undefined parameter is not saved)
      * @example
-     * // Set a user parameter for the session only
-     * $app.setSysParam("MY_USER_PARAM", "value");
-     * // Set and save it in the user parameters
-     * $app.setSysParam("MY_USER_PARAM", "value", true);
+     * const value: string = await $grant.getParameter("MY_SESSION_PARAM");
      */
-    setSysParam(name: string, value?: string, save?: boolean): Promise<string>;
+    getParameter(name: string): Promise<string>;
     /**
-     * Loads texts.
-     */
-    getTexts(): Promise<object>;
-    /**
-     * Get a field definition.
-     * @param name Field name
-     */
-    getField(name: string): Promise<object>;
-    /**
-     * Get a list of value.
-     * @param name List of values name
-     */
-    getListOfValues(name: string): Promise<object>;
-    /**
-     * Get instance of business object.
+     * Set a session parameter to server-side
+     * @param name Parameter name
+     * @param value Parameter value
      * @example
-     * // app is a Simplicite.Ajax instance
-     * const obj: UIBusinessObject = app.getBusinessObject("MyObject");
-     * // other instance of obj
-     * const tmp: UIBusinessObject = app.getBusinessObject("MyObject", "tmpObj");
-     * @param obj Object name or business object
-     * @param inst Optional instance name (default main instance: the_ajax_&lt;object name&gt;)
+     * $grant.setParameter("MY_PARAM", "value").then(v => $console.log(v));
      */
-    getBusinessObject(obj: string | BusinessObject, inst?: string): UIBusinessObject;
+    setParameter(name: string, value: string): Promise<string>;
     /**
-     * Remove objects from cache
-     * @param obj Object name or business object
-     */
-    clearCache(obj: string | BusinessObject): void;
-    /**
-     * Get a new business process.
+     * Get text alias (constraint usage)
+     * @param code text code
+     * @param plural look for the plural label
      * @example
-     * // app is a Simplicite.Ajax instance
-     * const pcs: BusinessProcess = app.getBusinessProcess("MyProcess");
-     * @param name Business process name
+     * const t = $grant.getText("SAVE");
      */
-    getBusinessProcess(name: string): BusinessProcess;
+    getText(code: string, plural?: boolean): string;
     /**
-     * Returns true if value is <code>1|true|yes|y</code>
-     * @param value parameter value
-     * @returns Is value true?
-     */
-    isTrue(value: unknown): boolean;
-    /**
-     * Returns true if value is <code>0|false|no|n</code>
-     * @param value parameter value
-     * @returns Is value false?
-     */
-    isFalse(value: unknown): boolean;
-    /**
-     * Get text value. Same as global <code>$T</code>
-     * @param code Text code
-     * @param plural True to get the plural value if known
-     * @returns Text value
-     */
-    static getText(code: string, plural?: boolean, texts?: KeyString): string;
-    /**
-     * Get text value.
-     * @param code Text code
-     * @param plural True to get the plural value if known
-     * @returns Text value
+     * Get text alias (constraint usage)
+     * @param code text code
+     * @param plural look for the plural label
      * @example
-     * // Translated text (same as $T(code) and $app.T(code))
-     * const label: string = $app.getText("MY_TEXT_CODE");
-     * // Plural value of a "singular|plural" text
-     * const days: string = $app.getText("DAY", true);
+     * const t = $grant.T("SAVE");
      */
-    getText(code: string, plural?: boolean, texts?: KeyString): string;
+    T(code: string, plural?: boolean): string;
     /**
-     * Get text value (alias to <code>getText</code>).
-     * @param code Text code
-     * @param plural True to get the plural value if known
-     * @returns Text value
+     * Get object wrapper
+     * @param inst instance name
+     * @param name object name
      * @example
-     * const label: string = $app.T("MY_TEXT_CODE");
-     * // or with the global shorthand
-     * const label2: string = $T("MY_TEXT_CODE");
+     * const o = $grant.getObject("my_instance", "MyObject");
      */
-    T: (code: string, plural?: boolean, texts?: KeyString) => string;
+    getObject(inst: string, name: string): BusinessObject;
     /**
-     * Loads news.
-     * @param params Optional parameters
-     * @param params.count Return news count only (false if absent or undefined)
-     * @param params.inlineImages Inline news image (false if absent or undefined, not taken into account if count is true)
+     * Get main object wrapper
+     * @param obj object name
+     * @example
+     * const o = $grant.getMainObject("MyObject");
      */
-    getNews(params?: {
-        count?: boolean;
-        inlineImages?: boolean;
-    }): Promise<object>;
+    getMainObject(obj: string): BusinessObject;
     /**
-     * Loads external object definition.
-     * @param name External object name
+     * Get home object wrapper
+     * @param obj object name
+     * @example
+     * const o = $grant.getHomeObject("MyObject");
      */
-    getExternalObject(name: string): Promise<ExternalMetadata>;
+    getHomeObject(obj: string): BusinessObject;
     /**
-     * External object URL.
+     * Get temporary object wrapper
+     * @param obj object name
+     * @example
+     * const o = $grant.getTmpObject("MyObject");
+     */
+    getTmpObject(obj: string): BusinessObject;
+    /**
+     * Get panel wrapper
+     * @param obj object name
+     * @param fk optional foreign-key name
+     * @example
+     * const o = $grant.getPanelObject("MyChild", "myChildParentId");
+     */
+    getPanelObject(obj: string, fk: string): BusinessObject;
+    /**
+     * Get merge wrapper
+     * @param obj object name
+     * @example
+     * const o = $grant.getMergeObject("MyObject");
+     */
+    getMergeObject(obj: string): BusinessObject;
+    /**
+     * Get merge panel wrapper
+     * @param obj object name
+     * @param fk optional foreign-key name
+     * @example
+     * const o = $grant.getMergePanelObject("MyChild", "myChildParentId");
+     */
+    getMergePanelObject(obj: string, fk: string): BusinessObject;
+    /**
+     * Get reference object wrapper
+     * @param obj object name
+     * @example
+     * const o = $grant.getRefObject("MyObject");
+     */
+    getRefObject(obj: string): BusinessObject;
+    /**
+     * Get datamap object wrapper
+     * @param obj object name
+     * @example
+     * const o = $grant.getDataMapObject("MyObject");
+     */
+    getDataMapObject(obj: string): BusinessObject;
+    /**
+     * Get object label
+     * @param name object or name
+     * @example
+     * const label = $grant.objectLabel("MyObject");
+     */
+    objectLabel(name: string | BusinessObject): string;
+    /**
+     * JS class for UI usage
      * @param name Object name
-     * @param params Optional parameters (object or string)
-     * @param embedded True to get a relative URL, false to get the full http URL (loadURL will create an iframe)
      * @example
-     * // Display an external object in the work area
-     * $ui.loadURL(null, $app.getExternalObjectURL("MyExternalObject", { param1: "value" }));
+     * const cls = $grant.getUIObjectClass("MyObject");
      */
-    getExternalObjectURL(name: string, params?: string | object, embedded?: boolean): string;
+    getUIObjectClass(name: string): typeof UIBusinessObject;
     /**
-     * Search from index.
-     * @param request Index search request string
-     * <ul>
-     * <li>simple text with wildcards and operators</li>
-     * <li>in:domain:xxx[:all] = to get recent objects in a specific domain 'xxx', 'all' or by default those updated by the user</li>
-     * <li>in:docs:obj1[;obj2;obj3...] text = to search the text in joined documents of listed objects</li>
-     * </ul>
-     * @param params Optional parameters
-     * @param params.inlineDocs Inline documents (false if absent or undefined, can be a boolean or an array of document fields to inline) ?
-     * @param params.inlineThumbs Inline image documents thumbnails (false if absent or undefined) ?
-     * @param params.inlineObjs Inline objects fields items (false if absent or undefined, can be a boolean or an array of object fields to inline) ?
-     * @param params.metadata gets the search engine metadata <code>{ indexed:[{name,label},...], withDocs:[{name,label},...] }</code>
-     * @param params.useFilter apply user preference INDEX_OBJ_FILTER to limit search
+     * JS class for UI usage
+     * @param name Object name
+     * @param js Class script
+     * @example
+     * // Script of the front class of the object
+     * $grant.setUIObjectClass("MyObject", "class extends Simplicite.UI.BusinessObject {}");
      */
-    indexsearch(request: string, params?: InlineParam & {
-        metadata?: boolean;
-        useFilter?: boolean;
-    }): Promise<KeyObject[]>;
+    setUIObjectClass(name: string, js: string): void;
     /**
-     * Bookmark service
-     * @param method show, add, delete, toggle
-     * @param params method parameters data or show
+     * Check access to object
+     * @param name object or name
+     * @param prop optional property to check 'c'=create 'u'=update 'd'=delete 'i'=indexable
+     * @example
+     * const read = $grant.checkAccess("MyObject");
+     * const update = $grant.checkAccess("MyObject", "u");
      */
-    bookmark(method: string, params?: {
-        data?: object;
-        show?: boolean | string;
-    }): Promise<KeyObject>;
+    checkAccess(name: string | BusinessObject, prop?: string): boolean;
     /**
-     * Dashboard service
-     * @param method list | delete | rename
-     * @param params method parameters
+     * Can access/read object
+     * @param name object or name
+     * @example
+     * if ($grant.accessObject("MyObject"))
+     * 	$ui.displayList(null, "MyObject");
      */
-    dashboard(method: string, params?: KeyObject): Promise<KeyObject>;
+    accessObject(name: string | BusinessObject): boolean;
     /**
-     * User guide service
-     * @param method tour
-     * @param params method parameters
+     * Add access/read object
+     * @param name object or name
+     * @example
+     * $grant.addAccessObject("MyObject");
      */
-    guide(method: string, params?: {
-        name?: string;
-        step?: string;
-        usageId?: string;
-        tour?: KeyObject;
-    }): Promise<KeyObject>;
+    addAccessObject(name: string | BusinessObject): void;
     /**
-     * Social post service.
-     * @param params Optional parameters
-     * @param params.counters true to get counters without posts
-     * @param params.object Optional object name
-     * @param params.rowId Optional row ID
-     * @param params.page Optional page to search, -1=no search
-     * @param params.activity true to include activity message
-     * @param params.level optional level filter
-     * @param params.audit to list audit message only
-     * @param params.del true to delete the post (default the service upsert the post)
-     * @param params.like Optional true to like, false to unlike
-     * @param params.status Optional status to update
-     * @param params.follow true to get follow counters
-     * @param post optional post to save or delete <code>{ id, userId, message, pub, object, rowId }</code>
+     * Can create object
+     * @param name object or name
+     * @example
+     * if ($grant.accessCreate("MyObject"))
+     * 	$ui.displayForm(null, "MyObject", $app.DEFAULT_ROW_ID, { nav: "add" });
      */
-    social(params: {
-        counters?: boolean;
-        object?: string;
-        rowId?: string;
-        page?: number;
-        activity?: boolean;
-        level?: string;
-        audit?: boolean;
-        auditAction?: string;
-        del?: boolean;
-        like?: boolean;
-        status?: string;
-        follow?: boolean;
-    }, post?: object): Promise<KeyObject>;
+    accessCreate(name: string | BusinessObject): boolean;
     /**
-     * Social follow service.
-     * @param params parameters
-     * @param params.method follow|unfollow|accept|deny|search
-     * @param params.param related userId or search request
-     * @param params.object optional User object to use
-     * @param params.all optional to search all authors or not
+     * Can update object
+     * @param name object or name
+     * @example
+     * const editable: boolean = $grant.accessUpdate("MyObject");
      */
-    follow(params?: {
-        method: string | null;
-        param?: string | null;
-        object?: string;
-        all?: boolean;
-    }): Promise<KeyObject>;
+    accessUpdate(name: string | BusinessObject): boolean;
     /**
-     * Firebase service to send mobile notification
-     * @param data Parameters
-     * @param data.title Optional title
-     * @param data.message Message body
-     * @param data.to <code>\{users, groups\}</code> list of logins or groups, or <code>'all'</code> to notify all users
-     * @param data.token Optional refresh device token
-     * @param data.oldtoken Optional previous token to remove
+     * Can delete object
+     * @param name object or name
+     * @example
+     * const del = $grant.accessDelete("MyObject");
      */
-    firebase(data: {
-        title?: string;
-        message?: string;
-        to?: FirebaseRecipients;
-        token?: string;
-        oldtoken?: string;
-    }): Promise<object>;
+    accessDelete(name: string | BusinessObject): boolean;
     /**
-    TODO
-    */
-    webpush(data: object): Promise<object>;
-    /**
-     * Syntax service: will return an object with the results
-     * @param data parameters
-     * @param data.type type of syntax service: field
-     * @param data.objectid object id for field name
-     * @param data.value value to validate or transform
+     * Get filtered objects on index search
+     * @example
+     * $grant.getIndexFilteredObjects(list => $console.log(list));
      */
-    syntax(data: {
-        type: string;
-        objectid: string;
-        value: any;
-        refobjectid?: string;
-    }): Promise<KeyObject>;
+    getIndexFilteredObjects(cbk: (list: string[]) => void): void;
     /**
-     * Palette service
+     * Set filtered objects on index search
+     * @example
+     * $grant.setIndexFilteredObjects(["MyObject"], () => $console.log("saved"));
      */
-    palette(): Promise<Palette[]>;
+    setIndexFilteredObjects(list: string[], cbk: Callback): void;
+}
+
+/**
+ * UI Component
+ * @typeParam Def Type of the definition (metadata)
+ * @typeParam RenderParam Type of the rendering options
+ * @typeParam InitParam Type of the init/destroy context
+ */
+declare class UIComponent<Def = unknown, RenderParam = unknown, InitParam = unknown> {
+    /** Component parent container */
+    ctn: Container;
+    /** Definition */
+    def: Def;
+    /** Event handlers */
+    handlers?: KeyHash<JQueryHandler[]>;
+    /** Component element */
+    element?: JQuery<HTMLElement>;
+    /** UI engine (`$ui`, backward compatibility V6) */
+    ui: UIEngine;
+    /** UI viewer (`$view`, backward compatibility V6) */
+    view: UIViewer;
+    /** Session (`$app`, backward compatibility V6) */
+    app: Session;
+    /** User grant (`$grant`, backward compatibility V6) */
+    grant: Grant;
     /**
-     * Module services
-     * @param params parameters
-     * @param params.row_id Module row ID
-     * @param params.del Deletion action <code>start|status</code>
-     * @param params.confirm Confirm deletion?</li>
-     * @param params.application or Application name
-     * @param params.method import, export, status
-     * @param params.format export to xml or json
-     * @param params.exploded exploded files in export?
+     * Constructor
+     * @param ctn Component container
+     * @param def Component definition
      */
-    module(params: ModuleAjax): Promise<KeyObject>;
+    constructor(ctn: Container, def: Def);
     /**
-     * Session init (retrieves server side session identifier and auth token).
-     * @param authToken Auth token to (re)use (in case of persistent tokens)
-     * @param params Optional parameters
-     * @param params.scope Optional session scope
-     * @param params.clientId Optional client Id
+     * Add an event handler, bound by `rebind`.
+     * @param event Event name
+     * @param handler Handler
+     * @returns This component
+     * Registered only: unlike `on`, it does not bind the current element.
+     * @example
+     * // Bound by the next rebind (redraw of the field)
+     * $ui.getUIField(ctn, obj, "myObjField1").ui.addHandler("keydown", e => e.stopPropagation());
      */
-    session(authToken: string, params?: {
-        scope?: string;
-        clientId?: string;
-    }): Promise<KeyObject>;
+    addHandler(event: string, handler: JQueryHandler): this;
     /**
-     * Login (same as session()).
-     * @param authToken Auth token to (re)use (in case of persistent tokens)
-     * @param params Optional parameters
-     * @param params.scope Optional session scope
+     * Remove an event handler.
+     * @param event Event name
+     * @param handler Handler to remove (all handlers of the event if undefined)
+     * @returns This component
+     * @example
+     * const log = () => $console.log("changed");
+     * const f = $ui.getUIField(ctn, obj, "myObjField1");
+     * f.ui.addHandler("change", log);
+     * f.ui.removeHandler("change", log);
      */
-    login: (authToken: string, params?: {
-        scope?: string;
-        clientId?: string;
-    }) => Promise<KeyObject>;
+    removeHandler(event: string, handler: JQueryHandler): this;
     /**
-     * Logout (in case of a persistent token it is deleted)
+     * Bind all the handlers on a target.
+     * @param target Target element
+     * @returns This component
+     * @example
+     * // Bind the registered handlers on a new element
+     * const f = $ui.getUIField(ctn, obj, "myObjField1");
+     * f.ui.rebind($("#myInput", ctn));
      */
-    logout(): Promise<object>;
+    rebind(target: HTMLElement | JQuery): this;
     /**
-     * Monitoring service
-     * @param m Monitoring service or plain JSON object to store
-     * @param params Optional parameters <code>\{ session \}</code>
-     * @param cbk Optional callback for response
+     * Bind UI event
+     * @param event event name (change, keydown...)
+     * @param handler related handler
+     * The handler is kept when the field is redrawn (see $view.getField).
+     * @example
+     * const f = $ui.getUIField(ctn, obj, "myObjField1");
+     * f.ui.on("keydown", e => e.key == "Escape" && f.ui.val(""));
      */
-    monitor(m: string | object, params?: object, cbk?: (r: KeyObject[]) => void): void;
+    on(event: string, handler: JQueryHandler): this;
+    /** compat alias */
+    bind(event: string, handler: JQueryHandler): this;
     /**
-     * Parse a date value into a Javascript Date
-     * @param v Date value (<code>YYYY-MM-DD</code>)
-     * @returns Javascript date
+     * Unbind UI event
+     * @param event event name (change, keydown...)
+     * @param handler related handler
+     * @example
+     * const log = () => $console.log("changed");
+     * const f = $ui.getUIField(ctn, obj, "myObjField1");
+     * f.ui.on("change", log);
+     * f.ui.off("change", log);
      */
-    parseDateValue(v: string): Date;
+    off(event: string, handler: JQueryHandler): this;
+    /** compat alias */
+    unbind(event: string, handler: JQueryHandler): this;
     /**
-     * Parse a date time value into a Javascript Date
-     * @param v Date time value (<code>YYYY-MM-DD HH:mm:ss</code>)
-     * @returns Javascript date
+     * Bind 'change' event
+     * @param param change handler to set or change context to trigger (ex: from a 'populate')
+     * @example
+     * const f = $ui.getUIField(ctn, obj, "myObjCountry");
+     * // Bind a handler, kept when the field is redrawn
+     * f.ui.change(() => $ui.getUIField(ctn, obj, "myObjCity").ui.val(""));
+     * // Trigger the event after a programmatic update (val does not trigger it)
+     * f.ui.val("FR").change();
      */
-    parseDateTimeValue(v: string): Date;
+    change(param?: string | JQueryHandler): this;
     /**
-     * Parse a Javascript Date into a date value
-     * @param d Javascript date
-     * @returns Date value (<code>YYYY-MM-DD</code>)
+     * Bind 'keyup' event
+     * @param handler related handler
+     * Also bound on 'input': called while typing and when pasting.
+     * @example
+     * const f = $ui.getUIField(ctn, obj, "myObjCode");
+     * f.ui.keyup(() => $console.log(f.ui.val()));
      */
-    toDateValue(d: Date): string;
+    keyup(handler?: JQueryHandler): this;
     /**
-     * Parse a Javascript Date into a time value
-     * @param d Javascript date
-     * @returns Time value (<code>HH:mm:ss</code>)
+     * Bind 'focus' event
+     * @param handler related handler
+     * @example
+     * $ui.getUIField(ctn, obj, "myObjCode").ui.focus(() => $console.log("focus"));
      */
-    toTimeValue(d: Date): string;
+    focus(handler?: JQueryHandler): this;
     /**
-     * Parse a Javascript Date into a date time value
-     * @param d Javascript date
-     * @returns Date time value (<code>YYYY-MM-DD HH-mm-ss</code>)
+     * Bind 'blur' event
+     * @param handler related handler
+     * @example
+     * const f = $ui.getUIField(ctn, obj, "myObjCode");
+     * f.ui.blur(() => f.ui.val(String(f.ui.val()).trim()));
      */
-    toDateTimeValue(d: Date): string;
+    blur(handler?: JQueryHandler): this;
     /**
-     * Encode a string to base64
-     * @param s Input string
-     * @returns Base64-encoded string
+     * Init component when displayed on screen
+     * @param _options Context
      */
-    base64Encode(s: string): string;
+    init(_options?: InitParam): this;
     /**
-     * Encode an array buffer (such as got from a local file read) to to base64
-     * @param b Array buffer
-     * @returns Base64-encoded string
+     * Render the component
+     * @param _options Rendering options
+     * @returns element
      */
-    base64EncodeArrayBuffer(b: ArrayBuffer): string;
+    render(_options?: RenderParam): JQuery;
     /**
-     * Decode a base64 string to string
-     * @param s Base64-encoded string
-     * @returns Decoded string
+     * Destroy component before closing
+     * @param _p Context
      */
-    base64Decode(s: string): string;
+    destroy(_p?: InitParam): this;
+}
+
+/** Rendering options of a view */
+interface UIViewParam extends Pick<ViewParam, "parent" | "home" | "edit" | "useCopyLink"> {
+    /** Load tabs content in lazy mode / on click (default true) */
+    lazy?: boolean;
+}
+/** Filters of a view (period and object filters) */
+interface ViewFilter {
+    /** Show a date period */
+    period?: boolean;
+    /** Start date of the period */
+    periodFromDate?: string;
+    /** End date of the period */
+    periodToDate?: string;
+    /** Metadata */
+    meta?: KeyObject;
+    /** Filters per object field */
+    filters?: {
+        /** Object name */
+        object: string;
+        /** Field name */
+        field: string;
+        /** Filter value */
+        filter: string;
+    }[];
+    /** Vertical rendering */
+    vertical?: boolean;
+    /** Compact rendering */
+    compact?: boolean;
+}
+/**
+ * UI View
+ */
+declare class UIView extends UIComponent<UIObjectView, UIViewParam> {
     /**
-     * Checks if a value is empty
-     * @param x Value
+     * UI View
+     * @param ctn container
+     * @param def View metadata
      */
-    isEmpty(x: unknown): boolean;
+    constructor(ctn: Container, def: View);
+    /**
+     * Display a view of items in container (i.e. home, plain view or part of form)
+     * @param options options
+     * @param options.parent parent object when the view belongs to a form
+     * @param options.home is a home view?
+     * @param options.lazy load tabs content in lazy mode / on click (default true)
+     * @param options.edit edit mode for gridstack
+     * @param options.useCopyLink add the copy link addon?
+     * @param cbk optional callback when rendered
+     * @returns The view element
+     * @example
+     * const v = $ui.getUIView(ctn, obj, "MyObjView");
+     * v && ctn.append(v.ui.render({ lazy: false }, () => $console.log("rendered")));
+     */
+    render(options?: UIViewParam, cbk?: Callback): JQuery;
+    /**
+     * Display the view filters
+     * @param ctn Container of view
+     * @param div Container of filters
+     * @param options Filters definition
+     * @param options.period Show a date period?
+     * @param options.periodFromDate optional min date filter
+     * @param options.periodToDate optional max date filter
+     * @param options.meta all meta-data with search fields
+     * @param options.filters optional list of object/field/filter
+     * @param cbk Optional callback
+     */
+    renderFilters(ctn: Container, div: Container, options: ViewFilter, cbk?: Callback): JQuery<HTMLElement>;
+    /**
+     * Show/Hide the view
+     * @param vis visibility ? false to hide
+     * @param slide optional slide effect
+     * @example
+     * $ui.getUIView(ctn, obj, "MyObjView")?.ui.visible(false, true);
+     */
+    visible(vis: boolean, slide?: boolean): this;
+    /**
+     * Grid stack rendering
+     * @param ctn View container
+     * @param el Element .grid-stack
+     * @param edit true to edit the view
+     * @param options Gridstack options (cellHeight, mode, removable, staticGrid, acceptWidgets...) and the grid DOM id
+     */
+    grid(ctn: Container, el: HTMLElement, edit?: boolean, options?: GridStackOptions & {
+        id?: string;
+    }): Promise<void>;
+}
+
+/**
+ * Type of a view item:
+ * `L` login, `D` date, `T` time, `C` enumeration code, `S` search list, `F` filters,
+ * `E` external object, `I` image, `G` graph chart, `X` crosstab, `P` link, `Z` print template,
+ * `N` index search, `W` news, `U` shortcuts, `V` tree view, `B` sub-view
+ */
+type ViewItemType = typeof ViewType[keyof typeof ViewType];
+/** Data given to the external object of a view item */
+interface ViewItemContentData {
+    /** External object name */
+    extobject?: string;
+    /** Translated label */
+    label?: string;
+    /** Translated help */
+    help?: string;
+    /** Values */
+    fields?: KeyObject;
+}
+/** Content of a view item (depends on its type) */
+interface ViewItemContent {
+    /** Translated label */
+    label?: string;
+    /** Name (external object, crosstab, tree view...) */
+    name?: string;
+    /** Image source */
+    src?: string;
+    /** URL */
+    url?: string;
+    /** External object name */
+    ext?: string;
+    /** Code */
+    code?: string;
+    /** Crosstab name */
+    crosstab?: string;
+    /** Search name */
+    search?: string;
+    /** Print template name */
+    print?: string;
+    /** CT options */
+    options?: KeyObject;
+    /** CT meta */
+    meta?: KeyObject;
+    /** External object data */
+    data?: ViewItemContentData;
+    /** Object name */
+    object?: string;
+    /** Object instance name */
+    inst?: string;
+    /** Field name */
+    field?: string;
+    /** Specific rendering */
+    spec?: string;
+    /** Fixed filters */
+    filters?: KeyObject;
+    /** Vertical rendering */
+    vertical?: boolean;
+    /** Compact rendering */
+    compact?: boolean;
+    /** Show a date period */
+    period?: boolean;
+    /** Treeview Id */
+    id?: string;
+    /** Root Id of treeview */
+    rowId?: string;
+    /** Tree view depth (default 2) */
+    depth?: number;
+}
+/** Item of a view */
+interface ViewItem {
+    /** Item row ID */
+    id?: string;
+    /** Position of the item in the view template */
+    pos?: number;
+    /** Item type */
+    type?: ViewItemType;
+    /** Collapsed */
+    collapsed?: boolean;
+    /** Show the title */
+    title?: boolean;
+    /** Translated label */
+    label?: string;
+    /** Item content */
+    content?: string | ViewItemContent;
+    /** Item container */
+    div?: Container;
+    /** Tab area of the item */
+    _tabArea?: number;
+    /** Index of the item in its tabs */
+    _tabIndex?: number;
+}
+/** Parameters of a view display (see `$ui.displayView`) */
+type ViewParam = {
+    /** True on main/domain home view (to get home instance of objects) */
+    home?: boolean;
+    /** When view has a parent object */
+    parent?: BusinessObject;
+    /** false to hide the permalink button */
+    useCopyLink?: boolean;
+    /** Edit mode */
+    edit?: boolean;
+    /** Optional before load callback */
+    beforeload?: (ctn: Container, view?: View) => void;
+    /** Optional onload callback */
+    onload?: (ctn: Container, view?: View) => void;
+    /** Optional unload callback */
+    onunload?: (ctn: Container, view?: View) => void;
+} & NavParam;
+/**
+ * View
+ */
+declare class View {
+    /** View row ID */
+    id?: string;
+    /** View name */
+    name: string;
+    /** Translated label */
+    label: string;
+    /** Show the title */
+    title?: boolean;
+    /** Icon name */
+    icon?: string;
+    /** View items */
+    items: ViewItem[];
+    /** Cacheable view */
+    cacheable?: boolean;
+    /** Visible view */
+    visible?: boolean;
+    /** Inlined view (link displayed in the form) */
+    inline?: boolean;
+    /** Related business object */
+    object?: BusinessObject;
+    /** Home page view */
+    home: boolean;
+    /** URL */
+    url?: string;
+    /** Home position */
+    item?: string;
+    /** Guides to play on display */
+    guides?: GuideMetadata[];
+    /** Owner row ID */
+    ownerId?: string;
+    /** Owner name */
+    ownerName?: string;
+    /** Link: child object name */
+    target?: string;
+    /** Link: reference field name */
+    reference?: string;
+    /** Name sanitized */
+    fullname: string;
+    /** Session */
+    app: Session;
+    /** UI view component, set by $view.getView (see UIObjectView) */
+    ui?: UIView;
+    /** View template */
+    uiTemplate?: string | JQuery;
+    /**
+     * Constructor
+     * @param app Ajax services
+     * @param view Field metadata
+     * @param obj Optional related business object
+     */
+    constructor(app: Session, view: KeyObject, obj?: BusinessObject);
+    /**
+     * Get an item of the view.
+     * @param n Item position
+     * @returns The item or undefined
+     */
+    getItem(n: number): ViewItem | undefined;
+}
+
+/**
+ * View with its UI component always set (see $view.getView).
+ * Only a type: `ui` is set by `getView`, the other members when the view is rendered.
+ * @example
+ * const x: UIObjectView | undefined = $ui.getUIView(ctn, obj, "MyObjView");
+ * x?.ui.visible(false);
+ * const el = x?.div;
+ */
+interface UIObjectView extends View {
+    /** UI view component */
+    ui: UIView;
+    /** Embedded in the form template: ignored in the bottom links of the form (see UIArea) */
+    moved?: boolean;
+    /** Container of the rendered view: embedded in the template, or item of the bottom links */
+    div?: Container;
+    /** Unique DOM ID of the container in the page */
+    domId?: string;
+    /** Unique DOM ID of the tab label, to display the count of the linked records */
+    linkTabId?: string;
 }
 
 /**
@@ -20377,7 +22473,7 @@ declare class UIRenderList {
      * // Read-only value
      * $ui.displayField($("#myValue", ctn), obj, obj.getField("myObjAmount")!, undefined, "value");
      */
-    displayField(ctn: AnyContainer, obj: BusinessObject, field: KeyObject | ObjectField, index?: string, disp?: FieldDisplay | null, p?: KeyObject): ObjectField;
+    displayField(ctn: AnyContainer, obj: BusinessObject, field: KeyObject | ObjectField, index?: string, disp?: FieldDisplay | null, p?: KeyObject): UIObjectField;
     /**
      * Build a list with the object search
      * @param ctn Target container
@@ -21025,22 +23121,30 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      */
     bindGenericActions(): void;
     /**
-     * Gets the field extended with the UIField interface
+     * Gets the field extended with the UIField interface (see $view.getField)
+     * - same rendered input = same component: its context is kept (ex: handlers when the field is redrawn)
      * @param ctn Container
      * @param obj Object
      * @param field Object field or name
      * @param index Optional for multiple inputs of the same field (edit list)
      * @param silent No trace when field is unknown
+     * @returns The field with field.ui = component, or an empty object without ui if the field is unknown
      * @example
      * // In a CLASS form hook
-     * const f: ObjectField = $ui.getUIField(ctn, obj, "myObjField1");
-     * f.ui?.val("new value");
-     * f.ui?.visible(false);
-     * f.ui?.updatable(false);
+     * const f = $ui.getUIField(ctn, obj, "myObjField1");
+     * f.ui.val("new value");
+     * f.ui.visible(false);
+     * f.ui.change(() => f.ui.val());
+     * // Same input = same component: the handler above is kept by this redraw
+     * $ui.getUIField(ctn, obj, "myObjField1").ui.updatable(false);
      * // On a list row
-     * const g: ObjectField = $ui.getUIField(ctn, obj, "myObjField1", rowId);
+     * const g = $ui.getUIField(ctn, obj, "myObjField1", rowId);
+     * g.ui.val("new value");
+     * // Optional field: no error message and no ui if the field is unknown
+     * const u = $ui.getUIField(ctn, obj, "myObjOption", null, true);
+     * u.ui?.visible(false);
      */
-    getUIField(ctn: AnyContainer, obj: BusinessObject | null, field: string | ObjectField, index?: string | null, silent?: boolean): ObjectField;
+    getUIField(ctn: AnyContainer, obj: BusinessObject | null, field: string | ObjectField, index?: string | null, silent?: boolean): UIObjectField;
     /**
      * Gets the action with UIAction interface
      * @param ctn Container
@@ -21048,11 +23152,11 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      * @param action Action metadata or name
      * @example
      * // In a form hook: hide or disable an action button
-     * const a: Action | undefined = $ui.getUIAction(ctn, obj, "MyObjSendOrder");
-     * a?.ui?.visible(false);
-     * a?.ui?.enable(obj.getFieldValue("myObjStatus") == "OPEN");
+     * const a: UIObjectAction | undefined = $ui.getUIAction(ctn, obj, "MyObjSendOrder");
+     * a?.ui.visible(false);
+     * a?.ui.enable(obj.getFieldValue("myObjStatus") == "OPEN");
      */
-    getUIAction(ctn: AnyContainer, obj: UIBusinessObject, action: Action | string): Action | undefined;
+    getUIAction(ctn: AnyContainer, obj: UIBusinessObject, action: Action | string): UIObjectAction | undefined;
     /**
      * Gets the area with UIArea interface
      * @param ctn Container
@@ -21060,20 +23164,20 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      * @param area Area metadata or name or position
      * @example
      * // In a form hook: hide the area 2 of the form
-     * $ui.getUIArea(ctn, obj, 2)?.ui?.visible(false);
+     * $ui.getUIArea(ctn, obj, 2)?.ui.visible(false);
      * // by name, with a slide effect
-     * $ui.getUIArea(ctn, obj, "MyObjDelivery")?.ui?.visible(true, true);
+     * $ui.getUIArea(ctn, obj, "MyObjDelivery")?.ui.visible(true, true);
      */
-    getUIArea(ctn: AnyContainer, obj: UIBusinessObject, area: Area | string | number): Area | undefined;
+    getUIArea(ctn: AnyContainer, obj: UIBusinessObject, area: Area | string | number): UIObjectArea | undefined;
     /**
      * Gets the view with UIView interface
      * @param ctn Container
      * @param obj Optional object
      * @param view View metadata or name
      * @example
-     * const v: View | undefined = $ui.getUIView(ctn, obj, "MyObjView");
+     * const v: UIObjectView | undefined = $ui.getUIView(ctn, obj, "MyObjView");
      */
-    getUIView(ctn: AnyContainer, obj: BusinessObject | null, view: View | string): View | undefined;
+    getUIView(ctn: AnyContainer, obj: BusinessObject | null, view: View | string): UIObjectView | undefined;
     /**
      * Count rows with context and filters
      * @param ctn Container
@@ -21316,7 +23420,7 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      * // Reload the lists linked to the country field
      * $ui.linkedLists(ctn, obj, obj.getField("myObjCountry")!, "FR");
      */
-    linkedLists(ctn: AnyContainer, obj: BusinessObject, field: ObjectField, code?: string | string[], index?: string, cbk?: (f: ObjectField) => void, all?: boolean): void;
+    linkedLists(ctn: AnyContainer, obj: BusinessObject, field: ObjectField, code?: string | string[], index?: string, cbk?: (f: UIObjectField) => void, all?: boolean): void;
     /** Minimal input size to trigger the field completion */
     private _completionMinSize;
     /**
@@ -21585,6 +23689,8 @@ interface BackendConstants {
     WEBSOCKET_SERVER: boolean;
     /** Platform full version */
     FULL_VERSION: string;
+    /** Development mode */
+    DEV_MODE: boolean;
     /** Platform version */
     VERSION: string;
     /** Platform minor version */
@@ -21997,4 +24103,4 @@ declare function displaySitemap(ctn?: AnyContainer): void;
 var Simplicite$1 = Simplicite;
 
 export { $app, $console, $factory, $grant, $nav, $tools, $ui, $view, A11y, AddonBar, Ajax, AppConstants, AsyncFunction, Bam, Board, Bootstrap5, BusinessObject, BusinessProcess, CSSCOLORS, Charts, ColorPicker, Context, Crosstab, ErrorLevel, EventWebSocket, External, ExternalObject, Factory, Feedback, FieldType, FieldTypeLabels, Firebase, Form, Gateway, Globals, Grant, GridEditor, Guide, Import, IndexSearch, JQueryExtension, Legacy, List, MediaSize, Menu, Merge, MessageLevel, OCR, ObjectField, Prefs, Rendering, Search, SearchMode, Session, SimpliciteColors, Social, Speech, StatusMetrics, StringExtension, SyncQueue, Timesheet, Tray, Tree, TreeView, UI, UIAction, UIArea, UIBusinessObject, UIBusinessProcess, UICalendar, UIColor, UIComponent, UIEngine, UIExternalObject, UIField, UIFieldBigDecimal, UIFieldBoolean, UIFieldColor, UIFieldDate, UIFieldDateTime, UIFieldDocument, UIFieldEmail, UIFieldEnum, UIFieldEnumMulti, UIFieldFloat, UIFieldGeoCoords, UIFieldHtml, UIFieldId, UIFieldImage, UIFieldInt, UIFieldLongString, UIFieldNotepad, UIFieldObject, UIFieldPhoneNum, UIFieldRegexp, UIFieldTime, UIFieldUrl, UILoader, UIMap, UINavigator, UIRenderDialog, UIRenderForm, UIRenderList, UIRenderMaker, UIRenderReference, UIRenderUser, UIRenderView, UISplitter, UITray, UIUtil, UIView, UIViewer, UIWorkflow, Updatable, Update, View, ViewClasses, ViewType, Visibility, WebNews, WebPush, Widget, Workflow, ZIP, buildSitemap, Simplicite$1 as default, displaySitemap };
-export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };
+export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };

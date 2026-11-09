@@ -134,13 +134,13 @@ stateDiagram-v2
 
 ### Implemented hooks
 
+* `askAction`
+* `confirmAction`
 * `initAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
-* `confirmAction`
-* `askAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -275,8 +275,8 @@ Object showcasing all the possible attributes
 
 ### Implemented hooks
 
-* `initUpdate`
 * `preSave`
+* `initUpdate`
 
 `FtCustomUser` (Custom User) business object definition
 -------------------------------------------------------
@@ -346,36 +346,36 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `postLoad`
 * `postSave`
 * `preValidate`
-* `initUpdate`
-* `initCopy`
-* `initCreate`
+* `postLoad`
 * `postCreate`
 * `preDelete`
 * `getUserKeyLabel`
 * `postValidate`
 * `initUpdateAll`
-* `isCopyEnable`
-* `isDeleteEnable`
 * `isActionEnable`
+* `isDeleteEnable`
+* `isCopyEnable`
 * `getMappedFilePath`
-* `anonymize`
 * `totpQRCode`
+* `anonymize`
+* `initCreate`
+* `initUpdate`
+* `initCopy`
 * `resetPassword`
-* `createUserToken`
 * `deletePrefs`
+* `createUserToken`
 * `postDelete`
-* `preSearch`
-* `postSearch`
+* `postUpdate`
 * `preCreate`
 * `preUpdate`
-* `postUpdate`
-* `postSelect`
 * `getMappedExportPath`
 * `canReference`
 * `isUpdateEnable`
+* `postSearch`
+* `preSearch`
+* `postSelect`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -493,8 +493,8 @@ _No description._
 
 ### Implemented hooks
 
-* `preReorder`
 * `postReorder`
+* `preReorder`
 
 `FtListOrdering` (List ordering) business object definition
 -----------------------------------------------------------
@@ -554,8 +554,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postLoad`
 * `initRefSelect`
+* `postLoad`
 
 `FtNotification` (Notification Tester) business object definition
 -----------------------------------------------------------------
@@ -616,8 +616,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postCreate`
 * `postUpdate`
+* `postCreate`
 
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------
@@ -909,8 +909,8 @@ _No description._
 | `ftTgoCode`                                                  | char(100)                                | ft_tgo_code                    | yes*     | yes       |          | -                                                                                |
 | `ftTgoStatus`                                                | char(10)                                 | ft_tgo_status                  |          | yes       |          | -                                                                                |
 
-`FtTgoTag` business object definition
--------------------------------------
+`FtTgoTag` (Pillbox N/N) business object definition
+---------------------------------------------------
 
 _No description._
 

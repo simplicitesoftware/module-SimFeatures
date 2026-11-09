@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtTgoTag",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtTgoTag"}
+ },
+ "tsl_lang": "ANY",
+ "tsl_value": "Pillbox N/N",
+ "tsl_plural_value": null,
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

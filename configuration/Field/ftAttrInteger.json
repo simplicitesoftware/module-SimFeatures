@@ -14,7 +14,7 @@
  "fld_sort_nulls": null,
  "fld_more": false,
  "fld_listmore": false,
- "fld_listsum": null,
+ "fld_listsum": "1",
  "fld_exportable": true,
  "fld_tray": null,
  "fld_type": "1",

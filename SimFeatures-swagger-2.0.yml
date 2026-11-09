@@ -6901,7 +6901,7 @@ definitions:
     items:
       $ref: '#/definitions/FtTaggedObject'
   FtTgoTag:
-    description: FtTgoTag
+    description: Pillbox N/N
     type: object
     properties:
       ftTgotagTagId__ftTagName:
@@ -7480,7 +7480,7 @@ definitions:
         description: Integer Slider
         type: integer
   ArrayOfFtTgoTag:
-    description: List of FtTgoTag
+    description: List of Pillbox N/N
     type: array
     items:
       $ref: '#/definitions/FtTgoTag'
@@ -7944,12 +7944,12 @@ tags:
 - name: FtTaggedObject
   description: Tagged object
 - name: FtTgoTag
-  description: FtTgoTag
+  description: Pillbox N/N
 - name: FtActions
   description: Action
-- name: FtAttributes
-  description: Attributes
 - name: FtActionRedirect
   description: Action redirect
+- name: FtAttributes
+  description: Attributes
 - name: FtSearch
   description: Search
