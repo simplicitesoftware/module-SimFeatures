@@ -448,13 +448,13 @@ ActConfirmFields:
 ### Hooks
 
 ```yaml
-askAction: ~
-confirmAction: ~
-initAction: ~
 getTargetObject: |
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
+initAction: ~
+askAction: ~
+confirmAction: ~
 ```
 
 ---
@@ -621,8 +621,8 @@ FTATTRENUMMULTIPILLBOX:
 ### Hooks
 
 ```yaml
-preSave: ~
 initUpdate: ~
+preSave: ~
 ```
 
 ---
@@ -700,36 +700,36 @@ FTUSRTYPE:
 ### Hooks
 
 ```yaml
+postLoad: ~
 postSave: ~
 preValidate: ~
-postLoad: ~
-postCreate: ~
-preDelete: ~
-getUserKeyLabel: ~
-postValidate: ~
-initUpdateAll: ~
-isActionEnable: ~
-isDeleteEnable: ~
-isCopyEnable: ~
-getMappedFilePath: ~
-totpQRCode: ~
-anonymize: ~
-initCreate: ~
 initUpdate: ~
 initCopy: ~
-resetPassword: ~
+postCreate: ~
+initCreate: ~
+preDelete: ~
+getMappedFilePath: ~
+getUserKeyLabel: ~
+postValidate: ~
+isActionEnable: ~
+initUpdateAll: ~
+isDeleteEnable: ~
+isCopyEnable: ~
+totpQRCode: ~
+anonymize: ~
 deletePrefs: ~
 createUserToken: ~
+resetPassword: ~
 postDelete: ~
-postUpdate: ~
-preCreate: ~
-preUpdate: ~
 getMappedExportPath: ~
-canReference: ~
-isUpdateEnable: ~
 postSearch: ~
 preSearch: ~
 postSelect: ~
+preCreate: ~
+preUpdate: ~
+postUpdate: ~
+canReference: ~
+isUpdateEnable: ~
 ```
 
 ---
@@ -915,8 +915,8 @@ Business object FtListItem
 ### Hooks
 
 ```yaml
-postReorder: ~
 preReorder: ~
+postReorder: ~
 ```
 
 ---
@@ -1013,8 +1013,8 @@ required:
 ### Hooks
 
 ```yaml
-initRefSelect: ~
 postLoad: ~
+initRefSelect: ~
 ```
 
 ---
@@ -1114,8 +1114,8 @@ referenced:
 ### Hooks
 
 ```yaml
-postUpdate: ~
 postCreate: ~
+postUpdate: ~
 ```
 
 ---
@@ -1535,6 +1535,12 @@ has_many:
 required:
   ftTagName: char(50)  # [unique key] [col:ft_tag_name]
 
+```
+
+### Hooks
+
+```yaml
+initRefSelect: ~
 ```
 
 ---

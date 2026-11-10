@@ -7750,11 +7750,6 @@ definitions:
       ftHistMultiDoc:
         description: Multi-doc
         type: object
-  ArrayOfFtTag:
-    description: List of Tags
-    type: array
-    items:
-      $ref: '#/definitions/FtTag'
   FtSearch:
     description: Search
     type: object
@@ -7789,6 +7784,11 @@ definitions:
         description: Code
         type: string
         maxLength: 20
+  ArrayOfFtTag:
+    description: List of Tags
+    type: array
+    items:
+      $ref: '#/definitions/FtTag'
   TreeviewData:
     type: object
     properties:
@@ -7939,8 +7939,6 @@ tags:
   description: States
 - name: FtStatesHistoric
   description: Ft states historic
-- name: FtTag
-  description: Tag
 - name: FtTaggedObject
   description: Tagged object
 - name: FtTgoTag
@@ -7949,7 +7947,9 @@ tags:
   description: Action
 - name: FtActionRedirect
   description: Action redirect
-- name: FtAttributes
-  description: Attributes
 - name: FtSearch
   description: Search
+- name: FtAttributes
+  description: Attributes
+- name: FtTag
+  description: Tag

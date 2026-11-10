@@ -8,7 +8,7 @@
   "mime": "text/plain",
   "name": "FtAttributes.java"
  },
- "obo_usets": "1",
+ "obo_usets": "3",
  "obo_nosearch": "1",
  "obo_comment": "Object showcasing all the possible attributes",
  "obo_type": "O",

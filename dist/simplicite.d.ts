@@ -7238,6 +7238,85 @@ interface CounterParam {
     /** Click handler, `true` to open the list */
     onclick?: true | JQueryHandler;
 }
+/** Parameters of a set of counters */
+interface CountersParam {
+    /** DOM Id (required if no container is passed) */
+    id?: string;
+    /** Objects to display */
+    objects: CounterParam[];
+    /** Width (number of pixels or CSS dimension) */
+    width?: string | number;
+    /** Height (number of pixels or CSS dimension) */
+    height?: string | number;
+    /** Column span */
+    colSpan?: number;
+    /** Optional CSS row classes (default 'row') */
+    rowClasses?: string;
+    /** Optional CSS classes to add */
+    classes?: string;
+    /** Click handler */
+    onclick?: JQueryHandler;
+}
+/** Parameters of the cards widget */
+interface CardsParam {
+    name: string;
+    instance?: string;
+    filters?: KeyObject;
+    titleField: string;
+    subTitleField?: string;
+    descriptionField?: string;
+    statusField?: string;
+    imageField?: string;
+    imageFieldThumbnail?: boolean;
+    id?: string;
+    rowClasses?: string;
+    classes?: string;
+    width?: string | number;
+    height?: string | number;
+    bgColor?: string;
+    cardClasses?: string;
+    cardWidth?: string | number;
+    cardHeight?: string | number;
+    cardImgWidth?: string | number;
+    cardImgHeight?: string | number;
+    cardBgColor?: string;
+    addon?: AnyContent;
+    button?: {
+        style?: string;
+        label?: string;
+        onclick?: JQueryHandler;
+    };
+    onclick?: boolean | JQueryHandler;
+}
+/**
+ * Formatted item rendered by a widget (carousel, cards, accordion, timeline):
+ * values are already displayable, built from a record or from example data
+ */
+interface WidgetItem {
+    /** Source record (data of the clickable elements) */
+    data?: KeyObject;
+    /** Row ID */
+    rowId?: string;
+    /** Raw name (carousel accessible labels) */
+    name?: string;
+    /** Title */
+    title?: string;
+    /** Date: ISO date of a card title, or displayed date of a timeline */
+    date?: string;
+    /** Sub-title */
+    subtitle?: string;
+    /** Description / content (HTML) */
+    description?: string;
+    /** Image URL */
+    image?: string;
+    /** Status (cards) */
+    status?: {
+        label: string;
+        bgcolor?: string;
+        color?: string;
+        icon?: string;
+    };
+}
 /** Parameters of a slider */
 interface SliderParam {
     /** Input ID */
@@ -7957,6 +8036,10 @@ declare class Widget {
      * });
      */
     counter(ctn: JQuery, p: CounterParam): JQuery<HTMLElement>;
+    /** Counter box with its colors and sizes (without content) */
+    private counterBox;
+    /** Counter content: value, label and icon */
+    private counterContent;
     /**
      * Display a set of counters
      * @param ctn Target container (if null defauts to container with options.id DOM Id)
@@ -7977,15 +8060,26 @@ declare class Widget {
      * 	]
      * });
      */
-    counters(ctn: JQuery | null, p: {
-        id?: string;
-        objects: CounterParam[];
-        width?: string | number;
-        height?: string | number;
-        colSpan?: number;
-        rowClasses?: string;
-        classes?: string;
-        onclick?: JQueryHandler;
+    counters(ctn: JQuery | null, p: CountersParam): JQuery<HTMLElement>;
+    /** Row of counters */
+    private countersRow;
+    /**
+     * Display an example of counters widget with fake data: one counter per predefined color (grey = default).
+     * Same rendering as the counters widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @param p Options
+     * @param p.icon Icon of the counters (default: a font icon, as usually configured on counters)
+     * @param p.colors Predefined colors to display (default: all of them)
+     * @param p.hover Add a forced hover twin (class "hover") after each counter
+     * @returns The widget container (div.widget-counters)
+     * @example
+     * $view.widget.displayCountersExample(ctn);
+     * $view.widget.displayCountersExample(ctn, { colors: ["blue"], hover: true });
+     */
+    displayCountersExample(ctn: JQuery, p?: {
+        icon?: string;
+        colors?: string[];
+        hover?: boolean;
     }): JQuery<HTMLElement>;
     /**
      * Display a carousel for a business object
@@ -8029,6 +8123,17 @@ declare class Widget {
         addon?: AnyContent;
         onclick?: boolean | JQueryHandler;
     }): void;
+    /** Carousel rendering of formatted items (frozen = no sliding nor auto-play, ex: theme editor preview) */
+    private carouselRender;
+    /**
+     * Display an example of carousel widget with fake data (3 slides without image), frozen on the 1st slide.
+     * Same rendering as the carousel widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @returns The widget container (div.widget-carousel)
+     * @example
+     * $view.widget.displayCarouselExample(ctn);
+     */
+    displayCarouselExample(ctn: JQuery): JQuery<HTMLElement>;
     /**
      * Display a set of cards for a business object
      * @param ctn Target container (if null defauts to container with opts.id DOM Id)
@@ -8066,36 +8171,24 @@ declare class Widget {
      * 	cardWidth: 250
      * });
      */
-    cards(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        subTitleField?: string;
-        descriptionField?: string;
-        statusField?: string;
-        imageField?: string;
-        imageFieldThumbnail?: boolean;
-        id?: string;
-        rowClasses?: string;
-        classes?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        cardClasses?: string;
-        cardWidth?: string | number;
-        cardHeight?: string | number;
-        cardImgWidth?: string | number;
-        cardImgHeight?: string | number;
-        cardBgColor?: string;
-        addon?: AnyContent;
-        button?: {
-            style?: string;
-            label?: string;
-            onclick?: JQueryHandler;
-        };
-        onclick?: boolean | JQueryHandler;
-    }): void;
+    cards(ctn: JQuery, p: CardsParam): void;
+    /** Cards rendering of formatted items */
+    private cardsRender;
+    /**
+     * Display an example of cards widget with fake data, in the usual configuration of each layout:
+     * - default grid: clickable cards with a status without color
+     * - row-horizontal: non clickable cards of 15rem with an image (placeholder)
+     * - row-vertical: clickable cards with a date as title and a colored status with icon (as an enum status field)
+     *
+     * Same rendering as the cards widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @param rowClasses Optional row CSS classes (row-horizontal or row-vertical), default grid when empty
+     * @param nb Number of cards (default 3)
+     * @returns The widget container (div.widget-cards)
+     * @example
+     * $view.widget.displayCardsExample(ctn, "row-horizontal");
+     */
+    displayCardsExample(ctn: JQuery, rowClasses?: string, nb?: number): JQuery<HTMLElement>;
     /**
      * Display an accordion set for a business object
      * @param ctn Target container (if null defauts to container with opts.id DOM Id)
@@ -8131,6 +8224,17 @@ declare class Widget {
         bgColor?: string;
         onclick?: boolean | JQueryHandler;
     }): void;
+    /** Accordion rendering of formatted items */
+    private accordionRender;
+    /**
+     * Display an example of accordion widget with fake data (first item expanded).
+     * Same rendering as the accordion widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @returns The widget container (div.widget-accordion)
+     * @example
+     * $view.widget.displayAccordionExample(ctn);
+     */
+    displayAccordionExample(ctn: JQuery): JQuery<HTMLElement>;
     /**
      * Display a time line set for a business object
      * @param ctn Target container (if null defauts to container with opts.id DOM Id)
@@ -8146,13 +8250,17 @@ declare class Widget {
      * @param p.width Width (number of pixels or CSS dimension)
      * @param p.height Height (number of pixels or CSS dimension)
      * @param p.bgColor Background color (CSS color)
+     * @param p.direction Layout: `vertical` (default) or `horizontal` (line on top, items below, scrollable on X axis)
+     * @param p.maxHeight Maximum height of a vertical time line (number of pixels or CSS dimension, `none` = unlimited),
+     * scrollable beyond (default theme variable `--simplicite-timeline-widget-max-height`)
      * @param p.onclick Click handler
      * @example
      * $view.widget.timeline(ctn, {
      * 	name: "MyEvent",
      * 	titleField: "myEvtTitle",
      * 	dateField: "myEvtDate",
-     * 	contentField: "myEvtDescription"
+     * 	contentField: "myEvtDescription",
+     * 	direction: "horizontal"
      * });
      */
     timeline(ctn: JQuery, p: {
@@ -8167,8 +8275,25 @@ declare class Widget {
         width?: string | number;
         height?: string | number;
         bgColor?: string;
+        direction?: "vertical" | "horizontal";
+        maxHeight?: string | number;
         onclick?: boolean | JQueryHandler;
     }): void;
+    /**
+     * Timeline rendering of formatted items
+     * @returns Scrollable region (div.timeline-scroll) containing the time line list (ol.timeline)
+     */
+    private timelineRender;
+    /**
+     * Display an example of timeline widget with fake data (3 dated items).
+     * Same rendering as the timeline widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @param direction Optional layout: `vertical` (default) or `horizontal`
+     * @returns The widget container (div.widget-timeline)
+     * @example
+     * $view.widget.displayTimelineExample(ctn, "horizontal");
+     */
+    displayTimelineExample(ctn: JQuery, direction?: "vertical" | "horizontal"): JQuery<HTMLElement>;
     /**
      * Create a context menu
      * @param _element The element that was right-clicked
@@ -12676,6 +12801,8 @@ declare class ThemeEditor {
      */
     openAce(addon: JQuery, change: JQueryHandler, apply: Callback): ThemeAceEditor;
     private _menu;
+    private _crosstab;
+    private _menuTop;
     private _form;
     private _list;
     private _bookmarks;
@@ -20169,6 +20296,8 @@ declare class BusinessObject {
         tmppb?: TempPillboxes;
         /** Flag to show toast once when no row found on new search */
         toastNoRowFound?: boolean;
+        /** Bookmarks filter state of the last rendered list (status message on toggle) */
+        bookmarksFilter?: boolean;
     };
     /**
      * Constructor
@@ -24103,4 +24232,4 @@ declare function displaySitemap(ctn?: AnyContainer): void;
 var Simplicite$1 = Simplicite;
 
 export { $app, $console, $factory, $grant, $nav, $tools, $ui, $view, A11y, AddonBar, Ajax, AppConstants, AsyncFunction, Bam, Board, Bootstrap5, BusinessObject, BusinessProcess, CSSCOLORS, Charts, ColorPicker, Context, Crosstab, ErrorLevel, EventWebSocket, External, ExternalObject, Factory, Feedback, FieldType, FieldTypeLabels, Firebase, Form, Gateway, Globals, Grant, GridEditor, Guide, Import, IndexSearch, JQueryExtension, Legacy, List, MediaSize, Menu, Merge, MessageLevel, OCR, ObjectField, Prefs, Rendering, Search, SearchMode, Session, SimpliciteColors, Social, Speech, StatusMetrics, StringExtension, SyncQueue, Timesheet, Tray, Tree, TreeView, UI, UIAction, UIArea, UIBusinessObject, UIBusinessProcess, UICalendar, UIColor, UIComponent, UIEngine, UIExternalObject, UIField, UIFieldBigDecimal, UIFieldBoolean, UIFieldColor, UIFieldDate, UIFieldDateTime, UIFieldDocument, UIFieldEmail, UIFieldEnum, UIFieldEnumMulti, UIFieldFloat, UIFieldGeoCoords, UIFieldHtml, UIFieldId, UIFieldImage, UIFieldInt, UIFieldLongString, UIFieldNotepad, UIFieldObject, UIFieldPhoneNum, UIFieldRegexp, UIFieldTime, UIFieldUrl, UILoader, UIMap, UINavigator, UIRenderDialog, UIRenderForm, UIRenderList, UIRenderMaker, UIRenderReference, UIRenderUser, UIRenderView, UISplitter, UITray, UIUtil, UIView, UIViewer, UIWorkflow, Updatable, Update, View, ViewClasses, ViewType, Visibility, WebNews, WebPush, Widget, Workflow, ZIP, buildSitemap, Simplicite$1 as default, displaySitemap };
-export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };
+export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, CardsParam, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CountersParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WidgetItem, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };

@@ -134,13 +134,13 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `askAction`
-* `confirmAction`
-* `initAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
+* `initAction`
+* `askAction`
+* `confirmAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -275,8 +275,8 @@ Object showcasing all the possible attributes
 
 ### Implemented hooks
 
-* `preSave`
 * `initUpdate`
+* `preSave`
 
 `FtCustomUser` (Custom User) business object definition
 -------------------------------------------------------
@@ -346,36 +346,36 @@ stateDiagram-v2
 
 ### Implemented hooks
 
+* `postLoad`
 * `postSave`
 * `preValidate`
-* `postLoad`
-* `postCreate`
-* `preDelete`
-* `getUserKeyLabel`
-* `postValidate`
-* `initUpdateAll`
-* `isActionEnable`
-* `isDeleteEnable`
-* `isCopyEnable`
-* `getMappedFilePath`
-* `totpQRCode`
-* `anonymize`
-* `initCreate`
 * `initUpdate`
 * `initCopy`
-* `resetPassword`
+* `postCreate`
+* `initCreate`
+* `preDelete`
+* `getMappedFilePath`
+* `getUserKeyLabel`
+* `postValidate`
+* `isActionEnable`
+* `initUpdateAll`
+* `isDeleteEnable`
+* `isCopyEnable`
+* `totpQRCode`
+* `anonymize`
 * `deletePrefs`
 * `createUserToken`
+* `resetPassword`
 * `postDelete`
-* `postUpdate`
-* `preCreate`
-* `preUpdate`
 * `getMappedExportPath`
-* `canReference`
-* `isUpdateEnable`
 * `postSearch`
 * `preSearch`
 * `postSelect`
+* `preCreate`
+* `preUpdate`
+* `postUpdate`
+* `canReference`
+* `isUpdateEnable`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -493,8 +493,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postReorder`
 * `preReorder`
+* `postReorder`
 
 `FtListOrdering` (List ordering) business object definition
 -----------------------------------------------------------
@@ -554,8 +554,8 @@ _No description._
 
 ### Implemented hooks
 
-* `initRefSelect`
 * `postLoad`
+* `initRefSelect`
 
 `FtNotification` (Notification Tester) business object definition
 -----------------------------------------------------------------
@@ -616,8 +616,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postUpdate`
 * `postCreate`
+* `postUpdate`
 
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------
@@ -890,6 +890,10 @@ _No description._
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftTagName`                                                  | char(50)                                 | ft_tag_name                    | yes*     | yes       |          | -                                                                                |
+
+### Implemented hooks
+
+* `initRefSelect`
 
 `FtTaggedObject` (Tagged object) business object definition
 -----------------------------------------------------------
