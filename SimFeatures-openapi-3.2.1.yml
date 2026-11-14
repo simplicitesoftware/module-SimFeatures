@@ -370,16 +370,16 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/FtStates'
-    ArrayOfFtHistoryHistoric:
-      description: List of Historic
-      type: array
-      items:
-        $ref: '#/components/schemas/FtHistoryHistoric'
     ArrayOfFtM2m:
       description: List of N/N
       type: array
       items:
         $ref: '#/components/schemas/FtM2m'
+    ArrayOfFtHistoryHistoric:
+      description: List of Historic
+      type: array
+      items:
+        $ref: '#/components/schemas/FtHistoryHistoric'
     ArrayOfFtObjInlineParent:
       description: List of Parent of inlined object
       type: array
@@ -1091,7 +1091,7 @@ components:
           type: string
           maxLength: 11
         ftRxmId:
-          description: Reflexive item (many)
+          description: Virtual link
           type: string
           maxLength: 11
     FtTaggedObject:
@@ -1235,11 +1235,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/FtNotification'
-    ArrayOfFtHistory:
-      description: List of History
-      type: array
-      items:
-        $ref: '#/components/schemas/FtHistory'
     FtRelationshipM2m:
       description: Relationship (many to many)
       type: object
@@ -1252,6 +1247,11 @@ components:
           description: Unique technical row ID
           type: string
           maxLength: 11
+    ArrayOfFtHistory:
+      description: List of History
+      type: array
+      items:
+        $ref: '#/components/schemas/FtHistory'
     FtRelationshipO2m:
       description: Relationship (one to many)
       type: object
@@ -2346,7 +2346,7 @@ paths:
           type: string
         in: query
         name: ftRxmId
-        description: Search filter for Reflexive item (many)
+        description: Search filter for Virtual link
         required: false
       tags:
       - FtReflexiveMany
@@ -4084,64 +4084,6 @@ paths:
         required: false
       tags:
       - FtCustomUser
-  /rest/FtSelectObject/{row_id}:
-    get:
-      summary: Get a FtSelectObject business object record
-      security:
-      - bearerAuth: []
-      operationId: obj-ftselectobject-get
-      responses:
-        '200':
-          description: Success in getting a single business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtSelectObject'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      - schema:
-          type: boolean
-        in: query
-        name: _inline_documents
-        description: Inline documents?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _inline_thumbnails
-        description: Inline documents' thumbnails?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _inline_objects
-        description: Inline objects?
-        required: false
-      tags:
-      - FtSelectObject
   /rest/FtAttributes/{row_id}:
     post:
       summary: Create a new FtAttributes business object record
@@ -4337,6 +4279,64 @@ paths:
         required: true
       tags:
       - FtAttributes
+  /rest/FtSelectObject/{row_id}:
+    get:
+      summary: Get a FtSelectObject business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftselectobject-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtSelectObject'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtSelectObject
   /:
     get:
       summary: Get user session information
@@ -7742,109 +7742,6 @@ paths:
         required: true
       tags:
       - FtObjInlineParent
-  /rest/FtHistory:
-    get:
-      summary: Search FtHistory business object records or get contextualized metadata
-      security:
-      - bearerAuth: []
-      operationId: obj-fthistory-search
-      responses:
-        '200':
-          description: Success in searching business object records (or in getting
-            contextualized business object metadata, documentation, ...)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArrayOfFtHistory'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: boolean
-        in: query
-        name: _metadata
-        description: Metadata?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _count
-        description: Count?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _doc
-        description: Documentation?
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftHistCode
-        description: Search filter for Code
-        required: false
-      - schema:
-          type: number
-        in: query
-        name: ftHistDecimal
-        description: Search filter for Decimal
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftHistDateAndTime
-        description: Search filter for Date and time
-        required: false
-      - schema:
-          type: string
-          enum:
-          - A
-          - B
-          - C
-        in: query
-        name: ftHistEnumeration
-        description: Search filter for Enumeration
-        required: false
-      - schema:
-          type: string
-          enum:
-          - A
-          - B
-          - C
-        in: query
-        name: ftHistMultipleEnumeration
-        description: Search filter for Multiple enumeration
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: ftHistBoolean
-        description: Search filter for Boolean
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftHistDocument
-        description: Search filter for Document
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftHistMultiDoc
-        description: Search filter for Multi-doc
-        required: false
-      tags:
-      - FtHistory
   /rest/FtTaggedObject/{row_id}:
     post:
       summary: Create a new FtTaggedObject business object record
@@ -8040,6 +7937,109 @@ paths:
         required: true
       tags:
       - FtTaggedObject
+  /rest/FtHistory:
+    get:
+      summary: Search FtHistory business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-fthistory-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtHistory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistCode
+        description: Search filter for Code
+        required: false
+      - schema:
+          type: number
+        in: query
+        name: ftHistDecimal
+        description: Search filter for Decimal
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistDateAndTime
+        description: Search filter for Date and time
+        required: false
+      - schema:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+        in: query
+        name: ftHistEnumeration
+        description: Search filter for Enumeration
+        required: false
+      - schema:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+        in: query
+        name: ftHistMultipleEnumeration
+        description: Search filter for Multiple enumeration
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: ftHistBoolean
+        description: Search filter for Boolean
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistDocument
+        description: Search filter for Document
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistMultiDoc
+        description: Search filter for Multi-doc
+        required: false
+      tags:
+      - FtHistory
   /rest/FtRelationshipM2m/{row_id}:
     post:
       summary: Create a new FtRelationshipM2m business object record
@@ -8885,92 +8885,6 @@ paths:
         required: true
       tags:
       - FtO2mChild
-  /rest/FtActions:
-    get:
-      summary: Search FtActions business object records or get contextualized metadata
-      security:
-      - bearerAuth: []
-      operationId: obj-ftactions-search
-      responses:
-        '200':
-          description: Success in searching business object records (or in getting
-            contextualized business object metadata, documentation, ...)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArrayOfFtActions'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: boolean
-        in: query
-        name: _metadata
-        description: Metadata?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _count
-        description: Count?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _doc
-        description: Documentation?
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActCode
-        description: Search filter for Code
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActDate
-        description: Search filter for Ft act date
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActDocument
-        description: Search filter for Ft act document
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActImage
-        description: Search filter for Ft act image
-        required: false
-      - schema:
-          type: string
-          enum:
-          - A
-          - B
-        in: query
-        name: ftActState
-        description: Search filter for Ft act state
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftActMultiDocs
-        description: Search filter for Multi docs
-        required: false
-      tags:
-      - FtActions
   /rest/FtSearch/{row_id}:
     post:
       summary: Create a new FtSearch business object record
@@ -9166,6 +9080,92 @@ paths:
         required: true
       tags:
       - FtSearch
+  /rest/FtActions:
+    get:
+      summary: Search FtActions business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftactions-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtActions'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActCode
+        description: Search filter for Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActDate
+        description: Search filter for Ft act date
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActDocument
+        description: Search filter for Ft act document
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActImage
+        description: Search filter for Ft act image
+        required: false
+      - schema:
+          type: string
+          enum:
+          - A
+          - B
+        in: query
+        name: ftActState
+        description: Search filter for Ft act state
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftActMultiDocs
+        description: Search filter for Multi docs
+        required: false
+      tags:
+      - FtActions
 info:
   license:
     name: Simplicite license
@@ -9178,59 +9178,59 @@ info:
   title: SimFeatures
   version: '0.1'
 tags:
-- name: FtCustomUser
-  description: Custom User
-- name: FtGuidedObject
-  description: Guided object
-- name: FtHistory
-  description: History
-- name: FtHistoryHistoric
-  description: Historic
 - name: FtListOrdering
   description: List ordering
-- name: FtM2m
-  description: N/N
-- name: FtM2mChild
-  description: Child (many to many)
 - name: FtNotification
   description: Notification Tester
-- name: FtO2mChild
-  description: Child object
-- name: FtObjInlineChild
-  description: Inlined object
 - name: FtObjInlineParent
   description: Parent of inlined object
-- name: FtPublications
-  description: Publication
+- name: FtO2mChild
+  description: Child object
 - name: FtReflexiveMany
   description: Reflexive item (many)
-- name: FtRelationshipM2m
-  description: Relationship (many to many)
-- name: FtRelationshipO2m
-  description: Relationship (one to many)
-- name: FtRxmLink
-  description: Associated items
-- name: FtSearchReference
-  description: Reference
-- name: FtListItem
-  description: Lists
-- name: FtSelectObject
-  description: Select object
-- name: FtStates
-  description: States
+- name: FtCustomUser
+  description: Custom User
+- name: FtPublications
+  description: Publication
+- name: FtGuidedObject
+  description: Guided object
+- name: FtM2m
+  description: N/N
+- name: FtObjInlineChild
+  description: Inlined object
+- name: FtM2mChild
+  description: Child (many to many)
 - name: FtStatesHistoric
   description: Ft states historic
+- name: FtRelationshipM2m
+  description: Relationship (many to many)
 - name: FtTaggedObject
   description: Tagged object
+- name: FtStates
+  description: States
+- name: FtRelationshipO2m
+  description: Relationship (one to many)
+- name: FtSearchReference
+  description: Reference
 - name: FtTgoTag
   description: Pillbox N/N
-- name: FtActions
-  description: Action
-- name: FtActionRedirect
-  description: Action redirect
-- name: FtSearch
-  description: Search
 - name: FtAttributes
   description: Attributes
+- name: FtSearch
+  description: Search
+- name: FtActionRedirect
+  description: Action redirect
+- name: FtActions
+  description: Action
 - name: FtTag
   description: Tag
+- name: FtHistoryHistoric
+  description: Historic
+- name: FtHistory
+  description: History
+- name: FtSelectObject
+  description: Select object
+- name: FtRxmLink
+  description: Associated items
+- name: FtListItem
+  description: Lists

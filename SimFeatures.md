@@ -134,13 +134,13 @@ stateDiagram-v2
 
 ### Implemented hooks
 
+* `initAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
-* `initAction`
-* `askAction`
 * `confirmAction`
+* `askAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -349,31 +349,31 @@ stateDiagram-v2
 * `postLoad`
 * `postSave`
 * `preValidate`
-* `initUpdate`
+* `createUserToken`
+* `deletePrefs`
+* `resetPassword`
 * `initCopy`
-* `postCreate`
+* `initUpdate`
 * `initCreate`
 * `preDelete`
-* `getMappedFilePath`
-* `getUserKeyLabel`
-* `postValidate`
-* `isActionEnable`
-* `initUpdateAll`
-* `isDeleteEnable`
-* `isCopyEnable`
+* `postCreate`
 * `totpQRCode`
 * `anonymize`
-* `deletePrefs`
-* `createUserToken`
-* `resetPassword`
+* `postValidate`
+* `getUserKeyLabel`
+* `getMappedFilePath`
+* `isDeleteEnable`
+* `isCopyEnable`
+* `isActionEnable`
+* `initUpdateAll`
 * `postDelete`
-* `getMappedExportPath`
 * `postSearch`
 * `preSearch`
 * `postSelect`
+* `postUpdate`
 * `preCreate`
 * `preUpdate`
-* `postUpdate`
+* `getMappedExportPath`
 * `canReference`
 * `isUpdateEnable`
 
@@ -616,8 +616,8 @@ _No description._
 
 ### Implemented hooks
 
-* `postCreate`
 * `postUpdate`
+* `postCreate`
 
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------
@@ -673,7 +673,7 @@ _No description._
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftRxmCode`                                                  | char(100)                                | ft_rxm_code                    | yes*     | yes       |          | -                                                                                |
-| `ftRxmId`                                                    | id                                       |                                |          | yes       |          | -                                                                                |
+| `ftRxmId`                                                    | id                                       |                                |          | yes       |          | Virtual link                                                                     |
 
 `FtRelationshipM2m` (Relationship (many to many)) business object definition
 ----------------------------------------------------------------------------

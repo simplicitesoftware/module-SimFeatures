@@ -448,13 +448,13 @@ ActConfirmFields:
 ### Hooks
 
 ```yaml
+initAction: ~
 getTargetObject: |
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
-initAction: ~
-askAction: ~
 confirmAction: ~
+askAction: ~
 ```
 
 ---
@@ -703,31 +703,31 @@ FTUSRTYPE:
 postLoad: ~
 postSave: ~
 preValidate: ~
-initUpdate: ~
+createUserToken: ~
+deletePrefs: ~
+resetPassword: ~
 initCopy: ~
-postCreate: ~
+initUpdate: ~
 initCreate: ~
 preDelete: ~
-getMappedFilePath: ~
-getUserKeyLabel: ~
-postValidate: ~
-isActionEnable: ~
-initUpdateAll: ~
-isDeleteEnable: ~
-isCopyEnable: ~
+postCreate: ~
 totpQRCode: ~
 anonymize: ~
-deletePrefs: ~
-createUserToken: ~
-resetPassword: ~
+postValidate: ~
+getUserKeyLabel: ~
+getMappedFilePath: ~
+isDeleteEnable: ~
+isCopyEnable: ~
+isActionEnable: ~
+initUpdateAll: ~
 postDelete: ~
-getMappedExportPath: ~
 postSearch: ~
 preSearch: ~
 postSelect: ~
+postUpdate: ~
 preCreate: ~
 preUpdate: ~
-postUpdate: ~
+getMappedExportPath: ~
 canReference: ~
 isUpdateEnable: ~
 ```
@@ -1114,8 +1114,8 @@ referenced:
 ### Hooks
 
 ```yaml
-postCreate: ~
 postUpdate: ~
+postCreate: ~
 ```
 
 ---
@@ -1211,7 +1211,7 @@ required:
   ftRxmCode: char(100)  # [unique key] [col:ft_rxm_code]
 
 optional:
-  ftRxmId: id
+  ftRxmId: id  # Virtual link
 
 ```
 

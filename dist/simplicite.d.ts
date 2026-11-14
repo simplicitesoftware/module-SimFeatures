@@ -750,8 +750,8 @@ type FormParam = NavParam & {
     inst?: string;
     /** In a copy context */
     copy?: boolean;
-    /** In a workflow */
-    workflow?: boolean;
+    /** In a workflow: name of the business process */
+    workflow?: string;
     /** Messages to display */
     msg?: MessageAny[];
     /** Forced values */
@@ -812,7 +812,6 @@ type FormParam = NavParam & {
     onsavenew?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
     /** Save & Copy button handler (`null` = no button) */
     onsavecopy?: null | ((ctn: Container, o: UIBusinessObject, cbk?: Callback) => void);
-    /** Long help handler */
     onhelp?: null | ((o: UIBusinessObject) => void);
     /** Close button handler (`null` = no button) */
     onclose?: null | ((ctn: Container, o: UIBusinessObject) => void);
@@ -2511,6 +2510,10 @@ interface NavFocus {
     cls: string;
     /** Element data */
     data: KeyObject;
+    /** Row ID of the enclosing list row */
+    row?: string;
+    /** Name attribute of a form control */
+    inputName?: string;
 }
 /** Item of the navigation history */
 interface NavHistItem {
@@ -2683,6 +2686,14 @@ declare class UINavigator {
      */
     leave(ctn: Container, y: number): this;
     /**
+     * Item that keeps the focus and scroll of a content: the current navigation item,
+     * or for a dialog content without its own navigator (picker, creation dialog...)
+     * a local item, so the page under the dialog is not affected
+     * @param ctn Container
+     * @returns The item
+     */
+    private contextItem;
+    /**
      * Set whether focus should be restored on navback
      * @param b a selector, true to restore, false to skip
      * @example
@@ -2691,7 +2702,8 @@ declare class UINavigator {
      */
     setRestoreFocus(b: boolean | string): this;
     /**
-     * Restore nav informations (scroll and focus)
+     * Restore nav informations (scroll and focus).
+     * Focus order: requested element (see setRestoreFocus), previously focused element, else the content heading.
      * @example
      * const nav = $ui.getNav(ctn);
      * nav.restore(ctn);
@@ -2709,13 +2721,32 @@ declare class UINavigator {
     vscroll(apply: boolean | number, n: NavItem, ctn?: Container): this;
     /**
      * Preserve page focus.
-     * If the previous focus is not found, try to focus the first visible '.js-focusable' in container
+     * If the previous focus is not found, focus the heading of a top level or dialog content
+     * (or the main area / the dialog when the content has no heading).
      * @param apply true to restore focus, false to keep activeElement infos
      * @example
      * const nav = $ui.getNav(ctn);
      * nav.focus(true, nav.getCurrentItem(), ctn);
      */
     focus(apply: boolean | number, n: NavItem, ctn: Container): this;
+    /**
+     * Find a re-rendered element from its saved description, in this container only:
+     * by id, then by identity attributes (action, row, field...), then by classes and data.
+     * Inside a list row, the search is limited to the same record (moved by a sort, or deleted).
+     * @param e Saved element
+     * @param ctn Container
+     * @returns The element or undefined when not found
+     */
+    private findFocus;
+    /**
+     * Focus the heading of a top level or dialog content (new page, or previous focus not found),
+     * so that assistive technologies announce the page before its first control:
+     * the h1 of a list, a form or a view (a view needs its own h1 to be compliant),
+     * else the main area or the dialog. Embedded contents (lists of a view...) and hidden work-areas are ignored.
+     * @param ctn Container
+     * @returns true when an element has been focused
+     */
+    private focusHeading;
     /**
      * Extract only simple types parameters to be serializable in JSON and to avoid cyclic object references
      * @param params Parameters
@@ -5697,7 +5728,7 @@ interface DialogParam {
     footer?: AnyContent;
     /** True to add a close button in header */
     closeable?: boolean;
-    /** True to focus the primary, success or first button (default true for ENTER key), or a selector element to focus */
+    /** True (default) to focus the title of a displayed form or list, else the first field, else the primary, success or first button; or a selector element to focus; false to keep the focus */
     focus?: boolean | string;
     /** False to remove fade effect (default true) */
     fade?: boolean;
@@ -5983,7 +6014,7 @@ declare class Bootstrap5 {
      * @param params.type Optional <code>error|danger|warning|info</code>
      * @param params.content Dialog body
      * @param params.closeable True to add a close button in header
-     * @param params.focus True to focus the primary, success or first button (default true for ENTER key), or a selector element to focus
+     * @param params.focus True (default) to focus the title of a displayed form or list, else the first field, else the primary, success or first button; or a selector element to focus; false to keep the focus
      * @param params.fade False to remove fade effect (default true)
      * @param params.modal True to disable click outside dialog and ESC keyboard button
      * @param params.scrollable Optional scrollable body (default true)
@@ -8991,8 +9022,8 @@ interface AreaParam {
     formActions?: Action[] | null;
     /** Null = no actions, undefined = from metadata */
     plusActions?: Action[] | null;
-    /** In a workflow */
-    workflow?: boolean;
+    /** In a workflow: name of the business process */
+    workflow?: string;
     /** Show extended fields */
     isExtended?: boolean;
     /** Index to identify fields by row */
@@ -10026,6 +10057,7 @@ type DiagramModelerTemplate = {
     canInsertContent?: (template: DiagramNodeContentTemplate) => boolean;
     canCreateContent?: (template: DiagramNodeContentTemplate) => boolean;
     canRemoveContainer?: (template: DiagramContainerTemplate) => boolean;
+    getNodeContainer?: (node: DiagramNode, containers: DiagramContainer[]) => DiagramContainer | undefined;
     canDeleteLink?: (template: DiagramLinkTemplate) => boolean;
     canAddLink?: (template: DiagramLinkTemplate) => boolean;
     customDesktopMenu?: () => DesktopMenuItem[];
@@ -10039,6 +10071,7 @@ type DiagramModelerTemplate = {
  */
 declare class DiagramModeler {
     modelId: string;
+    modelName?: string;
     template: DiagramModelerTemplate;
     root: string;
     baseURL: string;
@@ -10279,6 +10312,12 @@ declare class DiagramModeler {
      * @function
      */
     loadModel(cbk: (model: string) => void): void;
+    /**
+     * Load the model name
+     * @param {function} cbk callback
+     * @function
+     */
+    private loadName;
     /**
      * Get SVG inlined styles
      * @function
@@ -11867,6 +11906,8 @@ declare class DiagramNote extends DiagramNodus {
     position(x?: number, y?: number, rel?: boolean): Point;
 }
 
+/** Alignment of the selected nodes */
+type DiagramAlign = "left" | "center" | "right" | "top" | "middle" | "bottom" | "hspace" | "vspace";
 type DesktopMenuItem = {
     text: string | JQuery;
     icon?: string;
@@ -12150,6 +12191,12 @@ declare class DiagramDesktop {
     moveSelectedNodes(x: number, y: number, rel?: boolean): void;
     moveNodes(nodes: DiagramNode | JQuery, x: number, y: number, rel?: boolean): void;
     /**
+     * Align the selected nodes and notes on the bounds of the selection, or distribute them with the same gap
+     * @param {string} mode left, center, right, top, middle, bottom, hspace (horizontal gaps) or vspace (vertical gaps)
+     * @function
+     */
+    alignNodes(mode: DiagramAlign): void;
+    /**
      * Node/Container magnetism when grid is active
      * @function
      */
@@ -12213,12 +12260,45 @@ declare class DiagramDesktop {
         w: number;
         h: number;
     };
+    /**
+     * Prefix of the definition ids (markers, filters...): the model name to be unique in the page
+     * (several diagrams may be loaded, an url(#id) is resolved on the first element of the page)
+     * and stable between instances
+     * @function
+     */
+    defPrefix(): string;
+    /**
+     * Marker URL of a link extremity
+     * @param {string} m start or end
+     * @param {number} type Type of LINK
+     * @function
+     */
+    markerURL(m: "start" | "end", type: number): string;
+    /**
+     * Shadow filter URL of nodes and containers
+     * @function
+     */
+    shadowURL(): string;
+    /**
+     * Is a filter attribute the shadow: url(#shadow) of an older SVG or with the definitions prefix
+     * @param {string} filter Filter attribute
+     * @function
+     */
+    isShadow(filter?: string): boolean;
     private buildDef;
     /**
      * Add definition to SVG
      * @function
      */
     addDef(def: JSVG, replace?: boolean): void;
+    /**
+     * Id of an image definition (icon, picture...) with the definitions prefix
+     * @param {string} name Image name
+     * @param {number} w Width
+     * @param {number} h Height
+     * @function
+     */
+    defImageId(name: string, w: number, h: number): string;
     /**
      * Add base64 icon to defs: inlined image for standalone usage (export to image, svg+xml...)
      * @function
@@ -12350,7 +12430,51 @@ declare class DiagramCaption extends DiagramElement {
     bind(el: JSVG): void;
 }
 
+type DiagramFlowParam = {
+    horizontal?: boolean;
+    nodes?: DiagramNode[];
+    lanes?: DiagramContainer[];
+    isBegin?: (node: DiagramNode) => boolean;
+    isEnd?: (node: DiagramNode) => boolean;
+    isJoin?: (node: DiagramNode) => boolean;
+    weight?: (link: DiagramLink) => number;
+    gapFlow?: number;
+    gapCross?: number;
+};
+/**
+ * Layout singleton: flow placement of the nodes following the links
+ * @class
+ */
+declare class DiagramLayout {
+    private static singleton;
+    static get(): DiagramLayout;
+    /**
+     * Flow placement of the nodes (workflow, state model...) with straight links, in human reading (waterfall):
+     * - level = shortest path from the begin nodes: the routes of a node stay together on the next level,
+     *   a join node after all its routes, the end nodes on the last level
+     * - order in each lane and level by barycenter of the neighbors to limit the crossings,
+     *   the begin on the first row and the end on the last row where its links do not cross the nodes
+     * - the lanes (pools or free containers) keep their order and are resized to their contents,
+     *   the nodes out of the lanes stay outside
+     * @param {Simplicite.Diagram.Desktop} d desktop
+     * @param {Object} [params] layout options
+     * @param {boolean} [params.horizontal] flow from left to right (default), or from top to bottom
+     * @param {Array} [params.nodes] nodes to place (default all the nodes)
+     * @param {Array} [params.lanes] ordered lanes (pools or free containers) of the nodes, nodes out of lanes after the last lane
+     * @param {function} [params.isBegin] begin node on the first level
+     * @param {function} [params.isEnd] end node on the last level
+     * @param {function} [params.isJoin] join node after all its routes
+     * @param {function} [params.weight] link weight in the ordering, to keep the main routes straight (default 1)
+     * @param {number} [params.gapFlow] distance between levels (px)
+     * @param {number} [params.gapCross] distance between nodes of a level (px)
+     * @function
+     * @memberof Simplicite.Diagram.Layout
+     */
+    flow(d: DiagramDesktop, params?: DiagramFlowParam): void;
+}
+
 type UndoRedoAction = "nm" | // move element(s)
+"mm" | // move each element by its own offset (align)
 "re" | // resize
 "na" | // add node
 "nt" | // add note
@@ -12361,11 +12485,17 @@ type UndoRedoAction = "nm" | // move element(s)
 "st" | // style
 "lm";
 type UndoRedoTarget = DiagramElement | DiagramElement[] | JSVG;
+type UndoRedoMove = {
+    e: DiagramElement;
+    dx: number;
+    dy: number;
+};
 type UndoRedoItem = {
     a: UndoRedoAction;
     t: UndoRedoTarget;
     dx?: number;
     dy?: number;
+    moves?: UndoRedoMove[];
     style?: DiagramContainerStyle | DiagramNodeStyle;
     bound?: Bound;
     points?: Point[];
@@ -12381,6 +12511,7 @@ declare class DiagramUndoRedo {
     constructor(desktop: DiagramDesktop);
     push(data: UndoRedoItem): void;
     pushMoveElement(n: UndoRedoTarget, dx: number, dy: number): void;
+    pushMoveEach(moves: UndoRedoMove[]): void;
     pushResizeElement(rn: DeskElementPos): void;
     pushAddNode(n: DiagramNode): void;
     pushAddNote(n: DiagramNote): void;
@@ -12457,6 +12588,8 @@ interface diagram {
     Springs: typeof DiagramSprings;
     /** Tree renderer */
     Tree: typeof DiagramTree;
+    /** Flow layout */
+    Layout: typeof DiagramLayout;
     /** Undo/Redo user actions */
     UndoRedo: typeof DiagramUndoRedo;
     /** Synchronize data thru WS */
@@ -14223,6 +14356,7 @@ declare class Factory {
      * $factory.SimpliciteMaker().then(m => $console.log(m));
      */
     SimpliciteMaker(): Promise<typeof SimpliciteMaker>;
+    private _maker?;
 }
 
 /**
@@ -14235,7 +14369,9 @@ declare class Legacy {
     compat(win: Window): void;
     /**
      * Common key codes. Event.which and Event.keyCode are deprecated.
-     * Handler must now use the string Event.key = "Enter", "Escape", "ArrowUp", "KeyA", "Digit0"...
+     * Handler must now use the string Event.key = "Enter", "Escape", "ArrowUp", "a", "0"... (the typed character,
+     * compare letters in lower case: "A" with Shift). "KeyA", "Digit0" are values of Event.code (physical key,
+     * different on AZERTY/QWERTZ keyboards).
      * @deprecated
      */
     readonly KEYS: {
@@ -14970,6 +15106,7 @@ declare class UISplitter {
     private saveKeyMulti;
     private saveKeyMono;
     private restoreKey;
+    private lastWorkTab;
     /**
      * Init splitter #work for media desktop only
      * @param scope current user scope
@@ -14977,6 +15114,13 @@ declare class UISplitter {
      * $view.splitter.init();
      */
     init(scope?: Scope): void;
+    /**
+     * Last work tab used (focused or clicked), if still visible
+     * @returns the .work-tab-pane or undefined
+     * @example
+     * const tab = $view.splitter.getLastWorkTab();
+     */
+    getLastWorkTab(): JQuery | undefined;
     /**
      * Allows UI to be splittable. Preserved in localStorage.
      * @param enable optional to enable/disable
@@ -15790,14 +15934,17 @@ declare class UIViewer {
      */
     reload(): void;
     /**
-     * Focus elmeent
+     * Focus element
      * @param x 'l'ist, 'm'enu, 'n'ext area, 'f'inder or element
+     * @param scope optional container of the lists/areas (ex: the work tab), default the page
      * @example
      * // Focus the menu, then the first list of the page
      * $view.focus("m");
      * $view.focus("l");
+     * // Next area of the last used work tab
+     * $view.focus("n", $view.splitter.getLastWorkTab());
      */
-    focus(x: string): void;
+    focus(x: string, scope?: JQuery): void;
     /**
      * Change password
      * @example
@@ -16605,16 +16752,18 @@ declare class UILoader extends UIUtil {
     private onNotif;
     /**
      * Default keydown handler
-     * <br>CTRL-S : trigger "ui.key.ctrls" to all "js-ctrl-s" elements
-     * <br>ESCAPE : in order of priority close dialog, blur field (remove focus), or back in navigation
-     * <br>SHIFT-LEFT/RIGHT : navigation between list items
+     * <br>Scope of the content keys: the dialog or the work tab of the focused element, or the last used work tab
+     * (else the visible elements in single work-area)
+     * <br>CTRL-S : trigger "ui.key.ctrls" to the "js-ctrl-s" elements of the scope
+     * <br>ESCAPE : in order of priority close dialog, blur field (remove focus), or back in the navigation of the scope
+     * <br>SHIFT-LEFT/RIGHT : navigation between list items of the scope
      * <br>ALT-H : back to the home page
      * <br>ALT-M : focus last visited menu item
      * <br>ALT-W : wide screen = toggle menu
      * <br>ALT-B : open the bookmarks dialog
      * <br>ALT-F : focus the global searchbox
-     * <br>ALT-L : focus the first list row
-     * <br>ALT-N : focus the next area/panel
+     * <br>ALT-L : focus the first list row of the scope
+     * <br>ALT-N : focus the next area/panel of the scope
      * @param e Key event
      */
     private keydown;
@@ -16793,6 +16942,7 @@ declare class UILoader extends UIUtil {
      * await $ui.loadDiagramEngine();
      */
     loadDiagramEngine(): Promise<DiagramEngine>;
+    private _diagram?;
     private _speech?;
     /**
      * Load the speech engine
@@ -17198,6 +17348,7 @@ declare class Menu {
      * $view.menu.openTopDropdown(t);
      */
     openTopDropdown(mi: JQuery): void;
+    private fitTopDropdown;
     /**
      * Close a top menu dropdown
      * @example
@@ -19894,6 +20045,8 @@ interface ObjectMetadata {
     };
     /** Lock the record during update */
     useLock?: boolean;
+    /** Read-only record: locked by another user (blocking timestamp) or read-only object */
+    readonly?: boolean;
     /** Users of the record */
     usage?: UsageUser[];
     /** "select" object */
@@ -22914,6 +23067,22 @@ type Container = JQuery<HTMLElement>;
  * Generic DOM container as JQuery object or selector
  */
 type AnyContainer = JQuery<HTMLElement> | string | null;
+/** Login of the browser stored in the local storage (see $ui.getLocalLogins) */
+interface LocalLogin {
+    /** User login */
+    login: string;
+    /** Client ID of the browser */
+    clientId: string;
+    /** User picture */
+    pict?: DocumentDB;
+    /** User full name */
+    name?: string;
+}
+/** Keep-alive of a component (see $ui.keepAlive) */
+interface KeepAlive {
+    /** Stop the keep-alive of the component on unload */
+    stop(): void;
+}
 /**
  * Generic DOM content as JQuery element or string
  */
@@ -23013,8 +23182,6 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
     charts?: Charts;
     /** From Maker */
     diagram?: DiagramEngine;
-    /** Internal: keep-alive timer */
-    private _keepAliveTimer?;
     /** Internal: waiting an ajax response (server lost) */
     private _waitingAjax?;
     /** Licensed platform */
@@ -23085,19 +23252,28 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      */
     changeLang(lang: string, pref?: boolean): Promise<void>;
     /**
-     * Keep the session alive during data updates (used by form and edit list)
-     * and refresh object usage by other people
-     * @param enable true to start the timer, false to stop
-     * @param obj optional object name to get usage
-     * @param id optional rowId
+     * Keep the session alive while a component is displayed (form, edit list...)
+     * and refresh the object usage of a record by the other users (form)
+     * @param obj optional object name of the record
+     * @param id optional row ID of the record
+     * @returns keep-alive of the component, to stop when it is unloaded
+     * @example
+     * const ka: KeepAlive = $ui.keepAlive(obj.getName(), obj.getRowId());
+     * // ...component unloaded
+     * ka.stop();
      */
-    keepAlive(enable: boolean, obj?: string, id?: string): void;
+    keepAlive(obj?: string, id?: string): KeepAlive;
+    /**
+     * Remove the object usages of the displayed forms when the page is unloaded (browser tab closed, reload, navigation):
+     * the forms are not unloaded, the keepalive requests are sent even if the page is closing
+     */
+    removeUsagesOnUnload(): void;
     /**
      * All logins from local storage
      * @example
-     * const logins: KeyObject[] = $ui.getLocalLogins();
+     * const logins: LocalLogin[] = $ui.getLocalLogins();
      */
-    getLocalLogins(): any;
+    getLocalLogins(): LocalLogin[];
     /**
      * Add the connected login to local storage
      * @param g grant
@@ -24071,6 +24247,7 @@ declare const Globals: {
      *
      * - `CSV`: CVS export with default sep:';'
      * - `XLS`: Excel export
+     * - `ODS`: Open Document Spreadsheet export
      * - `PDF`: PDF export
      * - `ARC`: Archive ZIP
      * - `XML`: XML Simplicite (reserved to ADMIN) with default inline:true, timestamp:false
@@ -24088,6 +24265,11 @@ declare const Globals: {
         };
         /** Excel export */
         XLS: {
+            /** Export enabled */
+            enabled: boolean;
+        };
+        /** Open Document Spreadsheet export */
+        ODS: {
             /** Export enabled */
             enabled: boolean;
         };
@@ -24232,4 +24414,4 @@ declare function displaySitemap(ctn?: AnyContainer): void;
 var Simplicite$1 = Simplicite;
 
 export { $app, $console, $factory, $grant, $nav, $tools, $ui, $view, A11y, AddonBar, Ajax, AppConstants, AsyncFunction, Bam, Board, Bootstrap5, BusinessObject, BusinessProcess, CSSCOLORS, Charts, ColorPicker, Context, Crosstab, ErrorLevel, EventWebSocket, External, ExternalObject, Factory, Feedback, FieldType, FieldTypeLabels, Firebase, Form, Gateway, Globals, Grant, GridEditor, Guide, Import, IndexSearch, JQueryExtension, Legacy, List, MediaSize, Menu, Merge, MessageLevel, OCR, ObjectField, Prefs, Rendering, Search, SearchMode, Session, SimpliciteColors, Social, Speech, StatusMetrics, StringExtension, SyncQueue, Timesheet, Tray, Tree, TreeView, UI, UIAction, UIArea, UIBusinessObject, UIBusinessProcess, UICalendar, UIColor, UIComponent, UIEngine, UIExternalObject, UIField, UIFieldBigDecimal, UIFieldBoolean, UIFieldColor, UIFieldDate, UIFieldDateTime, UIFieldDocument, UIFieldEmail, UIFieldEnum, UIFieldEnumMulti, UIFieldFloat, UIFieldGeoCoords, UIFieldHtml, UIFieldId, UIFieldImage, UIFieldInt, UIFieldLongString, UIFieldNotepad, UIFieldObject, UIFieldPhoneNum, UIFieldRegexp, UIFieldTime, UIFieldUrl, UILoader, UIMap, UINavigator, UIRenderDialog, UIRenderForm, UIRenderList, UIRenderMaker, UIRenderReference, UIRenderUser, UIRenderView, UISplitter, UITray, UIUtil, UIView, UIViewer, UIWorkflow, Updatable, Update, View, ViewClasses, ViewType, Visibility, WebNews, WebPush, Widget, Workflow, ZIP, buildSitemap, Simplicite$1 as default, displaySitemap };
-export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, CardsParam, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CountersParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WidgetItem, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };
+export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, CardsParam, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CountersParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeepAlive, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LocalLogin, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WidgetItem, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };

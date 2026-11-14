@@ -38,7 +38,7 @@
  "fld_calc": null,
  "fld_objlist": null,
  "fld_settings": null,
- "fld_comment": null,
+ "fld_comment": "Virtual link",
  "fld_classification": null,
  "fld_anon": null,
  "row_module_id__mdl_name": "SimFeatures",
