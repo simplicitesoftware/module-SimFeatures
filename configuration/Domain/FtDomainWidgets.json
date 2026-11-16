@@ -1,0 +1,12 @@
+{
+ "obd_name": "FtDomainWidgets",
+ "obd_comment": null,
+ "obd_type": "D",
+ "obd_menu": "L",
+ "obd_view_id__viw_name": "FtWidgets",
+ "obd_nohome": false,
+ "obd_icon": "fas/th",
+ "obd_order": 1020,
+ "obd_domain_id__obd_name": "FtDomain",
+ "row_module_id__mdl_name": "SimFeatures"
+}

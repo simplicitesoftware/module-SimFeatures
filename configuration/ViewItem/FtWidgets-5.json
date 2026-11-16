@@ -1,0 +1,8 @@
+{
+ "vwi_view_id__viw_name": "FtWidgets",
+ "vwi_position": 5,
+ "vwi_type": "E",
+ "vwi_title": false,
+ "vwi_url": "[EXPR:HTMLTool.getExternalObjectURL(\"FtWidgetCarousel\")]",
+ "row_module_id__mdl_name": "SimFeatures"
+}

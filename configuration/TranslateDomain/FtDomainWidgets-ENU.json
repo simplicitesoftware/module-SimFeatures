@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "Domain",
+  "label": "Domain",
+  "userkeylabel": "FtDomainWidgets",
+  "icon": "img/system/domain",
+  "item": {"obd_name": "FtDomainWidgets"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Widgets",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

@@ -1,0 +1,17 @@
+{
+ "obe_name": "FtWidgetTimeline",
+ "obe_type": "E",
+ "obe_nature": "com_simplicite_webapp_web_ResponsiveExternalObject",
+ "obe_url": null,
+ "obe_settings": "{\n  \"name\": \"FtAttributes\",\n  \"filters\": {\n    \"ftAttrCode\": \"0W%\"\n  },\n  \"titleField\": \"ftAttrShortText\",\n  \"dateField\": \"ftAttrDate\",\n  \"contentField\": \"ftAttrLongText\",\n  \"onclick\": true\n}",
+ "obe_comment": null,
+ "obe_help": null,
+ "obe_class": "com.simplicite.webapp.web.widgets.TimelineExternalObject",
+ "obe_script_id": null,
+ "obe_icon": "fas/stream",
+ "obe_permalink": null,
+ "obe_widget": true,
+ "row_module_id__mdl_name": "SimFeatures",
+ "obe_width": null,
+ "obe_height": null
+}

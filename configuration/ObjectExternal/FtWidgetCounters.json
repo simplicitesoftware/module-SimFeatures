@@ -1,0 +1,17 @@
+{
+ "obe_name": "FtWidgetCounters",
+ "obe_type": "E",
+ "obe_nature": "com_simplicite_webapp_web_ResponsiveExternalObject",
+ "obe_url": null,
+ "obe_settings": "{\n  \"objects\": [\n    {\n      \"name\": \"FtAttributes\",\n      \"label\": \"Widget attributes\",\n      \"filters\": {\n        \"ftAttrCode\": \"0W%\"\n      }\n    },\n    {\n      \"name\": \"FtAttributes\",\n      \"label\": \"Widget booleans\",\n      \"filters\": {\n        \"ftAttrCode\": \"0W%\",\n        \"ftAttrBoolean\": true\n      },\n      \"color\": \"green\"\n    }\n  ]\n}",
+ "obe_comment": null,
+ "obe_help": null,
+ "obe_class": "com.simplicite.webapp.web.widgets.CountersExternalObject",
+ "obe_script_id": null,
+ "obe_icon": "fas/tachometer-alt",
+ "obe_permalink": null,
+ "obe_widget": true,
+ "row_module_id__mdl_name": "SimFeatures",
+ "obe_width": null,
+ "obe_height": null
+}

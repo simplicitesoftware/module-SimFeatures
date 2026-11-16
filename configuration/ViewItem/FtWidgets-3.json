@@ -1,0 +1,8 @@
+{
+ "vwi_view_id__viw_name": "FtWidgets",
+ "vwi_position": 3,
+ "vwi_type": "E",
+ "vwi_title": false,
+ "vwi_url": "[EXPR:HTMLTool.getExternalObjectURL(\"FtWidgetTimeline\")]",
+ "row_module_id__mdl_name": "SimFeatures"
+}

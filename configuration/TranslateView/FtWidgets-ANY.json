@@ -1,0 +1,13 @@
+{
+ "tsl_object": {
+  "object": "View",
+  "label": "View",
+  "userkeylabel": "FtWidgets",
+  "icon": "img/system/view",
+  "item": {"viw_name": "FtWidgets"}
+ },
+ "tsl_lang": "ANY",
+ "tsl_value": "Widgets",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}
