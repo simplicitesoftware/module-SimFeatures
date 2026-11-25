@@ -1,0 +1,15 @@
+{
+ "tsl_object": {
+  "object": "Action",
+  "label": "Action",
+  "userkeylabel": "FT_TSH_STATUS-DRAFT-VALID",
+  "icon": "img/system/action_btn",
+  "item": {
+   "act_name": "FT_TSH_STATUS-DRAFT-VALID"
+  }
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Valider",
+ "tsl_simplehelp": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

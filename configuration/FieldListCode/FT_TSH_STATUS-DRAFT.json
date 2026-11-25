@@ -1,0 +1,15 @@
+{
+ "lov_list_id__lov_name": "FT_TSH_STATUS",
+ "lov_code": "DRAFT",
+ "lov_order_by": 10,
+ "lov_label": "Draft",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": "#FFFFFF",
+ "lov_color_bg": "#6366f1",
+ "lov_icon": "fas/code",
+ "lov_display": [
+  "I",
+  "L",
+  "T"
+ ]
+}

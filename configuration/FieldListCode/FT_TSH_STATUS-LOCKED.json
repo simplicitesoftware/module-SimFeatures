@@ -1,0 +1,15 @@
+{
+ "lov_list_id__lov_name": "FT_TSH_STATUS",
+ "lov_code": "LOCKED",
+ "lov_order_by": 30,
+ "lov_label": "Locked",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": "#FFFFFF",
+ "lov_color_bg": "#6b7280",
+ "lov_icon": "fas/lock",
+ "lov_display": [
+  "I",
+  "L",
+  "T"
+ ]
+}

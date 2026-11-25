@@ -15,7 +15,7 @@
  "tsh_workload_id__fld_name": "ftTsuWorkload",
  "tsh_begindt_id__fld_name": "ftTsuStartDate",
  "tsh_enddt_id__fld_name": "ftTsuEndDate",
- "tsh_status_id__fld_name": null,
+ "tsh_status_id__fld_name": "ftTshStatus",
  "tsh_input1_id__fld_name": "ftTsuTime",
  "tsh_input2_id__fld_name": null,
  "tsh_input3_id__fld_name": null,

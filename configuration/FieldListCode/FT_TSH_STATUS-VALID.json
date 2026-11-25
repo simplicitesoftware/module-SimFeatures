@@ -1,0 +1,15 @@
+{
+ "lov_list_id__lov_name": "FT_TSH_STATUS",
+ "lov_code": "VALID",
+ "lov_order_by": 20,
+ "lov_label": "Validated",
+ "row_module_id__mdl_name": "SimFeatures",
+ "lov_color": "#000000",
+ "lov_color_bg": "#10b981",
+ "lov_icon": "fas/check-circle",
+ "lov_display": [
+  "I",
+  "L",
+  "T"
+ ]
+}
