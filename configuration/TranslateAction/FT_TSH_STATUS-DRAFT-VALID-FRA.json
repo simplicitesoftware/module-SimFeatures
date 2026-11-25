@@ -4,9 +4,7 @@
   "label": "Action",
   "userkeylabel": "FT_TSH_STATUS-DRAFT-VALID",
   "icon": "img/system/action_btn",
-  "item": {
-   "act_name": "FT_TSH_STATUS-DRAFT-VALID"
-  }
+  "item": {"act_name": "FT_TSH_STATUS-DRAFT-VALID"}
  },
  "tsl_lang": "FRA",
  "tsl_value": "Valider",

@@ -4,9 +4,7 @@
   "label": "Action",
   "userkeylabel": "FT_TSH_STATUS-VALID-DRAFT",
   "icon": "img/system/action_btn",
-  "item": {
-   "act_name": "FT_TSH_STATUS-VALID-DRAFT"
-  }
+  "item": {"act_name": "FT_TSH_STATUS-VALID-DRAFT"}
  },
  "tsl_lang": "ENU",
  "tsl_value": "Back to draft",

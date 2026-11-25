@@ -259,6 +259,7 @@ erDiagram
     }
     FtTask {
         id row_id PK
+        id ftTskParentId FK
         string ftTskCode PK
         string ftTskName
         longString ftTskDescription
@@ -276,6 +277,7 @@ erDiagram
         id tsh_parent_id FK
         string tsh_year PK
         string tsh_month PK
+        enum ftTshStatus
         string tsh_input1
         float tsh_total1
     }
@@ -295,6 +297,7 @@ erDiagram
     FtReflexiveMany ||--o{ FtRxmLink : "ftRxlRxm2"
     FtSearchReference |o--o{ FtSearch : "ftSchSrfId"
     FtStates ||--o{ FtStatesHistoric : "row_ref_id"
+    FtTask |o--o{ FtTask : "ftTskParentId"
     FtTask ||--o{ FtTaskUser : "ftTsuTskId"
     FtCustomUser ||--o{ FtTaskUser : "ftTsuUsrId"
     FtTaskUser ||--o{ FtTaskUserFtTaskUserTimesheet : "tsh_parent_id"
@@ -1517,7 +1520,8 @@ _No description._
 ### Relationships
 
 ```yaml
-belongs_to: []
+belongs_to:
+  - FtTask (ftTskParentId, optional, on parent delete: set-null)
 has_many:
   - FtTaskUser via ftTsuTskId [on delete: cascade, visible]
 ```
@@ -1531,6 +1535,10 @@ required:
 
 optional:
   ftTskDescription: text(100000)  # [col:ft_tsk_description]
+
+referenced:
+  ftTskCode: char(100)  # [col:ft_tsk_code]
+  ftTskName: char(255)  # [col:ft_tsk_name]
 
 ```
 
@@ -1597,11 +1605,29 @@ has_many: []
 required:
   tsh_year: char(4)  # Year [unique key] [col:tsh_year]
   tsh_month: char(2)  # Month [unique key] [col:tsh_month]
+  ftTshStatus: enum(10) using FT_TSH_STATUS list  # [col:ft_tsh_status] [default:DRAFT]
 
 optional:
   tsh_input1: char(255)  # [col:tsh_input1]
   tsh_total1: float(11, 2)  # [col:tsh_total1]
 
+```
+
+### Enumerations
+
+```yaml
+FT_TSH_STATUS:
+  DRAFT: Draft
+  VALID: Validated
+  LOCKED: Locked
+```
+
+### State transitions (ftTshStatus) accessible to the current user
+
+```yaml
+DRAFT: [VALID]
+VALID: [DRAFT, LOCKED]
+LOCKED: []  # terminal
 ```
 
 ---

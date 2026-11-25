@@ -5073,8 +5073,8 @@ interface TimesheetData {
     start?: string;
     /** End date of the range */
     end?: string;
-    /** Grid data to save */
-    data?: KeyObject;
+    /** Grid data to save, or changed blocks of the Gantt (`gantt: "update"`) */
+    data?: TimesheetInputs | TimesheetGanttChange[];
     /** Swap inputs and resources */
     swap?: boolean;
     /** Go to today */
@@ -5085,6 +5085,15 @@ interface TimesheetData {
     shift?: TimesheetShift;
     /** Gantt name */
     gantt?: string;
+}
+/** Grid data of a timesheet: changed inputs and status of the lines */
+interface TimesheetInputs {
+    /** Status code per line ID */
+    status?: KeyString;
+    /** Input field name: line ID: period key: value */
+    [field: string]: {
+        [line: string]: KeyString | string;
+    } | undefined;
 }
 /** Totals of a timesheet line */
 interface TimesheetTotal {
@@ -5204,7 +5213,7 @@ interface TimesheetMetadata {
     /** Redraw the timesheet */
     redraw?: Callback;
     /** Read the grid data */
-    read?: () => KeyObject;
+    read?: () => TimesheetInputs;
     /** Swap inputs and resources */
     swap?: Callback;
     /** Go to today */
@@ -5253,12 +5262,64 @@ interface TimesheetGanttData {
     period: TimesheetPeriod[];
     /** Gantt metadata */
     meta: TimesheetGanttMeta;
-    /**
-     * Root node of the hierarchy: `{ obj, id, label, type, children, blocks }`
-     * with `type` 0 hierarchical object, 1 master line (first resource), 2 assignment line (second resource),
-     * and `blocks` the assigned periods `{ id, begin, end, size, offset, workload, label }`
-     */
-    data: KeyObject;
+    /** Root node of the tree of the resources */
+    data: TimesheetGanttNode;
+}
+/** Node of the Gantt tree: one line of the Gantt */
+interface TimesheetGanttNode {
+    /** Object name (hierarchical object or resource), null for the root */
+    obj: string;
+    /** Row ID, null for the root */
+    id: string;
+    /** Label, null for the root */
+    label: string;
+    /** 0 hierarchical object, 1 master line (first resource), 2 assignment line (second resource) */
+    type: number;
+    /** Child lines */
+    children?: TimesheetGanttNode[];
+    /** Assigned periods (one main block for the hierarchy and master lines) */
+    blocks?: TimesheetGanttBlock[];
+}
+/** Assigned period of a Gantt line */
+interface TimesheetGanttBlock {
+    /** Assignment row ID */
+    id: string;
+    /** Begin period key (empty = no begin date) */
+    begin?: string;
+    /** End period key (empty = no end date) */
+    end?: string;
+    /** Size in periods */
+    size: number;
+    /** Offset from the start of the displayed period, in periods */
+    offset: number;
+    /** Workload */
+    workload?: number;
+    /** Label */
+    label?: string;
+    /** Title (dates) */
+    title?: string;
+    /** Changed by a drag/drop (to save) */
+    changed?: boolean;
+}
+/** Block changed by a drag/drop, sent to the server */
+interface TimesheetGanttChange {
+    /** Type of the line: see `TimesheetGanttNode.type` */
+    type: number;
+    /** Parent node row ID */
+    node?: string | null;
+    /** Line row ID */
+    child?: string | null;
+    /** New position of the block */
+    block: {
+        id: string;
+        offset: number;
+        size: number;
+    };
+}
+/** Result of the update of the Gantt */
+interface TimesheetGanttResult {
+    /** Messages of the updates */
+    msg?: MessageAny[];
 }
 /** Gantt display options */
 type TimesheetGanttParam = {
@@ -5268,6 +5329,10 @@ type TimesheetGanttParam = {
     start?: string;
     /** End date */
     end?: string;
+    /** Foreign key to the parent of an assignments panel (kept in the navigation to filter the assignments on restore) */
+    parentField?: string;
+    /** Row ID of the parent of an assignments panel */
+    parentId?: string;
 } & NavParam;
 /**
  * Timesheet rendering
@@ -5309,7 +5374,10 @@ declare class Timesheet {
     /**
      * Gantt chart
      */
-    displayGantt(ctn: Container, obj: BusinessObject, tsName: string, data: TimesheetGanttData, upd?: (p: KeyObject[], cbk: (r: KeyObject) => void) => void, cbk?: Callback): void;
+    displayGantt(ctn: Container, obj: BusinessObject, tsName: string, data: TimesheetGanttData, upd?: (p: TimesheetGanttChange[], cbk: (r: TimesheetGanttResult) => void, period?: {
+        start?: string;
+        end?: string;
+    }) => void, cbk?: Callback): void;
 }
 
 /** Common parameters of the widgets, extended by the parameters of each widget */
@@ -7039,7 +7107,7 @@ declare class Bootstrap5 {
      * Inlined message alert
      * @param m String or <code>\{ level, label \}</code>
      * @example
-     * ctn.append($tools.message({ level: "W", text: "Check the delivery date" }));
+     * ctn.append($tools.message({ level: "W", label: "Check the delivery date" }));
      */
     message(m: MessageAny): JQuery;
     /**
@@ -25778,17 +25846,24 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      * $ui.contentLoaded(c, () => $console.log("loaded"), () => $console.log("unloaded"));
      */
     contentLoaded(ctn: AnyContainer, onload?: Callback, onunload?: JQueryHandler): void;
+    /** Attribute of a content to check before closing it, the value is the event name (see setCloseEvent) */
+    private static readonly EVENT_CLOSE;
+    /** Event triggered on a content before closing it */
+    private static readonly EVENT_CLOSE_NAME;
     /**
-     * Attribute of a content to check before closing it, the value is the event name triggered with a callback
-     * to call when the content can close (see {@link canCloseContent})
+     * Set the handler to check before closing the content (see {@link canCloseContent}), replaces the previous one
+     * @param ctn Container
+     * @param handler called before closing, with the callback to call when the content can close
+     * (after {@link setCanClose}), or nothing to stay on the content
      * @example
-     * const event = "ui.content.close";
-     * ctn.attr($ui.EVENT_CLOSE, event).on(event, (_, fn?: () => void) => {
-     * 	$ui.setCanClose(ctn);
-     * 	fn?.();
+     * $ui.setCloseEvent(ctn, fn => {
+     * 	if (window.confirm("Quit?")) {
+     * 		$ui.setCanClose(ctn);
+     * 		fn?.();
+     * 	}
      * });
      */
-    readonly EVENT_CLOSE = "data-event-close";
+    setCloseEvent(ctn: Container, handler: (fn?: Callback) => void): void;
     /**
      * The content can close without checking its pending changes: removes its close event
      * @param ctn Container
@@ -26574,4 +26649,4 @@ declare function displaySitemap(ctn?: AnyContainer): void;
 var Simplicite$1 = Simplicite;
 
 export { $app, $console, $factory, $grant, $nav, $tools, $ui, $view, $widget, A11y, Accordion, AddonBar, Ajax, AppConstants, AsyncFunction, Bam, BarOverflow, Board, Bootstrap5, Breadcrumb, BusinessObject, BusinessProcess, CSSCOLORS, Calculator, Camera, Cards, Carousel, CharCounter, Charts, CircularProgressBar, CodeScanner, ColorPicker, Completion, Context, ContextMenu, Counter, Crosstab, DocUploader, ErrorLevel, EventWebSocket, External, ExternalObject, Factory, Feedback, FieldType, FieldTypeLabels, Firebase, Form, Gateway, Globals, Grant, GridEditor, Guide, ImagePreview, Import, IndexSearch, JQueryExtension, Legacy, List, LoadingToast, MarkdownEditor, MediaSize, Menu, Merge, MessageLevel, NewsWidget, Notepad, OCR, ObjectField, Palettes, PasswordChange, Prefs, ProgressBar, Rendering, ScratchPad, Search, SearchBar, SearchMode, Session, SimpliciteColors, Slider, Social, SocialCompletion, Speech, StarSlider, StatusMetrics, StringExtension, SwitchButton, SyncQueue, Timeline, Timesheet, Toast, Tray, Tree, TreeView, UI, UIAction, UIArea, UIBusinessObject, UIBusinessProcess, UICalendar, UIColor, UIComponent, UIEngine, UIExternalObject, UIField, UIFieldBigDecimal, UIFieldBoolean, UIFieldColor, UIFieldDate, UIFieldDateTime, UIFieldDocument, UIFieldEmail, UIFieldEnum, UIFieldEnumMulti, UIFieldFloat, UIFieldGeoCoords, UIFieldHtml, UIFieldId, UIFieldImage, UIFieldInt, UIFieldLongString, UIFieldNotepad, UIFieldObject, UIFieldPhoneNum, UIFieldRegexp, UIFieldTime, UIFieldUrl, UILoader, UIMap, UINavigator, UIRenderDialog, UIRenderForm, UIRenderList, UIRenderMaker, UIRenderReference, UIRenderUser, UIRenderView, UISplitter, UITray, UIUtil, UIView, UIViewer, UIWidget, UIWorkflow, Updatable, Update, UploadProgress, View, ViewClasses, ViewType, Visibility, WebNews, WebPush, Widget, WidgetClasses, Workflow, ZIP, buildSitemap, Simplicite$1 as default, displaySitemap };
-export type { A11yLevel, A11yOptions, AccordionOptions, AccordionParam, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, BarOverflowOptions, Bookmark, BookmarkParam, Bookmarks, BreadcrumbParam, Button, CSSColors, CalculatorParam, CalendarParam, CallResponse, Callback, CameraParam, CardsParam, CarouselOptions, CarouselParam, CharCounterParam, ChartClickHandler, ChartParam, CircularProgressBarOptions, CodeScannerParam, ColorPickerHandler, ColorSet, CompletionOptions, CompletionParam, ConfirmRun, ConstraintFunction, Container, ContextMenuParam, ContextMetrics, Contrast, CounterParam, CountersExampleParam, CountersParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabMethod, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocUploaderParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImagePreviewParam, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeepAlive, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LoadingToastParam, LocalLogin, LogViewerParam, MainMenu, MapParam, MapSettings, MarkdownEditorParam, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NewsDisplayOptions, NewsTickerOptions, NotepadParam, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, PalettePickerParam, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressBarParam, ProgressBarValueOptions, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchBarParam, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialCompletionParam, SocialFollowStatus, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StarSliderParam, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, SwitchButtonParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimelineLabels, TimelineOptions, TimelineParam, TimesheetData, TimesheetGanttData, TimesheetGanttMeta, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UIWidgetArgs, UIWidgetParam, UpdateFormParam, UpdateParam, UploadProgressParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WidgetItem, WidgetNamespace, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };
+export type { A11yLevel, A11yOptions, AccordionOptions, AccordionParam, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, BarOverflowOptions, Bookmark, BookmarkParam, Bookmarks, BreadcrumbParam, Button, CSSColors, CalculatorParam, CalendarParam, CallResponse, Callback, CameraParam, CardsParam, CarouselOptions, CarouselParam, CharCounterParam, ChartClickHandler, ChartParam, CircularProgressBarOptions, CodeScannerParam, ColorPickerHandler, ColorSet, CompletionOptions, CompletionParam, ConfirmRun, ConstraintFunction, Container, ContextMenuParam, ContextMetrics, Contrast, CounterParam, CountersExampleParam, CountersParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabMethod, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocUploaderParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImagePreviewParam, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeepAlive, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LoadingToastParam, LocalLogin, LogViewerParam, MainMenu, MapParam, MapSettings, MarkdownEditorParam, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NewsDisplayOptions, NewsTickerOptions, NotepadParam, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, PalettePickerParam, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressBarParam, ProgressBarValueOptions, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchBarParam, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialCompletionParam, SocialFollowStatus, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StarSliderParam, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, SwitchButtonParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimelineLabels, TimelineOptions, TimelineParam, TimesheetData, TimesheetGanttBlock, TimesheetGanttChange, TimesheetGanttData, TimesheetGanttMeta, TimesheetGanttNode, TimesheetGanttParam, TimesheetGanttResult, TimesheetInputs, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UIWidgetArgs, UIWidgetParam, UpdateFormParam, UpdateParam, UploadProgressParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WidgetItem, WidgetNamespace, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };

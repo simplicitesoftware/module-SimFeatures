@@ -832,12 +832,16 @@ _No description._
 
 ### Relationships
 
+* Belongs to **FtTask** via `ftTskParentId` (optional) — on parent delete: set-null
 * Has many **FtTaskUser** via `ftTsuTskId` [on delete: cascade, visible]
 
 ### Fields
 
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| **`ftTskParentId`** link to **`FtTask`**                     | id                                       | ft_tsk_parent_id               |          | yes       |          | -                                                                                |
+| _`ftTskCode`_                                                | _char(100)_                              | _ft_tsk_code_                  |          |           |          | _-_                                                                              |
+| _`ftTskName`_                                                | _char(255)_                              | _ft_tsk_name_                  |          |           |          | _-_                                                                              |
 | `ftTskCode`                                                  | char(100)                                | ft_tsk_code                    | yes*     | yes       |          | -                                                                                |
 | `ftTskName`                                                  | char(255)                                | ft_tsk_name                    | yes      | yes       |          | -                                                                                |
 | `ftTskDescription`                                           | text(100000)                             | ft_tsk_description             |          | yes       |          | -                                                                                |
@@ -886,8 +890,29 @@ Timesheet of FtTaskUserFtTaskUserTimesheet
 | **`tsh_parent_id`** link to **`FtTaskUser`**                 | id                                       | tsh_parent_id                  | yes*     | yes       |          | Assign reference                                                                 |
 | `tsh_year`                                                   | char(4)                                  | tsh_year                       | yes*     | yes       |          | Year                                                                             |
 | `tsh_month`                                                  | char(2)                                  | tsh_month                      | yes*     | yes       |          | Month                                                                            |
+| `ftTshStatus`                                                | enum(10) using FT_TSH_STATUS list        | ft_tsh_status                  | yes      | yes       |          | -                                                                                |
 | `tsh_input1`                                                 | char(255)                                | tsh_input1                     |          | yes       |          | -                                                                                |
 | `tsh_total1`                                                 | float(11, 2)                             | tsh_total1                     |          | yes       |          | -                                                                                |
+
+### Enumerations
+
+* `FT_TSH_STATUS`
+    - `DRAFT` Draft
+    - `VALID` Validated
+    - `LOCKED` Locked
+
+### State transitions (`ftTshStatus`)
+
+```mermaid
+stateDiagram-v2
+    state "Draft" as DRAFT
+    state "Validated" as VALID
+    state "Locked" as LOCKED
+    DRAFT --> VALID
+    VALID --> DRAFT
+    VALID --> LOCKED
+    LOCKED --> [*]
+```
 
 `FtTgoTag` (Pillbox N/N) business object definition
 ---------------------------------------------------

@@ -4,9 +4,7 @@
   "label": "Field",
   "userkeylabel": "ftTshStatus",
   "icon": "img/system/field",
-  "item": {
-   "fld_name": "ftTshStatus"
-  }
+  "item": {"fld_name": "ftTshStatus"}
  },
  "tsl_lang": "ENU",
  "tsl_value": "Status",

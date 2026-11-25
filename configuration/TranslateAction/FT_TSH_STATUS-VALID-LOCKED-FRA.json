@@ -4,9 +4,7 @@
   "label": "Action",
   "userkeylabel": "FT_TSH_STATUS-VALID-LOCKED",
   "icon": "img/system/action_btn",
-  "item": {
-   "act_name": "FT_TSH_STATUS-VALID-LOCKED"
-  }
+  "item": {"act_name": "FT_TSH_STATUS-VALID-LOCKED"}
  },
  "tsl_lang": "FRA",
  "tsl_value": "Verrouiller",

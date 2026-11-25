@@ -4,9 +4,7 @@
   "label": "Field",
   "userkeylabel": "ftTskParentId",
   "icon": "img/system/field",
-  "item": {
-   "fld_name": "ftTskParentId"
-  }
+  "item": {"fld_name": "ftTskParentId"}
  },
  "tsl_lang": "FRA",
  "tsl_value": "Tâche parente",

@@ -6,7 +6,7 @@
  "tsh_flying": false,
  "tsh_gantt": "2",
  "tsh_gantt_x": true,
- "tsh_gantt_y": true,
+ "tsh_gantt_y": false,
  "tsh_gantt_r": true,
  "tsh_chart_gantt": true,
  "tsh_chart_res": true,

@@ -13,7 +13,7 @@
  "obf_ref_export": true,
  "obf_copy": false,
  "obf_associate": null,
- "obf_inline": null,
+ "obf_inline": false,
  "obf_rendering": null,
  "obf_treedepth": null,
  "obf_redolog": null,

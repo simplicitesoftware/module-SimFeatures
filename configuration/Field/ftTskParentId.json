@@ -2,9 +2,7 @@
  "fld_name": "ftTskParentId",
  "fld_dbname": "ft_tsk_parent_id",
  "fld_visible": "3",
- "fld_updatable": [
-  "2"
- ],
+ "fld_updatable": ["2"],
  "fld_required": false,
  "fld_fonctid": false,
  "fld_research": null,
