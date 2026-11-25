@@ -70,4 +70,169 @@
     "ftAttrHtmlReadOnly":"",
     "ftAttrSignaturePad":""
   }]
+},{
+  "name":"FtTask",
+  "action":"upsert",
+  "data":[{
+    "ftTskCode":"PRJ-WEB",
+    "ftTskName":"Website redesign",
+    "ftTskDescription":"Redesign of the public website"
+  },{
+    "ftTskCode":"WEB-SPEC",
+    "ftTskName":"Specifications",
+    "ftTskParentId__ftTskCode":"PRJ-WEB"
+  },{
+    "ftTskCode":"WEB-SPEC-UX",
+    "ftTskName":"UX mockups",
+    "ftTskParentId__ftTskCode":"WEB-SPEC"
+  },{
+    "ftTskCode":"WEB-SPEC-FUN",
+    "ftTskName":"Functional specifications",
+    "ftTskParentId__ftTskCode":"WEB-SPEC"
+  },{
+    "ftTskCode":"WEB-DEV",
+    "ftTskName":"Development",
+    "ftTskParentId__ftTskCode":"PRJ-WEB"
+  },{
+    "ftTskCode":"WEB-DEV-FRONT",
+    "ftTskName":"Front-end development",
+    "ftTskParentId__ftTskCode":"WEB-DEV"
+  },{
+    "ftTskCode":"WEB-DEV-BACK",
+    "ftTskName":"Back-end development",
+    "ftTskParentId__ftTskCode":"WEB-DEV"
+  },{
+    "ftTskCode":"WEB-TEST",
+    "ftTskName":"Acceptance tests",
+    "ftTskParentId__ftTskCode":"PRJ-WEB"
+  },{
+    "ftTskCode":"WEB-PROD",
+    "ftTskName":"Go live",
+    "ftTskParentId__ftTskCode":"PRJ-WEB"
+  },{
+    "ftTskCode":"PRJ-CRM",
+    "ftTskName":"CRM migration",
+    "ftTskDescription":"Migration of the customer data to the new CRM"
+  },{
+    "ftTskCode":"CRM-AUDIT",
+    "ftTskName":"Audit of the existing data",
+    "ftTskParentId__ftTskCode":"PRJ-CRM"
+  },{
+    "ftTskCode":"CRM-MIG",
+    "ftTskName":"Data migration",
+    "ftTskParentId__ftTskCode":"PRJ-CRM"
+  },{
+    "ftTskCode":"CRM-MIG-MAP",
+    "ftTskName":"Mapping of the fields",
+    "ftTskParentId__ftTskCode":"CRM-MIG"
+  },{
+    "ftTskCode":"CRM-MIG-RUN",
+    "ftTskName":"Migration runs",
+    "ftTskParentId__ftTskCode":"CRM-MIG"
+  },{
+    "ftTskCode":"CRM-TRAIN",
+    "ftTskName":"User training",
+    "ftTskParentId__ftTskCode":"PRJ-CRM"
+  }]
+},{
+  "name":"FtCustomUser",
+  "action":"upsert",
+  "data":[{
+    "usr_login":"ftalice",
+    "usr_first_name":"Alice",
+    "usr_last_name":"Martin",
+    "usr_email":"alice.martin@example.com",
+    "usr_lang":"FRA",
+    "ftUsrType":"FT_READ"
+  },{
+    "usr_login":"ftbruno",
+    "usr_first_name":"Bruno",
+    "usr_last_name":"Durand",
+    "usr_email":"bruno.durand@example.com",
+    "usr_lang":"FRA",
+    "ftUsrType":"FT_READ"
+  },{
+    "usr_login":"ftchloe",
+    "usr_first_name":"Chloé",
+    "usr_last_name":"Bernard",
+    "usr_email":"chloe.bernard@example.com",
+    "usr_lang":"FRA",
+    "ftUsrType":"FT_ADMIN"
+  }]
+},{
+  "name":"FtTaskUser",
+  "action":"upsert",
+  "data":[{
+    "ftTsuTskId__ftTskCode":"WEB-SPEC-UX",
+    "ftTsuUsrId__usr_login":"ftchloe",
+    "ftTsuStartDate":"2026-12-01",
+    "ftTsuEndDate":"2026-12-11",
+    "ftTsuWorkload":"8"
+  },{
+    "ftTsuTskId__ftTskCode":"WEB-SPEC-FUN",
+    "ftTsuUsrId__usr_login":"ftalice",
+    "ftTsuStartDate":"2026-12-01",
+    "ftTsuEndDate":"2026-12-18",
+    "ftTsuWorkload":"12"
+  },{
+    "ftTsuTskId__ftTskCode":"WEB-DEV-FRONT",
+    "ftTsuUsrId__usr_login":"ftbruno",
+    "ftTsuStartDate":"2026-12-14",
+    "ftTsuEndDate":"2027-01-29",
+    "ftTsuWorkload":"25"
+  },{
+    "ftTsuTskId__ftTskCode":"WEB-DEV-BACK",
+    "ftTsuUsrId__usr_login":"ftalice",
+    "ftTsuStartDate":"2027-01-04",
+    "ftTsuEndDate":"2027-02-12",
+    "ftTsuWorkload":"25"
+  },{
+    "ftTsuTskId__ftTskCode":"WEB-TEST",
+    "ftTsuUsrId__usr_login":"ftchloe",
+    "ftTsuStartDate":"2027-02-01",
+    "ftTsuEndDate":"2027-02-19",
+    "ftTsuWorkload":"10"
+  },{
+    "ftTsuTskId__ftTskCode":"WEB-TEST",
+    "ftTsuUsrId__usr_login":"ftbruno",
+    "ftTsuStartDate":"2027-02-08",
+    "ftTsuEndDate":"2027-02-19",
+    "ftTsuWorkload":"5"
+  },{
+    "ftTsuTskId__ftTskCode":"WEB-PROD",
+    "ftTsuUsrId__usr_login":"ftalice",
+    "ftTsuStartDate":"2027-02-22",
+    "ftTsuEndDate":"2027-02-26",
+    "ftTsuWorkload":"3"
+  },{
+    "ftTsuTskId__ftTskCode":"CRM-AUDIT",
+    "ftTsuUsrId__usr_login":"ftbruno",
+    "ftTsuStartDate":"2027-01-04",
+    "ftTsuEndDate":"2027-01-22",
+    "ftTsuWorkload":"10"
+  },{
+    "ftTsuTskId__ftTskCode":"CRM-MIG-MAP",
+    "ftTsuUsrId__usr_login":"ftchloe",
+    "ftTsuStartDate":"2027-01-18",
+    "ftTsuEndDate":"2027-02-05",
+    "ftTsuWorkload":"10"
+  },{
+    "ftTsuTskId__ftTskCode":"CRM-MIG-RUN",
+    "ftTsuUsrId__usr_login":"ftbruno",
+    "ftTsuStartDate":"2027-02-08",
+    "ftTsuEndDate":"2027-03-12",
+    "ftTsuWorkload":"15"
+  },{
+    "ftTsuTskId__ftTskCode":"CRM-TRAIN",
+    "ftTsuUsrId__usr_login":"ftalice",
+    "ftTsuStartDate":"2027-03-15",
+    "ftTsuEndDate":"2027-03-26",
+    "ftTsuWorkload":"6"
+  },{
+    "ftTsuTskId__ftTskCode":"CRM-TRAIN",
+    "ftTsuUsrId__usr_login":"ftchloe",
+    "ftTsuStartDate":"2027-03-22",
+    "ftTsuEndDate":"2027-03-26",
+    "ftTsuWorkload":"3"
+  }]
 }]
