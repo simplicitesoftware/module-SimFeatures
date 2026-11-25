@@ -10,6 +10,7 @@ import { Options } from 'flatpickr/dist/types/options';
 import { Instance } from 'flatpickr/dist/types/instance';
 import moment from 'moment';
 import hljs from 'highlight.js';
+import * as Diff2Html from 'diff2html';
 import { marked } from 'marked';
 import { Calendar as Calendar$1 } from '@fullcalendar/core/index.js';
 import { Html5Qrcode } from 'html5-qrcode';
@@ -552,14 +553,16 @@ interface SocialShareData {
 }
 /** Status of a post: `O` open, `C` closed */
 type SocialStatus = "O" | "C";
+/** Follow status of a user: `R` request, `A` accepted, `D` denied */
+type SocialFollowStatus = "R" | "A" | "D";
 /** Author of a post */
 interface SocialUser {
     /** User row ID */
     userId: string;
     /** Login */
     login: string;
-    /** TODO "A" ... ? */
-    status: string;
+    /** Follow status (followers and followed users) */
+    status?: SocialFollowStatus;
     /** Displayed name */
     label: string;
     /** Full name */
@@ -2278,6 +2281,12 @@ declare class List {
     private static _areaId;
     private align;
     /**
+     * WCAG: a scrollable cell must be reachable with the keyboard to scroll with the arrow keys,
+     * other display values are not tab stops (sizes once displayed).
+     * @param d Cell content with a max height / width
+     */
+    private scrollFocus;
+    /**
      * Format a value for display in a list cell.
      * @param f Field definition
      * @param v Raw value
@@ -2481,6 +2490,53 @@ declare class List {
      * @returns The context menu
      */
     showContextMenu(ctn: Container, o: UIBusinessObject, rowId: string | null, p: ListParam, e: JQuery.ContextMenuEvent, element: JQuery): JQuery<HTMLElement> | undefined;
+    /**
+     * Action bar
+     * @param list Array of buttons (plain or plus)
+     * @param alignRight pull on the right side of container ?
+     * @returns div.actions
+     * @example
+     * // Empty string when there is no button
+     * ctn.append($view.list.actionBar([btn], true));
+     */
+    actionBar(list: JQuery[], alignRight?: boolean): JQuery | "";
+    /**
+     * Convert actions to buttons array
+     * @param o Business object
+     * @param rowId Optional rowId on form/row
+     * @param list List of actions as plain buttons
+     * @param plus List of actions as 'plus' button
+     * @param options Options
+     * @param options.alignRight true for right side
+     * @param options.minified true to move labels in tooltips
+     * @param options.dropUp true to drop up the 'plus' popup
+     * @param options.plusFirst true to put the plus button on first position
+     * @param options.grouped true to group plain buttons per type (print, crosstab, treeview, placemap, associate)
+     * @param options.groups additional action groups with name, icon, label, actions
+     * @returns jQuery items
+     * @example
+     * // Buttons of the object actions, then in a bar on the right
+     * const items = $view.list.actionItems(obj, rowId, obj.metadata.actions, null, { minified: true });
+     * ctn.append($view.list.actionBar(items, true));
+     */
+    actionItems(o: UIBusinessObject, rowId: string | null, list?: Action[] | null, plus?: Action[] | null, options?: {
+        alignRight?: boolean;
+        minified?: boolean;
+        dropUp?: boolean;
+        plusFirst?: boolean;
+        grouped?: boolean;
+        groups?: ActionGroup[];
+    }): JQuery[];
+    /**
+     * Build an action control
+     * @param a action metadata
+     * @param o object
+     * @param rowId optional rowId for form/row action
+     * @param click click handler
+     * @param minified true to move the label in a tooltip
+     * @returns button or li for 'Plus' button
+     */
+    actionItem(a: Action, o: UIBusinessObject, rowId: string | null, click?: ActionHandler, minified?: boolean): JQuery<HTMLElement>;
 }
 
 /**
@@ -2617,6 +2673,16 @@ declare class UINavigator {
      */
     navId(id?: string): string | undefined;
     /**
+     * Suffix of a DOM ID built with an object instance to be unique per navigator:
+     * the navigator Id, unless the instance already ends with it (instance of $ui.getNavObject)
+     * @param instance Object instance name
+     * @returns navigator Id or an empty string
+     * @example
+     * const nav = $ui.getNav(ctn);
+     * const id = `my_${obj.getName()}_${obj.getInstance()}${nav.idSuffix(obj.getInstance())}`;
+     */
+    idSuffix(instance: string): string;
+    /**
      * Navigation. Returns the current item.
      * @param action Optional <code>'new'</code>: reinit, <code>'add'</code>: push, <code>'del'</code>: pop (with an item = pop only if it is the current one), <code>'none' or null</code>: update last label
      * @param item Item to push in navigation <code>\{ container, type, object, rowId, params, callback, url \}</code>
@@ -2703,7 +2769,8 @@ declare class UINavigator {
     setRestoreFocus(b: boolean | string): this;
     /**
      * Restore nav informations (scroll and focus).
-     * Focus order: requested element (see setRestoreFocus), previously focused element, else the content heading.
+     * Focus order: requested element (see setRestoreFocus), previously focused element,
+     * else the content heading in a11y-mode or the first focusable element.
      * @example
      * const nav = $ui.getNav(ctn);
      * nav.restore(ctn);
@@ -2721,8 +2788,8 @@ declare class UINavigator {
     vscroll(apply: boolean | number, n: NavItem, ctn?: Container): this;
     /**
      * Preserve page focus.
-     * If the previous focus is not found, focus the heading of a top level or dialog content
-     * (or the main area / the dialog when the content has no heading).
+     * If the previous focus is not found: in a11y-mode, focus the heading of a top level or dialog content
+     * (or the main area / the dialog when the content has no heading), else the first visible '.js-focusable'.
      * @param apply true to restore focus, false to keep activeElement infos
      * @example
      * const nav = $ui.getNav(ctn);
@@ -3052,6 +3119,11 @@ declare class UIColor {
 
 /** Axis type: `C` column, `L` line, `V` value */
 type CrosstabAxisType = "C" | "L" | "V";
+/**
+ * Aggregation method of a crosstab: `T` text, `S` sum, `P` product, `A` algebraic average, `G` geometric average,
+ * `L` minimum, `H` maximum, `F` formula
+ */
+type CrosstabMethod = "T" | "S" | "P" | "A" | "G" | "L" | "H" | "F";
 /** Axis of a crosstab */
 interface CrosstabAxis {
     /** Field name */
@@ -3064,8 +3136,8 @@ interface CrosstabAxis {
     order: number;
     /** Caption position */
     caption?: string;
-    /** TODO "T" | "F"... */
-    method: string;
+    /** Aggregation method */
+    method: CrosstabMethod;
     /** Axis type */
     type: CrosstabAxisType;
     /** Formula of a calculated value */
@@ -3351,7 +3423,7 @@ declare class Charts {
      * Predefined palettes <code>\{ name:[colors] \}</code>.
      */
     PALETTES: {
-        [key: string]: string[];
+        [x: string]: string[];
     };
     /** Bright color of the palette */
     BRIGHT_COLOR?: string;
@@ -5160,13 +5232,32 @@ type TimesheetOptions = NavParam & {
     /** Hook when removed */
     onunload?: (ctn: Container, obj: UIBusinessObject, ts: TimesheetMetadata) => void;
 };
+/** Gantt metadata */
+interface TimesheetGanttMeta {
+    /** Assignment object name */
+    object: string;
+    /** Assignment object instance name */
+    inst: string;
+    /** Timesheet name */
+    timesheet: string;
+    /** Blocks can be moved in time (horizontal drag) */
+    dragX: boolean;
+    /** Blocks can be moved to another line (vertical drag) */
+    dragY: boolean;
+    /** Blocks can be resized */
+    resize: boolean;
+}
 /** Gantt data */
 interface TimesheetGanttData {
     /** Periods */
     period: TimesheetPeriod[];
-    /** TODO */
-    meta: KeyObject;
-    /** TODO */
+    /** Gantt metadata */
+    meta: TimesheetGanttMeta;
+    /**
+     * Root node of the hierarchy: `{ obj, id, label, type, children, blocks }`
+     * with `type` 0 hierarchical object, 1 master line (first resource), 2 assignment line (second resource),
+     * and `blocks` the assigned periods `{ id, begin, end, size, offset, workload, label }`
+     */
     data: KeyObject;
 }
 /** Gantt display options */
@@ -5218,7 +5309,383 @@ declare class Timesheet {
     /**
      * Gantt chart
      */
-    displayGantt(ctn: Container, obj: BusinessObject, tsName: string, data: TimesheetGanttData, upd?: (p: KeyObject, cbk: (err: MessageJSON) => void) => void, cbk?: Callback): void;
+    displayGantt(ctn: Container, obj: BusinessObject, tsName: string, data: TimesheetGanttData, upd?: (p: KeyObject[], cbk: (r: KeyObject) => void) => void, cbk?: Callback): void;
+}
+
+/** Common parameters of the widgets, extended by the parameters of each widget */
+interface UIWidgetParam {
+    /** Instance name (default <code>widget-n</code>) */
+    name?: string;
+    /** Caller container: the element is appended to it on the first rendering (default null = placed by the caller) */
+    ctn?: JQuery | null;
+}
+/** Constructor argument of a widget: the parameters are optional when all their fields are optional */
+type UIWidgetArgs<P> = object extends P ? [p?: P] : [p: P];
+/**
+ * Formatted item rendered by a widget (carousel, cards, accordion, timeline):
+ * values are already displayable, built from a record or from example data
+ */
+interface WidgetItem {
+    /** Source record (data of the clickable elements) */
+    data?: KeyObject;
+    /** Row ID */
+    rowId?: string;
+    /** Raw name (carousel accessible labels) */
+    name?: string;
+    /** Title */
+    title?: string;
+    /** Date: ISO date of a card title, or displayed date of a timeline */
+    date?: string;
+    /** Sub-title */
+    subtitle?: string;
+    /** Description / content (HTML) */
+    description?: string;
+    /** Image URL */
+    image?: string;
+    /** Status (cards) */
+    status?: {
+        label: string;
+        bgcolor?: string;
+        color?: string;
+        icon?: string;
+    };
+}
+/**
+ * Base class of the UI widgets: the constructor only stores the parameters, <code>render()</code> builds the element
+ * and appends it to the caller container (if any).
+ * <br>A widget implements <code>draw()</code> to build its element.
+ * @example
+ * // Specific widget: parameters, then the element built by draw()
+ * interface MyBadgeParam extends UIWidgetParam {
+ * 	label: string;
+ * }
+ * class MyBadge extends Simplicite.UI.Widget<MyBadgeParam> {
+ * 	protected draw() {
+ * 		return $('<span class="badge"/>').text(this.params.label);
+ * 	}
+ * }
+ * const b: MyBadge = new MyBadge({ label: "New", name: "myBadge", ctn });
+ * b.render();
+ * $console.log(b.name, b.element());
+ */
+declare abstract class UIWidget<P extends UIWidgetParam = UIWidgetParam> {
+    /** Sequence of the default instance names */
+    private static seq;
+    /** Instance name (parameter <code>name</code>, default <code>widget-n</code>) */
+    readonly name: string;
+    /** Caller container (parameter <code>ctn</code>): the element is appended to it on the first rendering (null = placed by the caller) */
+    readonly ctn: JQuery | null;
+    /** Root element, set by <code>render()</code> only */
+    private root;
+    /** Loading of the last rendering, set by <code>render()</code> only */
+    private loading;
+    /** Parameters */
+    protected readonly params: P;
+    /**
+     * Constructor: stores the parameters, nothing is rendered before <code>render()</code>
+     * @param args Parameters of the widget with the optional instance name and caller container (default <code>{}</code> when all optional)
+     */
+    constructor(...args: UIWidgetArgs<P>);
+    /**
+     * Root element, built by <code>render()</code> (empty before)
+     * @returns The element
+     * @example
+     * // Any widget
+     * function isRendered(w: UIWidget) {
+     * 	return w.element().length > 0;
+     * }
+     */
+    element(): JQuery;
+    /**
+     * Asynchronous content of the last rendering (resolved for a synchronous widget or before rendering)
+     * @returns Promise resolved when the content is displayed
+     * @example
+     * // Any widget
+     * async function whenDisplayed(w: UIWidget) {
+     * 	await w.ready();
+     * 	$console.log("displayed", w.name);
+     * }
+     */
+    ready(): Promise<void>;
+    /**
+     * Build the root element of the widget
+     * (to be implemented by the widget)
+     * @returns The new element
+     * @example
+     * // Synchronous widget: the element is built from the parameters
+     * interface MyTagParam extends UIWidgetParam {
+     * 	text: string;
+     * 	color?: string;
+     * }
+     * class MyTag extends Simplicite.UI.Widget<MyTagParam> {
+     * 	protected draw() {
+     * 		return $('<span class="my-tag"/>')
+     * 			.text(this.params.text)
+     * 			.css("background-color", this.params.color || "");
+     * 	}
+     * }
+     * new MyTag({ text: "Urgent", color: "red", ctn }).render();
+     */
+    protected abstract draw(): JQuery;
+    /**
+     * Load the asynchronous content of the rendered element (records, library, media...),
+     * started by <code>render()</code> once the element is placed
+     * (to be implemented by an asynchronous widget, nothing by default)
+     * @param _e Rendered element
+     * @returns Promise resolved when the content is displayed
+     * @example
+     * // Widget with a placeholder, then the number of records
+     * class MyCount extends Simplicite.UI.Widget {
+     * 	protected draw() {
+     * 		return $('<div class="my-count"/>').text($T("LOADING"));
+     * 	}
+     * 	protected async load(e: JQuery) {
+     * 		const rows = await obj.search();
+     * 		e.text(rows.length);
+     * 	}
+     * }
+     * const e: JQuery = await new MyCount({ ctn }).renderAsync();
+     */
+    protected load(_e: JQuery): Promise<void>;
+    /**
+     * Render the widget: builds the element and appends it to the caller container,
+     * or replaces the previous element when already rendered.
+     * <br>The asynchronous content is then loaded: see <code>ready</code> or <code>renderAsync()</code>.
+     * @returns The element
+     * @example
+     * // Any widget placed by the caller (no container in its parameters)
+     * function show(w: UIWidget) {
+     * 	ctn.append(w.render());
+     * }
+     */
+    render(): JQuery;
+    /**
+     * Render the widget and wait for its asynchronous content
+     * @returns Promise of the element, resolved when the content is displayed
+     * @example
+     * // Any widget, the asynchronous content included
+     * async function show(w: UIWidget) {
+     * 	const e: JQuery = await w.renderAsync();
+     * 	$console.log("displayed", w.name, e);
+     * }
+     */
+    renderAsync(): Promise<JQuery>;
+    /**
+     * Replace the root element by a new one built from the asynchronous content (from <code>load()</code>):
+     * the placeholder built by <code>draw()</code> is replaced in the DOM
+     * @param e New element
+     * @example
+     * // Widget built once its data is loaded
+     * class MyList extends Simplicite.UI.Widget {
+     * 	protected draw() {
+     * 		return $('<div aria-busy="true"/>');
+     * 	}
+     * 	protected async load() {
+     * 		const rows = await obj.search();
+     * 		this.replaceElement($('<ul/>').append(rows.map(r => $('<li/>').text(r.row_id))));
+     * 	}
+     * }
+     * new MyList({ ctn }).render();
+     */
+    protected replaceElement(e: JQuery): void;
+    /**
+     * Remove the widget from the DOM
+     * @example
+     * // Any widget
+     * function hide(w: UIWidget) {
+     * 	w.close();
+     * }
+     */
+    close(): void;
+}
+
+/** Parameters of the AI chatbot (see `$ui.displayAIChatBot`) */
+interface AIChatBotParam extends UIWidgetParam {
+    /** Specialisation of the assistant, sent with each message */
+    specialisation?: string;
+    /** Data disclaimer displayed above the messages (HTML) */
+    disclaimer?: string;
+    /** Conversation ID (default: a new random ID) */
+    conversation?: string;
+    /** Button to add an image (default true) */
+    addImage?: boolean;
+    /** Button to take a picture (default true) */
+    takePicture?: boolean;
+    /** Button to dictate the message, when the speech recognition is configured (default true) */
+    speech?: boolean;
+}
+/**
+ * AI chatbot: conversation with the assistant of the MCP client (`AiMcpClientApi`),
+ * with images, dictation, tools accepted by the user and settings of the LLM.
+ * Each instance has its own conversation (several chatbots in the multi work-areas mode).
+ * @example
+ * const bot = new $widget.AIChatBot({ specialisation: "Sales", ctn });
+ * bot.render();
+ */
+declare class AIChatBot extends UIWidget<AIChatBotParam> {
+    /** External object of the API */
+    static readonly API = "AiMcpClientApi";
+    private static provider?;
+    /** Configured providers { provider, model } */
+    private static providers?;
+    private static providerParams?;
+    private static speechSupported?;
+    /** Conversation ID (parameter `conversation`, default a new random ID) */
+    readonly conversation: string;
+    /** Tools of the last response waiting for the answer of the user */
+    private tools;
+    /** Rate limits of the provider given by the last response (see showLimits) */
+    private rateLimit?;
+    /** Tokens of the conversation at the last response (context sent and answer), unknown after a compaction */
+    private context?;
+    private recorder?;
+    private chunks;
+    private cancelled;
+    /**
+     * Constructor: stores the parameters, nothing is rendered before `render()`
+     * @param args Parameters of the chatbot with the optional instance name and caller container
+     */
+    constructor(...args: UIWidgetArgs<AIChatBotParam>);
+    /**
+     * Calls the API
+     * @param data JSON data with the request type `reqType`
+     * @returns promise of the JSON response, undefined when the response is not JSON
+     */
+    static callApi<T = KeyObject>(data: {
+        reqType?: string;
+        [key: string]: unknown;
+    }): Promise<T | undefined>;
+    /** Messages area */
+    private get messages();
+    /** Input area */
+    private get inputArea();
+    /** Message input */
+    private get input();
+    /** Image to send */
+    private get image();
+    /** Icon button `data-action=ai-<name>` */
+    private iconButton;
+    /**
+     * Builds the chatbot (the option buttons are added by the loading)
+     * @returns The chatbot element `.ai-chatbot`
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /** Option buttons of the actions bar */
+    private get options();
+    /**
+     * Option buttons and settings button of the actions bar: they depend on the server settings
+     * @returns Promise resolved when the buttons are added
+     */
+    protected load(): Promise<void>;
+    /**
+     * Label of a configured provider: name and model
+     * @param provider Provider name (default the one chosen by the user)
+     * @returns Label (ex `claude (claude-opus-5-5)`)
+     */
+    private static providerLabel;
+    /** Value of the message input, its height adjusted to the lines */
+    private setInput;
+    /** Image to send (data URL), none to remove it */
+    private setImage;
+    /** Image file chosen by the user */
+    private addImage;
+    /** Picture of the camera */
+    private takePicture;
+    /** History of the conversation, only without conversation ID (kept by the server otherwise) */
+    private history;
+    /** Sends the message and the image of the input */
+    send(): void;
+    /** Bot message, waiting for the answer without html */
+    private botMessage;
+    /** Enables or disables the input */
+    private enable;
+    private scroll;
+    /** Displays the response, the error or the tools to accept (always enables the chatbot again) */
+    private response;
+    /**
+     * Error message with its detail: error of the LLM provider `response: { code, error }` (rate limit, key, request...)
+     * or of the server `{ status, error }`, explicit message when the tokens quota of the provider is reached (429),
+     * message to reconnect without detail when the session ended during the request (full clear cache done by a tool)
+     */
+    private static errorMessage;
+    /**
+     * Usage in the actions bar: tokens of the last response (any provider), and remaining quota of the provider in a circle
+     * (the previous values are kept when the response has none)
+     * @param res Response of the provider with `usage` and `rateLimit` { limit, remaining, reset } (input tokens per minute)
+     * @param conversation Response of the conversation (size of its context), false for the compaction call
+     */
+    private usage;
+    /** Context window of the model of the provider chosen by the user (configuration `context_window`), undefined when not set */
+    private static contextWindow;
+    /**
+     * Size of the conversation in the actions bar: tokens, part of the context window of the model in a circle when configured,
+     * and the button to compact it
+     * @param size Tokens of the conversation, none when unknown (new or compacted conversation)
+     */
+    private contextGauge;
+    /**
+     * Compaction of the conversation: the server replaces its history by a summary written by the assistant,
+     * the messages stay displayed with a notice
+     * @param auto Done after an answer near the context window of the model
+     */
+    private compactConversation;
+    /**
+     * Number of tokens or requests: as is below 1000, in k with one digit below a million (ex 1.5k),
+     * else in M with 2 digits rounded down (ex 1.99M for 1,996,000: a used quota never shown as full),
+     * without the trailing zeros of the decimals (ex 200k, 1.5M, 2M)
+     */
+    private static compact;
+    /** Dialog of all the limits of the provider (last response): remaining, limit, reset time, and how to work with them */
+    private showLimits;
+    /** Text without HTML */
+    private static escape;
+    /** Answer in the last bot message, or below the last tools after a tools answer */
+    private answer;
+    /** Tools proposed by the assistant: accepted/refused by the permissions of the user, or asked */
+    private addTools;
+    /** Answer of the user to a tool */
+    private answerTool;
+    /** Calls the assistant again when all the tools are answered */
+    private recallWithTools;
+    /** Question of a tool: `[TOOL]`, `[PARAMS]` and optional part `[PARAMS?:...]` */
+    private static formatTool;
+    /** Speech recognition configured (asked once) */
+    private static isSpeechSupported;
+    /** Microphone button: starts the recording, or stops it during the recording */
+    private speech;
+    /** Recording state of the input: microphone blinking, cancel and stop buttons */
+    private recording;
+    /** Records the audio, transcribed in the input when stopped */
+    private record;
+    /** Speech to text of the audio (base64) in the input */
+    private transcribe;
+    /** Default values of the user parameters of the provider (undefined without parameters) */
+    private static defaults;
+    /** Configured providers, provider chosen by the user and its user parameters (loaded once, again after a change of provider) */
+    private static loadProviderParams;
+    /** User parameters of a provider record: JSON field `llmPrvUserParameters` (key: { label, help, default, min, max }) */
+    private static userParameters;
+    /**
+     * Definitions of the user parameters of a provider (record of LlmProvider)
+     * @param provider Provider name
+     * @returns Definitions (empty without record or parameter)
+     */
+    private static providerDefs;
+    /** Text of a parameter in the language of the user, else in english */
+    private static paramText;
+    /**
+     * Section of the parameters of a provider: a slider by numeric parameter, help, and reset to the default values
+     * @param section Section body
+     * @param defs Definitions of the parameters
+     * @param values Current values
+     */
+    private static paramsSection;
+    /** Section with its title */
+    private static section;
+    /** Settings dialog: provider among the configured ones, parameters of the LLM and permissions of the tools */
+    private static editParams;
+    /** Saves the provider and its parameters (session) and the permissions of the tools (user) */
+    private static saveParams;
 }
 
 /** Parameters of the fulltext index search */
@@ -5452,6 +5919,17 @@ declare class UIRenderView {
      */
     displayTray(ctn: AnyContainer, obj: string | BusinessObject, field?: string, options?: KeyObject, cbk?: Callback): void;
     /**
+     * AI chatbot of the MCP client (needs the AI settings and the `mcp_server` feature, warning otherwise)
+     * @param ctn Container
+     * @param params Optional parameters: `specialisation` of the assistant, data `disclaimer` (default the one of the settings),
+     * `conversation` ID, option buttons `addImage`, `takePicture` and `speech` (visible by default)
+     * @param cbk Optional callback with the chatbot
+     * @example
+     * // Chatbot specialized in the sales, without camera
+     * $ui.displayAIChatBot(null, { specialisation: "Sales", takePicture: false });
+     */
+    displayAIChatBot(ctn: AnyContainer, params?: Omit<AIChatBotParam, "ctn">, cbk?: (bot: AIChatBot) => void): void;
+    /**
      * Map service.
      * Loads object data to pass to the map renderer.
      * Can be a single object or multi-object
@@ -5575,6 +6053,11 @@ interface UIViewNamespace extends Readonly<typeof ViewClasses> {
  * Other bundles can add their classes by module augmentation (see the Maker).
  */
 interface AjaxNamespace {
+}
+/**
+ * `$widget` global: classes of the widget components (progress bars...).
+ */
+interface WidgetNamespace extends Readonly<typeof WidgetClasses> {
 }
 
 /** Job executed in a Promise: calls `resolve` with its result or `reject` on error */
@@ -5728,7 +6211,7 @@ interface DialogParam {
     footer?: AnyContent;
     /** True to add a close button in header */
     closeable?: boolean;
-    /** True (default) to focus the title of a displayed form or list, else the first field, else the primary, success or first button; or a selector element to focus; false to keep the focus */
+    /** True (default) to focus the title of a displayed form or list (in accessibility mode), else the first field, else the primary, success or first button; or a selector element to focus; false to keep the focus */
     focus?: boolean | string;
     /** False to remove fade effect (default true) */
     fade?: boolean;
@@ -6014,7 +6497,7 @@ declare class Bootstrap5 {
      * @param params.type Optional <code>error|danger|warning|info</code>
      * @param params.content Dialog body
      * @param params.closeable True to add a close button in header
-     * @param params.focus True (default) to focus the title of a displayed form or list, else the first field, else the primary, success or first button; or a selector element to focus; false to keep the focus
+     * @param params.focus True (default) to focus the title of a displayed form or list (in accessibility mode), else the first field, else the primary, success or first button; or a selector element to focus; false to keep the focus
      * @param params.fade False to remove fade effect (default true)
      * @param params.modal True to disable click outside dialog and ESC keyboard button
      * @param params.scrollable Optional scrollable body (default true)
@@ -6234,7 +6717,7 @@ declare class Bootstrap5 {
      */
     actionButton(a: Action, o: UIBusinessObject, rowid?: string | null, click?: ActionHandler, minified?: boolean): JQuery<HTMLElement>;
     /**
-     * Progress bar: creates the bar or updates an existing one.
+     * Progress bar: creates the bar or updates an existing one (component {@link ProgressBar}).
      * <br>Value and text can be refreshed later by the event <code>ui.progressbar</code>:
      * <pre>const pb = $tools.progressBar("mybar", 0, null, undefined, "Loading...");
      * pb.trigger("ui.progressbar", [50, "Processing..."]); // value + text
@@ -7202,45 +7685,106 @@ declare class WebNews {
     onNews(n: KeyObject): void;
 }
 
-/** Name of a color palette */
-type PaletteName = "Base" | "Pastel" | "Strong" | "Light" | "Bright" | "Mars" | "Sea" | "Berry" | "Fire" | "Choco";
-/** Parameters of a toast (see `$view.widget.toast`) */
-interface ToastParam {
-    /** Optional level */
-    level?: AlertType;
-    /** Toast body */
-    content: AnyContent;
-    /** Position `top` or `bottom` */
-    position?: string;
-    /** Align `left`, `right` or `center` */
-    align?: string;
-    /** Duration in ms (default 3000, -1 = no auto close) */
-    duration?: number;
-    /** Add an undo button */
-    undo?: boolean;
-    /** Add a pin button to keep the toast open */
-    pinable?: boolean;
+/** Layout options of a time line */
+interface TimelineOptions {
+    /** Row-level additional CSS classes */
+    classes?: string;
+    /** Width (number of pixels or CSS dimension) */
+    width?: string | number;
+    /** Height (number of pixels or CSS dimension) */
+    height?: string | number;
+    /** Background color (CSS color) */
+    bgColor?: string;
+    /** Layout: `vertical` (default) or `horizontal` (line on top, items below, scrollable on X axis) */
+    direction?: "vertical" | "horizontal";
+    /**
+     * Maximum height of a vertical time line (number of pixels or CSS dimension, `none` = unlimited),
+     * scrollable beyond (default theme variable `--simplicite-timeline-widget-max-height`)
+     */
+    maxHeight?: string | number;
 }
-/** Parameters of a scratch pad to draw on an image */
-interface ScratchPadParam {
-    /** Width */
-    width?: number;
-    /** Height */
-    height?: number;
-    /** Dialog title */
+/** Parameters of a time line of a business object (see `$widget.Timeline`) */
+interface TimelineParam extends TimelineOptions, UIWidgetParam {
+    /** Object name (and instance name) */
+    name: string;
+    /** Object instance name */
+    instance?: string;
+    /** Object filters */
+    filters?: KeyObject;
+    /** Object title field */
+    titleField: string;
+    /** Object date field */
+    dateField: string;
+    /** Object description field */
+    contentField: string;
+    /** DOM Id of the list */
+    id?: string;
+    /** Click handler (true = open the form of the record) */
+    onclick?: boolean | JQueryHandler;
+}
+/** Accessible labels of a time line */
+interface TimelineLabels {
+    /** Label of the time line region */
+    timeline?: string;
+    /** Label of the titles */
     title?: string;
-    /** Inline pad (else in a dialog) */
-    inline?: boolean;
-    /** Image to draw on */
-    image: HTMLImageElement | JQuery;
-    /** Callback when the pad is loaded */
-    onload?: (pad: JQuery) => void;
-    /** Callback with the updated image data URL (null when removed) */
-    update: (dataURL: string | null) => void;
+    /** Label of the dates */
+    date?: string;
+    /** Label of the contents */
+    content?: string;
 }
+/**
+ * Time line of the records of a business object: title, date and content of each record.
+ * @example
+ * const tl: Timeline = new $widget.Timeline({
+ * 	name: "MyEvent",
+ * 	titleField: "myEvtTitle",
+ * 	dateField: "myEvtDate",
+ * 	contentField: "myEvtDescription",
+ * 	direction: "horizontal",
+ * 	ctn
+ * });
+ * await tl.renderAsync();
+ */
+declare class Timeline extends UIWidget<TimelineParam> {
+    /**
+     * Placeholder until the records are loaded
+     * @returns A busy element, replaced by the time line
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Load the records and display the time line
+     * @returns Promise resolved when the time line is displayed
+     */
+    protected load(): Promise<void>;
+    /**
+     * Time line rendering of formatted items
+     * @param id DOM Id of the list
+     * @param opts Layout options
+     * @param items Items (already displayable values)
+     * @param labels Accessible labels
+     * @param click Click handler of an item (null = not clickable)
+     * @returns Scrollable region (div.timeline-scroll) containing the time line list (ol.timeline)
+     * @example
+     * ctn.append($widget.Timeline.renderItems("myTimeline", { direction: "horizontal" },
+     * 	[{ rowId: "1", title: "Event", date: "2026-01-01", description: "Description" }], { timeline: "Events" }, null));
+     */
+    static renderItems(id: string, opts: TimelineOptions, items: WidgetItem[], labels: TimelineLabels, click: JQueryHandler | null): JQuery<HTMLElement>;
+    /**
+     * Display an example of time line with fake data (3 dated items).
+     * Same rendering as the time line widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @param direction Optional layout: `vertical` (default) or `horizontal`
+     * @returns The widget container (div.widget-timeline)
+     * @example
+     * $widget.Timeline.displayExample(ctn, "horizontal");
+     */
+    static displayExample(ctn: JQuery, direction?: "vertical" | "horizontal"): JQuery<HTMLElement>;
+}
+
 /** Parameters of a counter widget */
-interface CounterParam {
-    /** Object name */
+interface CounterParam extends UIWidgetParam {
+    /** Object name (and instance name) */
     name: string;
     /** Object instance name */
     instance?: string;
@@ -7285,74 +7829,1052 @@ interface CountersParam {
     rowClasses?: string;
     /** Optional CSS classes to add */
     classes?: string;
-    /** Click handler */
+    /** Click handler of the counters (default: open the list) */
     onclick?: JQueryHandler;
 }
-/** Parameters of the cards widget */
-interface CardsParam {
+/** Options of the counters example */
+interface CountersExampleParam {
+    /** Icon of the counters (default: a font icon, as usually configured on counters) */
+    icon?: string;
+    /** Predefined colors to display (default: all of them) */
+    colors?: string[];
+    /** Add a forced hover twin (class "hover") after each counter */
+    hover?: boolean;
+}
+/**
+ * Counter: count of the records of a business object (or total of a field), with a label and an icon.
+ * <br>An instance is one counter; the static methods display a set of counters or an example.
+ * <br>The counter is refreshed by the event <code>ui.view.filters</code> (filters of the view).
+ * @example
+ * const c: Counter = new $widget.Counter({
+ * 	name: "MyObject",
+ * 	label: "Open orders",
+ * 	filters: { myObjStatus: "OPEN" },
+ * 	color: "blue",
+ * 	icon: "fas/shopping-cart",
+ * 	onclick: () => $ui.displayList(listCtn, obj),
+ * 	ctn
+ * });
+ * await c.renderAsync();
+ */
+declare class Counter extends UIWidget<CounterParam> {
+    /** Counted object (set by update) */
+    object?: UIBusinessObject;
+    /** Clickable counter */
+    private interactive;
+    /** Accessible object */
+    private get accessible();
+    /**
+     * Build the counter box, its value is loaded by <code>load()</code>
+     * @returns The counter element <code>.widget-counter</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Load the value of the counter (accessible object only)
+     * @returns Promise resolved when the value is displayed
+     */
+    protected load(): Promise<void>;
+    /**
+     * Load the count (or the total of the field) and display it
+     * @returns Resolved once displayed
+     * @example
+     * const c: Counter = new $widget.Counter({ name: "MyObject", ctn });
+     * c.render();
+     * await c.update();
+     */
+    update(): Promise<void>;
+    /**
+     * Counter box with its colors and sizes (without content)
+     * @param p Colors, help and sizes
+     * @param interactive Clickable counter (button)
+     * @returns The counter element
+     * @example
+     * const d: JQuery = $widget.Counter.box({ name: "MyObject", color: "blue" }, false);
+     */
+    static box(p: CounterParam, interactive: boolean): JQuery<HTMLElement>;
+    /**
+     * Counter content: value, label and icon
+     * @param d Counter element
+     * @param value Displayed value
+     * @param label Label
+     * @param icon Optional icon (font icon `fas/...` or image)
+     * @param interactive Clickable counter (accessible name)
+     * @example
+     * $widget.Counter.content($widget.Counter.box({ name: "MyObject" }, false), 12, "Orders", "fas/shopping-cart");
+     */
+    static content(d: JQuery, value: string | number, label: string, icon?: string, interactive?: boolean): void;
+    /**
+     * Row of counters (grid columns)
+     * @param p Row options
+     * @returns The row element
+     * @example
+     * ctn.append($widget.Counter.row({ objects: [], colSpan: 4 }));
+     */
+    static row(p: CountersParam): JQuery<HTMLElement>;
+    /**
+     * Display a set of counters
+     * @param ctn Target container (if null defaults to the container with the DOM Id p.id)
+     * @param p Objects and row options
+     * @returns The row of counters
+     * @example
+     * $widget.Counter.displayAll(ctn, {
+     * 	objects: [
+     * 		{ name: "MyObject", label: "All orders" },
+     * 		{ name: "MyObject", label: "Open orders", filters: { myObjStatus: "OPEN" }, color: "orange" }
+     * 	]
+     * });
+     */
+    static displayAll(ctn: JQuery | null, p: CountersParam): JQuery<HTMLElement>;
+    /**
+     * Display an example of counters widget with fake data: one counter per predefined color (grey = default).
+     * Same rendering as the counters widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @param p Icon, colors and hover twins
+     * @returns The widget container (div.widget-counters)
+     * @example
+     * $widget.Counter.displayExample(ctn);
+     * $widget.Counter.displayExample(ctn, { colors: ["blue"], hover: true });
+     */
+    static displayExample(ctn: JQuery, p?: CountersExampleParam): JQuery<HTMLElement>;
+}
+
+/** Layout options of a carousel */
+interface CarouselOptions {
+    /** Object name (accessible label of the carousel, and instance name) */
     name: string;
-    instance?: string;
-    filters?: KeyObject;
-    titleField: string;
-    subTitleField?: string;
-    descriptionField?: string;
-    statusField?: string;
-    imageField?: string;
-    imageFieldThumbnail?: boolean;
-    id?: string;
-    rowClasses?: string;
-    classes?: string;
+    /** Width (number of pixels or CSS dimension) */
     width?: string | number;
+    /** Height (number of pixels or CSS dimension) */
     height?: string | number;
+    /** Background color (CSS color) */
     bgColor?: string;
-    cardClasses?: string;
-    cardWidth?: string | number;
-    cardHeight?: string | number;
-    cardImgWidth?: string | number;
-    cardImgHeight?: string | number;
-    cardBgColor?: string;
+    /** Optional content added to each slide */
     addon?: AnyContent;
+}
+/** Parameters of a carousel of a business object (see `$widget.Carousel`) */
+interface CarouselParam extends CarouselOptions, UIWidgetParam {
+    /** Object name (accessible label of the carousel, and instance name) */
+    name: string;
+    /** Object instance name */
+    instance?: string;
+    /** Object filters */
+    filters?: KeyObject;
+    /** Object title field */
+    titleField: string;
+    /** Object sub-title field */
+    subTitleField?: string;
+    /** Object description field */
+    descriptionField?: string;
+    /** Object image field */
+    imageField?: string;
+    /** Object image field as thumbnail ? */
+    imageFieldThumbnail?: boolean;
+    /** DOM Id of the list */
+    id?: string;
+    /** Click handler of the titles (default: open the form of the record, false = not clickable) */
+    onclick?: boolean | JQueryHandler;
+}
+/**
+ * Carousel of the records of a business object: one slide per record with its image, title, sub-title and description.
+ * @example
+ * const c: Carousel = new $widget.Carousel({
+ * 	name: "MyProduct",
+ * 	titleField: "myPrdName",
+ * 	descriptionField: "myPrdDescription",
+ * 	imageField: "myPrdPicture",
+ * 	height: 300,
+ * 	ctn
+ * });
+ * await c.renderAsync();
+ */
+declare class Carousel extends UIWidget<CarouselParam> {
+    /**
+     * Placeholder until the records are loaded
+     * @returns A busy element, replaced by the carousel
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Load the records and display the carousel
+     * @returns Promise resolved when the carousel is displayed
+     */
+    protected load(): Promise<void>;
+    /**
+     * Carousel rendering of formatted items
+     * @param id DOM Id prefix (the carousel is `#<id>-container`)
+     * @param opts Layout options
+     * @param items Items (already displayable values)
+     * @param click Click handler of the titles (false = not clickable)
+     * @param frozen No sliding nor auto-play (ex: theme editor preview)
+     * @returns The carousel element
+     * @example
+     * ctn.append($widget.Carousel.renderItems("myCarousel", { name: "Products" },
+     * 	[{ name: "P1", title: "Product 1", description: "Description" }], false));
+     */
+    static renderItems(id: string, opts: CarouselOptions, items: WidgetItem[], click: false | JQueryHandler, frozen?: boolean): JQuery<HTMLElement>;
+    /**
+     * Display an example of carousel widget with fake data (3 slides without image), frozen on the 1st slide.
+     * Same rendering as the carousel widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @returns The widget container (div.widget-carousel)
+     * @example
+     * $widget.Carousel.displayExample(ctn);
+     */
+    static displayExample(ctn: JQuery): JQuery<HTMLElement>;
+}
+
+/** Parameters of the cards widget (see `$widget.Cards`) */
+interface CardsParam extends UIWidgetParam {
+    /** Object name (and instance name) */
+    name: string;
+    /** Object instance name */
+    instance?: string;
+    /** Object filters */
+    filters?: KeyObject;
+    /** Object title field */
+    titleField: string;
+    /** Object sub-title field */
+    subTitleField?: string;
+    /** Object description field */
+    descriptionField?: string;
+    /** Object status field */
+    statusField?: string;
+    /** Object image field */
+    imageField?: string;
+    /** Object image field as thumbnail ? */
+    imageFieldThumbnail?: boolean;
+    /** Not used by the component (DOM Id of the container of the deprecated `$widget.cards(null, p)`, default `cards-<name>`) */
+    id?: string;
+    /** Row-level CSS classes */
+    rowClasses?: string;
+    /** Row-level additional CSS classes */
+    classes?: string;
+    /** Width (number of pixels or CSS dimension) */
+    width?: string | number;
+    /** Height (number of pixels or CSS dimension) */
+    height?: string | number;
+    /** Background color (CSS color) */
+    bgColor?: string;
+    /** Card-level additional CSS classes */
+    cardClasses?: string;
+    /** Card width (number of pixels or CSS dimension) */
+    cardWidth?: string | number;
+    /** Card height (number of pixels or CSS dimension) */
+    cardHeight?: string | number;
+    /** Card image width (number of pixels or CSS dimension) */
+    cardImgWidth?: string | number;
+    /** Card image height (number of pixels or CSS dimension) */
+    cardImgHeight?: string | number;
+    /** Card background color (CSS color) */
+    cardBgColor?: string;
+    /** Optional content added to each card */
+    addon?: AnyContent;
+    /** Optional button of each card */
     button?: {
         style?: string;
         label?: string;
         onclick?: JQueryHandler;
     };
+    /** Click handler of the cards (default: open the form of the record, false = not clickable) */
     onclick?: boolean | JQueryHandler;
 }
 /**
- * Formatted item rendered by a widget (carousel, cards, accordion, timeline):
- * values are already displayable, built from a record or from example data
+ * Set of cards of the records of a business object: image, status, title, sub-title and description of each record.
+ * @example
+ * const c: Cards = new $widget.Cards({
+ * 	name: "MyProduct",
+ * 	filters: { myPrdAvailable: "1" },
+ * 	titleField: "myPrdName",
+ * 	subTitleField: "myPrdCode",
+ * 	imageField: "myPrdPicture",
+ * 	imageFieldThumbnail: true,
+ * 	cardWidth: 250,
+ * 	ctn
+ * });
+ * await c.renderAsync();
  */
-interface WidgetItem {
-    /** Source record (data of the clickable elements) */
-    data?: KeyObject;
-    /** Row ID */
-    rowId?: string;
-    /** Raw name (carousel accessible labels) */
-    name?: string;
-    /** Title */
-    title?: string;
-    /** Date: ISO date of a card title, or displayed date of a timeline */
-    date?: string;
-    /** Sub-title */
-    subtitle?: string;
-    /** Description / content (HTML) */
-    description?: string;
-    /** Image URL */
-    image?: string;
-    /** Status (cards) */
-    status?: {
-        label: string;
-        bgcolor?: string;
-        color?: string;
-        icon?: string;
-    };
+declare class Cards extends UIWidget<CardsParam> {
+    /**
+     * Placeholder until the records are loaded
+     * @returns A busy element, replaced by the cards
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Load the records and display the cards
+     * @returns Promise resolved when the cards is displayed
+     */
+    protected load(): Promise<void>;
+    /**
+     * Cards rendering of formatted items
+     * @param opts Layout options
+     * @param items Items (already displayable values)
+     * @param defaultClick Click handler of the cards when the options have none
+     * @returns The row of cards (list)
+     * @example
+     * ctn.append($widget.Cards.renderItems({ cardWidth: 250 },
+     * 	[{ rowId: "1", title: "Product 1", subtitle: "P001" }], e => e.preventDefault()));
+     */
+    static renderItems(opts: Omit<CardsParam, "name" | "titleField">, items: WidgetItem[], defaultClick: JQueryHandler): JQuery<HTMLElement>;
+    /**
+     * Display an example of cards widget with fake data, in the usual configuration of each layout:
+     * - default grid: clickable cards with a status without color
+     * - row-horizontal: non clickable cards of 15rem with an image (placeholder)
+     * - row-vertical: clickable cards with a date as title and a colored status with icon (as an enum status field)
+     *
+     * Same rendering as the cards widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @param rowClasses Optional row CSS classes (row-horizontal or row-vertical), default grid when empty
+     * @param nb Number of cards (default 3)
+     * @returns The widget container (div.widget-cards)
+     * @example
+     * $widget.Cards.displayExample(ctn, "row-horizontal");
+     */
+    static displayExample(ctn: JQuery, rowClasses?: string, nb?: number): JQuery<HTMLElement>;
 }
-/** Parameters of a slider */
-interface SliderParam {
+
+/** Layout options of an accordion */
+interface AccordionOptions {
+    /** Row-level additional CSS classes */
+    classes?: string;
+    /** Width (number of pixels or CSS dimension) */
+    width?: string | number;
+    /** Height (number of pixels or CSS dimension) */
+    height?: string | number;
+    /** Background color (CSS color) */
+    bgColor?: string;
+}
+/** Parameters of an accordion of a business object (see `$widget.Accordion`) */
+interface AccordionParam extends AccordionOptions, UIWidgetParam {
+    /** Object name (and instance name) */
+    name: string;
+    /** Object instance name */
+    instance?: string;
+    /** Object filters */
+    filters?: KeyObject;
+    /** Object title field */
+    titleField: string;
+    /** Object description field */
+    contentField: string;
+    /** DOM Id of the list */
+    id?: string;
+    /** Click handler of the display button of each item (true = open the form of the record) */
+    onclick?: boolean | JQueryHandler;
+}
+/**
+ * Accordion of the records of a business object: one collapsible item per record (title and content).
+ * @example
+ * const a: Accordion = new $widget.Accordion({
+ * 	name: "MyFaq",
+ * 	titleField: "myFaqQuestion",
+ * 	contentField: "myFaqAnswer",
+ * 	ctn
+ * });
+ * await a.renderAsync();
+ */
+declare class Accordion extends UIWidget<AccordionParam> {
+    /**
+     * Placeholder until the records are loaded
+     * @returns A busy element, replaced by the accordion
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Load the records and display the accordion
+     * @returns Promise resolved when the accordion is displayed
+     */
+    protected load(): Promise<void>;
+    /**
+     * Accordion rendering of formatted items
+     * @param id DOM Id of the accordion
+     * @param opts Layout options
+     * @param items Items (already displayable values)
+     * @param click Click handler of the display button of each item (null = no display button)
+     * @param expanded Optional row ID of the expanded item
+     * @returns The accordion element
+     * @example
+     * ctn.append($widget.Accordion.renderItems("myFaq", {},
+     * 	[{ rowId: "1", title: "Question", description: "Answer" }], null, "1"));
+     */
+    static renderItems(id: string, opts: AccordionOptions, items: WidgetItem[], click: JQueryHandler | null, expanded?: string): JQuery<HTMLElement>;
+    /**
+     * Display an example of accordion widget with fake data (first item expanded).
+     * Same rendering as the accordion widget of a view, without any server call (ex: theme editor preview).
+     * @param ctn Target container
+     * @returns The widget container (div.widget-accordion)
+     * @example
+     * $widget.Accordion.displayExample(ctn);
+     */
+    static displayExample(ctn: JQuery): JQuery<HTMLElement>;
+}
+
+/** Parameters of a picture taken by the camera (see `$widget.Camera`) */
+interface CameraParam extends Omit<UIWidgetParam, "ctn"> {
+    /** Dialog title */
+    title: string;
+    /** Video facing mode suggestion (selfie = 'user' or back camera = 'environment', not applicable if device has only one camera) */
+    facingMode: string;
+    /** Video width (use the media width by default without zoom) */
+    videoWidth?: number;
+    /** Result image width (use the media width if unspecified) */
+    imageWidth?: number;
+    /** Result image height (same video aspect ratio if unspecified) */
+    imageHeight?: number;
+}
+/**
+ * Camera dialog to take a picture: the video preview shows the crop of the result image.
+ * @example
+ * const cam: Camera = new $widget.Camera({ title: "Picture", facingMode: "environment", imageWidth: 800 });
+ * cam.render();
+ * t.attr("src", await cam.picture);
+ */
+declare class Camera extends UIWidget<CameraParam> {
+    /** Callback of the picture */
+    private resolve;
+    /** Resolved with the data URL of the picture 'data:image/png;base64,...' (never when closed without picture) */
+    picture: Promise<string>;
+    /** Dialog of the camera (once the video is started) */
+    private dlg;
+    /** Video preview */
+    private video;
+    /** Crop rectangle */
+    private rect;
+    /** Video size, image size and crop rect */
+    private size;
+    /**
+     * Build the content of the dialog: video preview, crop rectangle and button
+     * @returns The content element (displayed in the dialog once the video is started)
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Start the camera stream, then open the dialog
+     * @param content Content of the dialog
+     * @returns Promise resolved when the dialog is opened (or the device error displayed)
+     */
+    protected load(content: JQuery): Promise<void>;
+    /**
+     * Close the camera dialog (stops the video)
+     * @example
+     * const cam: Camera = new $widget.Camera({ title: "Picture", facingMode: "user" });
+     * await cam.renderAsync();
+     * cam.close();
+     */
+    close(): void;
+    /**
+     * Open a dialog to take a picture
+     * @param p Title, camera and sizes
+     * @returns Promise with data URL 'data:image/png;base64,...'
+     * @example
+     * $widget.Camera.takePicture({ title: "Picture", facingMode: "environment", imageWidth: 800 })
+     * 	.then(url => t.attr("src", url));
+     */
+    static takePicture(p: CameraParam): Promise<string>;
+}
+
+/** Parameters of a scratch pad to draw on an image (see `$widget.ScratchPad`) */
+interface ScratchPadParam extends UIWidgetParam {
+    /** Result image width (default 800, signature 400) */
+    width?: number;
+    /** Result image height (default 600, signature 200) */
+    height?: number;
+    /** Dialog title */
+    title?: string;
+    /** Inline pad (else in a dialog), implicit with a caller container <code>ctn</code> */
+    inline?: boolean;
+    /** Image to draw on */
+    image: HTMLImageElement | JQuery;
+    /** Callback when the pad is loaded (to place an inline pad without container) */
+    onload?: (pad: JQuery) => void;
+    /** Callback with the updated image data URL (null when removed) */
+    update: (dataURL: string | null) => void;
+}
+/**
+ * Scratch pad to draw on an image (in a dialog or inline), also used to take a signature.
+ * @example
+ * new $widget.ScratchPad({ title: "Draw", width: 800, height: 600, image: t, update: url => $console.log(url) }).render();
+ * // Inline in a container
+ * new $widget.ScratchPad({ image: t, ctn, update: url => $console.log(url) }).render();
+ */
+declare class ScratchPad extends UIWidget<ScratchPadParam> {
+    /** Dialog of the pad (not inline) */
+    private dlg;
+    /**
+     * Build the pad root, filled once the drawing library is loaded
+     * @returns The pad element <code>.scratch-pad</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Load the drawing library, then fill the pad and open the dialog (not inline)
+     * @param pad Pad element
+     * @returns Promise resolved when the pad is displayed
+     */
+    protected load(pad: JQuery): Promise<void>;
+    /**
+     * Close the pad without applying (dialog closed, or inline pad removed)
+     * @example
+     * const sp: ScratchPad = new $widget.ScratchPad({ image: t, update: url => $console.log(url) });
+     * await sp.renderAsync();
+     * sp.close();
+     */
+    close(): void;
+    /**
+     * Take a signature on pad (default size 400x200)
+     * @param p Sizes, title, image and callbacks
+     * @returns The rendered pad
+     * @example
+     * $widget.ScratchPad.takeSignature({ title: "Signature", image: t, update: url => $console.log(url) });
+     */
+    static takeSignature(p: ScratchPadParam): ScratchPad;
+}
+
+/** Parameters of a QRCode/barcode scanner (see `$widget.CodeScanner`) */
+interface CodeScannerParam extends UIWidgetParam {
+    /** Scanner width (default 350) */
+    width?: number;
+    /** Scanner height (default 0) */
+    height?: number;
+    /** Scan zone width (default 250) */
+    scanWidth?: number;
+    /** Scan zone height (default 250) */
+    scanHeight?: number;
+    /** Scanner aspect ratio height (default 1.0) */
+    aspectRatio?: number;
+    /** Dialog title */
+    title?: string;
+    /** Display apply button? defaults to true */
+    applyButton?: boolean;
+    /** Apply label */
+    applyLabel?: string;
+    /** Display retry button? defaults to true */
+    retryButton?: boolean;
+    /** Retry button title */
+    retryLabel?: string;
+    /** Display cancel button? defaults to true */
+    cancelButton?: boolean;
+    /** Cancel button title */
+    cancelLabel?: string;
+    /** DOM id (got from the caller container <code>ctn</code> if set, defaults to 'scanner') */
+    id?: string;
+    /** Callback when loaded */
+    onload?: Callback;
+    /** Callback when scan is done */
+    onscan?: (scan: Html5Qrcode | null, value: string) => void;
+    /** Callback when scan is applied (trigger by the apply button) */
+    onapply?: (text: string) => void;
+    /** Callback when scan is resumed (triggered by the retry button) */
+    onretry?: Callback;
+    /** Callback when scan is cancelled (triggered by the cancel button) */
+    oncancel?: Callback;
+    /** Callback after closing */
+    onclose?: Callback;
+}
+/**
+ * QRCode/barcode scanner with the camera, in a dialog or inline in the caller container <code>ctn</code>.
+ * @example
+ * new $widget.CodeScanner({ title: "Scan", onapply: text => $console.log(text) }).render();
+ * // Inline
+ * new $widget.CodeScanner({ ctn, onapply: text => $console.log(text) }).render();
+ */
+declare class CodeScanner extends UIWidget<CodeScannerParam> {
+    /** Start the scanner (once the scanner is displayed) */
+    private start;
+    /** Stop the scanner and close it */
+    private closer;
+    /**
+     * Build the scanner (opens the dialog when not inline)
+     * @returns The scanner element <code>.code-scanner</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Start the inline scanner (the dialog starts it on its loading)
+     * @returns Promise resolved when the inline scanner is started
+     */
+    protected load(): Promise<void>;
+    /**
+     * Stop the scanner and close it (dialog or inline)
+     * @example
+     * const s: CodeScanner = new $widget.CodeScanner({ onscan: (_scan, text) => { $console.log(text); s.close(); } });
+     * s.render();
+     */
+    close(): void;
+}
+
+/** Parameters of a multi-documents uploader (see `$widget.DocUploader`) */
+interface DocUploaderParam extends UIWidgetParam {
+    /** DOM id of the component (the file input is `files_<id>`) */
+    id: string;
+    /** Component name (and instance name) */
+    name: string;
+    /** Existing documents <code>{ id, name }</code> */
+    list: DocumentDB[];
+    /** Container of the preview of the zip files (form container) */
+    previewCtn: JQuery;
+    /** Business object */
+    object: BusinessObject;
+    /** Document field, with fileAccept: string or array of permitted extensions and MIME types */
+    field: ObjectField;
+    /** Upload files allowed? */
+    upload?: boolean;
+    /** Download documents? */
+    download?: boolean;
+    /** Preview documents? */
+    preview?: boolean;
+    /** Remove documents? */
+    remove?: boolean;
+    /** Display as a 'list' (default) or 'boxes' */
+    show?: "list" | "boxes";
+    /** True to toggle list|boxes (stored as a user preference of the object context) */
+    toggle?: boolean;
+    /** Minimum files (0 = not required) */
+    min?: number;
+    /** Total of permitted files (0 = no limit) */
+    max?: number;
+}
+/**
+ * Multi-documents rendering and upload: list or boxes of documents with preview, download and removal,
+ * files added by the file input or drag and drop, checked against the accepted types and the min/max quotas.
+ * <br>The documents are joined to the element (<code>element.data("docs")</code>), the element also handles
+ * the events <code>ui.docmulti.add</code>, <code>ui.docmulti.clear</code> and <code>ui.docmulti.replace</code>.
+ * @example
+ * const f = obj.getField("myObjDocuments");
+ * if (f) new $widget.DocUploader({ id: "myDocs", name: "myDocs", list: [], previewCtn: ctn, object: obj, field: f, upload: true, download: true, max: 5, ctn }).render();
+ */
+declare class DocUploader extends UIWidget<DocUploaderParam> {
+    /** Documents of the list (new files have the id "0", removed ones the flag deleted) */
+    docs: DocumentDB[];
+    /**
+     * Add a document to the list
+     * @example
+     * const u = $(".doc-multi", ctn).data("docUploader") as DocUploader;
+     * u.add({ id: "0", name: "file.txt" } as DocumentDB);
+     */
+    add: (doc: DocumentDB) => JQuery;
+    /**
+     * Empty the list
+     * @example
+     * const u = $(".doc-multi", ctn).data("docUploader") as DocUploader;
+     * u.clear();
+     */
+    clear: () => void;
+    /**
+     * Replace the list of documents
+     * @example
+     * const u = $(".doc-multi", ctn).data("docUploader") as DocUploader;
+     * u.replace([]);
+     */
+    replace: (list: DocumentDB[]) => void;
+    /**
+     * Build the list of the existing documents and the upload inputs
+     * @returns The uploader element <code>.doc-multi</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Parameters of an upload progress (see `$widget.UploadProgress`) */
+interface UploadProgressParam {
+    /** Dialog Id (one progress per id, default "uploading") */
+    id?: string;
+    /** Dialog title */
+    label?: string;
+    /** Timeout in ms before opening the modal dialog (default 3s) */
+    after?: number;
+    /** Callback when the dialog is minified as toast (post in background) */
+    background?: Callback;
+}
+/**
+ * Progress of a POST/UPLOAD: a modal dialog with a progress bar, the size and the elapsed/remaining times,
+ * opened when the upload lasts more than a few seconds, and that can be minified as a toast (upload in background).
+ * <br>Fed by the progress events of the request, one progress per id.
+ * @example
+ * const xhr = new XMLHttpRequest();
+ * xhr.upload.onprogress = e => $widget.UploadProgress.update(e, { id: "myUpload", label: "Upload" });
+ */
+declare class UploadProgress {
+    /** Uploads in progress by id */
+    private static uploads;
+    /**
+     * Update the progress of an upload (the dialog is closed at 100%)
+     * @param e Progress event from xhr
+     * @param p Optional parameters
+     * @example
+     * const xhr = new XMLHttpRequest();
+     * xhr.upload.onprogress = e => $widget.UploadProgress.update(e, { id: "myUpload", label: "Upload", after: 1000 });
+     */
+    static update(e: ProgressEvent, p?: UploadProgressParam): void;
+}
+
+/** Parameters of a loading toast (see `$widget.LoadingToast`) */
+interface LoadingToastParam extends UIWidgetParam {
+    /** Toast title */
+    title: string;
+    /** File name to download */
+    filename: string;
+    /** URL to load */
+    url: string;
+    /** Async URL to wait for by polling */
+    async?: string;
+    /** Optional URL to abort */
+    abort?: string;
+}
+/**
+ * Toast during the loading of a file (export...): the content is loaded silently (or waited for by polling
+ * when asynchronous), with a Stop button and a progress message, then downloaded.
+ * @example
+ * // Asynchronous export with polling, and a Stop button
+ * new $widget.LoadingToast({
+ * 	title: "Export",
+ * 	filename: "export.csv",
+ * 	url: myTaskURL,
+ * 	async: myTaskURL + "&async=true",
+ * 	abort: myTaskURL + "&abort=true"
+ * }).render();
+ */
+declare class LoadingToast extends UIWidget<LoadingToastParam> {
+    /**
+     * Stop the loading (client and server sides) and close the toast, nothing before rendering
+     * @example
+     * const t: LoadingToast = new $widget.LoadingToast({ title: "Export", filename: "export.csv", url: myTaskURL });
+     * t.render();
+     * t.stop();
+     */
+    stop: () => void;
+    /**
+     * Display the toast and start the loading
+     * @returns The toast element (see {@link Toast})
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the toast without stopping the loading
+     * @example
+     * const t: LoadingToast = new $widget.LoadingToast({ title: "Export", filename: "export.csv", url: myTaskURL });
+     * t.render();
+     * t.close();
+     */
+    close(): void;
+}
+
+/** Options of a completion */
+interface CompletionOptions {
+    /** Auto-select the single result on blur or enter (default false) */
+    autoselect?: boolean;
+}
+/** Parameters of a completion (see `$widget.Completion`) */
+interface CompletionParam extends UIWidgetParam, CompletionOptions {
+    /** Input (default a search input is created) */
+    input?: JQuery | null;
+    /** Max size of results (default 0 = no limit) */
+    limit?: number;
+    /** Search service(cbk) */
+    search: (cbk: (rows: KeyObject[]) => void) => void;
+    /** Optional callback(data) on picking (click or enter), default = the text is set in the input */
+    select?: null | ((data: KeyObject) => void);
+    /** Optional callback to display a result */
+    disp?: null | ((data: KeyObject) => string | JQuery);
+}
+/**
+ * Completion bound to an input (combobox): the search service is called after a short typing pause,
+ * the results are displayed in a dropdown list, picked by click, Enter or the arrow keys.
+ * <br>The component is stored on its input: <code>input.data("completion")</code>.
+ * @example
+ * const c: Completion = new $widget.Completion({
+ * 	input: t,
+ * 	limit: 10,
+ * 	search: cbk => obj.search({ myObjName: t.val() + "%" }).then(rows => cbk(rows)),
+ * 	select: data => $console.log("selected", data.row_id),
+ * 	disp: data => data.myObjName as string
+ * });
+ * c.render();
+ */
+declare class Completion extends UIWidget<CompletionParam> {
+    /** Input of the completion (created when none is given) */
+    input: JQuery;
+    /** Close the dropdown list */
+    private closer;
+    /**
+     * Bind the completion to the input
+     * @returns The input
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the dropdown list (the input is kept)
+     * @example
+     * const c: Completion = new $widget.Completion({ input: t, search: cbk => cbk([]) });
+     * c.render();
+     * c.close();
+     */
+    close(): void;
+}
+
+/** Parameters of an image preview (see `$widget.ImagePreview`) */
+interface ImagePreviewParam extends Omit<UIWidgetParam, "ctn"> {
+    /** Image URL */
+    url: string;
+    /** Optional image alt */
+    alt?: string;
+    /** Optional image long description */
+    longDesc?: string;
+    /** Optional image name, displayed in the title (and instance name) */
+    name?: string;
+    /** Zoom: percent or 'fit', 'fitWidth' or 'fitHeight' to screen */
+    zoom?: string | number;
+    /** Optional callback when the image is loaded */
+    onload?: (img: JQuery) => void;
+}
+/**
+ * Preview of an image in a dialog, with a zoom selector (fit to the screen, width, height or percent).
+ * @example
+ * new $widget.ImagePreview({ url: $app.imageURL("MyObject", "myObjImage", rowId, docId), alt: "Picture", zoom: "fit" }).render();
+ */
+declare class ImagePreview extends UIWidget<ImagePreviewParam> {
+    /** Image element */
+    image: JQuery;
+    /**
+     * Open the preview dialog
+     * @returns The dialog of the preview
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the preview dialog
+     * @example
+     * const ip: ImagePreview = new $widget.ImagePreview({ url: $app.imageURL("MyObject", "myObjImage", rowId, docId) });
+     * ip.render();
+     * ip.close();
+     */
+    close(): void;
+    /**
+     * Convert image to base64 (using a canvas)
+     * @param img DOM image
+     * @param mime mime type (ex: image/jpeg)
+     * @returns string = image BASE64 encoded
+     */
+    static getBase64Image(img: HTMLImageElement, mime: string): string;
+}
+
+/** Options of a characters counter (see `$widget.CharCounter`) */
+interface CharCounterParam extends UIWidgetParam {
+    /** Counted input or textarea (moved into the counter element) */
+    input: AnyContent;
+    /** Max length of input (default 100) */
+    max?: number;
+    /** Position top or bottom (default bottom) */
+    position?: "bottom" | "top";
+    /** Align left or right (default left) */
+    align?: "left" | "right";
+    /** True to show/hide on focus/blur */
+    toggle?: boolean;
+}
+/**
+ * Characters counter of an input or textarea: "length/max" displayed under (or above) the input, the value is truncated to the max.
+ * <br>The input is moved into the counter element.
+ * @example
+ * const c: CharCounter = new $widget.CharCounter({ input: t, max: 200, position: "bottom", align: "right", toggle: true, ctn });
+ * c.render();
+ */
+declare class CharCounter extends UIWidget<CharCounterParam> {
+    /** Counted input */
+    input: JQuery;
+    /**
+     * Bind the counter to the input
+     * @returns The counter element <code>.char-counter</code> (contains the input)
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Name of a color palette */
+type PaletteName = "Base" | "Pastel" | "Strong" | "Light" | "Bright" | "Mars" | "Sea" | "Berry" | "Fire" | "Choco";
+/** Parameters of the palette picker (see `$widget.Palettes.picker`) */
+interface PalettePickerParam {
+    /** Optional selected palette */
+    palette?: string;
+    /** Optional pick handler(palette) */
+    pick?: (palette: string) => void;
+    /** True to dropup (default dropdown) */
+    dropup?: boolean;
+    /** True to inline the palettes (default display a dropdown button) */
+    inline?: boolean;
+    /** Optional label of the dropdown button (default: selected palette name) */
+    label?: string;
+    /** Optional icon of the dropdown button */
+    icon?: string;
+}
+/**
+ * Palettes of colors: predefined palettes (charts), palette picker, theme picker and preview, contrast helper.
+ * @example
+ * ctn.append($widget.Palettes.picker({ label: "Colors", pick: palette => $console.log($widget.Palettes.PALETTES[palette]) }));
+ */
+declare class Palettes {
+    /**
+     * Predefined palettes of colors
+     * <ul>
+     * <li>Base</li>
+     * <li>Pastel</li>
+     * <li>Strong</li>
+     * <li>Light</li>
+     * <li>Bright</li>
+     * <li>Mars</li>
+     * <li>Sea</li>
+     * <li>Berry</li>
+     * <li>Fire</li>
+     * <li>Choco</li>
+     * </ul>
+     */
+    static readonly PALETTES: {
+        [key in PaletteName | string]: string[];
+    };
+    /**
+     * Theme picker: dialog with the themes of the user, a palette preview per theme
+     * @param themes List of themes (at least 2 themes to open the dialog)
+     * @param pick Callback with the selected theme
+     * @example
+     * $widget.Palettes.themePicker(app.grant?.themes, theme => $console.log(theme));
+     */
+    static themePicker(themes?: Theme[], pick?: (theme: Theme) => void): void;
+    /**
+     * Theme palette preview
+     * @param palette Palette of a theme
+     * @returns .theme-palette-preview with colors
+     * @example
+     * // Empty preview without a palette
+     * ctn.append($widget.Palettes.preview());
+     */
+    static preview(palette?: Palette): JQuery<HTMLElement>;
+    /**
+     * Predefined palette of colors picker
+     * @param p Selected palette, pick handler, inline or dropdown button
+     * @returns .palette-picker
+     * @example
+     * ctn.append($widget.Palettes.picker({ label: "Colors", pick: palette => $console.log(palette) }));
+     */
+    static picker(p: PalettePickerParam): JQuery<HTMLElement>;
+    /**
+     * Display a contrast helper between 2 colors (refreshed when the inputs change)
+     * @param ctn Target container to draw the preview button with colors and contrast value
+     * @param color Input of color
+     * @param bgcolor Input of background color
+     * @example
+     * // Inputs of the text and background colors
+     * $widget.Palettes.contrastHelper(ctn, t, c);
+     */
+    static contrastHelper(ctn: JQuery, color: JQuery, bgcolor: JQuery): void;
+}
+
+/** Options of a bar with overflow (see `$widget.BarOverflow`) */
+interface BarOverflowOptions extends UIWidgetParam {
+    /** Horizontal bar container (ul or div, with a limited height) with items (li/a, button or div) */
+    bar: JQuery;
+    /** Bring hidden item visible at 'first' or 'last' position when clicked (always trigger a 'ui.bar.click' on bar) */
+    show?: string;
+    /** Icon button (default fas/caret-square-down) */
+    icon?: string;
+    /** Count hidden items in icon (default false) */
+    count?: boolean;
+}
+/**
+ * Bar with an overflow button: the items that do not fit on the bar (wrapped) are hidden and listed in a dropdown.
+ * <br>The caller must trigger <code>ui.resize</code> on the element once displayed (and the element is refreshed on each resize).
+ * @example
+ * const bar: BarOverflow = new $widget.BarOverflow({ bar: t, show: "first", count: true, ctn });
+ * bar.render().trigger("ui.resize");
+ */
+declare class BarOverflow extends UIWidget<BarOverflowOptions> {
+    /**
+     * Refresh the hidden items and the dropdown (same as the event <code>ui.resize</code>), nothing before rendering
+     * @example
+     * const bar: BarOverflow = new $widget.BarOverflow({ bar: t, show: "last", ctn });
+     * bar.render();
+     * bar.update();
+     */
+    update: () => void;
+    /**
+     * Transform the bar
+     * @returns The bar element <code>aside.bar-overflow</code> (contains the bar container)
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Options of the news display (see `$widget.NewsWidget.display`) */
+interface NewsDisplayOptions {
+    /** HTML template with classes to fill <code>.news-title .news-date .news-desc .news-img</code> (default Simplicite.UI.Globals.news.template) */
+    template?: string;
+    /** True to get only news to display (on logon) in a modal dialog */
+    popup?: boolean;
+    /** True to get only news to display on a footer ticker */
+    ticker?: boolean;
+}
+/** Options of the news ticker bar (see `$widget.NewsWidget.ticker`) */
+interface NewsTickerOptions {
+    /** Position selector (default 'body') */
+    position?: AnyContainer;
+    /** List of news <code>\{ id, title, description \}</code> */
+    list?: News[];
+}
+/**
+ * News widget: list of articles (in a container, the work area or a dialog) or ticker bar.
+ * @example
+ * $widget.NewsWidget.display(ctn, [{ id: "1", title: "New release", description: "<p>Hello</p>", date: "2026-11-01" } as News]);
+ */
+declare class NewsWidget {
+    /**
+     * Display the news
+     * @param ctn Container to display articles (null to display an area or a ticker bar)
+     * @param list News list from WebNews object or <code>\{ id, title, description, date, image \}</code>
+     * @param options Template, popup or ticker
+     * @example
+     * $widget.NewsWidget.display(ctn, [{ id: "1", title: "New release", description: "<p>Hello</p>", date: "2026-11-01" } as News]);
+     */
+    static display(ctn: AnyContainer, list?: News[], options?: NewsDisplayOptions): void;
+    /**
+     * Display a ticker bar (removed when the list is empty)
+     * @param p Position and list of news
+     * @example
+     * $widget.NewsWidget.ticker({ list: [{ id: "1", title: "Maintenance tonight", description: "From 8pm" } as News] });
+     */
+    static ticker(p?: NewsTickerOptions): void;
+}
+
+/** Parameters of a switch button (see `$widget.SwitchButton`) */
+interface SwitchButtonParam extends UIWidgetParam {
+    /** Input id */
+    id?: string;
+    /** Input name (and instance name) */
+    name?: string;
+    /** Input value when checked (default "1") */
+    value?: string;
+    /** Optional accessible name (aria-label) */
+    label?: string;
+    /** Optional 'change' handler */
+    onchange?: JQueryHandler;
+    /** On/off */
+    checked?: boolean;
+    /** True to disable the switch */
+    disabled?: boolean;
+    /** Round or square */
+    round?: boolean;
+}
+/**
+ * Switch button: checkbox with the role switch, rendered as a sliding toggle.
+ * @example
+ * const s: SwitchButton = new $widget.SwitchButton({
+ * 	name: "myOption",
+ * 	label: "My option",
+ * 	checked: true,
+ * 	onchange: () => $console.log("changed"),
+ * 	ctn
+ * });
+ * s.render();
+ */
+declare class SwitchButton extends UIWidget<SwitchButtonParam> {
+    /** Checkbox */
+    input: JQuery;
+    /**
+     * Build the switch
+     * @returns The switch element <code>span.btn-switch</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Parameters of a slider (see `$widget.Slider`) */
+interface SliderParam extends UIWidgetParam {
     /** Input ID */
     id?: string;
-    /** Input name */
+    /** Input name (and instance name) */
     name?: string;
     /** Label */
     label?: string;
@@ -7384,124 +8906,337 @@ interface SliderParam {
     thin?: boolean;
 }
 /**
+ * Slider: range input with an optional displayed value, read-only mode (focusable but not changeable).
+ * @example
+ * const s: Slider = new $widget.Slider({ id: "myLevel", name: "myLevel", min: 0, max: 100, step: 5, value: 50, showValue: true, ctn });
+ * s.render();
+ */
+declare class Slider extends UIWidget<SliderParam> {
+    /** Range input */
+    input: JQuery;
+    /**
+     * Build the slider
+     * @returns The slider element <code>div.slider</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Parameters of a star slider (see `$widget.StarSlider`) */
+interface StarSliderParam extends UIWidgetParam {
+    /** Input name of the radio buttons (and instance name) */
+    name: string;
+    /** Number of stars, the values go from 1 to size (0 = no star checked) */
+    size: number;
+    /** Value */
+    value?: number;
+    /** True to disable the slider */
+    disabled?: boolean;
+}
+/**
+ * Star slider (rate rendering): radio buttons rendered as stars.
+ * @example
+ * const s: StarSlider = new $widget.StarSlider({ name: "myRate", size: 5, value: 3, ctn });
+ * s.render();
+ */
+declare class StarSlider extends UIWidget<StarSliderParam> {
+    /**
+     * Build the stars
+     * @returns The slider element <code>div.star-slider</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Parameters of a search bar (see `$widget.SearchBar`) */
+interface SearchBarParam extends UIWidgetParam {
+    /** Input id */
+    id: string;
+    /** Input accessible label */
+    label: string;
+    /** Optional icon (default fas/search) */
+    icon?: string;
+    /** Optional callback, called 300ms after the last input event */
+    cbk?: JQueryHandler | null;
+    /** Input bound events (default "keyup change") */
+    events?: string;
+    /** Input collapsed (expanded by the search button) */
+    collapsed?: boolean;
+}
+/**
+ * Search bar: search input with an icon (or an expand button when collapsible) and a clear button.
+ * @example
+ * const sb: SearchBar = new $widget.SearchBar({
+ * 	id: "mySearch",
+ * 	label: $T("SEARCH"),
+ * 	icon: "fas/search",
+ * 	cbk: function (this: HTMLElement) { $console.log((this as HTMLInputElement).value); },
+ * 	ctn
+ * });
+ * sb.render();
+ */
+declare class SearchBar extends UIWidget<SearchBarParam> {
+    /** Search input */
+    input: JQuery;
+    /**
+     * Build the search bar
+     * @returns The search bar element <code>div.search-bar</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Parameters of a notepad (see `$widget.Notepad`) */
+interface NotepadParam extends UIWidgetParam {
+    /** Widget id */
+    id?: string;
+    /** Widget name (attribute name, and instance name) */
+    name?: string;
+    /** Content <code>{ checks:[{ title, list:[check,text]}], activities:[{ date, author, text }] }</code> */
+    data: string | KeyObject;
+    /** Read only or editable by authors */
+    readonly?: boolean;
+    /** Allows to open a popup to enlarge contents */
+    popup?: boolean;
+    /** Split checklists and comments in 2 columns */
+    split?: boolean;
+    /** Minimal width of container to auto-split */
+    autosplit?: number;
+    /** Optional max height */
+    height?: number | string;
+    /** Optional callback when data has changed */
+    change?: (p: {
+        act?: KeyObject;
+        item?: KeyObject;
+        list?: {
+            title: string;
+            list: KeyObject[];
+        };
+        event: string;
+    }) => void;
+}
+/**
+ * Advanced notepad with checklists and activities (comments of the authors).
+ * <br>The data is joined to the element: <code>element.data("data")</code>.
+ * @example
+ * const np: Notepad = new $widget.Notepad({
+ * 	id: "myNotes",
+ * 	name: "myNotes",
+ * 	data: { checks: [], activities: [] },
+ * 	popup: true,
+ * 	change: e => $console.log(e),
+ * 	ctn
+ * });
+ * np.render();
+ */
+declare class Notepad extends UIWidget<NotepadParam> {
+    /**
+     * Build the notepad
+     * @returns The notepad element <code>.notepad</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/** Parameters of a toast (see `$widget.Toast`) */
+interface ToastParam extends UIWidgetParam {
+    /** Optional level: 'info' default, 'success', 'warning', 'error'='danger' */
+    level?: AlertType;
+    /** Toast body */
+    content: AnyContent;
+    /** Position `top` (default) or `bottom` */
+    position?: string;
+    /** Align `left`, `right` or `center` (default) */
+    align?: string;
+    /** Duration in ms (default 3000, -1 = no auto close) */
+    duration?: number;
+    /** Add an undo button */
+    undo?: boolean;
+    /** Add a pin button to keep the toast open */
+    pinable?: boolean;
+}
+/**
+ * Toast: short message displayed over the page (appended to the body by default), closed after a duration.
+ * <br>The toasts at the same position are stacked. The element closes on the event <code>ui.toast.close</code>.
+ * @example
+ * new $widget.Toast({ content: "Saved" }).render();
+ * // Kept until closed by the user
+ * new $widget.Toast({ level: "error", content: "Unable to save", position: "bottom", align: "right", duration: -1, pinable: true }).render();
+ */
+declare class Toast extends UIWidget<ToastParam> {
+    /** Toasts displayed by position (align + position) */
+    private static stacks;
+    /** Position `top` or `bottom` */
+    private pos;
+    /** Stack of the position */
+    private stack;
+    /** Pinned by the user (no auto close) */
+    private pinned;
+    /**
+     * Display the toast
+     * @returns The toast element <code>.simple-toast</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the toast: the next toasts of the stack move up
+     * @example
+     * const t: Toast = new $widget.Toast({ content: "Processing...", duration: -1 });
+     * t.render();
+     * t.close();
+     */
+    close(): void;
+}
+
+/** Options of the circular progress bar */
+interface CircularProgressBarOptions extends UIWidgetParam {
+    /** Percent value 0..100 */
+    percent?: number;
+    /** Center background color */
+    background?: string;
+    /** Center text color */
+    color?: string;
+    /** Circle color */
+    color1?: string;
+    /** Circle active color */
+    color2?: string;
+    /** Animation duration in ms (default 2000) */
+    duration?: number;
+    /** Circle radius in px */
+    radius?: number;
+    /** Circle line width in px */
+    width?: number;
+    /** Optional center content (""=empty, default='n%') */
+    text?: AnyContent;
+    /** Optional bar selector to update value */
+    bar?: string | JQuery;
+}
+/**
+ * Circular progress bar: circle filled up to the value in percent, with a central text.
+ * <br>Standalone component with its own CSS (class <code>.circular-progress-bar</code>).
+ * <br>Created by <code>new $widget.CircularProgressBar(options)</code>.
+ * @example
+ * const pb: CircularProgressBar = new $widget.CircularProgressBar({ percent: 75, radius: 40, width: 6, ctn });
+ * pb.render();
+ */
+declare class CircularProgressBar extends UIWidget<CircularProgressBarOptions> {
+    /**
+     * Build the bar, or update an existing one (option <code>bar</code>)
+     * @returns The progress element <code>.circular-progress-bar</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
+/**
  * Common widgets
+ * @deprecated use the components of `$widget` (see the deprecation of each method), this class will be removed
  */
 declare class Widget {
     /**
      * Predefined palettes
-     * <ul>
-     * <li>Base</li>
-     * <li>Pastel</li>
-     * <li>Strong</li>
-     * <li>Light</li>
-     * <li>Bright</li>
-     * <li>Mars</li>
-     * <li>Sea</li>
-     * <li>Berry</li>
-     * <li>Fire</li>
-     * <li>Choco</li>
-     * </ul>
+     * @deprecated use `$widget.Palettes.PALETTES`
      */
     readonly PALETTES: {
         [key: string]: string[];
     };
     /**
+     * Theme picker (component {@link Palettes})
+     * @param themes list of themes (at least 2 themes to open the dialog)
+     * @param pick callback with selected theme
+     * @deprecated use `$widget.Palettes.themePicker(themes, pick)`
+     */
+    themePicker(themes?: Theme[], pick?: (theme: Theme) => void): void;
+    /**
+     * Theme palette preview (component {@link Palettes})
+     * @returns .theme-palette-preview with colors
+     * @deprecated use `$widget.Palettes.preview(palette)`
+     */
+    palette(palette?: Palette): JQuery;
+    /**
+     * Predefined palette of colors picker (component {@link Palettes})
+     * @param p Parameters
+     * @deprecated use `$widget.Palettes.picker(p)`
+     */
+    palettePicker(p: PalettePickerParam): JQuery;
+    /**
+     * Display a contrast helper between 2 colors (component {@link Palettes})
+     * @param ctn Target container to draw the preview button with colors and contrast value
+     * @param color input of color
+     * @param bgcolor input of background color
+     * @deprecated use `$widget.Palettes.contrastHelper(ctn, color, bgcolor)`
+     */
+    contrastHelper(ctn: JQuery, color: JQuery, bgcolor: JQuery): void;
+    /**
+     * Transform a bar with overflow button for invisible items in a dropdown (component {@link BarOverflow})
+     * @param ctn horizontal bar container (ul or div, with a limited height) with items (li/a, button or div)
+     * @param options Overflow options
+     * @returns .bar-overflow + caller must trigger 'ui.resize' when displayed to fit size
+     * @deprecated use the component `new $widget.BarOverflow({ bar: ctn, ...options }).render()`
+     */
+    barOverflow(ctn: JQuery, options?: Omit<BarOverflowOptions, "bar">): JQuery;
+    /**
+     * Display the news (component {@link NewsWidget})
+     * @param ctn container to display articles (null to display an area or a ticker bar)
+     * @param list news list from WebNews object or <code>\{ id, title, description, date, image \}</code>
+     * @param options optional parameters
+     * @deprecated use `$widget.NewsWidget.display(ctn, list, options)`
+     */
+    news(ctn: AnyContainer, list?: News[], options?: NewsDisplayOptions): void;
+    /**
+     * Display a ticker bar (component {@link NewsWidget})
+     * @param p Optional parameters
+     * @deprecated use `$widget.NewsWidget.ticker(p)`
+     */
+    tickerBar(p?: NewsTickerOptions): void;
+    /**
      * Build an avatar image
      * @param data or { login, firstname, lastname, picture (full usr_image_id document) }
      * @returns .avatar
-     * @example
-     * ctn.append($view.widget.avatar({ login: "jdoe", firstname: "John", lastname: "Doe" }));
+     * @deprecated use `$view.avatar(data)`
      */
-    avatar(data?: UsageUser): JQuery<HTMLElement>;
+    avatar(data?: UsageUser): JQuery;
     /**
      * Create a badge
      * @param p value or { name, value }
-     * @returns div.badge
-     * @example
-     * btn.append($view.widget.badge(3));
-     * btn.append($view.widget.badge({ name: "unread", value: 12 }));
+     * @returns span.badge
+     * @deprecated use `$view.badge(p)`
      */
     badge(p?: string | number | {
         name?: string;
         value?: string | number;
-    }): JQuery<HTMLElement>;
+    }): JQuery;
     /**
      * Wait dialog box
      * @returns div.waitdlg
-     * @example
-     * ctn.append($view.widget.waitdlg());
+     * @deprecated use `$view.waitdlg()` instead
      */
     waitdlg(): JQuery<HTMLElement>;
     /**
-     * Build a switch button on/off
+     * Display shortcuts
+     * @param ctn Target container
+     * @param p Options
+     * @param p.shortcuts List of shortcuts, each with `name`, `url`, `label` and an optional `target`
+     * @deprecated use `$view.shortcutsWidget(ctn, p)` instead
+     */
+    shortcuts(ctn: JQuery, p: {
+        shortcuts: Shortcut[];
+    }): JQuery<HTMLElement>;
+    /**
+     * Build a switch button on/off (component {@link SwitchButton})
      * @param p button parameters
-     * @param p.id optional input id
-     * @param p.name input name
-     * @param p.value input initial value (default "1")
-     * @param p.onchange optional 'change' handler
-     * @param p.label optional accessible name through aria-label
-     * @param p.checked on/off ?
-     * @param p.disabled true to disable the switch
-     * @param p.round round or square?
      * @returns span with a checkbox and a slider
-     * @example
-     * ctn.append($view.widget.switchButton({
-     * 	name: "myOption",
-     * 	label: "My option",
-     * 	checked: true,
-     * 	onchange: () => $console.log("changed")
-     * }));
+     * @deprecated use the component `new $widget.SwitchButton(p).render()`
      */
-    switchButton(p: {
-        id?: string;
-        name?: string;
-        value?: string;
-        label?: string;
-        onchange?: JQueryHandler;
-        checked?: boolean;
-        disabled?: boolean;
-        round?: boolean;
-    }): JQuery<HTMLElement>;
+    switchButton(p: SwitchButtonParam): JQuery;
     /**
-     * Build a slider
+     * Build a slider (component {@link Slider})
      * @param p slider parameters
-     * @param p.id input id
-     * @param p.name input name
-     * @param p.min min value
-     * @param p.max max value
-     * @param p.step slider step
-     * @param p.value slider value
-     * @param p.width optional input width
-     * @param p.height optional input height
-     * @param p.showValue insert the value?
-     * @param p.onchange optional 'change' handler (on slider release)
-     * @param p.oninput optional 'input' handler (on slider move)
-     * @param p.disabled true to disable the slider
-     * @param p.readonly true for a focusable slider that cannot be changed
-     * @param p.round round or square?
-     * @param p.thin thin input?
      * @returns div.slider
-     * @example
-     * ctn.append($view.widget.slider({ id: "myLevel", name: "myLevel", min: 0, max: 100, step: 5, value: 50, showValue: true }));
+     * @deprecated use the component `new $widget.Slider(p).render()`
      */
-    slider(p: SliderParam): JQuery<HTMLElement>;
+    slider(p: SliderParam): JQuery;
     /**
-     * Build a star slider (rate rendering)
+     * Build a star slider (rate rendering, component {@link StarSlider})
      * @param p slider parameters
-     * @param p.name input name
-     * @param p.size nb of stars, server values goes from 1 to size (0 = no star checked)
-     * @param p.value slider value
-     * @param p.disabled true to disable the slider
      * @returns div.star-slider
-     * @example
-     * ctn.append($view.widget.starSlider({ name: "myRate", size: 5, value: 3 }));
+     * @deprecated use the component `new $widget.StarSlider(p).render()`
      */
-    starSlider(p: {
-        name: string;
-        size: number;
-        value?: number;
-        disabled?: boolean;
-    }): JQuery<HTMLElement>;
+    starSlider(p: StarSliderParam): JQuery;
     /**
      * Build an action control
      * @param a action metadata
@@ -7510,6 +9245,7 @@ declare class Widget {
      * @param click click handler
      * @param minified true to move the label in a tooltip
      * @returns button or li for 'Plus' button
+     * @deprecated use $view.list.actionItem(a,o,rowId,click,minified) instead
      */
     actionItem(a: Action, o: UIBusinessObject, rowId: string | null, click?: ActionHandler, minified?: boolean): JQuery<HTMLElement>;
     /**
@@ -7526,10 +9262,7 @@ declare class Widget {
      * @param options.grouped true to group plain buttons per type (print, crosstab, treeview, placemap, associate)
      * @param options.groups additional action groups with name, icon, label, actions
      * @returns jQuery items
-     * @example
-     * // Buttons of the object actions, then in a bar on the right
-     * const items = $view.widget.actionItems(obj, rowId, obj.metadata.actions, null, { minified: true });
-     * ctn.append($view.widget.actionBar(items, true));
+     * @deprecated use $view.list.actionItems(o,rowId,list,plus,options) instead
      */
     actionItems(o: UIBusinessObject, rowId: string | null, list?: Action[] | null, plus?: Action[] | null, options?: {
         alignRight?: boolean;
@@ -7540,38 +9273,11 @@ declare class Widget {
         groups?: ActionGroup[];
     }): JQuery[];
     /**
-     * Create a searchbar
-     * @param p Options
-     * @param p.id Input id
-     * @param p.label Input aria label
-     * @param p.icon Optional icon
-     * @param p.cbk Optional callback
-     * @param p.events Input binded events
-     * @param p.collapsed Input collapsed
-     * @returns The search bar
-     * @example
-     * ctn.append($view.widget.searchBar({
-     * 	id: "mySearch",
-     * 	label: $T("SEARCH"),
-     * 	icon: "fas/search"
-     * }));
-     */
-    searchBar(p: {
-        id: string;
-        label: string;
-        icon?: string;
-        cbk?: JQueryHandler | null;
-        events?: string;
-        collapsed?: boolean;
-    }): JQuery<HTMLElement>;
-    /**
      * Action bar
      * @param list Array of buttons (plain or plus)
      * @param alignRight pull on the right side of container ?
      * @returns div.actions
-     * @example
-     * // Empty string when there is no button
-     * ctn.append($view.widget.actionBar([btn], true));
+     * @deprecated use `$view.list.actionBar(list, alignRight)`
      */
     actionBar(list: JQuery[], alignRight?: boolean): JQuery | "";
     /**
@@ -7579,763 +9285,250 @@ declare class Widget {
      * @param img DOM image
      * @param mime mime type (ex: image/jpeg)
      * @returns string = image BASE64 encoded
+     * @deprecated use the component `$widget.ImagePreview.getBase64Image(img, mime)`
      */
     getBase64Image(img: HTMLImageElement, mime: string): string;
     /**
-     * Build a breadcrump 'first / ... / last ones'
+     * Build a breadcrump 'first / ... / last ones' (component {@link Breadcrumb})
      * @param items list of items : string or <code>{ label }</code>
      * @param size size limit
      * @param cbk click handler(index)
      * @returns ol.breadcrumb
-     * @example
-     * ctn.append($view.widget.breadcrump(["Home", "Orders", "Order 12"], 3, i => $console.log("clicked", i)));
+     * @deprecated use the component `new $widget.Breadcrumb({ items, size, cbk }).render()`
      */
-    breadcrump(items: (string | NavItem)[], size: number, cbk?: (index: number) => void): JQuery<HTMLElement>;
+    breadcrump(items: (string | NavItem)[], size: number, cbk?: (index: number) => void): JQuery;
     /**
-     * Transform a bar with overflow button for invisible items in a dropdown
-     * @param ctn horizontal bar container (ul or div, with a limited height) with items (li/a, button or div)
-     * @param options Overflow options
-     * @param options.show bring hidden item visible at 'first' or 'last' position when clicked (always trigger a 'ui.bar.click' on bar)
-     * @param options.icon icon button (default fas/caret-square-down)
-     * @param options.count count hidden items in icon (default false)
-     * @returns .bar-overflow + caller must trigger 'ui.resize' when displayed to fit size
-     * @example
-     * // Then trigger 'ui.resize' when it is displayed
-     * const bar = $view.widget.barOverflow(t, { show: "first", count: true });
-     * ctn.append(bar);
-     * bar.trigger("ui.resize");
+     * Create a searchbar (component {@link SearchBar})
+     * @param p Options
+     * @returns The search bar
+     * @deprecated use the component `new $widget.SearchBar(p).render()`
      */
-    barOverflow(ctn: JQuery, options?: {
-        show: string;
-        icon?: string;
-        count?: boolean;
-    }): JQuery<HTMLElement>;
+    searchBar(p: SearchBarParam): JQuery;
     /**
-     * Bind a completion to input
+     * Bind a completion to input (component {@link Completion})
      * @param input input or null
      * @param limit max size of results (0 = no limit)
      * @param search search service(cbk)
      * @param select optional callback(data) on picking (click or enter)
      * @param disp optional callback to display a result
      * @param options options
-     * @param options.autoselect auto-select the single result on blur or enter (default false)
      * @returns input
-     * @example
-     * $view.widget.completion(t, 10,
-     * 	cbk => obj.search({ myObjName: t.val() + "%" }).then(rows => cbk(rows)),
-     * 	data => $console.log("selected", data.row_id),
-     * 	data => data.myObjName as string
-     * );
+     * @deprecated use the component `new $widget.Completion({ input, limit, search, select, disp, ...options }).render()`
      */
-    completion(input: JQuery | null, limit: number, search: (cbk: (rows: KeyObject[]) => void) => void, select?: null | ((data: KeyObject) => void), disp?: null | ((data: KeyObject) => string | JQuery), options?: {
-        autoselect?: boolean;
-    }): JQuery<HTMLElement>;
+    completion(input: JQuery | null, limit: number, search: (cbk: (rows: KeyObject[]) => void) => void, select?: null | ((data: KeyObject) => void), disp?: null | ((data: KeyObject) => string | JQuery), options?: CompletionOptions): JQuery;
     /**
-     * Bind a completion to textarea (substitute @login)
+     * Bind a completion to textarea (substitute @login, component {@link SocialCompletion})
      * @param textarea social textarea
-     * @example
-     * $view.widget.completionSocial(t);
+     * @returns The textarea
+     * @deprecated use the component `new $widget.SocialCompletion({ textarea }).render()`
      */
-    completionSocial(textarea: JQuery): JQuery<HTMLElement>;
+    completionSocial(textarea: JQuery): JQuery;
     /**
      * Pillbox control with completion, deprecated use $.pillbox
      * @deprecated 7.0
      */
     pillbox(div: JQuery | null, data: PillboxItem[], limit: number, maxOccurs: number, search: null | ((values: string, cbk: (r: KeyObject) => void) => void), disp: null | ((item: KeyObject) => string), lookup: null | ((add?: Callback) => void), onAdd: null | ((id: string, fn: (...p: any) => void, data: KeyObject) => void), onRemove: null | ((id: string, fn: Callback) => void), onCreate: null | ((val: string, fn: Callback) => void), onOpen: null | ((id: string) => void)): JQuery<HTMLElement> | string[];
     /**
-     * Launch a simple calculator on input
+     * Launch a simple calculator on input (component {@link Calculator})
      * @param inp form input
      * @param cbk callback(result)
      * @returns input
-     * @example
-     * $view.widget.calculator(t, r => t.val(r));
+     * @deprecated use the component `new $widget.Calculator({ input: inp, cbk }).render()`
      */
     calculator(inp: AnyContent, cbk?: (result: number) => void): this;
     /**
-     * Theme picker
-     * @param themes list of themes (at least 2 themes to open the dialog)
-     * @param pick callback with selected theme
-     * @example
-     * $view.widget.themePicker(app.grant?.themes, theme => $console.log(theme));
+     * Preview image in a dialog (component {@link ImagePreview})
+     * @param p Image URL, texts, zoom and callback
+     * @returns The dialog
+     * @deprecated use the component `new $widget.ImagePreview(p).render()`
      */
-    themePicker(themes?: Theme[], pick?: (theme: Theme) => void): void;
+    previewImage(p: ImagePreviewParam): JQuery;
     /**
-     * Theme palette preview
-     * @returns .theme-palette-preview with colors
-     * @example
-     * // Empty preview without a palette
-     * ctn.append($view.widget.palette());
-     */
-    palette(palette?: Palette): JQuery<HTMLElement>;
-    /**
-     * Predefined palette of colors picker
-     * @param p Parameters
-     * @param p.palette optional selected palette
-     * @param p.pick optional pick handler(palette)
-     * @param p.dropup true to dropup (default dropdown)
-     * @param p.inline true to inline the palettes (default display a dropdown button)
-     * @param p.label optional label dropdown button (default: selected palette name)
-     * @param p.icon optional icon of dropdown button
-     * @example
-     * ctn.append($view.widget.palettePicker({ label: "Colors", pick: palette => $console.log(palette) }));
-     */
-    palettePicker(p: {
-        palette?: string;
-        pick?: (palette: string) => void;
-        dropup?: boolean;
-        inline?: boolean;
-        label?: string;
-        icon?: string;
-    }): JQuery<HTMLElement>;
-    /**
-     * Preview image in a dialog
-     * @param p
-     * @param p.url image url
-     * @param p.alt optional image alt
-     * @param p.longDesc optional image long description
-     * @param p.name optional image name
-     * @param p.zoom percent or 'fit", fitWidth' or 'fitHeight' to screen
-     * @param p.onload optional onload callback
-     * @example
-     * $view.widget.previewImage({ url: $app.imageURL("MyObject", "myObjImage", rowId, docId), alt: "Picture", zoom: "fit" });
-     */
-    previewImage(p: {
-        url: string;
-        alt?: string;
-        longDesc?: string;
-        name?: string;
-        zoom?: string | number;
-        onload?: (img: JQuery) => void;
-    }): JQuery<HTMLElement>;
-    /**
-     * Circular progress bar
-     * @param options
-     * @param options.percent percent value 0..100
-     * @param options.background center background color
-     * @param options.color center text color
-     * @param options.color1 circle color
-     * @param options.color2 circle active color
-     * @param options.duration animation duration in ms (default 2000)
-     * @param options.radius circle radius in px
-     * @param options.width circle line width in px
-     * @param options.text optional center content (""=empty, default='n%')
-     * @param options.bar optional bar selector to update value
+     * Circular progress bar (component {@link CircularProgressBar})
+     * @param options Value, colors, size and animation
      * @returns The progress bar
-     * @example
-     * ctn.append($view.widget.circularProgressBar({ percent: 75, radius: 40, width: 6 }));
+     * @deprecated use the component `new $widget.CircularProgressBar(options).render()`
      */
-    circularProgressBar(options?: {
-        percent?: number;
-        background?: string;
-        color?: string;
-        color1?: string;
-        color2?: string;
-        duration?: number;
-        radius?: number;
-        width?: number;
-        text?: AnyContent;
-        bar?: string | JQuery;
-    }): JQuery<HTMLElement>;
+    circularProgressBar(options?: CircularProgressBarOptions): JQuery;
     /**
-     * POST/UPLOAD dialog
+     * POST/UPLOAD dialog (component {@link UploadProgress})
      * @param e progress event from xhr
      * @param p Optional parameters
-     * @param p.id dialog Id
-     * @param p.label dialog title
-     * @param p.after timeout in ms before opening the modal dialog (default 3s)
-     * @param p.background callback when the dialog in minified as toast (post in background)
-     * @example
-     * const xhr = new XMLHttpRequest();
-     * xhr.upload.onprogress = e => $view.widget.postProgress(e, { id: "myUpload", label: "Upload" });
+     * @deprecated use `$widget.UploadProgress.update(e, p)`
      */
-    postProgress(e: ProgressEvent, p?: {
-        id?: string;
-        label?: string;
-        after?: number;
-        background?: Callback;
-    }): void;
-    private _postProgress;
+    postProgress(e: ProgressEvent, p?: UploadProgressParam): void;
     /**
-     * Toast during the export loading
+     * Toast during the export loading (component {@link LoadingToast})
      * @param title toast title
      * @param filename file name to download
      * @param url url to load
      * @param p Parameters
-     * @param p.async async URL to wait for by polling
-     * @param p.abort optional URL to abort
-     * @example
-     * // Asynchronous export with polling, and a Stop button
-     * $view.widget.toastLoading("Export", "export.csv", myTaskURL, { async: myTaskURL + "&async=true", abort: myTaskURL + "&abort=true" });
+     * @deprecated use the component `new $widget.LoadingToast({ title, filename, url, ...p }).render()`
      */
-    toastLoading(title: string, filename: string, url: string, p?: {
-        async?: string;
-        abort?: string;
-    }): void;
+    toastLoading(title: string, filename: string, url: string, p?: Pick<LoadingToastParam, "async" | "abort">): void;
     /**
-     * Toast dialog
-     * @param params text or an object with optional keys:
-     * `level` ('info' default, 'success', 'warning', 'error'='danger'),
-     * `content` (content message),
-     * `position` ('top' default or 'bottom'),
-     * `align` ('left', 'center' default or 'right'),
-     * `duration` (animation duration in ms, default 3000, -1 = infinity),
-     * `undo` (add a UNDO button?),
-     * `pinable` (add a push-pin button?)
+     * Toast dialog (component {@link Toast})
+     * @param params text or an object with optional keys
      * @returns The toast
-     * @example
-     * $view.widget.toast("Saved");
-     * // Kept until closed by the user
-     * $view.widget.toast({ level: "error", content: "Unable to save", position: "bottom", align: "right", duration: -1, pinable: true });
+     * @deprecated use the component `new $widget.Toast(params).render()`
      */
     toast(params: string | ToastParam): JQuery<HTMLElement>;
-    private toastStacks;
     /**
-     * Display the news
-     * @param ctn container to display articles (null to display an area or a ticker bar)
-     * @param list news list from WebNews object or <code>\{ id, title, description, date, image \}</code>
-     * @param options optional parameters
-     * @param options.template HTML template with classes to fill <code>.news-title .news-date .news-desc .news-img</code> (default Simplicite.UI.Globals.news.template)
-     * @param options.popup true to get only news to display (on logon) in a modal dialog
-     * @param options.ticker true to get only news to display on a footer ticker
-     * @example
-     * $view.widget.news(ctn, [{ id: "1", title: "New release", description: "<p>Hello</p>", date: "2026-11-01" } as News]);
-     */
-    news(ctn: AnyContainer, list?: News[], options?: {
-        template?: string;
-        popup?: boolean;
-        ticker?: boolean;
-    }): void;
-    /**
-     * Display a ticker bar
-     * @param p Optional parameters
-     * @param p.position position selector (default 'body')
-     * @param p.list list of news <code>\{ id, title, description \}</code>
-     * @example
-     * $view.widget.tickerBar({ list: [{ id: "1", title: "Maintenance tonight", description: "From 8pm" } as News] });
-     */
-    tickerBar(p?: {
-        position?: AnyContainer;
-        list?: News[];
-    }): void;
-    /**
-     * Multi-files rendering + upload
+     * Multi-files rendering + upload (component {@link DocUploader})
      * @param ctn container
      * @param list list of documents { id, name }
-     * @param p options
-     * @param p.name component name
-     * @param p.object business object
-     * @param p.field doc field with fileAccept: string or array of permitted extensions and MIME types
-     * @param p.upload upload files allowed?
-     * @param p.download download documents?
-     * @param p.preview preview documents?
-     * @param p.remove remove documents?
-     * @param p.show 'list' default or 'boxes'
-     * @param p.toggle true to toggle list|boxes
-     * @param p.min minimum files (0 = not required)
-     * @param p.max total of permitted files (0 = no limit)
-     * @example
-     * const f = obj.getField("myObjDocuments");
-     * if (f) $view.widget.docUploader(ctn, [], { id: "myDocs", name: "myDocs", object: obj, field: f, upload: true, download: true, max: 5 });
+     * @param p Options
+     * @returns The uploader element
+     * @deprecated use the component `new $widget.DocUploader({ ...p, list, previewCtn: ctn }).render()`
      */
-    docUploader(ctn: JQuery, list: DocumentDB[], p: {
-        id: string;
-        name: string;
-        object: BusinessObject;
-        field: ObjectField;
-        upload?: boolean;
-        download?: boolean;
-        preview?: boolean;
-        remove?: boolean;
-        show?: "list" | "boxes";
-        toggle?: boolean;
-        min?: number;
-        max?: number;
-    }): JQuery<HTMLElement>;
+    docUploader(ctn: JQuery, list: DocumentDB[], p: Omit<DocUploaderParam, "list" | "previewCtn">): JQuery;
     /**
-     * Advanced notepad with activities
-     * @param p options
-     * @param p.id widget id
-     * @param p.name widget name
-     * @param p.data Content <code>{ checks:[{ title, list:[check,text]}], activities:[{ date, author, text }] }</code>
-     * @param p.readonly Read only or editable by authors
-     * @param p.popup Allows to open a popup to enlarge contents
-     * @param p.split split checklists and comments in 2 columns
-     * @param p.autosplit minimal width of container to auto-split
-     * @param p.height Optional max height
-     * @param p.change optional <code>callback({act,event})</code> when data has changed
-     * @example
-     * ctn.append($view.widget.notepad({
-     * 	id: "myNotes",
-     * 	name: "myNotes",
-     * 	data: { checks: [], activities: [] },
-     * 	popup: true,
-     * 	change: e => $console.log(e)
-     * }));
+     * Advanced notepad with activities (component {@link Notepad})
+     * @param p Options
+     * @returns The notepad element
+     * @deprecated use the component `new $widget.Notepad(p).render()`
      */
-    notepad(p: {
-        id?: string;
-        name?: string;
-        data: string | KeyObject;
-        readonly?: boolean;
-        popup?: boolean;
-        split?: boolean;
-        autosplit?: number;
-        height?: number | string;
-        change?: (p: {
-            act?: KeyObject;
-            item?: KeyObject;
-            list?: {
-                title: string;
-                list: KeyObject[];
-            };
-            event: string;
-        }) => void;
-    }): JQuery<HTMLElement>;
+    notepad(p: NotepadParam): JQuery;
     /**
-     * Simple dialog to change the user's password
-     * @example
-     * $view.widget.changePwd();
+     * Simple dialog to change the user's password (component {@link PasswordChange})
+     * @deprecated use the component `new $widget.PasswordChange().render()`
      */
     changePwd(): void;
     /**
-     * Create a characters counter on input field
+     * Create a characters counter on input field (component {@link CharCounter})
      * @param input input or textarea
      * @param p Options
-     * @param p.max Max length of input (default 100)
-     * @param p.position top or bottom (default bottom)
-     * @param p.align left or right (default left)
-     * @param p.toggle true to show/hide on focus/blur
-     * @example
-     * $view.widget.charCounter(t, { max: 200, position: "bottom", align: "right", toggle: true });
+     * @returns The counter element
+     * @deprecated use the component `new $widget.CharCounter({ input, ...p }).render()`
      */
-    charCounter(input: AnyContent, p?: {
-        max?: number;
-        position?: "bottom" | "top";
-        align?: "left" | "right";
-        toggle?: boolean;
-    }): JQuery<HTMLElement>;
+    charCounter(input: AnyContent, p?: Omit<CharCounterParam, "input">): JQuery;
     /**
-     * Edit a markdown text in a dialog with a preview area
+     * Edit a markdown text in a dialog with a preview area (component {@link MarkdownEditor})
      * @param md Initial value
      * @param cbk Callback with new value
-     * @example
-     * $view.widget.editMarkdown("# Title", md => $console.log(md));
+     * @returns The dialog
+     * @deprecated use the component `new $widget.MarkdownEditor({ value: md, cbk }).render()`
      */
-    editMarkdown(md: string, cbk?: (md: string) => void): JQuery<HTMLElement>;
+    editMarkdown(md: string, cbk?: (md: string) => void): JQuery;
     /**
-     * Open a dialog to take a picture
+     * Open a dialog to take a picture (component {@link Camera})
      * @param p
-     * @param p.title Dialog title
-     * @param p.facingMode video facing mode suggestion (selfie = 'user' or back camera = 'environment', not applicable if device has only one camera)
-     * @param p.videoWidth video width (use the media width by default without zoom)
-     * @param p.imageWidth result image width (use the media width if unspecified)
-     * @param p.imageHeight result image height (same video aspect ratio if unspecified)
      * @returns Promise with data URL 'data:image/png;base64,...'
-     * @example
-     * $view.widget.takePicture({ title: "Picture", facingMode: "environment", imageWidth: 800 })
-     * 	.then(url => t.attr("src", url as string));
+     * @deprecated use `$widget.Camera.takePicture(p)`
      */
-    takePicture(p: {
-        title: string;
-        facingMode: string;
-        videoWidth?: number;
-        imageWidth?: number;
-        imageHeight?: number;
-    }): Promise<string>;
+    takePicture(p: CameraParam): Promise<string>;
     /**
-     * Simple scratch pad
+     * Simple scratch pad (component {@link ScratchPad})
      * @param p
-     * @param p.width result image width (default 800)
-     * @param p.height result image height (default 600)
-     * @param p.title dialog title
-     * @param p.inline inline pad
-     * @param p.image source image
-     * @param p.onload callback(pad) when loaded
-     * @param p.update callback(dataURL) when signature has changed
-     * @example
-     * $view.widget.scratchPad({ title: "Draw", width: 800, height: 600, image: t, update: url => $console.log(url) });
+     * @deprecated use the component `new $widget.ScratchPad(p).render()`
      */
     scratchPad(p: ScratchPadParam): void;
     /**
      * Take a signature on pad
      * @param p Options
-     * @param p.width result image width (default 400)
-     * @param p.height result image height (default 200)
-     * @param p.title dialog title
-     * @param p.inline inline pad
-     * @param p.image source image
-     * @param p.onload callback(pad) when loaded
-     * @param p.update callback(dataURL) when signature has changed
-     * @example
-     * $view.widget.takeSignature({ title: "Signature", image: t, update: url => $console.log(url) });
+     * @deprecated use `$widget.ScratchPad.takeSignature(p)`
      */
     takeSignature(p: ScratchPadParam): void;
     /**
-     * Scan a QRCode/barcode
+     * Scan a QRCode/barcode (component {@link CodeScanner})
      * @param p
-     * @param p.width scanner width (default 350)
-     * @param p.height scanner height (default 0)
-     * @param p.scanWidth scan zone width (default 250)
-     * @param p.scanHeight scan zone height (default 250)
-     * @param p.aspectRatio scanner aspect ratio height (default 1.0)
-     * @param p.title dialog title
-     * @param p.applyButton display apply button? defaults to true
-     * @param p.retryButton display retry button? defaults to true
-     * @param p.cancelButton display cancel button? defaults to true
-     * @param p.applyLabel apply label
-     * @param p.retryLabel retry button title
-     * @param p.cancelLabel cancel button title
-     * @param p.container container to inline in (no dialog in this case)
-     * @param p.id DOM id (got from container if a container is set, defaults to 'scanner')
-     * @param p.onload callback(scanner) when loaded
-     * @param p.onscan callback(scanner, text) when scan is done
-     * @param p.onapply callback(text) when scan is applied (trigger by the apply button)
-     * @param p.onretry callback() when scan is resumed (triggered by the retry button)
-     * @param p.oncancel callback() when scan is cancelled (triggered by the cancel button)
-     * @param p.onclose callback() after closing
-     * @example
-     * $view.widget.scanCode({ title: "Scan", onapply: text => $console.log(text) });
+     * @deprecated use the component `new $widget.CodeScanner(p).render()` (inline container in `p.ctn`)
      */
-    scanCode(p: {
-        width?: number;
-        height?: number;
-        scanWidth?: number;
-        scanHeight?: number;
-        aspectRatio?: number;
-        title?: string;
-        applyButton?: boolean;
-        applyLabel?: string;
-        retryButton?: boolean;
-        retryLabel?: string;
-        cancelButton?: boolean;
-        cancelLabel?: string;
+    scanCode(p: CodeScannerParam & {
         container?: JQuery;
-        id?: string;
-        onload?: Callback;
-        onscan?: (scan: Html5Qrcode | null, value: string) => void;
-        onapply?: (text: string) => void;
-        onretry?: Callback;
-        oncancel?: Callback;
-        onclose?: Callback;
     }): void;
     /**
-     * Display a contrast helper between 2 colors
-     * @param ctn Target container to draw the preview button with colors and contrast value
-     * @param color input of color
-     * @param bgcolor input of background color
-     * @example
-     * // Inputs of the text and background colors
-     * $view.widget.contrastHelper(ctn, t, c);
-     */
-    contrastHelper(ctn: JQuery, color: JQuery, bgcolor: JQuery): void;
-    /**
-     * Display a shortcut
+     * Display a counter (component {@link Counter})
      * @param ctn Target container
      * @param p Options
-     * @param p.shortcuts List of shortcuts, each with `name`, `url`, `label` and an optional `target`
-     * @example
-     * $view.widget.shortcuts(ctn, { shortcuts: [{ name: "MyShortcut", url: "/ui", label: "My shortcut" }] });
-     */
-    shortcuts(ctn: JQuery, p: {
-        shortcuts: Shortcut[];
-    }): JQuery<HTMLElement>;
-    /**
-     * Display a counter
-     * @param ctn Target container
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.field Optional field name to get total (or simple count)
-     * @param p.filters Object filters
-     * @param p.label Counter label
-     * @param p.help Optional help title
-     * @param p.bgColor Background color (CSS color)
-     * @param p.textColor Text color (CSS color)
-     * @param p.color Predefined background color grey(default)|blue|orange|red|green|purple|violet|yellow|turquoise|brown
-     * @param p.icon Icon name
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (number of pixels or CSS dimension)
-     * @param p.onclick Click handler
-     * @example
-     * $view.widget.counter(ctn, {
-     * 	name: "MyObject",
-     * 	label: "Open orders",
-     * 	filters: { myObjStatus: "OPEN" },
-     * 	color: "blue",
-     * 	icon: "fas/shopping-cart",
-     * 	onclick: () => $ui.displayList(listCtn, obj)
-     * });
+     * @deprecated use the component `new $widget.Counter({ ...p, ctn }).render()`
      */
     counter(ctn: JQuery, p: CounterParam): JQuery<HTMLElement>;
-    /** Counter box with its colors and sizes (without content) */
-    private counterBox;
-    /** Counter content: value, label and icon */
-    private counterContent;
     /**
      * Display a set of counters
      * @param ctn Target container (if null defauts to container with options.id DOM Id)
      * @param p Options
-     * @param p.objects Objects to display (see CounterParam for per-object properties)
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (number of pixels or CSS dimension)
-     * @param p.colSpan Column span (defaults to max(3, 12 / number of objects)
-     * @param p.rowClasses Optional CSS row classes (default 'row')
-     * @param p.classes Optional CSS classes to add
-     * @param p.onclick Click handler
-     * @example
-     * $view.widget.counters(ctn, {
-     * 	objects: [
-     * 		{ name: "MyObject", label: "All orders" },
-     * 		{ name: "MyObject", label: "Open orders", filters: { myObjStatus: "OPEN" }, color: "orange" }
-     * 	]
-     * });
+     * @deprecated use `$widget.Counter.displayAll(ctn, p)`
      */
     counters(ctn: JQuery | null, p: CountersParam): JQuery<HTMLElement>;
-    /** Row of counters */
-    private countersRow;
     /**
      * Display an example of counters widget with fake data: one counter per predefined color (grey = default).
      * Same rendering as the counters widget of a view, without any server call (ex: theme editor preview).
      * @param ctn Target container
      * @param p Options
-     * @param p.icon Icon of the counters (default: a font icon, as usually configured on counters)
-     * @param p.colors Predefined colors to display (default: all of them)
-     * @param p.hover Add a forced hover twin (class "hover") after each counter
      * @returns The widget container (div.widget-counters)
-     * @example
-     * $view.widget.displayCountersExample(ctn);
-     * $view.widget.displayCountersExample(ctn, { colors: ["blue"], hover: true });
+     * @deprecated use `$widget.Counter.displayExample(ctn, p)`
      */
-    displayCountersExample(ctn: JQuery, p?: {
-        icon?: string;
-        colors?: string[];
-        hover?: boolean;
-    }): JQuery<HTMLElement>;
+    displayCountersExample(ctn: JQuery, p?: CountersExampleParam): JQuery<HTMLElement>;
     /**
-     * Display a carousel for a business object
+     * Display a carousel for a business object (component {@link Carousel})
      * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.subTitleField Object sub-title field
-     * @param p.descriptionField Object description field
-     * @param p.imageField Object image field
-     * @param p.imageFieldThumbnail Object image field as thumbnail ?
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (number of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color)
-     * @param p.onclick Click handler
-     * @example
-     * $view.widget.carousel(ctn, {
-     * 	name: "MyProduct",
-     * 	titleField: "myPrdName",
-     * 	descriptionField: "myPrdDescription",
-     * 	imageField: "myPrdPicture",
-     * 	height: 300
-     * });
+     * @param p Object, fields and layout options
+     * @deprecated use the component `new $widget.Carousel({ ...p, ctn }).render()`
      */
-    carousel(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        subTitleField?: string;
-        descriptionField?: string;
-        imageField?: string;
-        imageFieldThumbnail?: boolean;
-        id?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        addon?: AnyContent;
-        onclick?: boolean | JQueryHandler;
-    }): void;
-    /** Carousel rendering of formatted items (frozen = no sliding nor auto-play, ex: theme editor preview) */
-    private carouselRender;
+    carousel(ctn: JQuery, p: CarouselParam): void;
     /**
      * Display an example of carousel widget with fake data (3 slides without image), frozen on the 1st slide.
      * Same rendering as the carousel widget of a view, without any server call (ex: theme editor preview).
      * @param ctn Target container
      * @returns The widget container (div.widget-carousel)
-     * @example
-     * $view.widget.displayCarouselExample(ctn);
+     * @deprecated use `$widget.Carousel.displayExample(ctn)`
      */
     displayCarouselExample(ctn: JQuery): JQuery<HTMLElement>;
     /**
-     * Display a set of cards for a business object
+     * Display a set of cards for a business object (component {@link Cards})
      * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.subTitleField Object sub-title field
-     * @param p.descriptionField Object description field
-     * @param p.statusField Object status field
-     * @param p.imageField Object image field
-     * @param p.imageFieldThumbnail Object image field as thumbnail ?
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.rowClasses Row-level CSS classes
-     * @param p.classes Row-level additional CSS classes
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (number of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color)
-     * @param p.cardClasses Card-level additional CSS classes
-     * @param p.cardWidth Card width (number of pixels or CSS dimension)
-     * @param p.cardHeight Card height (number of pixels or CSS dimension)
-     * @param p.cardImgWidth Card image width (number of pixels or CSS dimension)
-     * @param p.cardImgHeight Card image height (number of pixels or CSS dimension)
-     * @param p.cardBgColor Card background color (CSS color)
-     * @param p.onclick Click handler
-     * @example
-     * $view.widget.cards(ctn, {
-     * 	name: "MyProduct",
-     * 	filters: { myPrdAvailable: "1" },
-     * 	titleField: "myPrdName",
-     * 	subTitleField: "myPrdCode",
-     * 	imageField: "myPrdPicture",
-     * 	imageFieldThumbnail: true,
-     * 	cardWidth: 250
-     * });
+     * @param p Object, fields and layout options
+     * @deprecated use the component `new $widget.Cards({ ...p, ctn }).render()`
      */
     cards(ctn: JQuery, p: CardsParam): void;
-    /** Cards rendering of formatted items */
-    private cardsRender;
     /**
-     * Display an example of cards widget with fake data, in the usual configuration of each layout:
-     * - default grid: clickable cards with a status without color
-     * - row-horizontal: non clickable cards of 15rem with an image (placeholder)
-     * - row-vertical: clickable cards with a date as title and a colored status with icon (as an enum status field)
-     *
-     * Same rendering as the cards widget of a view, without any server call (ex: theme editor preview).
+     * Display an example of cards widget with fake data, in the usual configuration of each layout
      * @param ctn Target container
      * @param rowClasses Optional row CSS classes (row-horizontal or row-vertical), default grid when empty
      * @param nb Number of cards (default 3)
      * @returns The widget container (div.widget-cards)
-     * @example
-     * $view.widget.displayCardsExample(ctn, "row-horizontal");
+     * @deprecated use `$widget.Cards.displayExample(ctn, rowClasses, nb)`
      */
     displayCardsExample(ctn: JQuery, rowClasses?: string, nb?: number): JQuery<HTMLElement>;
     /**
-     * Display an accordion set for a business object
+     * Display an accordion set for a business object (component {@link Accordion})
      * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.contentField Object description field
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.classes Row-level additional CSS classes
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (number of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color)
-     * @param p.onclick Click handler
-     * @example
-     * $view.widget.accordion(ctn, {
-     * 	name: "MyFaq",
-     * 	titleField: "myFaqQuestion",
-     * 	contentField: "myFaqAnswer"
-     * });
+     * @param p Object, fields and layout options
+     * @deprecated use the component `new $widget.Accordion({ ...p, ctn }).render()`
      */
-    accordion(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        contentField: string;
-        id?: string;
-        classes?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        onclick?: boolean | JQueryHandler;
-    }): void;
-    /** Accordion rendering of formatted items */
-    private accordionRender;
+    accordion(ctn: JQuery, p: AccordionParam): void;
     /**
      * Display an example of accordion widget with fake data (first item expanded).
      * Same rendering as the accordion widget of a view, without any server call (ex: theme editor preview).
      * @param ctn Target container
      * @returns The widget container (div.widget-accordion)
-     * @example
-     * $view.widget.displayAccordionExample(ctn);
+     * @deprecated use `$widget.Accordion.displayExample(ctn)`
      */
     displayAccordionExample(ctn: JQuery): JQuery<HTMLElement>;
     /**
-     * Display a time line set for a business object
+     * Display a time line set for a business object (component {@link Timeline})
      * @param ctn Target container (if null defauts to container with opts.id DOM Id)
-     * @param p Options
-     * @param p.name Object name
-     * @param p.instance Object instance name
-     * @param p.filters Object filters
-     * @param p.titleField Object title field
-     * @param p.dateField Object date field
-     * @param p.contentField Object description field
-     * @param p.id DOM Id (required if no container is passed)
-     * @param p.classes Row-level additional CSS classes
-     * @param p.width Width (number of pixels or CSS dimension)
-     * @param p.height Height (number of pixels or CSS dimension)
-     * @param p.bgColor Background color (CSS color)
-     * @param p.direction Layout: `vertical` (default) or `horizontal` (line on top, items below, scrollable on X axis)
-     * @param p.maxHeight Maximum height of a vertical time line (number of pixels or CSS dimension, `none` = unlimited),
-     * scrollable beyond (default theme variable `--simplicite-timeline-widget-max-height`)
-     * @param p.onclick Click handler
-     * @example
-     * $view.widget.timeline(ctn, {
-     * 	name: "MyEvent",
-     * 	titleField: "myEvtTitle",
-     * 	dateField: "myEvtDate",
-     * 	contentField: "myEvtDescription",
-     * 	direction: "horizontal"
-     * });
+     * @param p Object, fields and layout options
+     * @deprecated use the component `new $widget.Timeline({ ...p, ctn }).render()`
      */
-    timeline(ctn: JQuery, p: {
-        name: string;
-        instance?: string;
-        filters?: KeyObject;
-        titleField: string;
-        dateField: string;
-        contentField: string;
-        id?: string;
-        classes?: string;
-        width?: string | number;
-        height?: string | number;
-        bgColor?: string;
-        direction?: "vertical" | "horizontal";
-        maxHeight?: string | number;
-        onclick?: boolean | JQueryHandler;
-    }): void;
-    /**
-     * Timeline rendering of formatted items
-     * @returns Scrollable region (div.timeline-scroll) containing the time line list (ol.timeline)
-     */
-    private timelineRender;
+    timeline(ctn: JQuery, p: TimelineParam): void;
     /**
      * Display an example of timeline widget with fake data (3 dated items).
      * Same rendering as the timeline widget of a view, without any server call (ex: theme editor preview).
      * @param ctn Target container
      * @param direction Optional layout: `vertical` (default) or `horizontal`
      * @returns The widget container (div.widget-timeline)
-     * @example
-     * $view.widget.displayTimelineExample(ctn, "horizontal");
+     * @deprecated use `$widget.Timeline.displayExample(ctn, direction)`
      */
     displayTimelineExample(ctn: JQuery, direction?: "vertical" | "horizontal"): JQuery<HTMLElement>;
     /**
-     * Create a context menu
+     * Create a context menu (component {@link ContextMenu})
      * @param _element The element that was right-clicked
      * @param e Mouse event
      * @param items Actions
      * @returns The menu
-     * @example
-     * t.on("contextmenu", e => {
-     * 	e.preventDefault();
-     * 	$view.widget.contextMenu(t, e, [$("<a/>").text("My action")]);
-     * });
+     * @deprecated use the component `new $widget.ContextMenu({ event: e, items }).render()`
      */
     contextMenu(_element: JQuery, e: JQuery.ContextMenuEvent, items: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
 }
@@ -9709,6 +10902,313 @@ declare class UIFieldUrl extends UIField {
     draw(): JQuery;
 }
 
+/** Parameters of a progress bar (see `$widget.ProgressBar`) */
+interface ProgressBarParam extends UIWidgetParam {
+    /** Existing <code>.progress</code> element to reuse (default a new element) */
+    element?: JQuery;
+}
+/** Options of a progress value change */
+interface ProgressBarValueOptions {
+    /** Text displayed above the bar (undefined = unchanged) */
+    text?: string;
+    /** Duration of the progression in ms (default: CSS transition of the bar) */
+    duration?: number;
+}
+/**
+ * Progress bar: horizontal bar with its value in percent and an optional text above it.
+ * <br>Standalone component with its own CSS (classes <code>.progress</code> and <code>.progress-bar</code>),
+ * the percent label is counted along the progression of the bar.
+ * <br>Created by <code>new $widget.ProgressBar(p)</code>, the instance name is the <code>data-progress</code> attribute
+ * and the component is stored on its element: <code>el.data("progressBar")</code>.
+ * @example
+ * const pb: ProgressBar = new $widget.ProgressBar({ name: "upload", ctn });
+ * pb.render();
+ * pb.setValue(50, { text: "Uploading..." });
+ * @example
+ * const bar = $tools.progressBar("upload", 0, null, undefined, "Uploading...");
+ * ctn.append(bar);
+ * (bar.data("progressBar") as ProgressBar).setValue(50, { text: "Processing..." });
+ */
+declare class ProgressBar extends UIWidget<ProgressBarParam> {
+    /** Value in percent [0..100] */
+    value?: number;
+    /** Bar element <code>.progress-bar</code> (detached one before rendering) */
+    private bar;
+    /** Text above the bar */
+    private label?;
+    /** Observer of the displayed width of the bar */
+    private observer?;
+    /**
+     * Create the element or reuse the existing <code>.progress</code> element
+     * @returns The progress element <code>.progress</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Remove the bar and release its observer
+     * @example
+     * const pb: ProgressBar = new $widget.ProgressBar({ name: "upload", ctn });
+     * pb.render();
+     * pb.close();
+     */
+    close(): void;
+    /**
+     * Style classes of the bar
+     * @param style Classes (null or empty = default style)
+     * @example
+     * const pb = $(".progress", ctn).data("progressBar") as ProgressBar;
+     * pb.setStyle("bg-success");
+     */
+    setStyle(style?: string | null): void;
+    /**
+     * Text displayed above the bar, created once the bar is in the DOM
+     * @param text Text (undefined = unchanged)
+     * @example
+     * const pb = $(".progress", ctn).data("progressBar") as ProgressBar;
+     * pb.setText("Processing...");
+     */
+    setText(text?: string): void;
+    /**
+     * Set the value: the width of the bar progresses to the value, the label in percent follows the displayed bar
+     * @param v Value in percent [0..100]
+     * @param options Text and duration of the progression
+     * @example
+     * const pb = $(".progress", ctn).data("progressBar") as ProgressBar;
+     * pb.setValue(75, { duration: 1000 });
+     */
+    setValue(v: number, options?: ProgressBarValueOptions): void;
+    /** Displayed width of the track (0 when hidden or detached) */
+    private trackWidth;
+    /**
+     * Label in % of the displayed width of the bar
+     * @param final Exact value (end of the transition)
+     */
+    private sync;
+    /**
+     * Get or create the progress bar of a name, and set its style and value
+     * (the value is set once the element is in the DOM, to display the text)
+     * @param name Name of the bar or existing element
+     * @param p Value in percent [0..100]
+     * @param style Optional style classes of the bar
+     * @param ctn Optional container to search the bar by name
+     * @param text Optional text above the bar
+     * @returns The component
+     */
+    static of(name: string | JQuery, p?: number, style?: string | null, ctn?: Container, text?: string): ProgressBar;
+}
+
+/** Parameters of a calculator (see `$widget.Calculator`) */
+interface CalculatorParam extends UIWidgetParam {
+    /** Form input (initial expression = its value), the calculator is placed after it */
+    input: AnyContent;
+    /** Callback with the result (key Ok or Enter) */
+    cbk?: (result: number) => void;
+}
+/**
+ * Simple calculator opened under a numeric input: the expression is evaluated and the result given back to the input.
+ * <br>Only one calculator at a time: opening one closes the previous one.
+ * @example
+ * const calc: Calculator = new $widget.Calculator({ input: t, cbk: r => t.val(r) });
+ * calc.render();
+ */
+declare class Calculator extends UIWidget<CalculatorParam> {
+    /** Input of the calculator */
+    input: JQuery;
+    /** Expression and result input */
+    private result;
+    /** Close on a click outside the calculator */
+    private outside;
+    /**
+     * Open the calculator under the input
+     * @returns The calculator element <code>.calculator</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /** Button of a key */
+    private key;
+    /**
+     * Clear the expression
+     * @example
+     * const calc: Calculator = new $widget.Calculator({ input: t });
+     * calc.render();
+     * calc.reset();
+     */
+    reset(): void;
+    /**
+     * Add a digit or an operator to the expression
+     * @param s Text to add
+     * @example
+     * const calc: Calculator = new $widget.Calculator({ input: t });
+     * calc.render();
+     * calc.add("*2");
+     */
+    add(s: string): void;
+    /**
+     * Evaluate the expression, the result replaces it
+     * @returns Result (0 when the expression is invalid)
+     * @example
+     * const calc: Calculator = new $widget.Calculator({ input: t });
+     * calc.render();
+     * const r: number = await calc.equ();
+     */
+    equ(): Promise<number>;
+    /**
+     * Evaluate the expression, give the result to the callback and close the calculator
+     * @example
+     * const calc: Calculator = new $widget.Calculator({ input: t, cbk: r => t.val(r) });
+     * calc.render();
+     * await calc.ok();
+     */
+    ok(): Promise<void>;
+    /**
+     * Close the calculator
+     * @example
+     * const calc: Calculator = new $widget.Calculator({ input: t });
+     * calc.render();
+     * calc.close();
+     */
+    close(): void;
+}
+
+/** Parameters of a markdown editor (see `$widget.MarkdownEditor`) */
+interface MarkdownEditorParam extends Omit<UIWidgetParam, "ctn"> {
+    /** Initial value */
+    value?: string;
+    /** Callback with the new value (button Apply) */
+    cbk?: (md: string) => void;
+}
+/**
+ * Markdown editor in a dialog with a preview area (code editor, or a text area in the accessible mode).
+ * @example
+ * new $widget.MarkdownEditor({ value: "# Title", cbk: md => $console.log(md) }).render();
+ */
+declare class MarkdownEditor extends UIWidget<MarkdownEditorParam> {
+    /**
+     * Open the editor
+     * @returns The dialog of the editor
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the editor without applying
+     * @example
+     * const ed: MarkdownEditor = new $widget.MarkdownEditor({ value: "# Title" });
+     * ed.render();
+     * ed.close();
+     */
+    close(): void;
+}
+
+/** Parameters of a social completion (see `$widget.SocialCompletion`) */
+interface SocialCompletionParam extends UIWidgetParam {
+    /** Social textarea */
+    textarea: JQuery;
+}
+/**
+ * Completion of the social users in a textarea: a word starting with @ proposes the matching users,
+ * the picked one replaces the word by @login.
+ * @example
+ * new $widget.SocialCompletion({ textarea: t }).render();
+ */
+declare class SocialCompletion extends UIWidget<SocialCompletionParam> {
+    /** Textarea of the completion */
+    textarea: JQuery;
+    /** Close the dropdown list */
+    private closer;
+    /**
+     * Bind the completion to the textarea
+     * @returns The textarea
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the dropdown list (the textarea is kept)
+     * @example
+     * const c: SocialCompletion = new $widget.SocialCompletion({ textarea: t });
+     * c.render();
+     * c.close();
+     */
+    close(): void;
+}
+
+/**
+ * Dialog to change the password of the current user: old password, new password and its confirmation.
+ * @example
+ * new $widget.PasswordChange().render();
+ */
+declare class PasswordChange extends UIWidget<Omit<UIWidgetParam, "ctn">> {
+    /**
+     * Open the dialog
+     * @returns The dialog of the password change
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the dialog without saving
+     * @example
+     * const pc: PasswordChange = new $widget.PasswordChange();
+     * pc.render();
+     * pc.close();
+     */
+    close(): void;
+}
+
+/** Parameters of a context menu (see `$widget.ContextMenu`) */
+interface ContextMenuParam extends UIWidgetParam {
+    /** Mouse event (position of the menu) */
+    event: JQuery.ContextMenuEvent;
+    /** Actions (dropdown items or elements) */
+    items: (DropdownItem | JQuery)[];
+}
+/**
+ * Context menu at the mouse position: one menu at a time, closed by a click or a key outside.
+ * @example
+ * t.on("contextmenu", e => {
+ * 	e.preventDefault();
+ * 	new $widget.ContextMenu({
+ * 		event: e,
+ * 		items: [{ name: "myAction", label: "My action", click: () => $console.log("clicked") }]
+ * 	}).render();
+ * });
+ */
+declare class ContextMenu extends UIWidget<ContextMenuParam> {
+    /** Keyboard listener of the opened menu (one menu at a time) */
+    private static keyListener;
+    /** Close function of the opened menu (one menu at a time): releases its listeners */
+    private static current;
+    /** Close the opened menu and release its listeners */
+    private closer;
+    /**
+     * Close the previous menu and open this one at the mouse position
+     * @returns The menu element <code>.ctx-menu</code> (empty without items)
+     */
+    protected draw(): JQuery<HTMLElement>;
+    /**
+     * Close the menu (and any other opened context menu)
+     * @example
+     * t.on("contextmenu", e => new $widget.ContextMenu({ event: e, items: [] }).close());
+     */
+    close(): void;
+}
+
+/** Parameters of a breadcrumb (see `$widget.Breadcrumb`) */
+interface BreadcrumbParam extends UIWidgetParam {
+    /** List of items: string or <code>{ label }</code> */
+    items: (string | NavItem)[];
+    /** Number of last items displayed after the first one */
+    size: number;
+    /** Click handler(index of the item) */
+    cbk?: (index: number) => void;
+}
+/**
+ * Breadcrumb 'first / ... / last ones': the first item, an ellipsis, then the last items, the current page (last item) is not a link.
+ * @example
+ * const bc: Breadcrumb = new $widget.Breadcrumb({ items: ["Home", "Orders", "Order 12"], size: 3, cbk: i => $console.log("clicked", i), ctn });
+ * bc.render();
+ */
+declare class Breadcrumb extends UIWidget<BreadcrumbParam> {
+    /**
+     * Build the breadcrumb
+     * @returns The breadcrumb element <code>ol.breadcrumb</code>
+     */
+    protected draw(): JQuery<HTMLElement>;
+}
+
 /**
  * Simplicite Ajax session / model layer, with the legacy static constants (Simplicite.Ajax.CONTEXT_CREATE...)
  */
@@ -9845,6 +11345,8 @@ declare const UI: {
     BusinessProcess: typeof UIBusinessProcess;
     /** `Simplicite.UI.ExternalObject`: alias of the `UIExternalObject` class */
     ExternalObject: typeof UIExternalObject;
+    /** `Simplicite.UI.Widget`: alias of the `UIWidget` class (base class of the widgets of `$widget`) */
+    Widget: typeof UIWidget;
     /** `Simplicite.UI.SyncQueue`: alias of the `SyncQueue` class */
     SyncQueue: typeof SyncQueue;
     /** `Simplicite.UI.Workflow`: alias of the `Workflow` class */
@@ -9931,6 +11433,79 @@ declare const $app: Session;
  * Grant singleton
  */
 declare const $grant: Grant;
+/**
+ * Classes of the `$widget` global (typed by WidgetNamespace, see namespaces.ts)
+ */
+declare const WidgetClasses: {
+    /** `$widget.ProgressBar`: progress bar component */
+    ProgressBar: typeof ProgressBar;
+    /** `$widget.CircularProgressBar`: circular progress bar component */
+    CircularProgressBar: typeof CircularProgressBar;
+    /** `$widget.Calculator`: calculator component */
+    Calculator: typeof Calculator;
+    /** `$widget.Toast`: toast component */
+    Toast: typeof Toast;
+    /** `$widget.Notepad`: notepad component (checklists and activities) */
+    Notepad: typeof Notepad;
+    /** `$widget.Timeline`: time line component */
+    Timeline: typeof Timeline;
+    /** `$widget.Counter`: counter component (and sets of counters) */
+    Counter: typeof Counter;
+    /** `$widget.Carousel`: carousel component */
+    Carousel: typeof Carousel;
+    /** `$widget.Cards`: cards component */
+    Cards: typeof Cards;
+    /** `$widget.Accordion`: accordion component */
+    Accordion: typeof Accordion;
+    /** `$widget.Camera`: camera dialog to take a picture */
+    Camera: typeof Camera;
+    /** `$widget.ScratchPad`: scratch pad and signature pad */
+    ScratchPad: typeof ScratchPad;
+    /** `$widget.CodeScanner`: QRCode/barcode scanner */
+    CodeScanner: typeof CodeScanner;
+    /** `$widget.DocUploader`: multi-documents list and upload */
+    DocUploader: typeof DocUploader;
+    /** `$widget.MarkdownEditor`: markdown editor with preview */
+    MarkdownEditor: typeof MarkdownEditor;
+    /** `$widget.UploadProgress`: progress dialog of an upload */
+    UploadProgress: typeof UploadProgress;
+    /** `$widget.LoadingToast`: toast during the loading of a file */
+    LoadingToast: typeof LoadingToast;
+    /** `$widget.Completion`: completion of an input */
+    Completion: typeof Completion;
+    /** `$widget.SocialCompletion`: completion of the social users (@login) in a textarea */
+    SocialCompletion: typeof SocialCompletion;
+    /** `$widget.ImagePreview`: image preview dialog with zoom */
+    ImagePreview: typeof ImagePreview;
+    /** `$widget.PasswordChange`: dialog to change the password of the user */
+    PasswordChange: typeof PasswordChange;
+    /** `$widget.CharCounter`: characters counter of an input */
+    CharCounter: typeof CharCounter;
+    /** `$widget.ContextMenu`: context menu at the mouse position */
+    ContextMenu: typeof ContextMenu;
+    /** `$widget.SwitchButton`: switch button on/off */
+    SwitchButton: typeof SwitchButton;
+    /** `$widget.Slider`: range slider */
+    Slider: typeof Slider;
+    /** `$widget.StarSlider`: star slider (rate) */
+    StarSlider: typeof StarSlider;
+    /** `$widget.SearchBar`: search input with clear button */
+    SearchBar: typeof SearchBar;
+    /** `$widget.Breadcrumb`: breadcrumb 'first / ... / last ones' */
+    Breadcrumb: typeof Breadcrumb;
+    /** `$widget.NewsWidget`: news list and ticker bar */
+    NewsWidget: typeof NewsWidget;
+    /** `$widget.BarOverflow`: bar with an overflow dropdown */
+    BarOverflow: typeof BarOverflow;
+    /** `$widget.Palettes`: palettes of colors, palette and theme pickers, contrast helper */
+    Palettes: typeof Palettes;
+    /** `$widget.AIChatBot`: AI chatbot of the MCP client (see `$ui.displayAIChatBot`) */
+    AIChatBot: typeof AIChatBot;
+};
+/**
+ * Widget components (classes)
+ */
+declare const $widget: WidgetNamespace;
 
 declare type Translate = (code: string, plural?: boolean) => string;
 declare global {
@@ -9941,6 +11516,7 @@ declare global {
         $ui: UIEngine;
         $view: UIViewer;
         $tools: Bootstrap5;
+        $widget: WidgetNamespace;
         $console: Console;
         $root: string;
         $nav: UINavigator;
@@ -10064,6 +11640,25 @@ type DiagramModelerTemplate = {
     customNodeMenu?: (node: DiagramNode, item: DiagramNodeContentItem, pos: Point) => DesktopMenuItem[];
     customLinkMenuAdd?: (from: DiagramNode, to: DiagramNode, palette: JQuery) => void;
 };
+/** Event of a maker on a model, relayed by the server to the other makers of the model */
+type DiagramEvent = {
+    /** Event type */
+    type: string;
+    /** Number of the event for its maker (order of the events, see DiagramModeler.onEvent) */
+    seq?: number;
+    [key: string]: unknown;
+};
+/** Event of another maker received by the modeler */
+type DiagramEventMessage = {
+    /** Model row ID */
+    modelId: string;
+    /** Event sent by the maker */
+    event: DiagramEvent;
+    /** Maker who sent the event */
+    emitter?: UsageUser;
+    /** Server time */
+    time?: number;
+};
 /**
  *
  * Model controller between Model servlet and desktop/palette/events
@@ -10083,6 +11678,11 @@ declare class DiagramModeler {
     springs?: DiagramSprings;
     printer?: DiagramPrint;
     saving: boolean;
+    /** Usage of the model by this session: refresh timer and palette of the other makers (see startUsage) */
+    private usage?;
+    private seq;
+    private inbox;
+    private reloading?;
     constructor(modelId: string, engine: DiagramEngine);
     private getObject;
     /**
@@ -10095,7 +11695,42 @@ declare class DiagramModeler {
      */
     open(ctn: Container, cbk?: (diagram: DiagramModeler) => void, p?: ModelParam): void;
     listener(): void;
-    onMessage(_: KeyObject): void;
+    /**
+     * Show the other makers on the model: usage of the Model record by this session (as the Model form),
+     * refreshed every minute and updated by the usage events of the server (see $view.form.objectUsage)
+     */
+    private startUsage;
+    /**
+     * Remove the usage of the model by this session
+     */
+    stopUsage(): void;
+    /**
+     * Reload the model saved by the other makers (maker joining the model, see DiagramSync)
+     */
+    reopen(): void;
+    /**
+     * URL of a modeler service for this model
+     * @param action Service
+     * @param params Optional parameters (encoded)
+     */
+    private serviceURL;
+    /**
+     * Send an event to the other makers of the model (sessions using the model, see startUsage)
+     * @param event Event
+     */
+    sendEvent(event: DiagramEvent): void;
+    /**
+     * Event of another maker on the model (see sendEvent), applied in the order of the maker:
+     * the events of another node may arrive in another order, an event arriving before the previous ones is held
+     * until they arrive, at most EVENT_HOLD_MS (lost event or maker already working before this one)
+     * @param msg Message with the event and its emitter
+     */
+    onEvent(msg: DiagramEventMessage): void;
+    /**
+     * Apply the event of another maker to the desktop, then trigger `diagram.event` on the desk
+     * @param msg Message with the event and its emitter
+     */
+    private applyEvent;
     /**
      * Generic hook call if exists in template
      * @param {string} hook hook name defined as a function in template
@@ -10364,6 +11999,7 @@ declare class DiagramSprings {
     remoteness: number;
     gravity: number;
     enabled?: boolean;
+    private recording;
     constructor(model: DiagramModeler);
     /**
      * Spring stiffness constant F = k * dx
@@ -10401,9 +12037,10 @@ declare class DiagramSprings {
     disable(): this;
     /**
      * Start the nodes placement
+     * @param {boolean} record started by the user: undo/redo of the moved nodes, sent to the other makers
      * @function
      */
-    start(): this;
+    start(record?: boolean): this;
     /**
      * Stop the nodes placement
      * @function
@@ -10818,6 +12455,21 @@ declare class DiagramTreeNode {
      */
     open(visible: boolean): void;
     /**
+     * Show/hide the node and its links in the diagram (collapsed sub-tree)
+     * @function
+     */
+    show(visible: boolean): void;
+    /**
+     * Node released from the tree: shown again without its button
+     * @function
+     */
+    release(): void;
+    /**
+     * Open/close buttons of the sub-tree (option openClose): on the visible nodes with children
+     * @function
+     */
+    drawButtons(): void;
+    /**
      * Is open?
      * @function
      */
@@ -10833,10 +12485,13 @@ declare class DiagramTreeNode {
      */
     doLayoutHierarchy(x: number, y: number, level: number, selected?: boolean): void;
     /**
-     * Do layout radial (recursive)
+     * Do layout radial: the root at the center, one ring per level,
+     * the sector of a node proportional to its leaves, each ring large enough for its nodes (no overlap):
+     * - away from the previous ring: half-diagonals of the largest nodes of both rings + gap between levels
+     * - between neighbors on the ring: half-diagonals + gap between nodes on the smallest sector of the ring
      * @function
      */
-    doLayoutRadial(cx: number, cy: number, r: number, a1: number, a2: number, selected?: boolean): void;
+    doLayoutRadial(cx: number, cy: number, selected?: boolean): void;
     /**
      * Move node
      * @function
@@ -11906,6 +13561,368 @@ declare class DiagramNote extends DiagramNodus {
     position(x?: number, y?: number, rel?: boolean): Point;
 }
 
+type UndoRedoAction = "bd" | // bounds of elements: move, align, resize, layout
+"na" | // add node
+"nt" | // add note
+"ac" | // add container
+"nr" | // remove nodes
+"tr" | // remove note
+"cr" | // remove container
+"st" | // style
+"lm" | // move link
+"ls" | // link style (style, label, rendering, extremities)
+"la" | // add link (note link, only in the SVG)
+"tx" | // note text
+"dr";
+type UndoRedoTarget = DiagramElement | DiagramElement[] | JSVG;
+type UndoRedoMove = {
+    e: DiagramElement;
+    dx: number;
+    dy: number;
+};
+/** Absolute position of an element, with its size when it changes */
+type UndoRedoBound = {
+    x: number;
+    y: number;
+    w?: number;
+    h?: number;
+};
+/** Bounds of an element before and after an action */
+type UndoRedoChange = {
+    e: DiagramElement;
+    from: UndoRedoBound;
+    to: UndoRedoBound;
+};
+/** Points of a link, and its anchors in the nodes (% of the node size) */
+type UndoRedoLinkState = {
+    points: Point[];
+    pointFrom: Point;
+    pointTo: Point;
+};
+/** Link state before and after an action */
+type UndoRedoLinkChange = {
+    e: DiagramLink;
+    from: UndoRedoLinkState;
+    to: UndoRedoLinkState;
+};
+/** Element style */
+type UndoRedoStyle = DiagramContainerStyle | DiagramNodeStyle;
+/** Link appearance */
+type UndoRedoLinkLook = {
+    style: DiagramLinkStyle;
+    label: DiagramLinkLabel;
+    render?: number;
+    fromType?: number;
+    toType?: number;
+};
+/**
+ * Undo/redo item: undo applies the states before the action, redo and the other makers the states after
+ */
+type UndoRedoItem = {
+    a: UndoRedoAction;
+    t: UndoRedoTarget;
+    changes?: UndoRedoChange[];
+    linkChanges?: UndoRedoLinkChange[];
+    style?: UndoRedoStyle;
+    styleTo?: UndoRedoStyle;
+    linkFrom?: UndoRedoLinkState;
+    linkTo?: UndoRedoLinkState;
+    cascade?: boolean;
+    links?: DiagramLink[];
+    look?: UndoRedoLinkLook;
+    lookTo?: UndoRedoLinkLook;
+    text?: string;
+    textTo?: string;
+    record?: {
+        undo?: string;
+        redo?: string;
+    };
+};
+declare class DiagramUndoRedo {
+    desktop: DiagramDesktop;
+    list: UndoRedoItem[];
+    index: number;
+    max: number;
+    lock: boolean;
+    private bulkDepth;
+    private bulk?;
+    private bulkLinks?;
+    constructor(desktop: DiagramDesktop);
+    push(data: UndoRedoItem): void;
+    /**
+     * Elements of a target
+     * @param t Target
+     */
+    elements(t: UndoRedoTarget): DiagramElement[];
+    /**
+     * Current bounds of an element
+     * @param e Element
+     * @param size With the size?
+     */
+    bound(e: DiagramElement, size?: boolean): UndoRedoBound;
+    /**
+     * Apply absolute bounds (undo, redo, actions of the other makers), without springs reaction:
+     * the containers first (outer first, moving their contents), then the nodes and notes (attached to their containers),
+     * then the final bounds of the containers without moving their contents
+     * @param list Elements and bounds
+     */
+    applyBounds(list: {
+        e: DiagramElement;
+        b: UndoRedoBound;
+    }[]): void;
+    private pushBounds;
+    /**
+     * Apply the bounds of the elements, then the points of the links (moved with the elements)
+     * @param x Bounds item
+     * @param after States after the action (redo), or before (undo)
+     */
+    private applyBoundsItem;
+    /**
+     * Elements moved by an offset (already moved)
+     * @param n Elements
+     * @param dx Horizontal offset
+     * @param dy Vertical offset
+     */
+    pushMoveElement(n: UndoRedoTarget, dx: number, dy: number): void;
+    /**
+     * Each element moved by its own offset, e.g. alignment (already moved)
+     * @param moves Elements and offsets
+     */
+    pushMoveEach(moves: UndoRedoMove[]): void;
+    /**
+     * Element resized (already resized)
+     * @param rn Resize data with the bounds before the resize
+     */
+    pushResizeElement(rn: DeskElementPos): void;
+    /**
+     * Beginning of a bulk change (drag, alignment, layout...): records the bounds of the elements and the states of the links,
+     * the changes are pushed by endBulk in one item
+     */
+    beginBulk(): void;
+    /**
+     * End of a bulk change: pushes the changed elements and links in one item
+     */
+    endBulk(): void;
+    pushAddNode(n: DiagramNode): void;
+    pushAddNote(n: DiagramNote): void;
+    pushAddContainer(c: DiagramContainer): void;
+    pushRemoveNodes(l: DiagramNode[]): void;
+    pushRemoveNote(n: DiagramNote): void;
+    /**
+     * Node deleted with its record (before its removal from the desktop): undone by the undo of the user changes
+     * on server side (header undo), which restores the record
+     * @param n Node
+     * @param label Label of the last undo of the user changes on server side: the deletion of the record
+     */
+    pushDeleteRecord(n: DiagramNode, label: string): void;
+    /**
+     * Service of the undo/redo of the user changes on server side
+     * @param action getundo, getredo, undo or redo
+     * @returns Response
+     */
+    private userUndoRedo;
+    /**
+     * Label of the next undo (getundo) or redo (getredo) of the user changes on server side
+     * @param action getundo or getredo
+     */
+    userLabel(action: "getundo" | "getredo"): Promise<string | undefined>;
+    /** Undo of a deleted record: the record is restored on server side (new row ID), then the node with its links */
+    private undoRecord;
+    /** Redo of a deleted record: the record is deleted again on server side, then the node */
+    private redoRecord;
+    /**
+     * Link added (note link, only in the SVG)
+     * @param l Link
+     */
+    pushAddLink(l: DiagramLink): void;
+    /**
+     * Note text changed (already changed)
+     * @param n Note
+     * @param text Text before the change
+     */
+    pushNoteText(n: DiagramNote, text: string): void;
+    /**
+     * Apply a note text (undo, redo, other makers)
+     * @param n Note
+     * @param text Text
+     */
+    applyNoteText(n: DiagramNote, text: string): void;
+    /**
+     * Link appearance changed (already changed)
+     * @param l Link
+     * @param look Appearance before the change
+     */
+    pushLinkLook(l: DiagramLink, look?: UndoRedoLinkLook): void;
+    /**
+     * Current appearance of a link
+     * @param l Link
+     */
+    linkLook(l: DiagramLink): UndoRedoLinkLook;
+    /**
+     * Apply a link appearance (undo, redo, other makers)
+     * @param l Link
+     * @param look Appearance
+     */
+    applyLinkLook(l: DiagramLink, look: UndoRedoLinkLook): void;
+    pushRemoveContainer(c: DiagramContainer, cascade?: boolean): void;
+    /**
+     * Style changed (already applied)
+     * @param n Element
+     * @param s Changed properties before the change
+     */
+    pushElementStyle(n: DiagramElement, s: KeyObject): void;
+    /**
+     * Link points moved (already moved)
+     * @param pt Link and its points before the move
+     */
+    pushMoveLink(pt: KeyObject): void;
+    /**
+     * Current state of a link (copy)
+     * @param l Link
+     */
+    linkState(l: DiagramLink): UndoRedoLinkState;
+    /**
+     * Apply a link state (undo, redo, other makers)
+     * @param l Link
+     * @param s State
+     */
+    applyLink(l: DiagramLink, s: UndoRedoLinkState): void;
+    /**
+     * Remove an element without undo/redo (undo, redo, other makers)
+     * @param e Node, note or container
+     * @param cascade Remove the contents of a container
+     */
+    removeElement(e: DiagramElement, cascade?: boolean): void;
+    /** Remove the elements of an item, after a copy to restore them with their links */
+    private removeItem;
+    /** Restore the elements of an item, then their links when both extremities are on the desktop */
+    private restoreItem;
+    /** Copy the links of nodes/notes (removed with them) */
+    private copyLinks;
+    private restoreLinks;
+    private copy;
+    private restore;
+    undo(): void;
+    redo(): void;
+}
+
+/** Key of an element shared by the makers of a model */
+type DiagramElementKey = {
+    /** Kind of element */
+    k: "node" | "note" | "cont" | "caption" | "link";
+    /** Object name of a node, a container or a link */
+    o?: string;
+    /** Row ID of a node, a container or a link, local ID of a note */
+    id?: string;
+    /** User keys of a node, a container or a link (serialized JSON of the SVG) */
+    keys?: string;
+    /** Template name of a container */
+    tpl?: string;
+    /** Title of a free container (without object) */
+    t?: string;
+    /** Link extremities: object and ID of the origin and of the target */
+    lf?: string;
+    lfi?: string;
+    lt?: string;
+    lti?: string;
+};
+/**
+ * Synchronization of a model between its makers:
+ * sends the states of the undo/redo items (see DiagramUndoRedo) and applies the ones of the other makers
+ * @class
+ */
+declare class DiagramSync {
+    desktop: DiagramDesktop;
+    private selection;
+    private selecting;
+    private observer?;
+    private locks;
+    private localChange;
+    private joining;
+    private pendingLinks;
+    constructor(desktop: DiagramDesktop);
+    /**
+     * Start the synchronization with the other makers:
+     * - soft locks: the selection of the maker is locked for the other makers (no selection, move, resize, menu),
+     *   the elements locked by the others can not be used
+     * - joining maker: the makers with unsaved changes save the model, reloaded by the joining maker
+     * @param join Maker joining the model (false after the reload)
+     */
+    start(join?: boolean): void;
+    /**
+     * Model saved by the maker: the other makers have no unsaved change
+     */
+    saved(): void;
+    /**
+     * Stop the soft locks: releases the selection of the maker
+     */
+    stop(): void;
+    /**
+     * Maker ID: usage of its session on the model (same login in several sessions), or login
+     * @param u User of the usage or emitter of an event
+     */
+    makerId(u?: UsageUser): string;
+    /**
+     * Keep only the locks of the makers still on the model (see DiagramModeler usage refresh)
+     * @param users Other makers
+     */
+    retainLocks(users: UsageUser[]): void;
+    private sendSelection;
+    /**
+     * Lock the elements selected by another maker, release its previous ones
+     * @param id Maker ID (see makerId)
+     * @param name Name of the maker
+     * @param keys Selected elements (none to release)
+     */
+    private lock;
+    /**
+     * Name of the maker above each locked element (foreground layer: not saved)
+     */
+    private drawLocks;
+    /**
+     * Key of an element: identification data of the SVG element (attributes as serialized in the model)
+     * @param e Element
+     */
+    key(e: DiagramElement): DiagramElementKey | undefined;
+    /**
+     * Element of a key: same row ID, or same user keys, or same title for a free container,
+     * or same extremities for a link without object
+     * @param k Key
+     */
+    element(k: DiagramElementKey): DiagramElement | undefined;
+    /**
+     * Send the states applied by a user action or its undo/redo (data of the undo/redo item)
+     * @param x Undo/redo item
+     * @param undo Undone item: sends the states before the action
+     */
+    send(x: UndoRedoItem, undo?: boolean): void;
+    private event;
+    /**
+     * Apply the event of another maker, as an undo/redo without undo/redo item
+     * @param msg Message with the event
+     */
+    apply(msg: DiagramEventMessage): void;
+    /**
+     * Add an element of another maker from its SVG markup, loaded as in a saved model (see DiagramDesktop.init)
+     * @param s Key and SVG markup
+     */
+    private add;
+    /**
+     * Add a link of another maker from its SVG markup, loaded as in a saved model (see DiagramDesktop.init)
+     * @param s Key and SVG markup
+     */
+    private addLink;
+    /**
+     * Retry the pending links (extremities added since), during PENDING_MS at most
+     */
+    private retryLinks;
+    /**
+     * SVG element of a state, when the element is not on the desktop
+     * @param s Key and SVG markup
+     */
+    private parse;
+}
+
 /** Alignment of the selected nodes */
 type DiagramAlign = "left" | "center" | "right" | "top" | "middle" | "bottom" | "hspace" | "vspace";
 type DesktopMenuItem = {
@@ -11923,6 +13940,7 @@ type DeskElementPos = {
     dir?: Direction;
     bound?: Bound;
     moved?: boolean;
+    bulk?: boolean;
     link?: DiagramLink;
     from?: DiagramNode | DiagramNote;
     to?: JQuery;
@@ -11958,6 +13976,7 @@ declare class DiagramDesktop {
     model: DiagramModeler;
     options: KeyObject;
     undoRedo: KeyObject;
+    sync: DiagramSync;
     pointerMode: number;
     _poolLock?: boolean;
     _move_links?: DiagramLink[];
@@ -12473,82 +14492,6 @@ declare class DiagramLayout {
     flow(d: DiagramDesktop, params?: DiagramFlowParam): void;
 }
 
-type UndoRedoAction = "nm" | // move element(s)
-"mm" | // move each element by its own offset (align)
-"re" | // resize
-"na" | // add node
-"nt" | // add note
-"ac" | // add container
-"nr" | // remove nodes
-"tr" | // remove note
-"cr" | // remove container
-"st" | // style
-"lm";
-type UndoRedoTarget = DiagramElement | DiagramElement[] | JSVG;
-type UndoRedoMove = {
-    e: DiagramElement;
-    dx: number;
-    dy: number;
-};
-type UndoRedoItem = {
-    a: UndoRedoAction;
-    t: UndoRedoTarget;
-    dx?: number;
-    dy?: number;
-    moves?: UndoRedoMove[];
-    style?: DiagramContainerStyle | DiagramNodeStyle;
-    bound?: Bound;
-    points?: Point[];
-    pointFrom?: DiagramElement;
-    pointTo?: DiagramElement;
-};
-declare class DiagramUndoRedo {
-    desktop: DiagramDesktop;
-    list: UndoRedoItem[];
-    index: number;
-    max: number;
-    lock: boolean;
-    constructor(desktop: DiagramDesktop);
-    push(data: UndoRedoItem): void;
-    pushMoveElement(n: UndoRedoTarget, dx: number, dy: number): void;
-    pushMoveEach(moves: UndoRedoMove[]): void;
-    pushResizeElement(rn: DeskElementPos): void;
-    pushAddNode(n: DiagramNode): void;
-    pushAddNote(n: DiagramNote): void;
-    pushAddContainer(c: DiagramContainer): void;
-    pushRemoveNodes(l: DiagramNode[]): void;
-    pushRemoveNote(n: DiagramNote): void;
-    pushRemoveContainer(c: DiagramContainer): void;
-    pushElementStyle(n: DiagramElement, s: KeyObject): void;
-    pushMoveLink(pt: KeyObject): void;
-    private copy;
-    private restore;
-    private restoreSize;
-    private restoreStyle;
-    private restoreLink;
-    undo(): void;
-    redo(): void;
-}
-
-/**
- * Websocket to synchronize diagrams
- * @class
- */
-declare class DiagramWebsocket {
-    engine: DiagramEngine;
-    url: string;
-    ws?: WebSocket;
-    retry: number;
-    constructor(engine: DiagramEngine);
-    private init;
-    private onUpd;
-    private onDel;
-    start(): void;
-    stop(): void;
-    send(msg: string | object): void;
-    private onMessage;
-}
-
 interface diagram {
     /** SVG modelId => Simplicite.Diagram.Modeler */
     models: DiagramModelers;
@@ -12592,8 +14535,6 @@ interface diagram {
     Layout: typeof DiagramLayout;
     /** Undo/Redo user actions */
     UndoRedo: typeof DiagramUndoRedo;
-    /** Synchronize data thru WS */
-    Websocket: typeof DiagramWebsocket;
 }
 declare const Diagram: diagram;
 
@@ -12689,8 +14630,11 @@ declare class CodeEditor {
         row_id?: string | string[];
         field?: string;
     }, cbk?: Callback): void;
-    /** Close the editor */
-    exit(): void;
+    /**
+     * Close the editor: ask to save the pending changes before leaving
+     * @param ctn editor container
+     */
+    exit(ctn: Container): void;
     /**
      * Select a tab with lazy loading
      * @function
@@ -13947,6 +15891,7 @@ declare global {
     const $ui: UIEngine;
     const $view: UIViewer;
     const $tools: Bootstrap5;
+    const $widget: WidgetNamespace;
     const $console: Console;
     const $nav: UINavigator;
     var $root: string;
@@ -14147,6 +16092,7 @@ declare class Factory {
     private _flatpickr?;
     private _moment?;
     private _hljs?;
+    private _diff2html?;
     private _marked?;
     private _calendar?;
     private _select2?;
@@ -14238,6 +16184,16 @@ declare class Factory {
     Highlight(options?: {
         styles?: string;
     }): Promise<typeof hljs>;
+    /**
+     * Load Diff2Html tool
+     * @param options Options
+     * @param options.ui UI feature?
+     * @example
+     * $factory.Diff2Html({ ui: true }).then(d2h => $console.log(d2h));
+     */
+    Diff2Html(options?: {
+        ui?: boolean;
+    }): Promise<typeof Diff2Html>;
     /**
      * Load marked plugin
      * @example
@@ -15005,46 +16961,54 @@ declare class UIWorkflow {
     activity(ctn: Container, w: BusinessProcess, af: ActivityFile, p: ProcessParam, cbk?: Callback): void;
 }
 
-/** Legacy 6.3: 2 parts splitter */
+/**
+ * Options of the legacy 6.3 splitter (`splitPart`): a container split in 2 parts, without tabs.
+ * Used to split `#work` in the single work-area mode, or any other container (editor, monitor, view...).
+ */
 interface SplitPart {
-    /** Content */
+    /** Content of the new part */
     content?: Container | string;
-    /** Resizable part */
+    /** The separator can be dragged to resize the parts */
     resizable?: boolean;
-    /** Height */
+    /** Height of the new part (top/bottom position), ex: "200px" or "30%" */
     height?: string;
-    /** Width */
+    /** Width of the new part (left/right position), ex: "20rem", "300px" or "30%" */
     width?: string;
-    /** Collapsible part */
+    /** The new part can be collapsed by a toggle button */
     collapsible?: boolean;
-    /** Collapsed part */
+    /** The new part is collapsed at creation (with collapsible) */
     collapsed?: boolean;
-    /** Width of the splitter */
+    /** Width of the split container, default 100% ("auto" lets the horizontal scroll to the parent element) */
     splitWidth?: string;
-    /** Height of the splitter */
+    /** Height of the split container, default 100% ("auto" lets the vertical scroll to the parent element) */
     splitHeight?: string;
 }
-/** Target work area to load a content */
+/** Work area target of a loaded URL (`LoadTarget`): new tab, or new area at the left, right, top or bottom */
 type LoadTargetArea = 'work_tab' | 'work_left' | 'work_right' | 'work_top' | 'work_bottom';
-/** Options of a work area */
+/** Options of a new work-area (`createWorkArea`) */
 interface WorkAreaOptions {
-    /** Work area ID */
+    /** Unique ID of the work-area tabs (restored from the saved layout), default the next free ID */
     id?: number;
-    /** TODO */
-    noSplit?: boolean;
+    /**
+     * Fixed (locked) area, default false: the area cannot be split and no tab can be moved into or out of it.
+     * The user can lock or unlock an area with the context menu of its tabs, except the root area.
+     */
+    fixed?: boolean;
 }
-/** Context menu of a work tab */
+/** Items of the context menu of a work tab: each item is displayed unless false */
 interface WorkTabContextMenu {
-    /** Detach to a new window */
+    /** Detach the tab navigation to a new window (only a closeable tab with a navigation) */
     detach?: boolean;
-    /** Close the tab */
+    /** Lock or unlock the work-area of the tab (not in the root area) */
+    fixed?: boolean;
+    /** Close the tab (only a closeable tab) */
     close?: boolean;
 }
-/** Workarea size when splitted */
+/** Size of a new work-area when split */
 interface WorkAreaSize {
-    /** optional area width in px or rem (only applies on horizontal split) */
+    /** Optional area width, in px when a number, or "300px", "20rem", "50%" (of the parent split area width), only applies to a horizontal split (left/right) */
     width?: number | string;
-    /** optional area height in px or rem (only applies on vertical split) */
+    /** Optional area height, in px when a number, or "300px", "20rem", "50%" (of the parent split area height), only applies to a vertical split (top/bottom) */
     height?: number | string;
 }
 /** Serializable tab infos */
@@ -15055,6 +17019,8 @@ interface WorkTabInfos {
     name: string;
     /** unique tab? default true = if a tab with the same name already exists, activate it instead of creating a new one */
     unique?: boolean;
+    /** name of the shortcut opened in the tab: kept when the navigation renames the tab, to open the shortcut once (unique tab) */
+    shortcut?: string;
     /** can move the tab, default true */
     draggable?: boolean;
     /** add a close button to tab, default true */
@@ -15088,12 +17054,19 @@ interface WorkAreas {
 interface WorkAreaItem {
     content: WorkAreas | WorkTabs;
     id?: number;
+    fixed?: true;
     width?: string;
     height?: string;
 }
 type WorkAreaSettings = WorkTabs | WorkAreas;
 /**
- * Tools to split the work area
+ * Tools to split the work area (`$view.splitter`).
+ *
+ * In the multiple work-areas mode, `#work` contains a tree of `.work-area`: each one contains
+ * tabs (`.work-tab`) or several split `.work-area` with separators to resize them.
+ * The user opens a content in a new tab or in a new area (context menu of a link), moves a tab by drag & drop,
+ * locks an area (context menu of its tabs), and the layout is saved in the user's parameter `WORKAREA`.
+ * In the single work-area mode, `splitPart` splits a container in 2 parts (legacy 6.3).
  */
 declare class UISplitter {
     private worktabId;
@@ -15102,6 +17075,8 @@ declare class UISplitter {
     /** Work area min size */
     readonly MIN_SIZE = 300;
     private autoSave;
+    private loading;
+    private savePending;
     private lastSaved;
     private saveKeyMulti;
     private saveKeyMono;
@@ -15129,6 +17104,23 @@ declare class UISplitter {
      * const on = ($view.splitter.constructor as typeof UISplitter).enabled();
      */
     static enabled(enable?: boolean): boolean;
+    /**
+     * Is the multiple work-areas mode displayed? It may differ from `enabled()` after a resize
+     * across the LG breakpoint, until the UI is reloaded (see `checkMediaMode`).
+     * @returns true if the UI is built with work-areas
+     * @example
+     * const multi = ($view.splitter.constructor as typeof UISplitter).splitted();
+     */
+    static splitted(): boolean;
+    /**
+     * Check the displayed mode after a change of media size:
+     * the multiple work-areas mode is only available on a large screen (LG).
+     * When the mode to use differs from the displayed one, the current state is saved and the UI is reloaded to build the other mode.
+     * @returns true when the UI is reloading
+     * @example
+     * if ($view.splitter.checkMediaMode()) return;
+     */
+    checkMediaMode(): boolean;
     /**
      * Is splitted mode enabled?
      * @returns true if user is allowed to split work-areas
@@ -15267,7 +17259,23 @@ declare class UISplitter {
      */
     saveRequest(): void;
     /**
-     * Tree of areas and navigations
+     * Tree of areas and navigations.
+     *
+     * Single tabs:
+     * ```text
+     * { tabs: [{ name, title, nav?, active?... }, ...] }
+     * ```
+     * Splitted areas (recursive content):
+     * ```text
+     * {
+     *   vertical?: true,
+     *   areas: [
+     *     { id?, fixed?: true, width?, height?, content: { tabs: [...] } | { vertical?, areas: [...] } },
+     *     ...
+     *   ]
+     * }
+     * ```
+     * @returns the serializable tree (saved in WORKAREA)
      * @example
      * const tree = $view.splitter.jsonTree();
      */
@@ -15333,12 +17341,16 @@ declare class UISplitter {
     getDeskContent(el: JQuery): JQuery<HTMLElement>;
     /**
      * Find a tab in all work-areas
-     * @param name Optional tab name to find
-     * @returns .nav-link if found
+     * @param key Property value to match, or several property values: a tab matching one of them (undefined values are ignored)
+     * @param param Property name to filter by when the key is a value (name, title, shortcut, url...)
+     * @returns first matching .nav-link if found
      * @example
-     * const tab = $view.splitter.findTab("myTab");
+     * const tab1 = $view.splitter.findTab("myTab");
+     * const tab2 = $view.splitter.findTab("myShortcut", "shortcut");
+     * // Tab named "myTab" or opened by the shortcut "myShortcut" (one scan)
+     * const tab3 = $view.splitter.findTab({ name: "myTab", shortcut: "myShortcut" });
      */
-    findTab(name?: string): JQuery | undefined;
+    findTab(key?: string | Partial<WorkTab>, param?: keyof WorkTab): JQuery | undefined;
     /**
      * Get a tab of related element
      * @param el any content element inside the .work-tab-pane
@@ -15469,7 +17481,7 @@ declare class UISplitter {
     attachNavigator(ctn: JQuery, key: string): void;
     /**
      * Close a tab if can close
-     * @param tab .nav-link to close
+     * @param tab .nav-link (or its .nav-item) to close
      * @param checkCanClose check can close the tab content? default true. false = only destroy the content
      * @param activatePrevious activate the previous tab if exists? default true
      * @example
@@ -15526,6 +17538,24 @@ declare class UISplitter {
      */
     refresh(ctn: JQuery, resize?: boolean): void;
     /**
+     * Is the element in a fixed work-area (created with the fixed option)?
+     * @param elt work-area or any element inside
+     * @returns true when no split nor tab move (into or out of the area) is allowed
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * const fixed = tab && $view.splitter.isFixedArea(tab);
+     */
+    isFixedArea(elt: JQuery): boolean;
+    /**
+     * Set or unset the fixed work-area of the element (saved in WORKAREA)
+     * @param elt work-area or any element inside (ex: tab)
+     * @param fixed true to fix the area: not splittable, no tab moved into or out of it
+     * @example
+     * const tab = $view.splitter.findTab("myTab");
+     * if (tab) $view.splitter.setFixedArea(tab, true);
+     */
+    setFixedArea(elt: JQuery, fixed: boolean): void;
+    /**
      * Create a .work-area and/or assign a split direction
      * @param workarea optional .work-area to (re)assign (default returns a new one)
      * @param vertical optional, true to split vertically, false to split horizontally
@@ -15535,12 +17565,30 @@ declare class UISplitter {
      */
     workArea(workarea?: JQuery | null, vertical?: boolean, children?: JQuery[]): JQuery;
     /**
-     * Split a work-area
+     * Split a work-area.
+     *
+     * Each `.work-area` contains one tabs `.work-tab`, xor several `.work-area` and separators.
+     * Sample of tree:
+     * ```text
+     * .work-area.split-area.horizontal
+     *   .work-area
+     *     .work-tab
+     *   .split-separator
+     *   .work-area.split-area.vertical
+     *     .work-area
+     *       .work-tab
+     *     .split-separator
+     *     .work-area
+     *       .work-tab
+     *   .split-separator
+     *   .work-area
+     *     .work-tab
+     * ```
      * @param workarea .work-area to split (default the root one)
      * @param pos insert at position left/right/top/bottom
      * @param tabOptions tab options
      * @param content optional content to insert in the new area
-     * @returns newArea and content
+     * @returns the new work-area and its content, undefined when the work-area is fixed
      * @example
      * $view.splitter.splitWorkArea(null, "right", { name: "myTab", title: "My tab" });
      */
@@ -15549,35 +17597,37 @@ declare class UISplitter {
         newArea: JQuery;
         /** Content of the new work-area */
         content: JQuery;
-    };
+    } | undefined;
     /**
      * Convert a CSS size value to pixels.
      * Supports plain numbers (treated as px), "rem" units (1rem = 16px),
-     * and "%" relative to the total #work width.
+     * and "%" relative to the width (horizontal) or height (vertical) of the reference element.
      * @param value Size as a number (px) or a CSS string ("300px", "20rem", "50%")
+     * @param horizontal true for a width, false for a height
+     * @param ref reference of a "%" (parent split area of the resized work-area)
      * @returns Equivalent size in pixels
      */
     private toPixel;
     /**
-     * Resize a work area (and its next area) in a horizontal split
+     * Resize a work area (and its next area, or the previous one for the last area) in a horizontal split
      * @param workarea workarea to resize
-     * @param width width in pixels or in rem (or in % of the #work)
+     * @param width width in pixels or in rem (or in % of the parent split area width)
      * @example
      * const area = $view.splitter.getWorkArea(ctn);
      * if (area) $view.splitter.setWidth(area, "40%");
      */
     setWidth(workarea: JQuery, width: number | string, store?: boolean): void;
     /**
-     * Resize a work area (and its next area) in a vertical split
+     * Resize a work area (and its next area, or the previous one for the last area) in a vertical split
      * @param workarea workarea to resize
-     * @param height height in pixels or in rem (or in % of the #work)
+     * @param height height in pixels or in rem (or in % of the parent split area height)
      * @example
      * const area = $view.splitter.getWorkArea(ctn);
      * if (area) $view.splitter.setHeight(area, 300);
      */
     setHeight(workarea: JQuery, height: number | string, store?: boolean): void;
     /**
-     * Resize a work area (and its next area) in the split direction
+     * Resize a work area (and its next area, or the previous one for the last area) in the split direction
      * @param workarea workarea to resize
      * @param horizontal or vertical
      * @param size new size in pixels (fit to parent size if unset)
@@ -15597,7 +17647,7 @@ declare class UISplitter {
     fitSize(workarea: JQuery): void;
     /**
      * Create context menu to request for the new tab position
-     * @param el Right clicked element
+     * @param _el Right clicked element (not used)
      * @param e Context menu event
      * @param request callback with requested position
      * @param items optional previous menu items
@@ -15606,7 +17656,7 @@ declare class UISplitter {
      * 	$view.splitter.contextMenu(t, e, pos => $console.log(pos));
      * });
      */
-    contextMenu(el: JQuery, e: JQuery.ContextMenuEvent, request?: (pos: NewTabPosition) => void, items?: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
+    contextMenu(_el: JQuery, e: JQuery.ContextMenuEvent, request?: (pos: NewTabPosition) => void, items?: (DropdownItem | JQuery)[]): JQuery<HTMLElement> | undefined;
     /**
      * Add a context menu on follow link to open the target in a new tab or side
      * @param title Tab title
@@ -15647,6 +17697,17 @@ declare class UISplitter {
      */
     splitPart(ctnr: AnyContainer, pos: Position, options: SplitPart | JQuery): void;
     /**
+     * Single work-area: split the main work area to display a content on one side (as the docked modeler).
+     * The previous split part is removed first: only one part at a time.
+     * @param pos Side of the new part (default "right")
+     * @param size Optional width (left/right) or height (top/bottom) of the new part, default "50%"
+     * @returns Container of the new part, to load the content in
+     * @example
+     * const part = $view.splitter.splitWork("right", "40%");
+     * $ui.loadURL(part, "/ext/MyExternalObject");
+     */
+    splitWork(pos?: Position, size?: string): JQuery;
+    /**
      * Remove the splitted content
      * @param ctn container with splitted contents
      * @example
@@ -15657,6 +17718,7 @@ declare class UISplitter {
 
 interface A11yLevel {
     audit: boolean;
+    display: boolean;
     score: number;
 }
 /**
@@ -15832,6 +17894,7 @@ declare class UIViewer {
     readonly menu: Menu;
     /**
      * Widget renderer
+     * @deprecated use the components of `$widget`, the `$view.widget` methods will be removed
      */
     readonly widget: Widget;
     /**
@@ -16003,6 +18066,19 @@ declare class UIViewer {
         reset?: boolean;
     }): JQuery | undefined;
     /**
+     * Display shortcuts in a widget container (home or plus menu)
+     * @param ctn Target container
+     * @param p Options
+     * @param p.shortcuts List of shortcuts, each with `name`, `url`, `label` and an optional `target`
+     * @returns .widget-shortcut container with shortcuts
+     * @example
+     * // Display shortcuts in a widget container
+     * $view.shortcutsWidget($("#myShortcuts"), { shortcuts: $grant.shortcuts || [] });
+     */
+    shortcutsWidget(ctn: JQuery, p: {
+        shortcuts: Shortcut[];
+    }): JQuery<HTMLElement>;
+    /**
      * Toogle bookmark action (star icon)
      * @param ctn container of bookmark action
      * @param obj object
@@ -16020,6 +18096,26 @@ declare class UIViewer {
      * const lang: string = await $view.langPicker("FRA");
      */
     langPicker(dflt?: string): Promise<string>;
+    /**
+     * Build an avatar image
+     * @param data or { login, firstname, lastname, picture (full usr_image_id document) }
+     * @returns .avatar
+     * @example
+     * ctn.append($view.avatar({ login: "jdoe", firstname: "John", lastname: "Doe" }));
+     */
+    avatar(data?: UsageUser): JQuery;
+    /**
+     * Create a badge
+     * @param p value or { name, value }
+     * @returns span.badge
+     * @example
+     * btn.append($view.badge(3));
+     * btn.append($view.badge({ name: "unread", value: 12 }));
+     */
+    badge(p?: string | number | {
+        name?: string;
+        value?: string | number;
+    }): JQuery<HTMLElement>;
     /**
      * Get simple icon
      * @param icon prefixed icon name: from icon set 'name', from fontawesome solid 'fas/name' or regular 'far/name', bootstrap icon 'bi/name'
@@ -16248,6 +18344,13 @@ declare class UIViewer {
      */
     getArea(ctn: AnyContainer, obj: UIBusinessObject, area: string | number | Area, silent?: boolean): UIObjectArea | undefined;
     /**
+     * Wait dialog box
+     * @returns div.waitdlg
+     * @example
+     * ctn.append($view.waitdlg());
+     */
+    waitdlg(): JQuery<HTMLElement>;
+    /**
      * Show the loading spinner (widget waitdlg)
      * @param ctn optional container (full body if undefined or #work area if null)
      * <ul>
@@ -16352,6 +18455,11 @@ declare class DiagramEngine {
     /** SVG styles */
     styles?: string;
     constructor();
+    /**
+     * SSE event of another maker: dispatched to the opened model of this window
+     * (a popup has its own connection)
+     */
+    private onEvent;
     /**
      * Open a SVG diagram
      * @function
@@ -16580,6 +18688,8 @@ declare class UILoader extends UIUtil {
     feedback?: Feedback;
     /** Disconnected translation */
     labelDisconnected?: string;
+    /** jQuery prefilter of the session parameters installed (see session) */
+    private static sessionPrefilter;
     /** Web news (popup and footer ticker) */
     readonly news: WebNews;
     /** Main navigator */
@@ -18278,6 +20388,16 @@ declare class Session extends SessionBase {
      * @param name Business process name
      */
     getBusinessProcess(name: string): BusinessProcess;
+    /**
+     * Append a parameter to the query string of an URL (before the optional fragment)
+     * @param url URL with or without query string
+     * @param name Parameter name
+     * @param value Parameter value (encoded)
+     * @returns URL with the parameter
+     * @example
+     * $app.appendURLParam("/ui/ext/MyObject?a=1#top", "b", "x y"); // "/ui/ext/MyObject?a=1&b=x%20y#top"
+     */
+    appendURLParam(url: string, name: string, value: string): string;
     /**
      * Returns true if value is <code>1|true|yes|y</code>
      * @param value parameter value
@@ -21604,8 +23724,10 @@ interface UsageUser {
     image?: string;
     /** Avatar image document */
     picture?: DocumentDB;
-    /** Usage ID */
+    /** Usage ID (session of the user on the record) */
     usageId?: string;
+    /** Anonymous user: identity not displayed (system parameter USE_OBJECT_USAGE false), only the usage ID */
+    anonymous?: boolean;
 }
 /** Application scope (multi-apps) */
 interface Scope {
@@ -22583,6 +24705,8 @@ declare class View {
     ownerId?: string;
     /** Owner name */
     ownerName?: string;
+    /** View of a system module */
+    system?: boolean;
     /** Link: child object name */
     target?: string;
     /** Link: reference field name */
@@ -23289,11 +25413,22 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
     /**
      * Shortcut handler
      * @param shortcut definition <code>\{ name, url, target, label, width, height \}</code>
+     * @param newtab Optional position to open the shortcut in a new work-area 'tab' or 'right' (splitted UI only,
+     * shortcuts opened in the work area, see `isWorkShortcut`)
      * @example
      * // Open a URL as if the user clicked on a shortcut
      * $ui.clickShortcut({ name: "MyDoc", label: "Documentation", url: "https://docs.simplicite.io", target: "_blank" });
      */
-    clickShortcut(shortcut?: Shortcut): void;
+    clickShortcut(shortcut?: Shortcut, newtab?: NewTabPosition): void;
+    /**
+     * Is the shortcut opened in the work area (can be opened in a new work-area)?
+     * Not the shortcuts opened in a window or a dialog, nor the system shortcuts opening a dialog, a panel or a dropdown.
+     * @param shortcut Shortcut definition
+     * @returns `true` for a shortcut opened in the work area
+     */
+    isWorkShortcut(shortcut: Shortcut): boolean;
+    /** System shortcuts opened outside the work area: dialog, docked panel, dropdown or model picker */
+    private static readonly NOT_WORK_SHORTCUTS;
     /**
      * Main menu handler
      * @param data Menu data
@@ -23644,6 +25779,28 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
      */
     contentLoaded(ctn: AnyContainer, onload?: Callback, onunload?: JQueryHandler): void;
     /**
+     * Attribute of a content to check before closing it, the value is the event name triggered with a callback
+     * to call when the content can close (see {@link canCloseContent})
+     * @example
+     * const event = "ui.content.close";
+     * ctn.attr($ui.EVENT_CLOSE, event).on(event, (_, fn?: () => void) => {
+     * 	$ui.setCanClose(ctn);
+     * 	fn?.();
+     * });
+     */
+    readonly EVENT_CLOSE = "data-event-close";
+    /**
+     * The content can close without checking its pending changes: removes its close event
+     * @param ctn Container
+     * @param scope optional `deep` to remove also the close events of the sub-contents,
+     * or `closest` to remove the one of the closest content (the container or its first ancestor with a close event)
+     * @returns the container
+     * @example
+     * // Close the form of an element even if inputs have changed
+     * $ui.getNav($ui.setCanClose(ctn, "closest")).navBack();
+     */
+    setCanClose(ctn: Container, scope?: "deep" | "closest"): Container;
+    /**
      * Force to close a content and destroy components
      * @param ctn Container
      * @param cbk Callback when done
@@ -23828,13 +25985,16 @@ declare class UIEngine extends UIEngineBase implements UIRenders {
     saveField(ctn: Container, obj: BusinessObject, rowId: string, field: ObjectField, index?: string | null): Promise<KeyObject>;
     /**
      * Close the object form: default going back in navigation
+     * after checking the canCloseContent event on the container
      * @param ctn Container
      * @example
      * $ui.closeForm(ctn);
      */
     closeForm(ctn?: AnyContainer): void;
     /**
-     * Reload the object form: default reload navigation
+     * Reload current navigation and notify js-reload components.
+     * Forced reload after a data change: the pending changes are discarded without confirmation
+     * (no canCloseContent check, unlike closeForm).
      * @param ctn Container
      * @example
      * $ui.reloadForm(ctn);
@@ -24413,5 +26573,5 @@ declare function displaySitemap(ctn?: AnyContainer): void;
 
 var Simplicite$1 = Simplicite;
 
-export { $app, $console, $factory, $grant, $nav, $tools, $ui, $view, A11y, AddonBar, Ajax, AppConstants, AsyncFunction, Bam, Board, Bootstrap5, BusinessObject, BusinessProcess, CSSCOLORS, Charts, ColorPicker, Context, Crosstab, ErrorLevel, EventWebSocket, External, ExternalObject, Factory, Feedback, FieldType, FieldTypeLabels, Firebase, Form, Gateway, Globals, Grant, GridEditor, Guide, Import, IndexSearch, JQueryExtension, Legacy, List, MediaSize, Menu, Merge, MessageLevel, OCR, ObjectField, Prefs, Rendering, Search, SearchMode, Session, SimpliciteColors, Social, Speech, StatusMetrics, StringExtension, SyncQueue, Timesheet, Tray, Tree, TreeView, UI, UIAction, UIArea, UIBusinessObject, UIBusinessProcess, UICalendar, UIColor, UIComponent, UIEngine, UIExternalObject, UIField, UIFieldBigDecimal, UIFieldBoolean, UIFieldColor, UIFieldDate, UIFieldDateTime, UIFieldDocument, UIFieldEmail, UIFieldEnum, UIFieldEnumMulti, UIFieldFloat, UIFieldGeoCoords, UIFieldHtml, UIFieldId, UIFieldImage, UIFieldInt, UIFieldLongString, UIFieldNotepad, UIFieldObject, UIFieldPhoneNum, UIFieldRegexp, UIFieldTime, UIFieldUrl, UILoader, UIMap, UINavigator, UIRenderDialog, UIRenderForm, UIRenderList, UIRenderMaker, UIRenderReference, UIRenderUser, UIRenderView, UISplitter, UITray, UIUtil, UIView, UIViewer, UIWorkflow, Updatable, Update, View, ViewClasses, ViewType, Visibility, WebNews, WebPush, Widget, Workflow, ZIP, buildSitemap, Simplicite$1 as default, displaySitemap };
-export type { A11yLevel, A11yOptions, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, Bookmark, BookmarkParam, Bookmarks, Button, CSSColors, CalendarParam, CallResponse, Callback, CardsParam, ChartClickHandler, ChartParam, ColorPickerHandler, ColorSet, ConfirmRun, ConstraintFunction, Container, ContextMetrics, Contrast, CounterParam, CountersParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeepAlive, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LocalLogin, LogViewerParam, MainMenu, MapParam, MapSettings, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimesheetData, TimesheetGanttData, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UpdateFormParam, UpdateParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WidgetItem, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };
+export { $app, $console, $factory, $grant, $nav, $tools, $ui, $view, $widget, A11y, Accordion, AddonBar, Ajax, AppConstants, AsyncFunction, Bam, BarOverflow, Board, Bootstrap5, Breadcrumb, BusinessObject, BusinessProcess, CSSCOLORS, Calculator, Camera, Cards, Carousel, CharCounter, Charts, CircularProgressBar, CodeScanner, ColorPicker, Completion, Context, ContextMenu, Counter, Crosstab, DocUploader, ErrorLevel, EventWebSocket, External, ExternalObject, Factory, Feedback, FieldType, FieldTypeLabels, Firebase, Form, Gateway, Globals, Grant, GridEditor, Guide, ImagePreview, Import, IndexSearch, JQueryExtension, Legacy, List, LoadingToast, MarkdownEditor, MediaSize, Menu, Merge, MessageLevel, NewsWidget, Notepad, OCR, ObjectField, Palettes, PasswordChange, Prefs, ProgressBar, Rendering, ScratchPad, Search, SearchBar, SearchMode, Session, SimpliciteColors, Slider, Social, SocialCompletion, Speech, StarSlider, StatusMetrics, StringExtension, SwitchButton, SyncQueue, Timeline, Timesheet, Toast, Tray, Tree, TreeView, UI, UIAction, UIArea, UIBusinessObject, UIBusinessProcess, UICalendar, UIColor, UIComponent, UIEngine, UIExternalObject, UIField, UIFieldBigDecimal, UIFieldBoolean, UIFieldColor, UIFieldDate, UIFieldDateTime, UIFieldDocument, UIFieldEmail, UIFieldEnum, UIFieldEnumMulti, UIFieldFloat, UIFieldGeoCoords, UIFieldHtml, UIFieldId, UIFieldImage, UIFieldInt, UIFieldLongString, UIFieldNotepad, UIFieldObject, UIFieldPhoneNum, UIFieldRegexp, UIFieldTime, UIFieldUrl, UILoader, UIMap, UINavigator, UIRenderDialog, UIRenderForm, UIRenderList, UIRenderMaker, UIRenderReference, UIRenderUser, UIRenderView, UISplitter, UITray, UIUtil, UIView, UIViewer, UIWidget, UIWorkflow, Updatable, Update, UploadProgress, View, ViewClasses, ViewType, Visibility, WebNews, WebPush, Widget, WidgetClasses, Workflow, ZIP, buildSitemap, Simplicite$1 as default, displaySitemap };
+export type { A11yLevel, A11yOptions, AccordionOptions, AccordionParam, Action, ActionGroup, ActionHandler, ActionHandlers, ActionLevel, ActionSize, ActionType, ActivityFile, ActivityMetadata, ActivityStatus, Addon, AddonBarItem, Agenda, AjaxNamespace, AlertCallback, AlertLevel, AlertParam, AlertType, AnyAddon, AnyContainer, AnyContent, AppConstantsType, Area, AreaParam, Associate, BackendConstants, BamParam, BarOverflowOptions, Bookmark, BookmarkParam, Bookmarks, BreadcrumbParam, Button, CSSColors, CalculatorParam, CalendarParam, CallResponse, Callback, CameraParam, CardsParam, CarouselOptions, CarouselParam, CharCounterParam, ChartClickHandler, ChartParam, CircularProgressBarOptions, CodeScannerParam, ColorPickerHandler, ColorSet, CompletionOptions, CompletionParam, ConfirmRun, ConstraintFunction, Container, ContextMenuParam, ContextMetrics, Contrast, CounterParam, CountersExampleParam, CountersParam, CreateLink, CreateParam, CrosstabAxis, CrosstabAxisType, CrosstabData, CrosstabMetadata, CrosstabMethod, CrosstabNavParam, CrosstabNode, CrosstabParam, Datamap, DevOptions, DialogAction, DialogParam, DocUploaderParam, DocumentDB, DontAskAgainParam, DrawSearchOptions, DropdownItem, EnumItem, EventCloseParam, ExternalData, ExternalMetadata, ExternalParam, FeedbackData, FeedbackParam, FieldAddon, FieldCase, FieldDisplay, FieldFilter, FieldLinkMap, FieldMetrics, FieldNumFormat, FieldOrderNulls, FieldParam, FieldSearch, FieldSearchFixed, FieldValue, Filters, FirebaseMessage, FirebaseRecipients, FirebaseServiceData, FollowLink, Font, FormActions, FormParam, GetParam, GoogleParam, GridEditorJson, GridEditorOptions, GridEditorParam, GuideMetadata, HSV, IconsMetadata, ImagePreviewParam, ImportXMLParams, IndexMetadata, IndexParam, InlineObject, InlineParam, InputAddon, JQueryHandler, JSVG, Job, JobFunction, KeepAlive, KeyBoolean, KeyBusinessObjectHook, KeyBusinessProcessHook, KeyConstraint, KeyExternalObject, KeyHash, KeyNumber, KeyObject, KeyObjectHook, KeyString, KeyStrings, Link, ListActions, ListEditMode, ListLayout, ListParam, ListRowsActions, ListSearchMode, ListSelection, LoadParam, LoadPart, LoadPartOnload, LoadTarget, LoadTargetArea, LoadingToastParam, LocalLogin, LogViewerParam, MainMenu, MapParam, MapSettings, MarkdownEditorParam, MenuGridOptions, MenuItem, MenuParam, MenuSettings, MergeParam, MergeSaveParam, MessageAny, MessageFromBack, MessageJSON, MessageSaveRows, MessageText, MessagesPerRow, MetaObject, ModuleAjax, MousePos, NavAction, NavFocus, NavHistItem, NavItem, NavParam, NavType, NewTabPosition, News, NewsDisplayOptions, NewsTickerOptions, NotepadParam, NotifyObject, NotifyObjectType, OKLAB, ObjectHookFunction, ObjectMetadata, Palette, PaletteColors, PaletteName, PalettePickerParam, ParentObject, PillboxItem, PillboxParam, Place, Placemap, PlotSerie, Point, Position, PredefSearch, PrefItem, PrefType, Prefixed, PrefsParam, PrintTemplate, ProcessAction, ProcessActionType, ProcessMetadata, ProcessParam, ProgressBarParam, ProgressBarValueOptions, ProgressHandler, ProgressStatus, PromisesParam, RGB, RGBA, Rect, RenderFunction, Resource, RoadRender, RowActions, RowData, RowDataMeta, RowGroupBy, RowGroupByKey, RowItem, RowPartial, RowTree, SaveParam, Scope, ScratchPadParam, SearchAjax, SearchAjaxGroupBy, SearchAjaxList, SearchAjaxMetadata, SearchAjaxPartial, SearchAjaxTree, SearchBarParam, SearchParam, SearchPredefParam, Shortcut, ShortcutKey, ShortcutKeys, ShowViewsMode, SimpliciteInterface, Size, SliderParam, SocialCompletionParam, SocialFollowStatus, SocialParam, SocialPost, SocialShareConfig, SocialShareData, SocialShareProvider, SocialStatus, SocialUser, SpeechRecognitionParam, SpeechSynthesisParam, SplitPart, SplitterOptions, StarSliderParam, StatusCountData, StatusDurationData, StatusMetricsData, StatusMetricsDisplayParam, StatusMetricsInput, StatusMetricsParam, StatusMetricsShow, StatusPieData, StatusTerminalData, SubMenu, SummaryParam, SwitchButtonParam, Tab, Tabs, TargetObject, TempPillbox, TempPillboxes, TemplateEntity, TemplateTarget, Theme, ThemeBase, TimelineLabels, TimelineOptions, TimelineParam, TimesheetData, TimesheetGanttData, TimesheetGanttMeta, TimesheetGanttParam, TimesheetLine, TimesheetMetadata, TimesheetOptions, TimesheetParam, TimesheetPeriod, TimesheetShift, TimesheetTotal, ToastParam, TrackerCallback, TrackerData, TrackerParam, TrackerTask, Transition, TrayActor, TrayCard, TrayColumn, TreeNode, TreeNodeList, TreeParam, UIObjectAction, UIObjectArea, UIObjectField, UIObjectView, UIRenders, UIViewNamespace, UIViewParam, UIWidgetArgs, UIWidgetParam, UpdateFormParam, UpdateParam, UploadProgressParam, UsageUser, UserFilterParam, ViewAddonsOptions, ViewFilter, ViewItem, ViewItemContent, ViewItemContentData, ViewItemType, ViewParam, WebPushData, WidgetItem, WidgetNamespace, WorkAreaOptions, WorkAreaSize, WorkTabContextMenu, WorkTabInfos, WorkTabOptions };

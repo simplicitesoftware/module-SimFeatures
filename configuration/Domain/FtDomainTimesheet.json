@@ -1,0 +1,12 @@
+{
+ "obd_name": "FtDomainTimesheet",
+ "obd_comment": null,
+ "obd_type": "D",
+ "obd_menu": "L",
+ "obd_view_id__viw_name": null,
+ "obd_nohome": true,
+ "obd_icon": "fas/business-time",
+ "obd_order": 1030,
+ "obd_domain_id__obd_name": "FtDomain",
+ "row_module_id__mdl_name": "SimFeatures"
+}

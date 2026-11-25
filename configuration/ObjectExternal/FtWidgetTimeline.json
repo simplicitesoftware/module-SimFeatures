@@ -3,7 +3,7 @@
  "obe_type": "E",
  "obe_nature": "com_simplicite_webapp_web_ResponsiveExternalObject",
  "obe_url": null,
- "obe_settings": "{\n  \"name\": \"FtAttributes\",\n  \"filters\": {\n    \"ftAttrCode\": \"0W%\"\n  },\n  \"titleField\": \"ftAttrShortText\",\n  \"dateField\": \"ftAttrDate\",\n  \"contentField\": \"ftAttrLongText\",\n  \"onclick\": true\n}",
+ "obe_settings": "{\n  \"titleField\": \"ftAttrShortText\",\n  \"onclick\": true,\n  \"name\": \"FtAttributes\",\n  \"dateField\": \"ftAttrDate\",\n  \"filters\": {\"ftAttrCode\": \"0W%\"},\n  \"contentField\": \"ftAttrLongText\"\n}",
  "obe_comment": null,
  "obe_help": null,
  "obe_class": "com.simplicite.webapp.web.widgets.TimelineExternalObject",

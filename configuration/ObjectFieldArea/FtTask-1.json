@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtTask-1",
+ "ofa_position": 1,
+ "ofa_title": true,
+ "ofa_ui": "<div class=\"field\" data-field=\"ftTskCode\"><\/div>\n<div class=\"field\" data-field=\"ftTskName\"><\/div>",
+ "ofa_icon": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

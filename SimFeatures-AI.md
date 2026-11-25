@@ -257,6 +257,28 @@ erDiagram
         string ftTgoCode PK
         string ftTgoStatus
     }
+    FtTask {
+        id row_id PK
+        string ftTskCode PK
+        string ftTskName
+        longString ftTskDescription
+    }
+    FtTaskUser {
+        id row_id PK
+        id ftTsuTskId FK
+        id ftTsuUsrId FK
+        date ftTsuStartDate PK
+        date ftTsuEndDate
+        float ftTsuWorkload
+    }
+    FtTaskUserFtTaskUserTimesheet {
+        id row_id PK
+        id tsh_parent_id FK
+        string tsh_year PK
+        string tsh_month PK
+        string tsh_input1
+        float tsh_total1
+    }
     FtTgoTag {
         id row_id PK
         id ftTgotagTgoId FK
@@ -273,6 +295,9 @@ erDiagram
     FtReflexiveMany ||--o{ FtRxmLink : "ftRxlRxm2"
     FtSearchReference |o--o{ FtSearch : "ftSchSrfId"
     FtStates ||--o{ FtStatesHistoric : "row_ref_id"
+    FtTask ||--o{ FtTaskUser : "ftTsuTskId"
+    FtCustomUser ||--o{ FtTaskUser : "ftTsuUsrId"
+    FtTaskUser ||--o{ FtTaskUserFtTaskUserTimesheet : "tsh_parent_id"
     FtTaggedObject ||--o{ FtTgoTag : "ftTgotagTgoId"
     FtTag ||--o{ FtTgoTag : "ftTgotagTagId"
 
@@ -331,6 +356,15 @@ FtDomainInline:
       type: object
     - name: FtObjInlineChild
       type: object
+FtDomainWidgets:
+  parent: FtDomain
+FtDomainTimesheet:
+  parent: FtDomain
+  items:
+    - name: FtTask
+      type: object
+    - name: FtTaskUser
+      type: object
 ```
 
 ## System parameters
@@ -380,7 +414,7 @@ FT_ACT_STATE:
   B: Step B
 ```
 
-### State transitions (ftActState)
+### State transitions (ftActState) accessible to the current user
 
 ```yaml
 A: [B]
@@ -430,7 +464,7 @@ FT_ACT_STATE:
   B: Step B
 ```
 
-### State transitions (ftActState)
+### State transitions (ftActState) accessible to the current user
 
 ```yaml
 A: [B]
@@ -448,13 +482,10 @@ ActConfirmFields:
 ### Hooks
 
 ```yaml
-initAction: ~
 getTargetObject: |
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
-confirmAction: ~
-askAction: ~
 ```
 
 ---
@@ -618,13 +649,6 @@ FTATTRENUMMULTIPILLBOX:
   C: code C
 ```
 
-### Hooks
-
-```yaml
-initUpdate: ~
-preSave: ~
-```
-
 ---
 
 ## FtCustomUser
@@ -642,7 +666,8 @@ _No description._
 belongs_to:
   - ViewHome (usr_home_id, optional)  # deprecated / use usr_scope_id.viw_home_id
   - Scope (usr_scope_id, optional)
-has_many: []
+has_many:
+  - FtTaskUser via ftTsuUsrId [on delete: cascade, visible]
 ```
 
 ### Fields
@@ -686,50 +711,6 @@ USER_STATUS:
 FTUSRTYPE:
   FT_ADMIN: SimFeatures Admin
   FT_READ: SimFeatures Reader
-```
-
-### State transitions (usr_active)
-
-```yaml
-0: [1, 2, 3]
-1: [0, 3]
-2: [0, 1]
-3: [0, 1]
-```
-
-### Hooks
-
-```yaml
-postLoad: ~
-postSave: ~
-preValidate: ~
-createUserToken: ~
-deletePrefs: ~
-resetPassword: ~
-initCopy: ~
-initUpdate: ~
-initCreate: ~
-preDelete: ~
-postCreate: ~
-totpQRCode: ~
-anonymize: ~
-postValidate: ~
-getUserKeyLabel: ~
-getMappedFilePath: ~
-isDeleteEnable: ~
-isCopyEnable: ~
-isActionEnable: ~
-initUpdateAll: ~
-postDelete: ~
-postSearch: ~
-preSearch: ~
-postSelect: ~
-postUpdate: ~
-preCreate: ~
-preUpdate: ~
-getMappedExportPath: ~
-canReference: ~
-isUpdateEnable: ~
 ```
 
 ---
@@ -912,13 +893,6 @@ FT_LST_TYPE:
 
 Business object FtListItem
 
-### Hooks
-
-```yaml
-preReorder: ~
-postReorder: ~
-```
-
 ---
 
 ## FtListOrdering
@@ -977,12 +951,6 @@ referenced:
 
 ```
 
-### Hooks
-
-```yaml
-postCreate: ~
-```
-
 ---
 
 ## FtM2mChild
@@ -1008,13 +976,6 @@ has_many:
 required:
   ftM2mcCode: char(100)  # [unique key] [col:ft_m2mc_code]
 
-```
-
-### Hooks
-
-```yaml
-postLoad: ~
-initRefSelect: ~
 ```
 
 ---
@@ -1111,13 +1072,6 @@ referenced:
 
 ```
 
-### Hooks
-
-```yaml
-postUpdate: ~
-postCreate: ~
-```
-
 ---
 
 ## FtObjInlineParent
@@ -1176,12 +1130,6 @@ optional:
   ftPubHtml: text(4000)  # [col:ft_pub_html]
   ftPubFile: document  # [col:ft_pub_file]
 
-```
-
-### Hooks
-
-```yaml
-preSave: ~
 ```
 
 ---
@@ -1301,12 +1249,6 @@ referenced:
 
 ```
 
-### Hooks
-
-```yaml
-preValidate: ~
-```
-
 ---
 
 ## FtSearch
@@ -1399,12 +1341,6 @@ optional:
 
 ```
 
-### Hooks
-
-```yaml
-preSearch: ~
-```
-
 ---
 
 ## FtStates
@@ -1448,7 +1384,7 @@ FT_ST_STATE:
   FINAL: Final State
 ```
 
-### State transitions (ftStState)
+### State transitions (ftStState) accessible to the current user
 
 ```yaml
 INITIAL: [A]
@@ -1537,12 +1473,6 @@ required:
 
 ```
 
-### Hooks
-
-```yaml
-initRefSelect: ~
-```
-
 ---
 
 ## FtTaggedObject
@@ -1575,6 +1505,107 @@ optional:
 
 ---
 
+## FtTask
+
+```yaml
+label: Task
+table: ft_task
+```
+
+_No description._
+
+### Relationships
+
+```yaml
+belongs_to: []
+has_many:
+  - FtTaskUser via ftTsuTskId [on delete: cascade, visible]
+```
+
+### Fields
+
+```yaml
+required:
+  ftTskCode: char(100)  # [unique key] [col:ft_tsk_code]
+  ftTskName: char(255)  # [col:ft_tsk_name]
+
+optional:
+  ftTskDescription: text(100000)  # [col:ft_tsk_description]
+
+```
+
+---
+
+## FtTaskUser
+
+```yaml
+label: Task assignment
+table: ft_task_user
+```
+
+_No description._
+
+### Relationships
+
+```yaml
+belongs_to:
+  - FtTask (ftTsuTskId, required, on parent delete: cascade)
+  - FtCustomUser (ftTsuUsrId, required, on parent delete: cascade)
+has_many:
+  - FtTaskUserFtTaskUserTimesheet via tsh_parent_id [on delete: cascade, hidden]
+```
+
+### Fields
+
+```yaml
+required:
+  ftTsuStartDate: date  # [unique key] [col:ft_tsu_start_date]
+
+optional:
+  ftTsuEndDate: date  # [col:ft_tsu_end_date]
+  ftTsuWorkload: float(7, 2)  # [col:ft_tsu_workload]
+
+referenced:
+  ftTskCode: char(100)  # [col:ft_tsk_code]
+  ftTskName: char(255)  # [col:ft_tsk_name]
+  usr_login: regexp(100)  # Login [col:usr_login]
+
+```
+
+---
+
+## FtTaskUserFtTaskUserTimesheet
+
+```yaml
+label: Task assignment timesheet
+table: ft_task_user_fttaskusertimeshe
+```
+
+Timesheet of FtTaskUserFtTaskUserTimesheet
+
+### Relationships
+
+```yaml
+belongs_to:
+  - FtTaskUser (tsh_parent_id, required, on parent delete: cascade)  # assign reference
+has_many: []
+```
+
+### Fields
+
+```yaml
+required:
+  tsh_year: char(4)  # Year [unique key] [col:tsh_year]
+  tsh_month: char(2)  # Month [unique key] [col:tsh_month]
+
+optional:
+  tsh_input1: char(255)  # [col:tsh_input1]
+  tsh_total1: float(11, 2)  # [col:tsh_total1]
+
+```
+
+---
+
 ## FtTgoTag
 
 ```yaml
@@ -1602,12 +1633,6 @@ referenced:
 
 ```
 
-### Hooks
-
-```yaml
-isCreateEnable: ~
-```
-
 ---
 
 ## External Objects
@@ -1615,6 +1640,11 @@ isCreateEnable: ~
 ```yaml
 widgets:
   FtTestMermaid: No description.
+  FtWidgetAccordion: No description.
+  FtWidgetCards: No description.
+  FtWidgetCarousel: No description.
+  FtWidgetCounters: No description.
+  FtWidgetTimeline: No description.
 ```
 
 ## Shared Code

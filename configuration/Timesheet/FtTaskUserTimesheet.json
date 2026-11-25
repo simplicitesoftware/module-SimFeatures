@@ -1,0 +1,23 @@
+{
+ "tsh_name": "FtTaskUserTimesheet",
+ "tsh_type": "D",
+ "tsh_assign_id__obo_name": "FtTaskUser",
+ "tsh_backward": true,
+ "tsh_flying": false,
+ "tsh_gantt": "2",
+ "tsh_gantt_x": true,
+ "tsh_gantt_y": true,
+ "tsh_gantt_r": true,
+ "tsh_chart_gantt": true,
+ "tsh_chart_res": true,
+ "tsh_res1_id__fld_name": "ftTsuTskId",
+ "tsh_res2_id__fld_name": "ftTsuUsrId",
+ "tsh_workload_id__fld_name": "ftTsuWorkload",
+ "tsh_begindt_id__fld_name": "ftTsuStartDate",
+ "tsh_enddt_id__fld_name": "ftTsuEndDate",
+ "tsh_status_id__fld_name": null,
+ "tsh_input1_id__fld_name": "ftTsuTime",
+ "tsh_input2_id__fld_name": null,
+ "tsh_input3_id__fld_name": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

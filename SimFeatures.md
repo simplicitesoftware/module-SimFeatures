@@ -50,6 +50,10 @@ _Domains organize the application's main navigation menu. Each domain groups the
 * `FtDomainInline` _(sub-domain of `FtDomain`)_
   * `FtObjInlineParent` _(object)_
   * `FtObjInlineChild` _(object)_
+* `FtDomainWidgets` _(sub-domain of `FtDomain`)_
+* `FtDomainTimesheet` _(sub-domain of `FtDomain`)_
+  * `FtTask` _(object)_
+  * `FtTaskUser` _(object)_
 
 System parameters
 -----------------
@@ -134,13 +138,10 @@ stateDiagram-v2
 
 ### Implemented hooks
 
-* `initAction`
 * `getTargetObject`:
   Redirect hook to FtActionRedirect inherited object 
   to test the redirect feature of actions
   and bulk update/reorder on a list of objects
-* `confirmAction`
-* `askAction`
 
 `FtAttributes` (Attributes) business object definition
 ------------------------------------------------------
@@ -273,11 +274,6 @@ Object showcasing all the possible attributes
     - `B` code B
     - `C` code C
 
-### Implemented hooks
-
-* `initUpdate`
-* `preSave`
-
 `FtCustomUser` (Custom User) business object definition
 -------------------------------------------------------
 
@@ -289,6 +285,7 @@ _No description._
 
 * Belongs to **ViewHome** via `usr_home_id` (optional)
 * Belongs to **Scope** via `usr_scope_id` (optional)
+* Has many **FtTaskUser** via `ftTsuUsrId` [on delete: cascade, visible]
 
 ### Fields
 
@@ -324,58 +321,6 @@ _No description._
 * `FTUSRTYPE`
     - `FT_ADMIN` SimFeatures Admin
     - `FT_READ` SimFeatures Reader
-
-### State transitions (`usr_active`)
-
-```mermaid
-stateDiagram-v2
-    state "Inactive" as 0
-    state "Active" as 1
-    state "Pending" as 2
-    state "Web services only" as 3
-    0 --> 1
-    0 --> 2
-    0 --> 3
-    1 --> 0
-    1 --> 3
-    2 --> 0
-    2 --> 1
-    3 --> 0
-    3 --> 1
-```
-
-### Implemented hooks
-
-* `postLoad`
-* `postSave`
-* `preValidate`
-* `createUserToken`
-* `deletePrefs`
-* `resetPassword`
-* `initCopy`
-* `initUpdate`
-* `initCreate`
-* `preDelete`
-* `postCreate`
-* `totpQRCode`
-* `anonymize`
-* `postValidate`
-* `getUserKeyLabel`
-* `getMappedFilePath`
-* `isDeleteEnable`
-* `isCopyEnable`
-* `isActionEnable`
-* `initUpdateAll`
-* `postDelete`
-* `postSearch`
-* `preSearch`
-* `postSelect`
-* `postUpdate`
-* `preCreate`
-* `preUpdate`
-* `getMappedExportPath`
-* `canReference`
-* `isUpdateEnable`
 
 `FtGuidedObject` (Guided object) business object definition
 -----------------------------------------------------------
@@ -491,11 +436,6 @@ _No description._
 
 > Business object FtListItem
 
-### Implemented hooks
-
-* `preReorder`
-* `postReorder`
-
 `FtListOrdering` (List ordering) business object definition
 -----------------------------------------------------------
 
@@ -531,10 +471,6 @@ _No description._
 | _`ftM2mCode`_                                                | _char(100)_                              | _ft_m2m_code_                  |          |           |          | _-_                                                                              |
 | _`ftM2mcCode`_                                               | _char(100)_                              | _ft_m2mc_code_                 |          |           |          | _-_                                                                              |
 
-### Implemented hooks
-
-* `postCreate`
-
 `FtM2mChild` (Child (many to many)) business object definition
 --------------------------------------------------------------
 
@@ -551,11 +487,6 @@ _No description._
 | Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftM2mcCode`                                                 | char(100)                                | ft_m2mc_code                   | yes*     | yes       |          | -                                                                                |
-
-### Implemented hooks
-
-* `postLoad`
-* `initRefSelect`
 
 `FtNotification` (Notification Tester) business object definition
 -----------------------------------------------------------------
@@ -614,11 +545,6 @@ _No description._
 | `ftObjInlineDocMulti`                                        | document                                 | ft_objinline_doc_multi         |          | yes       |          | -                                                                                |
 | `ftObjInlineImage`                                           | image                                    | ft_objinline_image             |          | yes       |          | -                                                                                |
 
-### Implemented hooks
-
-* `postUpdate`
-* `postCreate`
-
 `FtObjInlineParent` (Parent of inlined object) business object definition
 -------------------------------------------------------------------------
 
@@ -651,10 +577,6 @@ _No description._
 | `ftPubCode`                                                  | char(100)                                | ft_pub_code                    | *        |           |          | -                                                                                |
 | `ftPubHtml`                                                  | text(4000)                               | ft_pub_html                    |          | yes       |          | -                                                                                |
 | `ftPubFile`                                                  | document                                 | ft_pub_file                    |          | yes       |          | -                                                                                |
-
-### Implemented hooks
-
-* `preSave`
 
 `FtReflexiveMany` (Reflexive item (many)) business object definition
 --------------------------------------------------------------------
@@ -731,10 +653,6 @@ _No description._
 | _`ftRxmCode`_                                                | _char(100)_                              | _ft_rxm_code_                  |          |           |          | _-_                                                                              |
 | _`ftRxmCode`_                                                | _char(100)_                              | _ft_rxm_code_                  |          |           |          | _-_                                                                              |
 
-### Implemented hooks
-
-* `preValidate`
-
 `FtSearch` (Search) business object definition
 ----------------------------------------------
 
@@ -788,10 +706,6 @@ _No description._
 | `ftSlcField1`                                                | char(255)                                | field1                         | yes      | yes       |          | -                                                                                |
 | `ftSlcField2`                                                | char(255)                                | field2                         |          | yes       |          | -                                                                                |
 | `ftSlcFieldDt`                                               | date                                     |                                |          | yes       |          | -                                                                                |
-
-### Implemented hooks
-
-* `preSearch`
 
 `FtStates` (States) business object definition
 ----------------------------------------------
@@ -891,10 +805,6 @@ _No description._
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftTagName`                                                  | char(50)                                 | ft_tag_name                    | yes*     | yes       |          | -                                                                                |
 
-### Implemented hooks
-
-* `initRefSelect`
-
 `FtTaggedObject` (Tagged object) business object definition
 -----------------------------------------------------------
 
@@ -912,6 +822,72 @@ _No description._
 |--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
 | `ftTgoCode`                                                  | char(100)                                | ft_tgo_code                    | yes*     | yes       |          | -                                                                                |
 | `ftTgoStatus`                                                | char(10)                                 | ft_tgo_status                  |          | yes       |          | -                                                                                |
+
+`FtTask` (Task) business object definition
+------------------------------------------
+
+_No description._
+
+**Physical table**: `ft_task`
+
+### Relationships
+
+* Has many **FtTaskUser** via `ftTsuTskId` [on delete: cascade, visible]
+
+### Fields
+
+| Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| `ftTskCode`                                                  | char(100)                                | ft_tsk_code                    | yes*     | yes       |          | -                                                                                |
+| `ftTskName`                                                  | char(255)                                | ft_tsk_name                    | yes      | yes       |          | -                                                                                |
+| `ftTskDescription`                                           | text(100000)                             | ft_tsk_description             |          | yes       |          | -                                                                                |
+
+`FtTaskUser` (Task assignment) business object definition
+---------------------------------------------------------
+
+_No description._
+
+**Physical table**: `ft_task_user`
+
+### Relationships
+
+* Belongs to **FtTask** via `ftTsuTskId` (required) — on parent delete: cascade
+* Belongs to **FtCustomUser** via `ftTsuUsrId` (required) — on parent delete: cascade
+* Has many **FtTaskUserFtTaskUserTimesheet** via `tsh_parent_id` [on delete: cascade, hidden]
+
+### Fields
+
+| Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| **`ftTsuTskId`** link to **`FtTask`**                        | id                                       | ft_tsu_tsk_id                  | yes*     | yes       |          | -                                                                                |
+| **`ftTsuUsrId`** link to **`FtCustomUser`**                  | id                                       | ft_tsu_usr_id                  | yes*     | yes       |          | -                                                                                |
+| _`ftTskCode`_                                                | _char(100)_                              | _ft_tsk_code_                  |          |           |          | _-_                                                                              |
+| _`ftTskName`_                                                | _char(255)_                              | _ft_tsk_name_                  |          |           |          | _-_                                                                              |
+| _`usr_login`_                                                | _regexp(100)_                            | _usr_login_                    |          |           | yes      | _Login_                                                                          |
+| `ftTsuStartDate`                                             | date                                     | ft_tsu_start_date              | yes*     | yes       |          | -                                                                                |
+| `ftTsuEndDate`                                               | date                                     | ft_tsu_end_date                |          | yes       |          | -                                                                                |
+| `ftTsuWorkload`                                              | float(7, 2)                              | ft_tsu_workload                |          | yes       |          | -                                                                                |
+
+`FtTaskUserFtTaskUserTimesheet` (Task assignment timesheet) business object definition
+--------------------------------------------------------------------------------------
+
+Timesheet of FtTaskUserFtTaskUserTimesheet
+
+**Physical table**: `ft_task_user_fttaskusertimeshe`
+
+### Relationships
+
+* Belongs to **FtTaskUser** via `tsh_parent_id` (required) — on parent delete: cascade
+
+### Fields
+
+| Name                                                         | Type                                     | Column                         | Required | Updatable | Personal | Description                                                                      |
+|--------------------------------------------------------------|------------------------------------------|--------------------------------|----------|-----------|----------|----------------------------------------------------------------------------------|
+| **`tsh_parent_id`** link to **`FtTaskUser`**                 | id                                       | tsh_parent_id                  | yes*     | yes       |          | Assign reference                                                                 |
+| `tsh_year`                                                   | char(4)                                  | tsh_year                       | yes*     | yes       |          | Year                                                                             |
+| `tsh_month`                                                  | char(2)                                  | tsh_month                      | yes*     | yes       |          | Month                                                                            |
+| `tsh_input1`                                                 | char(255)                                | tsh_input1                     |          | yes       |          | -                                                                                |
+| `tsh_total1`                                                 | float(11, 2)                             | tsh_total1                     |          | yes       |          | -                                                                                |
 
 `FtTgoTag` (Pillbox N/N) business object definition
 ---------------------------------------------------
@@ -934,14 +910,15 @@ _No description._
 | _`ftTgoCode`_                                                | _char(100)_                              | _ft_tgo_code_                  |          |           |          | _-_                                                                              |
 | _`ftTagName`_                                                | _char(50)_                               | _ft_tag_name_                  |          |           |          | _-_                                                                              |
 
-### Implemented hooks
-
-* `isCreateEnable`
-
 External objects
 ----------------
 
 * `FtTestMermaid`: _No description._
+* `FtWidgetAccordion`: _No description._
+* `FtWidgetCards`: _No description._
+* `FtWidgetCarousel`: _No description._
+* `FtWidgetCounters`: _No description._
+* `FtWidgetTimeline`: _No description._
 
 Shared code
 -----------

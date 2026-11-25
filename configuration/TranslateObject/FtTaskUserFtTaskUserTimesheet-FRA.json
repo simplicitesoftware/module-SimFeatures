@@ -1,0 +1,14 @@
+{
+ "tsl_object": {
+  "object": "ObjectInternal",
+  "label": "Business object",
+  "userkeylabel": "FtTaskUserFtTaskUserTimesheet",
+  "icon": "img/system/business_object",
+  "item": {"obo_name": "FtTaskUserFtTaskUserTimesheet"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Feuille de temps des affectations",
+ "tsl_plural_value": "Feuilles de temps des affectations",
+ "tsl_help": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

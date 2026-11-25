@@ -1,7 +1,7 @@
 {
  "viw_name": "FtWidgets",
  "viw_type": "D",
- "viw_ui": "<div>\n  <div class=\"area\" data-area=\"1\"></div>\n  <div class=\"area\" data-area=\"2\"></div>\n  <div class=\"row\">\n    <div class=\"col-sm-6\"><div class=\"area\" data-area=\"3\"></div></div>\n    <div class=\"col-sm-6\"><div class=\"area\" data-area=\"4\"></div></div>\n  </div>\n  <div class=\"area\" data-area=\"5\"></div>\n</div>",
+ "viw_ui": "<div>\n  <div class=\"area\" data-area=\"1\"><\/div>\n  <div class=\"area\" data-area=\"2\"><\/div>\n  <div class=\"row\">\n    <div class=\"col-sm-6\"><div class=\"area\" data-area=\"3\"><\/div><\/div>\n    <div class=\"col-sm-6\"><div class=\"area\" data-area=\"4\"><\/div><\/div>\n  <\/div>\n  <div class=\"area\" data-area=\"5\"><\/div>\n<\/div>",
  "viw_order": 2,
  "viw_icon": "fas/th",
  "row_module_id__mdl_name": "SimFeatures"

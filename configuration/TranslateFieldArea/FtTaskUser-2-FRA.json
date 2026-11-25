@@ -1,0 +1,12 @@
+{
+ "tsl_object": {
+  "object": "ObjectFieldArea",
+  "label": "Fields area",
+  "userkeylabel": "FtTaskUser-2",
+  "icon": "img/system/field_area",
+  "item": {"ofa_name": "FtTaskUser-2"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Période",
+ "row_module_id__mdl_name": "SimFeatures"
+}

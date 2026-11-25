@@ -1,0 +1,19 @@
+{
+ "tsl_object": {
+  "object": "Field",
+  "label": "Field",
+  "userkeylabel": "ftTsuTime",
+  "icon": "img/system/field",
+  "item": {"fld_name": "ftTsuTime"}
+ },
+ "tsl_lang": "ENU",
+ "tsl_value": "Time spent (h)",
+ "tsl_simplehelp": null,
+ "tsl_plural_value": null,
+ "tsl_short_value": "Hours",
+ "tsl_placeholder": null,
+ "tsl_listhelp": null,
+ "tsl_tooltip": null,
+ "tsl_compliance": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

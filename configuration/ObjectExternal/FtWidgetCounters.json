@@ -3,7 +3,7 @@
  "obe_type": "E",
  "obe_nature": "com_simplicite_webapp_web_ResponsiveExternalObject",
  "obe_url": null,
- "obe_settings": "{\n  \"objects\": [\n    {\n      \"name\": \"FtAttributes\",\n      \"label\": \"Widget attributes\",\n      \"filters\": {\n        \"ftAttrCode\": \"0W%\"\n      }\n    },\n    {\n      \"name\": \"FtAttributes\",\n      \"label\": \"Widget booleans\",\n      \"filters\": {\n        \"ftAttrCode\": \"0W%\",\n        \"ftAttrBoolean\": true\n      },\n      \"color\": \"green\"\n    }\n  ]\n}",
+ "obe_settings": "{\"objects\": [\n  {\n    \"name\": \"FtAttributes\",\n    \"label\": \"Widget attributes\",\n    \"filters\": {\"ftAttrCode\": \"0W%\"}\n  },\n  {\n    \"color\": \"green\",\n    \"name\": \"FtAttributes\",\n    \"label\": \"Widget booleans\",\n    \"filters\": {\n      \"ftAttrCode\": \"0W%\",\n      \"ftAttrBoolean\": true\n    }\n  }\n]}",
  "obe_comment": null,
  "obe_help": null,
  "obe_class": "com.simplicite.webapp.web.widgets.CountersExternalObject",

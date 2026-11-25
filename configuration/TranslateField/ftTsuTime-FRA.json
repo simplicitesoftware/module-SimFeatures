@@ -1,0 +1,19 @@
+{
+ "tsl_object": {
+  "object": "Field",
+  "label": "Field",
+  "userkeylabel": "ftTsuTime",
+  "icon": "img/system/field",
+  "item": {"fld_name": "ftTsuTime"}
+ },
+ "tsl_lang": "FRA",
+ "tsl_value": "Temps passé (h)",
+ "tsl_simplehelp": null,
+ "tsl_plural_value": null,
+ "tsl_short_value": "Heures",
+ "tsl_placeholder": null,
+ "tsl_listhelp": null,
+ "tsl_tooltip": null,
+ "tsl_compliance": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

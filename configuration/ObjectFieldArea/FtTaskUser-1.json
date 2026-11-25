@@ -1,0 +1,8 @@
+{
+ "ofa_name": "FtTaskUser-1",
+ "ofa_position": 1,
+ "ofa_title": true,
+ "ofa_ui": "<div class=\"field\" data-field=\"ftTsuTskId\"><\/div>\n<div class=\"field\" data-field=\"ftTsuTskId__ftTskCode\"><\/div>\n<div class=\"field\" data-field=\"ftTsuTskId__ftTskName\"><\/div>\n<div class=\"field\" data-field=\"ftTsuUsrId\"><\/div>\n<div class=\"field\" data-field=\"ftTsuUsrId__usr_login\"><\/div>",
+ "ofa_icon": null,
+ "row_module_id__mdl_name": "SimFeatures"
+}

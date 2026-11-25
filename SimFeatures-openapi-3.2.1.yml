@@ -20,6 +20,47 @@ components:
           description: Unique technical row ID
           type: string
           maxLength: 11
+    FtTaskUser:
+      description: Task assignment
+      type: object
+      properties:
+        ftTsuTskId__ftTskName:
+          description: Task Name
+          type: string
+          maxLength: 255
+        ftTsuUsrId__usr_login:
+          description: Login
+          type: string
+          maxLength: 100
+        ftTsuWorkload:
+          description: Planned workload
+          type: number
+        ftTsuTskId__ftTskCode:
+          description: Task Code
+          type: string
+          maxLength: 100
+        ftTsuUsrId:
+          description: User
+          type: string
+          maxLength: 11
+        row_id:
+          description: Unique technical row ID
+          type: string
+          maxLength: 11
+        ftTsuStartDate:
+          description: Start date
+          type: string
+          maxLength: 10
+          example: yyyy-MM-dd
+        ftTsuEndDate:
+          description: End date
+          type: string
+          maxLength: 10
+          example: yyyy-MM-dd
+        ftTsuTskId:
+          description: Task
+          type: string
+          maxLength: 11
     FtObjInlineChild:
       description: Inlined object
       type: object
@@ -83,6 +124,11 @@ components:
         ftStOrder:
           description: Order
           type: integer
+    ArrayOfFtTaskUserFtTaskUserTimesheet:
+      description: List of Task assignment timesheets
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTaskUserFtTaskUserTimesheet'
     ArrayOfFtPublications:
       description: List of Publications
       type: array
@@ -141,6 +187,11 @@ components:
           description: Unique technical row ID
           type: string
           maxLength: 11
+    ArrayOfFtTask:
+      description: List of Tasks
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTask'
     ArrayOfFtListItem:
       description: List of List Item
       type: array
@@ -240,6 +291,36 @@ components:
             It is enabled by default on the history panel of the parent object.
           type: string
           maxLength: 2000000
+    FtTaskUserFtTaskUserTimesheet:
+      description: |-
+        Task assignment timesheet:
+
+        Timesheet of FtTaskUserFtTaskUserTimesheet
+      type: object
+      properties:
+        tsh_total1:
+          description: Total1
+          type: number
+        tsh_year:
+          description: Year
+          type: string
+          maxLength: 4
+        tsh_input1:
+          description: Input1
+          type: string
+          maxLength: 255
+        tsh_parent_id:
+          description: Assign reference
+          type: string
+          maxLength: 11
+        tsh_month:
+          description: Month
+          type: string
+          maxLength: 2
+        row_id:
+          description: Unique technical row ID
+          type: string
+          maxLength: 11
     FtActionRedirect:
       description: Action redirect
       type: object
@@ -309,11 +390,6 @@ components:
         result:
           description: Action result
           type: string
-    ArrayOfFtTaggedObject:
-      description: List of Tagged object
-      type: array
-      items:
-        $ref: '#/components/schemas/FtTaggedObject'
     FtTgoTag:
       description: Pillbox N/N
       type: object
@@ -338,6 +414,11 @@ components:
           description: Unique technical row ID
           type: string
           maxLength: 11
+    ArrayOfFtTaggedObject:
+      description: List of Tagged object
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTaggedObject'
     ArrayOfFtRelationshipM2m:
       description: List of Relationship (many to many)
       type: array
@@ -903,6 +984,11 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/FtGuidedObject'
+    ArrayOfFtTaskUser:
+      description: List of Task assignments
+      type: array
+      items:
+        $ref: '#/components/schemas/FtTaskUser'
     FtStatesHistoric:
       description: Ft states historic
       type: object
@@ -1047,16 +1133,16 @@ components:
           type: integer
           enum:
           - 403
-    ArrayOfFtCustomUser:
-      description: List of Custom Users
-      type: array
-      items:
-        $ref: '#/components/schemas/FtCustomUser'
     ArrayOfFtObjInlineChild:
       description: List of Inlined object
       type: array
       items:
         $ref: '#/components/schemas/FtObjInlineChild'
+    ArrayOfFtCustomUser:
+      description: List of Custom Users
+      type: array
+      items:
+        $ref: '#/components/schemas/FtCustomUser'
     FtObjInlineParent:
       description: Parent of inlined object
       type: object
@@ -1078,6 +1164,26 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/FtAttributes'
+    FtTask:
+      description: Task
+      type: object
+      properties:
+        ftTskCode:
+          description: Code
+          type: string
+          maxLength: 100
+        ftTskDescription:
+          description: Description
+          type: string
+          maxLength: 100000
+        ftTskName:
+          description: Name
+          type: string
+          maxLength: 255
+        row_id:
+          description: Unique technical row ID
+          type: string
+          maxLength: 11
     FtReflexiveMany:
       description: Reflexive item (many)
       type: object
@@ -3515,6 +3621,201 @@ paths:
         required: true
       tags:
       - FtListItem
+  /rest/FtTaskUserFtTaskUserTimesheet/{row_id}:
+    post:
+      summary: Create a new FtTaskUserFtTaskUserTimesheet business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTaskUserFtTaskUserTimesheet'
+      operationId: obj-fttaskuserfttaskusertimesheet-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaskUserFtTaskUserTimesheet'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaskUserFtTaskUserTimesheet
+    get:
+      summary: Get a FtTaskUserFtTaskUserTimesheet business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaskuserfttaskusertimesheet-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaskUserFtTaskUserTimesheet'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtTaskUserFtTaskUserTimesheet
+    delete:
+      summary: Delete a FtTaskUserFtTaskUserTimesheet business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaskuserfttaskusertimesheet-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaskUserFtTaskUserTimesheet
+    put:
+      summary: Update a FtTaskUserFtTaskUserTimesheet business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTaskUserFtTaskUserTimesheet'
+      operationId: obj-fttaskuserfttaskusertimesheet-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaskUserFtTaskUserTimesheet'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaskUserFtTaskUserTimesheet
   /rest/FtM2mChild/{row_id}:
     post:
       summary: Create a new FtM2mChild business object record
@@ -3781,6 +4082,84 @@ paths:
         required: false
       tags:
       - FtRxmLink
+  /rest/FtTaskUserFtTaskUserTimesheet:
+    get:
+      summary: Search FtTaskUserFtTaskUserTimesheet business object records or get
+        contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaskuserfttaskusertimesheet-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtTaskUserFtTaskUserTimesheet'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: tsh_parent_id
+        description: Search filter for Assign reference
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: tsh_year
+        description: Search filter for Year
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: tsh_month
+        description: Search filter for Month
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: tsh_input1
+        description: Search filter for Input1
+        required: false
+      - schema:
+          type: number
+        in: query
+        name: tsh_total1
+        description: Search filter for Total1
+        required: false
+      tags:
+      - FtTaskUserFtTaskUserTimesheet
   /rest/FtHistoryHistoric:
     get:
       summary: Search FtHistoryHistoric business object records or get contextualized
@@ -3924,6 +4303,64 @@ paths:
         required: false
       tags:
       - FtHistoryHistoric
+  /rest/FtSelectObject/{row_id}:
+    get:
+      summary: Get a FtSelectObject business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-ftselectobject-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtSelectObject'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtSelectObject
   /rest/FtCustomUser:
     get:
       summary: Search FtCustomUser business object records or get contextualized metadata
@@ -4279,64 +4716,6 @@ paths:
         required: true
       tags:
       - FtAttributes
-  /rest/FtSelectObject/{row_id}:
-    get:
-      summary: Get a FtSelectObject business object record
-      security:
-      - bearerAuth: []
-      operationId: obj-ftselectobject-get
-      responses:
-        '200':
-          description: Success in getting a single business object record
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/FtSelectObject'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-        '404':
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error404'
-      parameters:
-      - schema:
-          type: string
-        in: path
-        name: row_id
-        description: Row ID (or empty or _ for all row IDs)
-        required: true
-      - schema:
-          type: boolean
-        in: query
-        name: _inline_documents
-        description: Inline documents?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _inline_thumbnails
-        description: Inline documents' thumbnails?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _inline_objects
-        description: Inline objects?
-        required: false
-      tags:
-      - FtSelectObject
   /:
     get:
       summary: Get user session information
@@ -6175,6 +6554,396 @@ paths:
         required: false
       tags:
       - FtSearch
+  /rest/FtTaskUser/{row_id}:
+    post:
+      summary: Create a new FtTaskUser business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTaskUser'
+      operationId: obj-fttaskuser-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaskUser'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaskUser
+    get:
+      summary: Get a FtTaskUser business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaskuser-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaskUser'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtTaskUser
+    delete:
+      summary: Delete a FtTaskUser business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaskuser-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaskUser
+    put:
+      summary: Update a FtTaskUser business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTaskUser'
+      operationId: obj-fttaskuser-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTaskUser'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTaskUser
+  /rest/FtTask/{row_id}:
+    post:
+      summary: Create a new FtTask business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTask'
+      operationId: obj-fttask-create
+      responses:
+        '200':
+          description: Success in creating a new business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTask'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTask
+    get:
+      summary: Get a FtTask business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttask-get
+      responses:
+        '200':
+          description: Success in getting a single business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTask'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_documents
+        description: Inline documents?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_thumbnails
+        description: Inline documents' thumbnails?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _inline_objects
+        description: Inline objects?
+        required: false
+      tags:
+      - FtTask
+    delete:
+      summary: Delete a FtTask business object record
+      security:
+      - bearerAuth: []
+      operationId: obj-fttask-delete
+      responses:
+        '200':
+          description: Success in deleting a business object record
+          content:
+            application/json: {}
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTask
+    put:
+      summary: Update a FtTask business object record
+      security:
+      - bearerAuth: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FtTask'
+      operationId: obj-fttask-update
+      responses:
+        '200':
+          description: Success in updating a business object record
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FtTask'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+        '404':
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+      parameters:
+      - schema:
+          type: string
+        in: path
+        name: row_id
+        description: Row ID (or empty or _ for all row IDs)
+        required: true
+      tags:
+      - FtTask
   /rest/FtRelationshipO2m/{row_id}:
     post:
       summary: Create a new FtRelationshipO2m business object record
@@ -7292,6 +8061,101 @@ paths:
         required: false
       tags:
       - FtRelationshipM2m
+  /rest/FtTaskUser:
+    get:
+      summary: Search FtTaskUser business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-fttaskuser-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtTaskUser'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTsuTskId
+        description: Search filter for Task
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTsuTskId__ftTskCode
+        description: Search filter for Task Code
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTsuTskId__ftTskName
+        description: Search filter for Task Name
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTsuUsrId
+        description: Search filter for User
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTsuUsrId__usr_login
+        description: Search filter for Login
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTsuStartDate
+        description: Search filter for Start date
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftTsuEndDate
+        description: Search filter for End date
+        required: false
+      - schema:
+          type: number
+        in: query
+        name: ftTsuWorkload
+        description: Search filter for Planned workload
+        required: false
+      tags:
+      - FtTaskUser
   /rest/FtHistory/{row_id}:
     post:
       summary: Create a new FtHistory business object record
@@ -7487,66 +8351,6 @@ paths:
         required: true
       tags:
       - FtHistory
-  /rest/FtListOrdering:
-    get:
-      summary: Search FtListOrdering business object records or get contextualized
-        metadata
-      security:
-      - bearerAuth: []
-      operationId: obj-ftlistordering-search
-      responses:
-        '200':
-          description: Success in searching business object records (or in getting
-            contextualized business object metadata, documentation, ...)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ArrayOfFtListOrdering'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error401'
-        '500':
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error500'
-      parameters:
-      - schema:
-          type: boolean
-        in: query
-        name: _metadata
-        description: Metadata?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _count
-        description: Count?
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: _doc
-        description: Documentation?
-        required: false
-      - schema:
-          type: integer
-        in: query
-        name: ftLoOrder
-        description: Search filter for Order
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftLoLabel
-        description: Search filter for Label
-        required: false
-      tags:
-      - FtListOrdering
   /rest/FtObjInlineParent/{row_id}:
     post:
       summary: Create a new FtObjInlineParent business object record
@@ -7742,6 +8546,169 @@ paths:
         required: true
       tags:
       - FtObjInlineParent
+  /rest/FtListOrdering:
+    get:
+      summary: Search FtListOrdering business object records or get contextualized
+        metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-ftlistordering-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtListOrdering'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: integer
+        in: query
+        name: ftLoOrder
+        description: Search filter for Order
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftLoLabel
+        description: Search filter for Label
+        required: false
+      tags:
+      - FtListOrdering
+  /rest/FtHistory:
+    get:
+      summary: Search FtHistory business object records or get contextualized metadata
+      security:
+      - bearerAuth: []
+      operationId: obj-fthistory-search
+      responses:
+        '200':
+          description: Success in searching business object records (or in getting
+            contextualized business object metadata, documentation, ...)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArrayOfFtHistory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error500'
+      parameters:
+      - schema:
+          type: boolean
+        in: query
+        name: _metadata
+        description: Metadata?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _count
+        description: Count?
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: _doc
+        description: Documentation?
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistCode
+        description: Search filter for Code
+        required: false
+      - schema:
+          type: number
+        in: query
+        name: ftHistDecimal
+        description: Search filter for Decimal
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistDateAndTime
+        description: Search filter for Date and time
+        required: false
+      - schema:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+        in: query
+        name: ftHistEnumeration
+        description: Search filter for Enumeration
+        required: false
+      - schema:
+          type: string
+          enum:
+          - A
+          - B
+          - C
+        in: query
+        name: ftHistMultipleEnumeration
+        description: Search filter for Multiple enumeration
+        required: false
+      - schema:
+          type: boolean
+        in: query
+        name: ftHistBoolean
+        description: Search filter for Boolean
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistDocument
+        description: Search filter for Document
+        required: false
+      - schema:
+          type: string
+        in: query
+        name: ftHistMultiDoc
+        description: Search filter for Multi-doc
+        required: false
+      tags:
+      - FtHistory
   /rest/FtTaggedObject/{row_id}:
     post:
       summary: Create a new FtTaggedObject business object record
@@ -7937,12 +8904,12 @@ paths:
         required: true
       tags:
       - FtTaggedObject
-  /rest/FtHistory:
+  /rest/FtTask:
     get:
-      summary: Search FtHistory business object records or get contextualized metadata
+      summary: Search FtTask business object records or get contextualized metadata
       security:
       - bearerAuth: []
-      operationId: obj-fthistory-search
+      operationId: obj-fttask-search
       responses:
         '200':
           description: Success in searching business object records (or in getting
@@ -7950,7 +8917,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ArrayOfFtHistory'
+                $ref: '#/components/schemas/ArrayOfFtTask'
         '401':
           description: Unauthorized
           content:
@@ -7985,61 +8952,23 @@ paths:
       - schema:
           type: string
         in: query
-        name: ftHistCode
+        name: ftTskCode
         description: Search filter for Code
         required: false
       - schema:
-          type: number
+          type: string
         in: query
-        name: ftHistDecimal
-        description: Search filter for Decimal
+        name: ftTskName
+        description: Search filter for Name
         required: false
       - schema:
           type: string
         in: query
-        name: ftHistDateAndTime
-        description: Search filter for Date and time
-        required: false
-      - schema:
-          type: string
-          enum:
-          - A
-          - B
-          - C
-        in: query
-        name: ftHistEnumeration
-        description: Search filter for Enumeration
-        required: false
-      - schema:
-          type: string
-          enum:
-          - A
-          - B
-          - C
-        in: query
-        name: ftHistMultipleEnumeration
-        description: Search filter for Multiple enumeration
-        required: false
-      - schema:
-          type: boolean
-        in: query
-        name: ftHistBoolean
-        description: Search filter for Boolean
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftHistDocument
-        description: Search filter for Document
-        required: false
-      - schema:
-          type: string
-        in: query
-        name: ftHistMultiDoc
-        description: Search filter for Multi-doc
+        name: ftTskDescription
+        description: Search filter for Description
         required: false
       tags:
-      - FtHistory
+      - FtTask
   /rest/FtRelationshipM2m/{row_id}:
     post:
       summary: Create a new FtRelationshipM2m business object record
@@ -9178,59 +10107,65 @@ info:
   title: SimFeatures
   version: '0.1'
 tags:
-- name: FtListOrdering
-  description: List ordering
-- name: FtNotification
-  description: Notification Tester
-- name: FtObjInlineParent
-  description: Parent of inlined object
 - name: FtO2mChild
   description: Child object
-- name: FtReflexiveMany
-  description: Reflexive item (many)
-- name: FtCustomUser
-  description: Custom User
-- name: FtPublications
-  description: Publication
 - name: FtGuidedObject
   description: Guided object
-- name: FtM2m
-  description: N/N
+- name: FtPublications
+  description: Publication
 - name: FtObjInlineChild
   description: Inlined object
+- name: FtObjInlineParent
+  description: Parent of inlined object
+- name: FtReflexiveMany
+  description: Reflexive item (many)
 - name: FtM2mChild
   description: Child (many to many)
-- name: FtStatesHistoric
-  description: Ft states historic
-- name: FtRelationshipM2m
-  description: Relationship (many to many)
-- name: FtTaggedObject
-  description: Tagged object
-- name: FtStates
-  description: States
+- name: FtM2m
+  description: N/N
 - name: FtRelationshipO2m
   description: Relationship (one to many)
+- name: FtRelationshipM2m
+  description: Relationship (many to many)
 - name: FtSearchReference
   description: Reference
+- name: FtStates
+  description: States
 - name: FtTgoTag
   description: Pillbox N/N
-- name: FtAttributes
-  description: Attributes
-- name: FtSearch
-  description: Search
+- name: FtTask
+  description: Task
+- name: FtNotification
+  description: Notification Tester
+- name: FtTaskUser
+  description: Task assignment
 - name: FtActionRedirect
   description: Action redirect
-- name: FtActions
-  description: Action
-- name: FtTag
-  description: Tag
-- name: FtHistoryHistoric
-  description: Historic
+- name: FtSearch
+  description: Search
 - name: FtHistory
   description: History
+- name: FtHistoryHistoric
+  description: Historic
 - name: FtSelectObject
   description: Select object
 - name: FtRxmLink
   description: Associated items
+- name: FtTag
+  description: Tag
+- name: FtListOrdering
+  description: List ordering
+- name: FtCustomUser
+  description: Custom User
+- name: FtActions
+  description: Action
+- name: FtTaggedObject
+  description: Tagged object
+- name: FtAttributes
+  description: Attributes
+- name: FtStatesHistoric
+  description: Ft states historic
 - name: FtListItem
   description: Lists
+- name: FtTaskUserFtTaskUserTimesheet
+  description: Task assignment timesheet

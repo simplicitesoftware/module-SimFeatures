@@ -3,7 +3,7 @@
  "obe_type": "E",
  "obe_nature": "com_simplicite_webapp_web_ResponsiveExternalObject",
  "obe_url": null,
- "obe_settings": "{\n  \"name\": \"FtAttributes\",\n  \"filters\": {\n    \"ftAttrCode\": \"0W%\"\n  },\n  \"titleField\": \"ftAttrShortText\",\n  \"subTitleField\": \"ftAttrCode\",\n  \"descriptionField\": \"ftAttrLongText\",\n  \"imageField\": \"ftAttrImage\",\n  \"height\": 250\n}",
+ "obe_settings": "{\n  \"subTitleField\": \"ftAttrCode\",\n  \"imageField\": \"ftAttrImage\",\n  \"titleField\": \"ftAttrShortText\",\n  \"name\": \"FtAttributes\",\n  \"filters\": {\"ftAttrCode\": \"0W%\"},\n  \"descriptionField\": \"ftAttrLongText\",\n  \"height\": 250\n}",
  "obe_comment": null,
  "obe_help": null,
  "obe_class": "com.simplicite.webapp.web.widgets.CarouselExternalObject",
